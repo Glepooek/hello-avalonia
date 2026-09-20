@@ -1,0 +1,14 @@
+<Application xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="Avalonia.HtmlRendererDemo.App"
+             RequestedThemeVariant="Dark">
+
+    <Application.Styles>
+        <FluentTheme />
+        <StyleInclude Source="avares://Avalonia.HtmlRendererDemo/Resources/Icons.axaml" />
+    </Application.Styles>
+
+    <Application.Resources>
+        <FontFamily x:Key="IconFont">avares://Avalonia.HtmlRendererDemo/Assets/#iconfont</FontFamily>
+    </Application.Resources>
+</Application>

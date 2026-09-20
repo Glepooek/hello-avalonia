@@ -1,0 +1,52 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:html="using:TheArtOfDev.HtmlRenderer.Avalonia"
+        xmlns:vm="using:Avalonia.HtmlRendererDemo.ViewModels"
+        mc:Ignorable="d"
+        d:DesignWidth="800"
+        d:DesignHeight="450"
+        x:Class="Avalonia.HtmlRendererDemo.Views.MainWindow"
+        x:DataType="vm:MainWindowViewModel"
+        Icon="/Assets/avalonia-logo.ico"
+        Title="Avalonia HtmlRenderer &amp; IconFont Demo"
+        Width="800"
+        Height="450"
+        WindowStartupLocation="CenterScreen">
+
+    <Design.DataContext>
+        <vm:MainWindowViewModel />
+    </Design.DataContext>
+
+    <Grid Margin="20" ColumnDefinitions="*,auto">
+        <Border Grid.Column="0"
+                Padding="12"
+                BorderBrush="Gray"
+                BorderThickness="1">
+            <DockPanel>
+                <TextBlock DockPanel.Dock="Top"
+                           Margin="0,0,0,8"
+                           FontWeight="Bold"
+                           Text="HtmlPanel (rich text)" />
+                <!--  HtmlRenderer draws plain HTML with its own default colors (black text),
+                      so it needs a light background instead of the window's dark theme.  -->
+                <html:HtmlPanel Background="White" Text="{Binding Text}" />
+            </DockPanel>
+        </Border>
+
+        <StackPanel Grid.Column="1"
+                    Margin="20,0,0,0"
+                    Spacing="16">
+            <TextBlock FontWeight="Bold" Text="IconFont" />
+            <TextBlock FontFamily="{StaticResource IconFont}"
+                       FontSize="32"
+                       Foreground="OrangeRed"
+                       Text="&#xe71a;" />
+            <TextBlock FontWeight="Bold" Text="PathIcon" />
+            <PathIcon Width="32"
+                      Height="32"
+                      Data="{StaticResource store_microsoft_regular}" />
+        </StackPanel>
+    </Grid>
+</Window>
