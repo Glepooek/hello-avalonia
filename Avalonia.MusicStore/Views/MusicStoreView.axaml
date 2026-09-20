@@ -1,0 +1,52 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:Avalonia.MusicStore.ViewModels"
+             x:Class="Avalonia.MusicStore.Views.MusicStoreView"
+             xmlns:views="using:Avalonia.MusicStore.Views"
+             xmlns:lang="using:Avalonia.MusicStore.Assets.Langs"
+             x:DataType="vm:MusicStoreViewModel"
+             mc:Ignorable="d"
+             d:DesignWidth="800"
+             d:DesignHeight="450"
+             x:Name="root">
+
+    <UserControl.DataContext>
+        <vm:MusicStoreViewModel />
+    </UserControl.DataContext>
+
+    <DockPanel>
+        <StackPanel DockPanel.Dock="Top">
+            <TextBox Text="{Binding SearchText}" PlaceholderText="{x:Static lang:Resources.txt_SearchAlbums}" />
+            <ProgressBar IsIndeterminate="True" IsVisible="{Binding IsBusy}" />
+        </StackPanel>
+
+        <Button Content="{x:Static lang:Resources.btn_BuyAlbum}"
+                Command="{Binding BuyMusicCommand}"
+                CommandParameter="{Binding ElementName=root}"
+                DockPanel.Dock="Bottom"
+                HorizontalAlignment="Center" />
+
+        <!--
+            默认情况下，DockPanel元素的最后一个子元素将“填充”剩余的未分配空间。
+            如果不希望出现这种情况，可以将LastChildFill属性设置为false。
+        -->
+        <ListBox ItemsSource="{Binding SearchResults}"
+                 SelectedItem="{Binding SelectedAlbum}"
+                 Background="Transparent"
+                 Margin="0,20">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <views:AlbumView />
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+            <ListBox.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <WrapPanel />
+                </ItemsPanelTemplate>
+            </ListBox.ItemsPanel>
+        </ListBox>
+
+    </DockPanel>
+</UserControl>
