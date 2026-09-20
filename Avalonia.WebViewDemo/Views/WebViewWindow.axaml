@@ -1,0 +1,149 @@
+<Window x:Class="Avalonia.WebViewDemo.Views.WebViewWindow"
+        xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:webview="using:Avalonia.Controls"
+        Title="WebViewWindow"
+        Width="900"
+        Height="600"
+        d:DesignWidth="800"
+        d:DesignHeight="450"
+        Background="White"
+        WindowStartupLocation="CenterOwner"
+        ShowInTaskbar="False"
+        mc:Ignorable="d">
+
+    <Window.Styles>
+        <Style Selector="Canvas">
+            <Style.Animations>
+                <Animation IterationCount="INFINITE" Duration="0:0:2">
+                    <KeyFrame Cue="0%">
+                        <Setter Property="RotateTransform.Angle" Value="0" />
+                    </KeyFrame>
+                    <KeyFrame Cue="100%">
+                        <Setter Property="RotateTransform.Angle" Value="360" />
+                    </KeyFrame>
+                </Animation>
+            </Style.Animations>
+        </Style>
+        <Style Selector="Ellipse.ellipse3">
+            <Style.Animations>
+                <Animation Duration="0:0:2">
+                    <KeyFrame Cue="0%">
+                        <Setter Property="Opacity" Value="0.25" />
+                    </KeyFrame>
+                    <KeyFrame Cue="70%">
+                        <Setter Property="Opacity" Value="1.0" />
+                    </KeyFrame>
+                    <KeyFrame Cue="100%">
+                        <Setter Property="Opacity" Value="0.25" />
+                    </KeyFrame>
+                </Animation>
+            </Style.Animations>
+        </Style>
+        <Style Selector="Ellipse.ellipse3">
+            <Style.Animations>
+                <Animation Duration="0:0:2">
+                    <KeyFrame Cue="0%">
+                        <Setter Property="Opacity" Value="0.25" />
+                    </KeyFrame>
+                    <KeyFrame Cue="70%">
+                        <Setter Property="Opacity" Value="1.0" />
+                    </KeyFrame>
+                    <KeyFrame Cue="100%">
+                        <Setter Property="Opacity" Value="0.25" />
+                    </KeyFrame>
+                </Animation>
+            </Style.Animations>
+        </Style>
+        <Style Selector="Ellipse.ellipse2">
+            <Style.Animations>
+                <Animation Duration="0:0:2">
+                    <KeyFrame Cue="0%">
+                        <Setter Property="Opacity" Value="0.5" />
+                    </KeyFrame>
+                    <KeyFrame Cue="70%">
+                        <Setter Property="Opacity" Value="1.0" />
+                    </KeyFrame>
+                    <KeyFrame Cue="100%">
+                        <Setter Property="Opacity" Value="0.5" />
+                    </KeyFrame>
+                </Animation>
+            </Style.Animations>
+        </Style>
+        <Style Selector="Ellipse.ellipse1">
+            <Style.Animations>
+                <Animation Duration="0:0:2">
+                    <KeyFrame Cue="0%">
+                        <Setter Property="Opacity" Value="0.75" />
+                    </KeyFrame>
+                    <KeyFrame Cue="70%">
+                        <Setter Property="Opacity" Value="0.25" />
+                    </KeyFrame>
+                    <KeyFrame Cue="100%">
+                        <Setter Property="Opacity" Value="0.75" />
+                    </KeyFrame>
+                </Animation>
+            </Style.Animations>
+        </Style>
+        <Style Selector="Ellipse.ellipse">
+            <Style.Animations>
+                <Animation Duration="0:0:2">
+                    <KeyFrame Cue="0%">
+                        <Setter Property="Opacity" Value="1" />
+                    </KeyFrame>
+                    <KeyFrame Cue="70%">
+                        <Setter Property="Opacity" Value="0.25" />
+                    </KeyFrame>
+                    <KeyFrame Cue="100%">
+                        <Setter Property="Opacity" Value="1" />
+                    </KeyFrame>
+                </Animation>
+            </Style.Animations>
+        </Style>
+    </Window.Styles>
+
+    <Panel x:Name="panel">
+        <!--  NativeWebView: embedded native browser (WebView2 on Windows, WKWebView on macOS, WPE/WebKitGTK on Linux)  -->
+        <webview:NativeWebView x:Name="webView"
+                               NavigationCompleted="WebView_NavigationCompleted"
+                               WebMessageReceived="WebView_WebMessageReceived" />
+
+        <Canvas x:Name="canvas"
+                Width="45"
+                Height="45">
+            <Canvas.RenderTransform>
+                <RotateTransform />
+            </Canvas.RenderTransform>
+            <Ellipse x:Name="ellipse3"
+                     Width="16"
+                     Height="16"
+                     Classes="ellipse3"
+                     Fill="#0092FA"
+                     Opacity="0.25" />
+            <Ellipse x:Name="ellipse2"
+                     Canvas.Left="29"
+                     Width="16"
+                     Height="16"
+                     Classes="ellipse2"
+                     Fill="#0092FA"
+                     Opacity="0.5" />
+            <Ellipse x:Name="ellipse1"
+                     Canvas.Top="29"
+                     Width="16"
+                     Height="16"
+                     Classes="ellipse1"
+                     Fill="#0092FA"
+                     Opacity="0.75" />
+            <Ellipse x:Name="ellipse"
+                     Canvas.Left="29"
+                     Canvas.Top="29"
+                     Width="16"
+                     Height="16"
+                     Classes="ellipse"
+                     Fill="#0092FA" />
+        </Canvas>
+
+    </Panel>
+</Window>
