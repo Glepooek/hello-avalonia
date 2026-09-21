@@ -3,6 +3,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:shared="using:Avalonia.Shared.Controls"
+             xmlns:converters="using:Avalonia.Shared.Converters"
              mc:Ignorable="d"
              d:DesignWidth="860"
              d:DesignHeight="560"
@@ -66,14 +67,17 @@
                 </StackPanel>
 
                 <Border Grid.Row="1" Grid.Column="0" Classes="stage" Margin="3" Height="110">
-                    <!--  Margin pushes the child away from the stage edge; negative values let it spill out.  -->
-                    <Border Background="#E8564A" CornerRadius="3" Margin="{Binding #MarginSlider.Value}">
+                    <!--  Margin pushes the child away from the stage edge; negative values let it spill out.
+                          The converter is required: a bare double will not bind to a Thickness.  -->
+                    <Border Background="#E8564A" CornerRadius="3"
+                            Margin="{Binding #MarginSlider.Value, Converter={x:Static converters:DoubleToThicknessConverter.Instance}}">
                         <TextBlock Margin="8" Text="我有 Margin" VerticalAlignment="Center" />
                     </Border>
                 </Border>
                 <Border Grid.Row="1" Grid.Column="1" Classes="stage" Margin="3" Height="110">
                     <!--  Padding grows the element itself: only Border, TemplatedControl and TextBlock expose it.  -->
-                    <Border Background="#4AC7E8" CornerRadius="3" Padding="{Binding #PaddingSlider.Value}"
+                    <Border Background="#4AC7E8" CornerRadius="3"
+                            Padding="{Binding #PaddingSlider.Value, Converter={x:Static converters:DoubleToThicknessConverter.Instance}}"
                             HorizontalAlignment="Center" VerticalAlignment="Center">
                         <TextBlock Text="我有 Padding" VerticalAlignment="Center" />
                     </Border>
