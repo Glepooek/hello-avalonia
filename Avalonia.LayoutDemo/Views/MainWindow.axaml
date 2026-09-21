@@ -13,7 +13,7 @@
         Height="640"
         WindowStartupLocation="CenterScreen">
 
-    <!--  Tabs are added by later tasks, one per documentation topic.  -->
+    <!--  One tab per documentation topic under the Layout category.  -->
     <TabControl Margin="12">
         <TabItem Header="布局面板">
             <pages:PanelsPage />
