@@ -173,6 +173,25 @@ ReactiveUI、Prism 等会让读者分不清"这是 Avalonia 的能力"还是"这
 验证方式：在样板项目（#3 Layout，零外部依赖）跑通后，单独建一个最小 probe 验证第 1、2 点，
 再决定 #4 和 #15 的最终形态。
 
+### 样板阶段实测结论（2026-09-21）
+
+- **容器查询**：可用。`Container.Name` / `Container.Sizing` 附加属性与
+  `<ContainerQuery Name="..." Query="max-width:400">` 元素在 Avalonia 12.1.2 中直接
+  编译通过、运行时无异常，未使用任何回退方案。
+- **`Avalonia.Shared` 承载 XAML 控件**：可行，需增加 `Avalonia.Themes.Fluent` 包引用
+  （因 ControlTheme 用到 Fluent 资源键 `SystemControlBackgroundListLowBrush` 和
+  `SystemAccentColor`）。
+- **元素名绑定**（额外发现，brief 未列出）：`{Binding #ElementName.Value}` 在
+  `AvaloniaUseCompiledBindingsByDefault=true` 下无需 `x:DataType`，plan 里准备的三级
+  回退未用上。
+- **8 种布局面板语法**（额外发现，brief 未列出）：Avalonia 12.1.2 全部接受，含
+  `RelativePanel` 的 8 个附加属性、裸 `<Panel>` 元素、`Width="NaN"` 覆盖 double 型
+  样式属性。
+- 风险 1（Headless 测试包）与风险 3（Services 桌面可用性）不在样板范围，留待对应
+  plan 验证。
+- **验证局限**：所有页面的视觉排布效果均未经目视确认，仅验证了"构建 0 错误 + 运行
+  无异常堆栈"。
+
 ## 交付顺序与验证标准
 
 **第一阶段（样板）**：完成 `Avalonia.LayoutDemo`。选它作样板的理由——纯 UI、零外部依赖、
