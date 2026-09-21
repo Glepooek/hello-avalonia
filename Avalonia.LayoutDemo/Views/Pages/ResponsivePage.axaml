@@ -1,0 +1,93 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             xmlns:vm="using:Avalonia.LayoutDemo.ViewModels"
+             mc:Ignorable="d"
+             d:DesignWidth="860"
+             d:DesignHeight="560"
+             x:Class="Avalonia.LayoutDemo.Views.Pages.ResponsivePage"
+             x:DataType="vm:ResponsiveViewModel">
+
+    <UserControl.Styles>
+        <Style Selector="TextBlock.caption">
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="Margin" Value="0,16,0,6" />
+        </Style>
+        <Style Selector="Border.tile">
+            <Setter Property="Background" Value="#4A7BE8" />
+            <Setter Property="CornerRadius" Value="4" />
+            <Setter Property="Height" Value="44" />
+            <Setter Property="Margin" Value="3" />
+        </Style>
+    </UserControl.Styles>
+
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="响应式布局：横向拉伸窗口观察四种手段的反应"
+                               DocPath="docs/layout/responsive-layouts" />
+
+            <TextBlock Classes="caption" Text="1. 容器查询 —— 样式随祖先控件尺寸触发，类似 CSS media query" />
+            <Border Name="QueryHost"
+                    Container.Name="ResponsiveHost"
+                    Container.Sizing="Width"
+                    BorderBrush="#40FFFFFF"
+                    BorderThickness="1"
+                    CornerRadius="4"
+                    Padding="8">
+                <Border.Styles>
+                    <!--  Tiered breakpoints: each query sets a different column count.  -->
+                    <ContainerQuery Name="ResponsiveHost" Query="max-width:400">
+                        <Style Selector="UniformGrid#TileGrid">
+                            <Setter Property="Columns" Value="1" />
+                        </Style>
+                    </ContainerQuery>
+                    <ContainerQuery Name="ResponsiveHost" Query="min-width:400 and max-width:700">
+                        <Style Selector="UniformGrid#TileGrid">
+                            <Setter Property="Columns" Value="2" />
+                        </Style>
+                    </ContainerQuery>
+                    <ContainerQuery Name="ResponsiveHost" Query="min-width:700">
+                        <Style Selector="UniformGrid#TileGrid">
+                            <Setter Property="Columns" Value="4" />
+                        </Style>
+                    </ContainerQuery>
+                </Border.Styles>
+                <UniformGrid Name="TileGrid" Columns="1">
+                    <Border Classes="tile" />
+                    <Border Classes="tile" />
+                    <Border Classes="tile" />
+                    <Border Classes="tile" />
+                </UniformGrid>
+            </Border>
+
+            <TextBlock Classes="caption" Text="2. OnFormFactor / OnPlatform —— 启动时解析一次，不响应运行时缩放" />
+            <StackPanel Spacing="4">
+                <TextBlock Text="{OnFormFactor Desktop='当前按桌面版式渲染', Mobile='当前按移动版式渲染', Default='未知设备类型'}" />
+                <TextBlock Text="{OnPlatform Windows='运行于 Windows', macOS='运行于 macOS', Linux='运行于 Linux', Default='运行于其他平台'}" />
+            </StackPanel>
+
+            <TextBlock Classes="caption" Text="3. 换行面板 —— 内容装不下就折行，最省事的响应式手段" />
+            <WrapPanel>
+                <Border Classes="tile" Width="120" />
+                <Border Classes="tile" Width="120" />
+                <Border Classes="tile" Width="120" />
+                <Border Classes="tile" Width="120" />
+                <Border Classes="tile" Width="120" />
+                <Border Classes="tile" Width="120" />
+            </WrapPanel>
+
+            <TextBlock Classes="caption" Text="4. 断点 ViewModel —— 在代码里判定，可组合尺寸以外的条件" />
+            <StackPanel Spacing="6">
+                <TextBlock Text="{Binding CurrentWidth, StringFormat='当前页面宽度：{0:F0} px（阈值 500）'}" />
+                <Border Background="#E8974A" CornerRadius="4" Padding="10" IsVisible="{Binding IsCompact}">
+                    <TextBlock Text="窄版式：宽度小于 500 px 时显示这一块" />
+                </Border>
+                <Border Background="#6FE84A" CornerRadius="4" Padding="10" IsVisible="{Binding IsWide}">
+                    <TextBlock Text="宽版式：宽度不小于 500 px 时显示这一块" Foreground="Black" />
+                </Border>
+            </StackPanel>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

@@ -21,5 +21,8 @@
         <TabItem Header="定位与间距">
             <pages:PositioningPage />
         </TabItem>
+        <TabItem Header="响应式布局">
+            <pages:ResponsivePage />
+        </TabItem>
     </TabControl>
 </Window>
