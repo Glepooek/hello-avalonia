@@ -1,0 +1,28 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:pages="using:Avalonia.LayoutDemo.Views.Pages"
+        mc:Ignorable="d"
+        d:DesignWidth="900"
+        d:DesignHeight="640"
+        x:Class="Avalonia.LayoutDemo.Views.MainWindow"
+        Icon="/Assets/avalonia-logo.ico"
+        Title="Avalonia Layout Demo"
+        Width="900"
+        Height="640"
+        WindowStartupLocation="CenterScreen">
+
+    <!--  One tab per documentation topic under the Layout category.  -->
+    <TabControl Margin="12">
+        <TabItem Header="布局面板">
+            <pages:PanelsPage />
+        </TabItem>
+        <TabItem Header="定位与间距">
+            <pages:PositioningPage />
+        </TabItem>
+        <TabItem Header="响应式布局">
+            <pages:ResponsivePage />
+        </TabItem>
+    </TabControl>
+</Window>

@@ -1,0 +1,28 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:controls="using:Avalonia.Shared.Controls">
+
+    <ControlTheme x:Key="{x:Type controls:DemoHeader}" TargetType="controls:DemoHeader">
+        <Setter Property="Margin" Value="0,0,0,12" />
+        <Setter Property="Template">
+            <ControlTemplate TargetType="controls:DemoHeader">
+                <Border Background="{DynamicResource SystemControlBackgroundListLowBrush}"
+                        BorderBrush="{DynamicResource SystemAccentColor}"
+                        BorderThickness="4,0,0,0"
+                        CornerRadius="0,4,4,0"
+                        Padding="12,8">
+                    <StackPanel Spacing="2">
+                        <TextBlock FontSize="15"
+                                   FontWeight="SemiBold"
+                                   Text="{TemplateBinding Title}" />
+                        <!--  The doc path is dimmed: it is a reference, not the message.  -->
+                        <TextBlock FontFamily="Consolas, monospace"
+                                   FontSize="12"
+                                   Opacity="0.65"
+                                   Text="{TemplateBinding DocPath}" />
+                    </StackPanel>
+                </Border>
+            </ControlTemplate>
+        </Setter>
+    </ControlTheme>
+</ResourceDictionary>

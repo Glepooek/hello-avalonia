@@ -1,0 +1,156 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             mc:Ignorable="d"
+             d:DesignWidth="860"
+             d:DesignHeight="560"
+             x:Class="Avalonia.LayoutDemo.Views.Pages.PanelsPage">
+
+    <UserControl.Styles>
+        <!--  Every panel below hosts these same five blocks, so differences come from the panel alone.  -->
+        <Style Selector="Border.block">
+            <Setter Property="Width" Value="52" />
+            <Setter Property="Height" Value="32" />
+            <Setter Property="Margin" Value="2" />
+            <Setter Property="CornerRadius" Value="3" />
+        </Style>
+        <Style Selector="Border.card">
+            <Setter Property="BorderBrush" Value="#40FFFFFF" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="CornerRadius" Value="4" />
+            <Setter Property="Padding" Value="8" />
+            <Setter Property="Height" Value="150" />
+        </Style>
+        <Style Selector="TextBlock.caption">
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="Margin" Value="0,0,0,4" />
+        </Style>
+    </UserControl.Styles>
+
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="布局面板对照：同样的 5 个色块，8 种排布结果"
+                               DocPath="docs/layout/choosing-a-layout-panel" />
+
+            <UniformGrid Columns="2">
+
+                <!--  Grid: rows and columns sized independently. The only panel with proportional sizing.  -->
+                <StackPanel Margin="4">
+                    <TextBlock Classes="caption" Text="Grid — 行列独立定尺，支持 * 比例分配" />
+                    <Border Classes="card">
+                        <Grid ColumnDefinitions="Auto,*,Auto" RowDefinitions="Auto,*">
+                            <Border Grid.Row="0" Grid.Column="0" Classes="block" Background="#E8564A" />
+                            <Border Grid.Row="0" Grid.Column="1" Classes="block" Background="#E8974A" Width="NaN" />
+                            <Border Grid.Row="0" Grid.Column="2" Classes="block" Background="#E8D24A" />
+                            <Border Grid.Row="1" Grid.Column="0" Classes="block" Background="#6FE84A" />
+                            <Border Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Classes="block" Background="#4AC7E8" Width="NaN" />
+                        </Grid>
+                    </Border>
+                </StackPanel>
+
+                <!--  DockPanel: earlier children win space; the last one fills what is left.  -->
+                <StackPanel Margin="4">
+                    <TextBlock Classes="caption" Text="DockPanel — 先声明先占边，最后一个填满剩余" />
+                    <Border Classes="card">
+                        <DockPanel>
+                            <Border Classes="block" Background="#E8564A" DockPanel.Dock="Top" Width="NaN" />
+                            <Border Classes="block" Background="#E8974A" DockPanel.Dock="Bottom" Width="NaN" />
+                            <Border Classes="block" Background="#E8D24A" DockPanel.Dock="Left" Height="NaN" />
+                            <Border Classes="block" Background="#6FE84A" DockPanel.Dock="Right" Height="NaN" />
+                            <Border Classes="block" Background="#4AC7E8" Width="NaN" Height="NaN" />
+                        </DockPanel>
+                    </Border>
+                </StackPanel>
+
+                <!--  StackPanel: one direction, no wrapping, children get unlimited space along it.  -->
+                <StackPanel Margin="4">
+                    <TextBlock Classes="caption" Text="StackPanel — 单方向排列，不换行" />
+                    <Border Classes="card">
+                        <StackPanel Orientation="Horizontal">
+                            <Border Classes="block" Background="#E8564A" />
+                            <Border Classes="block" Background="#E8974A" />
+                            <Border Classes="block" Background="#E8D24A" />
+                            <Border Classes="block" Background="#6FE84A" />
+                            <Border Classes="block" Background="#4AC7E8" />
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+
+                <!--  WrapPanel: same as StackPanel until it runs out of room, then breaks to a new line.  -->
+                <StackPanel Margin="4">
+                    <TextBlock Classes="caption" Text="WrapPanel — 排满即换行，行与行独立对齐" />
+                    <Border Classes="card" Width="220" HorizontalAlignment="Left">
+                        <WrapPanel Orientation="Horizontal">
+                            <Border Classes="block" Background="#E8564A" />
+                            <Border Classes="block" Background="#E8974A" />
+                            <Border Classes="block" Background="#E8D24A" />
+                            <Border Classes="block" Background="#6FE84A" />
+                            <Border Classes="block" Background="#4AC7E8" />
+                        </WrapPanel>
+                    </Border>
+                </StackPanel>
+
+                <!--  UniformGrid: every cell identical, regardless of content size.  -->
+                <StackPanel Margin="4">
+                    <TextBlock Classes="caption" Text="UniformGrid — 等分单元格，与内容尺寸无关" />
+                    <Border Classes="card">
+                        <UniformGrid Columns="3">
+                            <Border Classes="block" Background="#E8564A" Width="NaN" Height="NaN" />
+                            <Border Classes="block" Background="#E8974A" Width="NaN" Height="NaN" />
+                            <Border Classes="block" Background="#E8D24A" Width="NaN" Height="NaN" />
+                            <Border Classes="block" Background="#6FE84A" Width="NaN" Height="NaN" />
+                            <Border Classes="block" Background="#4AC7E8" Width="NaN" Height="NaN" />
+                        </UniformGrid>
+                    </Border>
+                </StackPanel>
+
+                <!--  RelativePanel: each child positioned against a sibling or a panel edge.  -->
+                <StackPanel Margin="4">
+                    <TextBlock Classes="caption" Text="RelativePanel — 相对兄弟元素或面板边缘定位" />
+                    <Border Classes="card">
+                        <RelativePanel>
+                            <Border Name="Anchor" Classes="block" Background="#E8564A"
+                                    RelativePanel.AlignHorizontalCenterWithPanel="True"
+                                    RelativePanel.AlignVerticalCenterWithPanel="True" />
+                            <Border Classes="block" Background="#E8974A" RelativePanel.Above="Anchor" RelativePanel.AlignHorizontalCenterWith="Anchor" />
+                            <Border Classes="block" Background="#E8D24A" RelativePanel.Below="Anchor" RelativePanel.AlignHorizontalCenterWith="Anchor" />
+                            <Border Classes="block" Background="#6FE84A" RelativePanel.LeftOf="Anchor" RelativePanel.AlignVerticalCenterWith="Anchor" />
+                            <Border Classes="block" Background="#4AC7E8" RelativePanel.RightOf="Anchor" RelativePanel.AlignVerticalCenterWith="Anchor" />
+                        </RelativePanel>
+                    </Border>
+                </StackPanel>
+
+                <!--  Canvas: absolute coordinates. The only panel that ignores the available size.  -->
+                <StackPanel Margin="4">
+                    <TextBlock Classes="caption" Text="Canvas — 绝对坐标，不随窗口尺寸调整" />
+                    <Border Classes="card">
+                        <Canvas>
+                            <Border Classes="block" Background="#E8564A" Canvas.Left="0" Canvas.Top="0" />
+                            <Border Classes="block" Background="#E8974A" Canvas.Left="30" Canvas.Top="24" />
+                            <Border Classes="block" Background="#E8D24A" Canvas.Left="60" Canvas.Top="48" />
+                            <Border Classes="block" Background="#6FE84A" Canvas.Left="90" Canvas.Top="72" />
+                            <Border Classes="block" Background="#4AC7E8" Canvas.Left="120" Canvas.Top="96" />
+                        </Canvas>
+                    </Border>
+                </StackPanel>
+
+                <!--  Panel: the base class itself. Children stack in Z order, declaration order = bottom to top.  -->
+                <StackPanel Margin="4">
+                    <TextBlock Classes="caption" Text="Panel — 按声明顺序层叠（后声明的在上层）" />
+                    <Border Classes="card">
+                        <Panel>
+                            <Border Classes="block" Background="#E8564A" Width="120" Height="90" />
+                            <Border Classes="block" Background="#E8974A" Width="100" Height="74" />
+                            <Border Classes="block" Background="#E8D24A" Width="80" Height="58" />
+                            <Border Classes="block" Background="#6FE84A" Width="60" Height="42" />
+                            <Border Classes="block" Background="#4AC7E8" Width="40" Height="26" />
+                        </Panel>
+                    </Border>
+                </StackPanel>
+
+            </UniformGrid>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>
