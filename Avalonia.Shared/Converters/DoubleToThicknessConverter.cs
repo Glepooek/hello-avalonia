@@ -18,6 +18,10 @@ namespace Avalonia.Shared.Converters
     {
         public static readonly DoubleToThicknessConverter Instance = new();
 
+        // Unconvertible input yields UnsetValue, which drops the property back to
+        // its default. BindingOperations.DoNothing would instead freeze the target
+        // at its last good value — a quieter failure than the one this converter
+        // exists to fix.
         public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
         {
             return value is double length ? new Thickness(length) : AvaloniaProperty.UnsetValue;
