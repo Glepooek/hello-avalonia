@@ -74,7 +74,7 @@ and Animation 有 21 个。若全部塞进单个 `MainWindow.axaml`，文件会�
 
 ```
 布局面板选择 — docs/layout/choosing-a-layout-panel
-Avalonia 提供 7 种内置面板，本页对照它们在相同内容下的排布差异。
+Avalonia 提供 8 种内置面板，本页对照它们在相同内容下的排布差异。
 ```
 
 这让演示页与官方文档可双向对照，读者看到某个效果能立刻回查原文。
@@ -89,7 +89,7 @@ Layout 官方只有 3 个子页，就是 3 个 Tab，不为凑数拆分。
 |---|---|---|
 | 1 | `Avalonia.FundamentalsDemo` | Code-only UI / Code-behind / MVVM 模式 / TopLevel / UI 组合 / 视觉树与逻辑树 / 应用生命周期 / Assets 资源 |
 | 2 | `Avalonia.XamlDemo` | XAML 命名空间 / x: 指令 / 标记扩展 / 类型转换器 / XAML 泛型 / 编译型 XAML |
-| 3 | `Avalonia.LayoutDemo` | 布局面板对照（Stack/Wrap/Dock/Grid/Canvas/Relative/UniformGrid）/ 定位对齐与 Margin-Padding / 响应式布局 |
+| 3 | `Avalonia.LayoutDemo` | 布局面板对照（Grid/DockPanel/StackPanel/WrapPanel/UniformGrid/RelativePanel/Canvas/Panel）/ 定位对齐与 Margin-Padding / 响应式布局 |
 | 4 | `Avalonia.StylingDemo` | Style 与选择器语法 / 样式类 / 伪类 / ControlTheme / 主题与 ThemeVariant / 容器查询 / 自定义字体与排版 / 样式共享 / 属性值优先级 |
 | 5 | `Avalonia.DataBindingDemo` | 绑定语法与 DataContext / 编译绑定 / 集合绑定 / 主从绑定 / MultiBinding / 命令与 CanExecute / 值转换器 / 数据校验 / 排序筛选分组 / 绑定调试 |
 | 6 | `Avalonia.DataTemplatesDemo` | DataTemplate 基础 / DataType 隐式匹配 / IDataTemplate 选择器 / ItemsPanelTemplate / TreeDataTemplate / ControlTemplate 对照 |
