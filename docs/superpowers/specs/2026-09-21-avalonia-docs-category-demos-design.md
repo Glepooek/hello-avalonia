@@ -161,9 +161,10 @@ ReactiveUI、Prism 等会让读者分不清"这是 Avalonia 的能力"还是"这
 以下几点无法从文档确定，在样板项目阶段先行验证，结果反馈后再批量推进：
 
 1. **`Avalonia.Headless.XUnit` 是否有 12.1.2 版本**。Avalonia 12 发布不久，配套测试包
-   可能滞后（`Avalonia.Diagnostics` 就停在 11.3.22）。回退顺序：先试 12.x 最新版；不可用
-   则试与 Avalonia 12 二进制兼容的最近版本；仍不可用则项目 #15 不建，#14 保留为普通演示
-   项目，并在 README 中说明原因。
+   可能滞后（`Avalonia.Diagnostics` 就停在 11.3.22）。**全部项目统一使用 Avalonia 12，
+   不为任何项目降级到 11。** 回退顺序：先试 12.x 最新版；不可用则试与 Avalonia 12 二进制
+   兼容的最近版本；仍不可用则项目 #15 不建，#14 保留为普通演示项目，并在 README 中说明
+   该分类待上游发布 12.x 测试包后补齐。
 2. **Container Queries 在 12.1.2 的可用性**。该特性在文档中列于 Styling 分类，但属较新
    特性，需确认 API 形态与文档一致。
 3. **Services 分类的桌面平台可用性**。InputPane、InsetsManager 主要面向移动端，在
