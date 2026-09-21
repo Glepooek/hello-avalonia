@@ -1,0 +1,91 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             mc:Ignorable="d"
+             d:DesignWidth="860"
+             d:DesignHeight="560"
+             x:Class="Avalonia.LayoutDemo.Views.Pages.PositioningPage">
+
+    <UserControl.Styles>
+        <Style Selector="Border.stage">
+            <Setter Property="Background" Value="#20FFFFFF" />
+            <Setter Property="BorderBrush" Value="#40FFFFFF" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="CornerRadius" Value="4" />
+        </Style>
+        <Style Selector="TextBlock.caption">
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="Margin" Value="0,16,0,6" />
+        </Style>
+    </UserControl.Styles>
+
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="定位控件：对齐、外边距与内边距"
+                               DocPath="docs/layout/positioning-controls" />
+
+            <TextBlock Classes="caption" Text="1. HorizontalAlignment / VerticalAlignment — 子元素在父级分配空间内的落点" />
+            <UniformGrid Columns="4" Height="120">
+                <Border Classes="stage" Margin="3">
+                    <Button HorizontalAlignment="Left" VerticalAlignment="Top" Content="Left / Top" />
+                </Border>
+                <Border Classes="stage" Margin="3">
+                    <Button HorizontalAlignment="Center" VerticalAlignment="Center" Content="Center" />
+                </Border>
+                <Border Classes="stage" Margin="3">
+                    <Button HorizontalAlignment="Right" VerticalAlignment="Bottom" Content="Right / Bottom" />
+                </Border>
+                <Border Classes="stage" Margin="3">
+                    <!--  Stretch is the default for both axes, hence no attribute needed here.  -->
+                    <Button Content="Stretch（默认值）" />
+                </Border>
+            </UniformGrid>
+
+            <TextBlock Classes="caption" Text="2. 显式尺寸会压过 Stretch —— 两个按钮都是 Stretch，右边那个设了 Width" />
+            <UniformGrid Columns="2" Height="70">
+                <Border Classes="stage" Margin="3">
+                    <Button Content="无 Width：撑满" />
+                </Border>
+                <Border Classes="stage" Margin="3">
+                    <!--  An explicit Width wins: the Stretch request is silently ignored.  -->
+                    <Button Width="150" Content="Width=150：不撑满" />
+                </Border>
+            </UniformGrid>
+
+            <TextBlock Classes="caption" Text="3. Margin 是元素外的间距，Padding 是元素内的间距（拖动滑块对比）" />
+            <Grid ColumnDefinitions="*,*" RowDefinitions="Auto,Auto">
+                <StackPanel Grid.Row="0" Grid.Column="0" Margin="3">
+                    <TextBlock Text="{Binding #MarginSlider.Value, StringFormat='Margin = {0:F0}'}" />
+                    <Slider Name="MarginSlider" Minimum="-20" Maximum="40" Value="8" />
+                </StackPanel>
+                <StackPanel Grid.Row="0" Grid.Column="1" Margin="3">
+                    <TextBlock Text="{Binding #PaddingSlider.Value, StringFormat='Padding = {0:F0}'}" />
+                    <Slider Name="PaddingSlider" Minimum="0" Maximum="40" Value="8" />
+                </StackPanel>
+
+                <Border Grid.Row="1" Grid.Column="0" Classes="stage" Margin="3" Height="110">
+                    <!--  Margin pushes the child away from the stage edge; negative values let it spill out.  -->
+                    <Border Background="#E8564A" CornerRadius="3" Margin="{Binding #MarginSlider.Value}">
+                        <TextBlock Margin="8" Text="我有 Margin" VerticalAlignment="Center" />
+                    </Border>
+                </Border>
+                <Border Grid.Row="1" Grid.Column="1" Classes="stage" Margin="3" Height="110">
+                    <!--  Padding grows the element itself: only Border, TemplatedControl and TextBlock expose it.  -->
+                    <Border Background="#4AC7E8" CornerRadius="3" Padding="{Binding #PaddingSlider.Value}"
+                            HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <TextBlock Text="我有 Padding" VerticalAlignment="Center" />
+                    </Border>
+                </Border>
+            </Grid>
+
+            <TextBlock Classes="caption" Text="4. Margin 的四值写法：左、上、右、下（顺时针从左开始）" />
+            <Border Classes="stage" Height="110">
+                <Border Background="#6FE84A" CornerRadius="3" Margin="40,10,5,25">
+                    <TextBlock Margin="8" Text='Margin="40,10,5,25"' VerticalAlignment="Center" />
+                </Border>
+            </Border>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

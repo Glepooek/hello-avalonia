@@ -18,5 +18,8 @@
         <TabItem Header="布局面板">
             <pages:PanelsPage />
         </TabItem>
+        <TabItem Header="定位与间距">
+            <pages:PositioningPage />
+        </TabItem>
     </TabControl>
 </Window>
