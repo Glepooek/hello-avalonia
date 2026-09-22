@@ -31,7 +31,7 @@
                     <TextBlock TextWrapping="Wrap" Text="Model — 数据与业务规则，不知道界面存在" />
                     <TextBlock TextWrapping="Wrap" Text="ViewModel — 界面状态与命令，不引用任何控件类型" />
                     <TextBlock TextWrapping="Wrap" Text="View — 只做展示与绑定，不存状态" />
-                    <TextBlock TextWrapping="Wrap" Opacity="0.75"
+                    <TextBlock Classes="hint"
                                Text="判断 ViewModel 写对了没有：它的 using 里若出现 Avalonia.Controls，多半越界了。" />
                 </StackPanel>
             </Border>

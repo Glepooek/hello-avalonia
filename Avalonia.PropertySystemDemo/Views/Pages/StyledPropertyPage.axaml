@@ -27,7 +27,7 @@
                     <Slider Name="ValueSlider" Minimum="-50" Maximum="150" Value="30" />
                     <controls:GaugeControl Caption="本地值驱动"
                                            Value="{Binding #ValueSlider.Value}" />
-                    <TextBlock Opacity="0.75" TextWrapping="Wrap"
+                    <TextBlock Classes="hint"
                                Text="滑块范围是 -50 到 150，但仪表永远停在 0 到 100 之间——coerce 回调在每次写入时都会夹取。" />
                 </StackPanel>
             </Border>
@@ -42,7 +42,7 @@
                     <controls:GaugeControl Name="StyledGauge" Caption="样式类驱动" />
                     <CheckBox Name="WarningToggle" Content="加上 warning 样式类（Value=90）"
                               IsCheckedChanged="OnWarningToggled" />
-                    <TextBlock Opacity="0.75" TextWrapping="Wrap"
+                    <TextBlock Classes="hint"
                                Text="注意这个 GaugeControl 元素上没有写 Value。写了的话它就是本地值，样式类将永远不起作用——且没有任何报错或日志。" />
                 </StackPanel>
             </Border>

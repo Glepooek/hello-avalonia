@@ -42,7 +42,7 @@
                             </ItemsPanelTemplate>
                         </ItemsControl.ItemsPanel>
                     </ItemsControl>
-                    <TextBlock Opacity="0.75" TextWrapping="Wrap"
+                    <TextBlock Classes="hint"
                                Text="写法：&lt;gen:List x:TypeArguments=&quot;sys:String&quot;&gt;。类型实参本身也要带命名空间前缀。" />
                 </StackPanel>
             </Border>
@@ -57,7 +57,7 @@
                             </ItemsPanelTemplate>
                         </ItemsControl.ItemsPanel>
                     </ItemsControl>
-                    <TextBlock Opacity="0.75" TextWrapping="Wrap"
+                    <TextBlock Classes="hint"
                                Text="PriorityList : List&lt;PriorityLevel&gt; 在 XAML 里就是个普通类型，不需要 x:TypeArguments。多处复用同一个闭合类型时这样更省事。" />
                 </StackPanel>
             </Border>

@@ -22,4 +22,10 @@
         <Setter Property="BorderThickness" Value="1" />
         <Setter Property="CornerRadius" Value="4" />
     </Style>
+
+    <!--  Secondary explanatory text beneath a demonstration.  -->
+    <Style Selector="TextBlock.hint">
+        <Setter Property="Opacity" Value="0.75" />
+        <Setter Property="TextWrapping" Value="Wrap" />
+    </Style>
 </Styles>

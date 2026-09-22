@@ -31,7 +31,7 @@
             <Border Classes="stage" Padding="10">
                 <StackPanel Spacing="4">
                     <TextBlock Text="{Binding #Target.Readout, StringFormat='Readout 当前是：{0}'}" />
-                    <TextBlock Opacity="0.75" TextWrapping="Wrap"
+                    <TextBlock Classes="hint"
                                Text="GaugeControl 重写了 OnPropertyChanged，发现 ValueProperty 变化就更新 Readout。这是让一个属性跟随另一个属性的标准位置。" />
                 </StackPanel>
             </Border>
@@ -47,7 +47,7 @@
                     <Slider Name="FontSlider" Minimum="10" Maximum="28" Value="14" />
                 </StackPanel>
             </Border>
-            <TextBlock Opacity="0.75" TextWrapping="Wrap" Margin="0,4,0,0"
+            <TextBlock Classes="hint" Margin="0,4,0,0"
                        Text="FontSize 是注册时带 inherits 的属性之一。Avalonia 里只有少量属性参与继承：FontSize、FontFamily、Foreground、FlowDirection 等。" />
 
             <TextBlock Classes="caption" Text="4. 注册时能提供哪些元数据" />

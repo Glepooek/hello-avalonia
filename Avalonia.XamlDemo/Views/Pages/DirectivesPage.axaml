@@ -59,7 +59,7 @@
             <Border Classes="stage" Padding="10">
                 <StackPanel Spacing="6">
                     <TextBlock Name="TypeText" />
-                    <TextBlock Opacity="0.75" TextWrapping="Wrap"
+                    <TextBlock Classes="hint"
                                Text="x:Type 的日常位置是 ControlTheme 的 x:Key 与 TargetType（见 Avalonia.Shared/Controls/DemoHeader.axaml）。它不能直接当 Binding 的 Source——编译型 XAML 会要求 x:DataType，报 AVLN2100。" />
                 </StackPanel>
             </Border>

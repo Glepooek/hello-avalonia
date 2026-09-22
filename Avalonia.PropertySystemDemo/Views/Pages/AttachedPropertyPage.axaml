@@ -30,7 +30,7 @@
                         <Button Name="TargetB" Content="按钮 B" />
                     </StackPanel>
                     <CheckBox Content="给按钮 A 挂上 IsHighlighted" IsCheckedChanged="OnHighlightToggled" />
-                    <TextBlock Opacity="0.75" TextWrapping="Wrap"
+                    <TextBlock Classes="hint"
                                Text="Button 类里没有 IsHighlighted 这个属性，是 HighlightBehavior 挂上去的。上面的样式选择器据此改变外观。" />
                 </StackPanel>
             </Border>
@@ -44,7 +44,7 @@
                             Background="#E8564A" CornerRadius="3" Margin="2" />
                 </Grid>
             </Border>
-            <TextBlock Opacity="0.75" TextWrapping="Wrap" Margin="0,4,0,0"
+            <TextBlock Classes="hint" Margin="0,4,0,0"
                        Text="Grid.Row / Grid.Column / Grid.ColumnSpan 都是 Grid 挂到子元素上的附加属性——Border 自己并不知道行列是什么。" />
 
             <TextBlock Classes="caption" Text="3. 继承型：设在祖先上，后代全部读到" />
