@@ -54,7 +54,7 @@
                     <!--  DemoHeader itself comes from Avalonia.Shared, declared as shared: above.  -->
                     <TextBlock TextWrapping="Wrap"
                                Text="本页顶部那条说明条就来自另一个程序集：xmlns:shared=&quot;using:Avalonia.Shared.Controls&quot;。" />
-                    <TextBlock TextWrapping="Wrap" Opacity="0.75"
+                    <TextBlock Classes="hint"
                                Text="跨程序集时 using: 后面写命名空间即可，Avalonia 会在已引用的程序集里查找；只有同名命名空间冲突时才需要 assembly= 限定。" />
                 </StackPanel>
             </Border>
