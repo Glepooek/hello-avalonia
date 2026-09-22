@@ -1,0 +1,40 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             mc:Ignorable="d"
+             d:DesignWidth="860"
+             d:DesignHeight="560"
+             x:Class="Avalonia.FundamentalsDemo.Views.Pages.TopLevelPage">
+
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="TopLevel：桌面窗口与嵌入宿主的共同基类"
+                               DocPath="fundamentals/top-level" />
+
+            <TextBlock Classes="caption" Text="1. 本页所在 TopLevel 的运行时信息（拖动窗口到不同显示器可观察缩放变化）" />
+            <Border Classes="stage" Padding="10">
+                <StackPanel Spacing="6">
+                    <TextBlock Name="TopLevelTypeText" />
+                    <TextBlock Name="ScalingText" />
+                    <TextBlock Name="ScreenText" />
+                    <TextBlock Name="ServiceText" TextWrapping="Wrap" />
+                    <Button Content="刷新" Click="OnRefreshClick" HorizontalAlignment="Left" />
+                </StackPanel>
+            </Border>
+
+            <TextBlock Classes="caption" Text="2. 为什么要经由 TopLevel 取服务" />
+            <Border Classes="stage" Padding="10">
+                <TextBlock TextWrapping="Wrap"
+                           Text="剪贴板、文件选择器、屏幕信息都属于某一个顶层窗口，而不属于整个应用。用 TopLevel.GetTopLevel(control) 取当前控件所在的顶层，代码在桌面窗口、浏览器页面、移动端视图里都能跑。" />
+            </Border>
+
+            <TextBlock Classes="caption" Text="3. 启动窗口是怎么设置的" />
+            <Border Classes="stage" Padding="10">
+                <SelectableTextBlock TextWrapping="Wrap"
+                                     Text="App.axaml.cs 的 OnFrameworkInitializationCompleted 里：if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop) desktop.MainWindow = new MainWindow();&#10;桌面之外的生命周期（单视图）用 ISingleViewApplicationLifetime.MainView，那里没有窗口概念。" />
+            </Border>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

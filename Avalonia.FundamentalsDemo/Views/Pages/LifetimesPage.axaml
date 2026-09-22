@@ -1,0 +1,50 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             mc:Ignorable="d"
+             d:DesignWidth="860"
+             d:DesignHeight="560"
+             x:Class="Avalonia.FundamentalsDemo.Views.Pages.LifetimesPage">
+
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="应用生命周期与 Assets：当前进程跑在哪种生命周期下"
+                               DocPath="fundamentals/application-lifetimes" />
+
+            <TextBlock Classes="caption" Text="1. 运行时探测到的生命周期" />
+            <Border Classes="stage" Padding="10">
+                <StackPanel Spacing="6">
+                    <TextBlock Name="LifetimeText" TextWrapping="Wrap" />
+                    <TextBlock Name="WindowCountText" TextWrapping="Wrap" />
+                    <Button Content="再开一个窗口" Click="OnOpenWindowClick" HorizontalAlignment="Left" />
+                </StackPanel>
+            </Border>
+
+            <TextBlock Classes="caption" Text="2. 三种生命周期的区别" />
+            <Border Classes="stage" Padding="10">
+                <StackPanel Spacing="6">
+                    <TextBlock TextWrapping="Wrap" Text="IClassicDesktopStyleApplicationLifetime — 桌面：有多窗口、有退出码、可控制何时退出" />
+                    <TextBlock TextWrapping="Wrap" Text="ISingleViewApplicationLifetime — 移动端与浏览器：只有一个 MainView，没有窗口概念" />
+                    <TextBlock TextWrapping="Wrap" Text="无生命周期 — 设计器预览与 headless 测试宿主里 ApplicationLifetime 为 null" />
+                    <TextBlock TextWrapping="Wrap" Opacity="0.75"
+                               Text="因此 OnFrameworkInitializationCompleted 里那个 is 判断不是防御性代码，是真的会走另一条分支。" />
+                </StackPanel>
+            </Border>
+
+            <TextBlock Classes="caption" Text="3. Assets：用 avares:// 加载嵌入资源" />
+            <Border Classes="stage" Padding="10">
+                <StackPanel Orientation="Horizontal" Spacing="12">
+                    <!--  Loaded through the same avares scheme the code-behind uses.  -->
+                    <Image Width="48" Height="48" Source="/Assets/avalonia-logo.ico" />
+                    <StackPanel Spacing="4" VerticalAlignment="Center">
+                        <TextBlock Name="AssetText" TextWrapping="Wrap" />
+                        <TextBlock Opacity="0.75" TextWrapping="Wrap"
+                                   Text="XAML 里写相对路径即可；代码里要用完整的 avares://程序集名/路径，并通过 AssetLoader.Open 读取。" />
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

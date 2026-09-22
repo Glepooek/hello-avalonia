@@ -1,0 +1,40 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             mc:Ignorable="d"
+             d:DesignWidth="860"
+             d:DesignHeight="560"
+             x:Class="Avalonia.FundamentalsDemo.Views.Pages.CodeBehindPage">
+
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="Code-behind：x:Name 让 XAML 元素成为字段"
+                               DocPath="fundamentals/code-behind" />
+
+            <TextBlock Classes="caption" Text="1. x:Name 生成的字段可以在 code-behind 里直接访问" />
+            <Border Classes="stage" Padding="10">
+                <StackPanel Spacing="8">
+                    <TextBox Name="NameBox" PlaceholderText="你的名字" />
+                    <Button Name="GreetButton" Content="打招呼" Click="OnGreetClick" />
+                    <TextBlock Name="ResultText" Text="（结果显示在这里）" TextWrapping="Wrap" />
+                </StackPanel>
+            </Border>
+
+            <TextBlock Classes="caption" Text="2. 计数器：状态存在 code-behind 的字段里" />
+            <Border Classes="stage" Padding="10">
+                <StackPanel Orientation="Horizontal" Spacing="8">
+                    <Button Content="点我 +1" Click="OnCountClick" />
+                    <TextBlock Name="CountText" Text="0 次" VerticalAlignment="Center" />
+                </StackPanel>
+            </Border>
+
+            <TextBlock Classes="caption" Text="代价" />
+            <Border Classes="stage" Padding="10">
+                <TextBlock TextWrapping="Wrap"
+                           Text="状态和逻辑长在控件上，换一个界面就得重写，也无法脱离 UI 测试。功能点 3 的 MVVM 页演示如何把这两段逻辑搬出去。" />
+            </Border>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

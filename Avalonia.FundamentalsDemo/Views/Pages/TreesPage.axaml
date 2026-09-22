@@ -1,0 +1,63 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             xmlns:models="using:Avalonia.FundamentalsDemo.Models"
+             xmlns:vm="using:Avalonia.FundamentalsDemo.ViewModels"
+             mc:Ignorable="d"
+             d:DesignWidth="860"
+             d:DesignHeight="560"
+             x:Class="Avalonia.FundamentalsDemo.Views.Pages.TreesPage"
+             x:DataType="vm:TreesViewModel">
+
+    <Grid Margin="12" RowDefinitions="Auto,Auto,Auto,*">
+        <shared:DemoHeader Grid.Row="0"
+                           Title="视觉树与逻辑树：同一个控件，两种父子关系"
+                           DocPath="fundamentals/visual-and-logical-trees" />
+
+        <TextBlock Grid.Row="1" Classes="caption"
+                   Text="下面这个按钮是被观察的对象，点『生成快照』查看它展开成了什么" />
+
+        <Border Grid.Row="2" Classes="stage" Padding="10">
+            <StackPanel Spacing="8">
+                <Button Name="SampleButton" Content="我是一个普通按钮" HorizontalAlignment="Left" />
+                <StackPanel Orientation="Horizontal" Spacing="8">
+                    <Button Content="生成快照" Click="OnSnapshotClick" />
+                    <TextBlock Name="HintText" VerticalAlignment="Center" Opacity="0.75"
+                               Text="逻辑树只有你写的那一层；视觉树里是控件模板展开后的每个零件。" />
+                </StackPanel>
+            </StackPanel>
+        </Border>
+
+        <Grid Grid.Row="3" ColumnDefinitions="*,*" Margin="0,8,0,0">
+            <Border Grid.Column="0" Classes="stage" Margin="3" Padding="8">
+                <DockPanel>
+                    <TextBlock DockPanel.Dock="Top" Classes="caption" Margin="0,0,0,6"
+                               Text="逻辑树 LogicalChildren" />
+                    <TreeView ItemsSource="{Binding LogicalTree}">
+                        <TreeView.ItemTemplate>
+                            <TreeDataTemplate DataType="models:TreeNodeInfo" ItemsSource="{Binding Children}">
+                                <TextBlock Text="{Binding Label}" />
+                            </TreeDataTemplate>
+                        </TreeView.ItemTemplate>
+                    </TreeView>
+                </DockPanel>
+            </Border>
+
+            <Border Grid.Column="1" Classes="stage" Margin="3" Padding="8">
+                <DockPanel>
+                    <TextBlock DockPanel.Dock="Top" Classes="caption" Margin="0,0,0,6"
+                               Text="视觉树 GetVisualChildren" />
+                    <TreeView ItemsSource="{Binding VisualTree}">
+                        <TreeView.ItemTemplate>
+                            <TreeDataTemplate DataType="models:TreeNodeInfo" ItemsSource="{Binding Children}">
+                                <TextBlock Text="{Binding Label}" />
+                            </TreeDataTemplate>
+                        </TreeView.ItemTemplate>
+                    </TreeView>
+                </DockPanel>
+            </Border>
+        </Grid>
+    </Grid>
+</UserControl>

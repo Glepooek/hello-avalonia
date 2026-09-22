@@ -1,0 +1,38 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             mc:Ignorable="d"
+             d:DesignWidth="860"
+             d:DesignHeight="560"
+             x:Class="Avalonia.FundamentalsDemo.Views.Pages.CodedUiPage">
+
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="纯代码建 UI：同一个界面，XAML 与 C# 两种写法"
+                               DocPath="fundamentals/coded-ui" />
+
+            <TextBlock Classes="caption" Text="左边由 XAML 声明，右边由 C# 在构造函数里搭建，两者渲染结果一致" />
+            <Grid ColumnDefinitions="*,*">
+                <Border Grid.Column="0" Classes="stage" Margin="3" Padding="10">
+                    <StackPanel Spacing="6">
+                        <TextBlock FontWeight="SemiBold" Text="XAML 声明" />
+                        <TextBox PlaceholderText="输入点什么" />
+                        <Button Content="提交" HorizontalAlignment="Stretch"
+                                HorizontalContentAlignment="Center" />
+                    </StackPanel>
+                </Border>
+
+                <!--  Filled in by the constructor; see the code-behind.  -->
+                <Border Grid.Column="1" Name="CodeBuiltHost" Classes="stage" Margin="3" Padding="10" />
+            </Grid>
+
+            <TextBlock Classes="caption" Text="什么时候用纯代码" />
+            <Border Classes="stage" Padding="10">
+                <TextBlock TextWrapping="Wrap"
+                           Text="控件数量或层级在编译期无法确定时（例如按运行时数据生成表单），纯代码比 XAML 更直接。反之，静态布局用 XAML 更易读，也能享受编译型绑定与设计时预览。" />
+            </Border>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

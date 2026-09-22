@@ -1,0 +1,46 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             xmlns:vm="using:Avalonia.FundamentalsDemo.ViewModels"
+             mc:Ignorable="d"
+             d:DesignWidth="860"
+             d:DesignHeight="560"
+             x:Class="Avalonia.FundamentalsDemo.Views.Pages.MvvmPage"
+             x:DataType="vm:MvvmViewModel">
+
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="MVVM：把上一页的逻辑搬进 ViewModel"
+                               DocPath="fundamentals/the-mvvm-pattern" />
+
+            <TextBlock Classes="caption" Text="界面与上一页的第 1 组一模一样，但没有一行事件处理代码" />
+            <Border Classes="stage" Padding="10">
+                <StackPanel Spacing="8">
+                    <TextBox Text="{Binding Input}" PlaceholderText="你的名字" />
+                    <!--  The command supplies both the action and its enabled state.  -->
+                    <Button Command="{Binding GreetCommand}" Content="打招呼" />
+                    <TextBlock Text="{Binding Greeting}" TextWrapping="Wrap" />
+                </StackPanel>
+            </Border>
+
+            <TextBlock Classes="caption" Text="三层各自的职责" />
+            <Border Classes="stage" Padding="10">
+                <StackPanel Spacing="6">
+                    <TextBlock TextWrapping="Wrap" Text="Model — 数据与业务规则，不知道界面存在" />
+                    <TextBlock TextWrapping="Wrap" Text="ViewModel — 界面状态与命令，不引用任何控件类型" />
+                    <TextBlock TextWrapping="Wrap" Text="View — 只做展示与绑定，不存状态" />
+                    <TextBlock TextWrapping="Wrap" Opacity="0.75"
+                               Text="判断 ViewModel 写对了没有：它的 using 里若出现 Avalonia.Controls，多半越界了。" />
+                </StackPanel>
+            </Border>
+
+            <TextBlock Classes="caption" Text="按钮为什么一开始是灰的" />
+            <Border Classes="stage" Padding="10">
+                <TextBlock TextWrapping="Wrap"
+                           Text="GreetCommand 的 CanExecute 要求输入非空。输入框一变化，[NotifyCanExecuteChangedFor] 就通知命令重新求值，按钮随之启用——这一步若漏写，按钮会一直保持初始状态。" />
+            </Border>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>
