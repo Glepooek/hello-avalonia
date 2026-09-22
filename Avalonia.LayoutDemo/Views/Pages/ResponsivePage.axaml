@@ -11,10 +11,6 @@
              x:DataType="vm:ResponsiveViewModel">
 
     <UserControl.Styles>
-        <Style Selector="TextBlock.caption">
-            <Setter Property="FontWeight" Value="SemiBold" />
-            <Setter Property="Margin" Value="0,16,0,6" />
-        </Style>
         <Style Selector="Border.tile">
             <Setter Property="Background" Value="#4A7BE8" />
             <Setter Property="CornerRadius" Value="4" />
@@ -37,13 +33,18 @@
                     CornerRadius="4"
                     Padding="8">
                 <Border.Styles>
-                    <!--  Tiered breakpoints: each query sets a different column count.  -->
+                    <!--
+                        Tiered breakpoints, expressed as single-condition queries that cascade:
+                        the later match overrides the earlier one, the way CSS rules do. Avalonia
+                        12.1.2 parses an "a and b" query but only honours the right-hand condition,
+                        so a range has to be built from overlapping single conditions instead.
+                    -->
                     <ContainerQuery Name="ResponsiveHost" Query="max-width:400">
                         <Style Selector="UniformGrid#TileGrid">
                             <Setter Property="Columns" Value="1" />
                         </Style>
                     </ContainerQuery>
-                    <ContainerQuery Name="ResponsiveHost" Query="min-width:400 and max-width:700">
+                    <ContainerQuery Name="ResponsiveHost" Query="min-width:400">
                         <Style Selector="UniformGrid#TileGrid">
                             <Setter Property="Columns" Value="2" />
                         </Style>
@@ -54,7 +55,12 @@
                         </Style>
                     </ContainerQuery>
                 </Border.Styles>
-                <UniformGrid Name="TileGrid" Columns="1">
+                <!--
+                    Columns is deliberately left unset here. A value written on the element is a
+                    local value, which outranks every style setter permanently, so the queries
+                    above would never take effect. The narrowest query supplies the starting point.
+                -->
+                <UniformGrid Name="TileGrid">
                     <Border Classes="tile" />
                     <Border Classes="tile" />
                     <Border Classes="tile" />
