@@ -231,6 +231,30 @@ ReactiveUI、Prism 等会让读者分不清"这是 Avalonia 的能力"还是"这
   plan 里"人工目视核对"一类的验证步骤应当替换为这种可断言的检查——样板阶段
   plan Task 5 Step 5 写的"核对列数依次为 1 → 2 → 4"若真执行了，当场就会暴露上述缺陷。
 
+### 基础层实测结论（2026-09-22）
+
+三个项目（#1 Fundamentals、#2 XAML、#7 PropertySystem）落地过程中验证到的结果：
+
+- **官方文档子页与 spec 功能点映射有三处出入**（已按实际调整）：Fundamentals 官方有 12 个
+  子页而非 8 个，其中 `architecture` / `cross-platform-architecture` 无可交互内容、
+  `avalonia-xaml` 归项目 #2；Property System 分类只有 3 个子页，三种属性的定义方式实际在
+  `custom-controls/defining-properties`；XAML Reference 的 6 个子页与 spec 完全吻合。
+- **编译型 XAML 的两条响亮失败**：`{x:Static}` 返回枚举时不能直接填 `string` 属性
+  （`AVLN3000`），包一层 `{Binding Source=...}` 可解；`{x:Type}` 不能当 `Binding` 的
+  `Source`（`AVLN2100` 要求 `x:DataType`），它的正当位置是 `ControlTheme.TargetType`。
+- **`StringFormat` 里的字面花括号必须双写**（新增的静默失败类型）：单层 `{Binding}` 会被
+  .NET 复合格式化当成占位符，解析失败后**静默产出空字符串**，无报错无日志。后续项目凡用
+  `StringFormat` 的，headless 断言里要检查文本非空。
+- **`BindingPlugins` 在 12.1.2 不是公开 API**（`CS0122`）。需要展示编译型 XAML 的产物时，
+  改为反射程序集自身的 `CompiledAvaloniaXaml` 命名空间。
+- **属性系统行为确认**：`coerce` 在每次写入时生效（150→100、−20→0）；
+  `RegisterAttached(..., inherits: true)` 的值沿视觉树传递多层；
+  附加属性选择器语法为 `Button[(ns|Owner.Prop)=True]`（前缀用 `|`，属性名加圆括号）；
+  **本地值 111 确实压过样式 Setter 999**——样板阶段那个缺陷的最小复现。
+- **验证方式**：三个项目各用一个仓库外的 headless 探针断言关键属性值，跑完即弃。
+  这套做法在本组共拦下 3 个写 plan 阶段的错误（枚举填 string、`x:Type` 作 Source、
+  `StringFormat` 花括号），全部在编写期解决，未进入实现。
+
 ## 交付顺序与验证标准
 
 **第一阶段（样板）**：完成 `Avalonia.LayoutDemo`。选它作样板的理由——纯 UI、零外部依赖、
