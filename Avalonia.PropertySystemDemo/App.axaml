@@ -8,4 +8,12 @@
         <!--  Brings in DemoHeader plus the shared caption and stage styles.  -->
         <StyleInclude Source="avares://Avalonia.Shared/Themes/SharedStyles.axaml" />
     </Application.Styles>
+
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceInclude Source="avares://Avalonia.PropertySystemDemo/Controls/GaugeControl.axaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Application.Resources>
 </Application>

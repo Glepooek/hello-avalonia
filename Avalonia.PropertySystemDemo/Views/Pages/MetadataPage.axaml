@@ -1,0 +1,65 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             xmlns:controls="using:Avalonia.PropertySystemDemo.Controls"
+             mc:Ignorable="d"
+             d:DesignWidth="860"
+             d:DesignHeight="560"
+             x:Class="Avalonia.PropertySystemDemo.Views.Pages.MetadataPage">
+
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="元数据与回调：默认值、强制、变更通知"
+                               DocPath="properties/metadata-and-callbacks" />
+
+            <TextBlock Classes="caption" Text="1. coerce：每次写入都会夹取，来源不限" />
+            <Border Classes="stage" Padding="10">
+                <StackPanel Spacing="8">
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <Button Content="写入 150" Click="OnWriteHighClick" />
+                        <Button Content="写入 -20" Click="OnWriteLowClick" />
+                        <Button Content="写入 55" Click="OnWriteMidClick" />
+                    </StackPanel>
+                    <controls:GaugeControl Name="Target" Caption="看写进去和存下来的差别" />
+                    <TextBlock Name="CoerceLog" TextWrapping="Wrap" />
+                </StackPanel>
+            </Border>
+
+            <TextBlock Classes="caption" Text="2. 变更回调：派生值在 OnPropertyChanged 里重算" />
+            <Border Classes="stage" Padding="10">
+                <StackPanel Spacing="4">
+                    <TextBlock Text="{Binding #Target.Readout, StringFormat='Readout 当前是：{0}'}" />
+                    <TextBlock Opacity="0.75" TextWrapping="Wrap"
+                               Text="GaugeControl 重写了 OnPropertyChanged，发现 ValueProperty 变化就更新 Readout。这是让一个属性跟随另一个属性的标准位置。" />
+                </StackPanel>
+            </Border>
+
+            <TextBlock Classes="caption" Text="3. 值继承：设一次，后代全读到" />
+            <Border Name="InheritHost" Classes="stage" Padding="10">
+                <StackPanel Spacing="6">
+                    <TextBlock Text="下面两行的字号没有各自设置，是从这个 Border 继承的：" />
+                    <TextBlock Text="第一行" />
+                    <Border Padding="8">
+                        <TextBlock Text="第二行（又嵌了一层，仍然继承）" />
+                    </Border>
+                    <Slider Name="FontSlider" Minimum="10" Maximum="28" Value="14" />
+                </StackPanel>
+            </Border>
+            <TextBlock Opacity="0.75" TextWrapping="Wrap" Margin="0,4,0,0"
+                       Text="FontSize 是注册时带 inherits 的属性之一。Avalonia 里只有少量属性参与继承：FontSize、FontFamily、Foreground、FlowDirection 等。" />
+
+            <TextBlock Classes="caption" Text="4. 注册时能提供哪些元数据" />
+            <Border Classes="stage" Padding="10">
+                <StackPanel Spacing="4">
+                    <TextBlock Text="defaultValue — 谁也没设置时的值（优先级最低）" />
+                    <TextBlock Text="inherits — 是否沿视觉树向下传递" />
+                    <TextBlock Text="defaultBindingMode — 不写 Mode 时的默认绑定方向" />
+                    <TextBlock Text="coerce — 每次写入的夹取/规整回调" />
+                    <TextBlock Text="validate — 值非法时直接抛异常，与 coerce 的静默纠正相对" />
+                </StackPanel>
+            </Border>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

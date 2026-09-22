@@ -1,0 +1,59 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             xmlns:controls="using:Avalonia.PropertySystemDemo.Controls"
+             mc:Ignorable="d"
+             d:DesignWidth="860"
+             d:DesignHeight="560"
+             x:Class="Avalonia.PropertySystemDemo.Views.Pages.DirectPropertyPage">
+
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="DirectProperty：包了通知的普通字段"
+                               DocPath="custom-controls/defining-properties" />
+
+            <TextBlock Classes="caption" Text="1. Readout 是 DirectProperty，由 Value 变化时算出" />
+            <Border Classes="stage" Padding="10">
+                <StackPanel Spacing="8">
+                    <Slider Name="Driver" Minimum="0" Maximum="100" Value="25" />
+                    <controls:GaugeControl Name="Gauge" Caption="观察下方读数"
+                                           Value="{Binding #Driver.Value}" />
+                    <TextBlock Text="{Binding #Gauge.Readout, StringFormat='从外部绑定读到 Readout：{0}'}" />
+                </StackPanel>
+            </Border>
+
+            <TextBlock Classes="caption" Text="2. 两种属性的取舍" />
+            <Border Classes="stage" Padding="10">
+                <Grid ColumnDefinitions="Auto,*,*" RowDefinitions="Auto,Auto,Auto,Auto,Auto">
+                    <TextBlock Grid.Row="0" Grid.Column="0" FontWeight="SemiBold" Margin="0,0,16,4" Text="能力" />
+                    <TextBlock Grid.Row="0" Grid.Column="1" FontWeight="SemiBold" Margin="0,0,16,4" Text="StyledProperty" />
+                    <TextBlock Grid.Row="0" Grid.Column="2" FontWeight="SemiBold" Margin="0,0,0,4" Text="DirectProperty" />
+
+                    <TextBlock Grid.Row="1" Grid.Column="0" Margin="0,0,16,2" Text="样式可设置" />
+                    <TextBlock Grid.Row="1" Grid.Column="1" Margin="0,0,16,2" Text="可以" />
+                    <TextBlock Grid.Row="1" Grid.Column="2" Margin="0,0,0,2" Text="不可以" />
+
+                    <TextBlock Grid.Row="2" Grid.Column="0" Margin="0,0,16,2" Text="值继承 / 优先级仲裁" />
+                    <TextBlock Grid.Row="2" Grid.Column="1" Margin="0,0,16,2" Text="支持" />
+                    <TextBlock Grid.Row="2" Grid.Column="2" Margin="0,0,0,2" Text="不支持" />
+
+                    <TextBlock Grid.Row="3" Grid.Column="0" Margin="0,0,16,2" Text="读取开销" />
+                    <TextBlock Grid.Row="3" Grid.Column="1" Margin="0,0,16,2" Text="查优先级表" />
+                    <TextBlock Grid.Row="3" Grid.Column="2" Margin="0,0,0,2" Text="直接读字段" />
+
+                    <TextBlock Grid.Row="4" Grid.Column="0" Margin="0,0,16,0" Text="适合" />
+                    <TextBlock Grid.Row="4" Grid.Column="1" Margin="0,0,16,0" Text="外观类、可换肤的属性" />
+                    <TextBlock Grid.Row="4" Grid.Column="2" Margin="0,0,0,0" Text="高频读写的内部状态、只读派生值" />
+                </Grid>
+            </Border>
+
+            <TextBlock Classes="caption" Text="3. 注册一个 DirectProperty 要写什么" />
+            <Border Classes="stage" Padding="10">
+                <SelectableTextBlock FontFamily="Consolas, monospace" TextWrapping="Wrap"
+                                     Text="private string _readout = &quot;0%&quot;;&#10;&#10;public static readonly DirectProperty&lt;GaugeControl, string&gt; ReadoutProperty =&#10;    AvaloniaProperty.RegisterDirect&lt;GaugeControl, string&gt;(&#10;        nameof(Readout), o =&gt; o._readout);&#10;&#10;// 写入必须走 SetAndRaise，否则绑定收不到通知&#10;private set =&gt; SetAndRaise(ReadoutProperty, ref _readout, value);" />
+            </Border>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

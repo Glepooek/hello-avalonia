@@ -1,0 +1,57 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             xmlns:controls="using:Avalonia.PropertySystemDemo.Controls"
+             mc:Ignorable="d"
+             d:DesignWidth="860"
+             d:DesignHeight="560"
+             x:Class="Avalonia.PropertySystemDemo.Views.Pages.StyledPropertyPage">
+
+    <UserControl.Styles>
+        <!--  Styles can reach a StyledProperty. This is the whole point of the kind.  -->
+        <Style Selector="controls|GaugeControl.warning">
+            <Setter Property="Value" Value="90" />
+        </Style>
+    </UserControl.Styles>
+
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="StyledProperty：可被样式设置、支持强制与继承的属性"
+                               DocPath="custom-controls/defining-properties" />
+
+            <TextBlock Classes="caption" Text="1. 滑块直接写 Value（本地值）" />
+            <Border Classes="stage" Padding="10">
+                <StackPanel Spacing="8">
+                    <Slider Name="ValueSlider" Minimum="-50" Maximum="150" Value="30" />
+                    <controls:GaugeControl Caption="本地值驱动"
+                                           Value="{Binding #ValueSlider.Value}" />
+                    <TextBlock Opacity="0.75" TextWrapping="Wrap"
+                               Text="滑块范围是 -50 到 150，但仪表永远停在 0 到 100 之间——coerce 回调在每次写入时都会夹取。" />
+                </StackPanel>
+            </Border>
+
+            <TextBlock Classes="caption" Text="2. 样式类设置同一个属性" />
+            <Border Classes="stage" Padding="10">
+                <StackPanel Spacing="8">
+                    <!--
+                        No Value written on the element: a local value would outrank
+                        the style setter permanently and the class would do nothing.
+                    -->
+                    <controls:GaugeControl Name="StyledGauge" Caption="样式类驱动" />
+                    <CheckBox Name="WarningToggle" Content="加上 warning 样式类（Value=90）"
+                              IsCheckedChanged="OnWarningToggled" />
+                    <TextBlock Opacity="0.75" TextWrapping="Wrap"
+                               Text="注意这个 GaugeControl 元素上没有写 Value。写了的话它就是本地值，样式类将永远不起作用——且没有任何报错或日志。" />
+                </StackPanel>
+            </Border>
+
+            <TextBlock Classes="caption" Text="3. 注册一个 StyledProperty 要写什么" />
+            <Border Classes="stage" Padding="10">
+                <SelectableTextBlock FontFamily="Consolas, monospace" TextWrapping="Wrap"
+                                     Text="public static readonly StyledProperty&lt;double&gt; ValueProperty =&#10;    AvaloniaProperty.Register&lt;GaugeControl, double&gt;(&#10;        nameof(Value),&#10;        defaultValue: 0d,&#10;        coerce: static (_, v) =&gt; Math.Clamp(v, 0d, 100d));" />
+            </Border>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

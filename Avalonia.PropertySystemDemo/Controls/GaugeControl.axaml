@@ -1,0 +1,21 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:controls="using:Avalonia.PropertySystemDemo.Controls">
+
+    <ControlTheme x:Key="{x:Type controls:GaugeControl}" TargetType="controls:GaugeControl">
+        <Setter Property="Template">
+            <ControlTemplate TargetType="controls:GaugeControl">
+                <StackPanel Spacing="4">
+                    <TextBlock FontWeight="SemiBold" Text="{TemplateBinding Caption}" />
+                    <Border Background="#20FFFFFF" CornerRadius="3" Height="18">
+                        <!--  Width driven by Value through the ProgressBar-like fill.  -->
+                        <ProgressBar Maximum="100"
+                                     Minimum="0"
+                                     Value="{TemplateBinding Value}" />
+                    </Border>
+                    <TextBlock FontSize="12" Opacity="0.75" Text="{TemplateBinding Readout}" />
+                </StackPanel>
+            </ControlTemplate>
+        </Setter>
+    </ControlTheme>
+</ResourceDictionary>

@@ -1,0 +1,77 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             xmlns:vm="using:Avalonia.PropertySystemDemo.ViewModels"
+             mc:Ignorable="d"
+             d:DesignWidth="860"
+             d:DesignHeight="560"
+             x:Class="Avalonia.PropertySystemDemo.Views.Pages.PrecedencePage"
+             x:DataType="vm:PrecedenceViewModel">
+
+    <UserControl.Styles>
+        <Style Selector="Border.probe">
+            <Setter Property="Background" Value="#4A7BE8" />
+            <Setter Property="CornerRadius" Value="3" />
+            <Setter Property="Height" Value="32" />
+            <!--  Style priority: 3. Loses to anything written on the element.  -->
+            <Setter Property="Width" Value="300" />
+        </Style>
+        <Style Selector="Border.probe:pointerover">
+            <!--  Pseudo-class trigger priority: 1. Beats a plain style, loses to local.  -->
+            <Setter Property="Width" Value="380" />
+        </Style>
+    </UserControl.Styles>
+
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="属性值优先级：谁赢了，为什么"
+                               DocPath="properties/value-precedence" />
+
+            <TextBlock Classes="caption" Text="1. 三个方块用同一套样式，差别只在有没有写本地值" />
+            <Border Classes="stage" Padding="10">
+                <StackPanel Spacing="8">
+                    <TextBlock Text="A：只有样式（Width=300），鼠标悬停时伪类接管（380）" />
+                    <Border Name="ProbeA" Classes="probe" HorizontalAlignment="Left" />
+
+                    <TextBlock Text="B：元素上写了 Width=150，样式与伪类都失效" />
+                    <Border Name="ProbeB" Classes="probe" Width="150" HorizontalAlignment="Left" />
+
+                    <TextBlock Text="C：绑定到 ViewModel，绑定与本地值同级，后写的赢" />
+                    <Border Name="ProbeC" Classes="probe" Width="{Binding BoundWidth}" HorizontalAlignment="Left" />
+                    <Slider Minimum="80" Maximum="400" Value="{Binding BoundWidth}" />
+                </StackPanel>
+            </Border>
+
+            <TextBlock Classes="caption" Text="2. 实测读回来的宽度" />
+            <Border Classes="stage" Padding="10">
+                <StackPanel Spacing="4">
+                    <TextBlock Name="ReadoutA" />
+                    <TextBlock Name="ReadoutB" />
+                    <TextBlock Name="ReadoutC" />
+                    <Button Content="重新读取" Click="OnReadClick" HorizontalAlignment="Left" Margin="0,4,0,0" />
+                </StackPanel>
+            </Border>
+
+            <TextBlock Classes="caption" Text="3. 优先级表（数值越小越优先）" />
+            <Border Classes="stage" Padding="10">
+                <StackPanel Spacing="4">
+                    <TextBlock Text="0  Animation — 动画运行期间压过一切" />
+                    <TextBlock Text="0  LocalValue — 元素上直接写的属性、代码里的 SetValue" />
+                    <TextBlock Text="1  StyleTrigger — 伪类与容器查询命中时的 Setter" />
+                    <TextBlock Text="2  TemplatedParent — 控件模板里 TemplateBinding 带来的值" />
+                    <TextBlock Text="3  Style — 普通样式 Setter" />
+                    <TextBlock Text="4  Inherited — 从祖先继承" />
+                    <TextBlock Text="5  Default — 属性注册时的默认值" />
+                </StackPanel>
+            </Border>
+
+            <TextBlock Classes="caption" Text="4. 这条规则坑过本仓库一次" />
+            <Border Classes="stage" Padding="10">
+                <TextBlock TextWrapping="Wrap"
+                           Text="Avalonia.LayoutDemo 的容器查询演示里，UniformGrid 元素上写了 Columns=&quot;1&quot; 作为兜底，结果三个 ContainerQuery 的 Setter 全部失效，任何窗口宽度下都只渲染一列。它不报错、不记日志、不抛异常——因为从框架视角看这不是错误，是按设计工作的优先级规则。凡打算被样式驱动的属性，元素上就不要写值。" />
+            </Border>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>
