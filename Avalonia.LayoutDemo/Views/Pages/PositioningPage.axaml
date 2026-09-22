@@ -9,19 +9,7 @@
              d:DesignHeight="560"
              x:Class="Avalonia.LayoutDemo.Views.Pages.PositioningPage">
 
-    <UserControl.Styles>
-        <Style Selector="Border.stage">
-            <Setter Property="Background" Value="#20FFFFFF" />
-            <Setter Property="BorderBrush" Value="#40FFFFFF" />
-            <Setter Property="BorderThickness" Value="1" />
-            <Setter Property="CornerRadius" Value="4" />
-        </Style>
-        <Style Selector="TextBlock.caption">
-            <Setter Property="FontWeight" Value="SemiBold" />
-            <Setter Property="Margin" Value="0,16,0,6" />
-        </Style>
-    </UserControl.Styles>
-
+    <!--  Border.stage and TextBlock.caption come from SharedStyles.axaml.  -->
     <ScrollViewer>
         <StackPanel Margin="12">
             <shared:DemoHeader Title="定位控件：对齐、外边距与内边距"

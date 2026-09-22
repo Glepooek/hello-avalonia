@@ -8,4 +8,18 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Styles.Resources>
+
+    <!--  Section heading above a demonstration block.  -->
+    <Style Selector="TextBlock.caption">
+        <Setter Property="FontWeight" Value="SemiBold" />
+        <Setter Property="Margin" Value="0,16,0,6" />
+    </Style>
+
+    <!--  Neutral frame marking off the area a demonstration plays out in.  -->
+    <Style Selector="Border.stage">
+        <Setter Property="Background" Value="#20FFFFFF" />
+        <Setter Property="BorderBrush" Value="#40FFFFFF" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="CornerRadius" Value="4" />
+    </Style>
 </Styles>
