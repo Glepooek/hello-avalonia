@@ -175,9 +175,24 @@ ReactiveUI、Prism 等会让读者分不清"这是 Avalonia 的能力"还是"这
 
 ### 样板阶段实测结论（2026-09-21）
 
-- **容器查询**：可用。`Container.Name` / `Container.Sizing` 附加属性与
-  `<ContainerQuery Name="..." Query="max-width:400">` 元素在 Avalonia 12.1.2 中直接
-  编译通过、运行时无异常，未使用任何回退方案。
+- **容器查询**：语法可用，但有两个运行时约束，都属于"不报错、不记日志、不抛异常"的静默
+  失败，必须当成硬性规则传给后续项目。`Container.Name` / `Container.Sizing` 附加属性与
+  `<ContainerQuery Name="..." Query="max-width:400">` 元素在 Avalonia 12.1.2 中编译通过、
+  运行时无异常，未使用任何回退方案；但初版写法实测**列数在任何宽度下恒为 1**，两个缺陷叠加：
+  - **目标属性上不能写本地值。** XAML 元素属性（如 `<UniformGrid Columns="1">`）是
+    `BindingPriority.LocalValue`（值 0，最高），永久压过查询里的 Setter
+    （`StyleTrigger=1` / `Style=3`）。**凡打算被 Style / ContainerQuery / 伪类驱动的属性，
+    一律不在元素上写"兜底默认值"**——那个本能动作会悄悄禁用你为它写的全部样式。需要兜底就
+    写进普通 `<Style>`（同为 Style 优先级、声明在前，会被 trigger 覆盖）。
+  - **`and` 组合符解析有缺陷，只有右侧条件生效。** 实测
+    `min-width:400 and max-width:700` 的行为等同于单条 `max-width:700`，左侧被整个丢弃；
+    调换顺序则等同于单条 `min-width:400`。加括号、加 `px`、写小数、大写 `AND` 五种替代写法
+    均在解析阶段抛 `InvalidOperationException`。**12.1.2 没有任何可用的 `and` 写法**，区间
+    必须用单条件按声明顺序层叠表达（后声明覆盖先声明，CSS 式级联）。这个"层叠而非区间"的
+    模式本身就是容器查询值得演示的知识点。
+  - 修复后实测（headless，读回 `UniformGrid.Columns`）：容器 375→1 列、526→2 列、
+    876→4 列。注意断点落在**容器**尺寸而非窗口尺寸上——`QueryHost` 比窗口窄 24 px，这正是
+    容器查询区别于 CSS media query 的地方。
 - **`Avalonia.Shared` 承载 XAML 控件**：可行，需增加 `Avalonia.Themes.Fluent` 包引用
   （因 ControlTheme 用到 Fluent 资源键 `SystemControlBackgroundListLowBrush` 和
   `SystemAccentColor`）。
@@ -194,12 +209,27 @@ ReactiveUI、Prism 等会让读者分不清"这是 Avalonia 的能力"还是"这
 - **8 种布局面板语法**（额外发现，brief 未列出）：Avalonia 12.1.2 全部接受，含
   `RelativePanel` 的 8 个附加属性、裸 `<Panel>` 元素、`Width="NaN"` 覆盖 double 型
   样式属性。
+- **共享的不只是控件，还有页面级样式**：`TextBlock.caption`（小节标题）与 `Border.stage`
+  （演示区边框）已提到 `Avalonia.Shared/Themes/SharedStyles.axaml`。样板初版让三个页面各写
+  一份，三份里就已经有一份 Margin 分叉了——按 15 项目约 120 页的规模，这类"只有几行"的样式
+  会长出上百份互不一致的副本。**判断是否该共享，看的是复制次数而非代码行数。** 页面专属的
+  装饰样式（如 `Border.block` / `Border.tile`）留在页面里。注意 `SharedStyles.axaml` 中普通
+  `<Style>` 要作为 `<Styles>` 的直接子元素，放在 `Styles.Resources` 之外。
+- **不要引用 `Avalonia.Diagnostics`**：该包停在 11.3.22，12.x 的 DevTools 已内置于主包
+  （见 `Directory.Packages.props` 注释）。四个早期项目引用了它，但全仓库零处
+  `AttachDevTools` 调用，只是把一个 11.x 程序集复制进 12.x 应用的输出目录。样板不沿袭，
+  后续 14 个项目一律不加；早期项目按外科手术式改动原则暂不回头修改。
 - 风险 1（Headless 测试包）与风险 3（Services 桌面可用性）不在样板范围，留待对应
   plan 验证。
-- **验证局限**：所有页面的视觉排布效果均未经目视确认，仅验证了"构建 0 错误 + 运行
-  无异常堆栈"。**这套验证方法已被证明存在盲区**——上面的 `double`→`Thickness` 缺陷正是
-  从中漏过、由最终审查静态分析发现的。后续项目除构建外，应额外检查 trace 中的 binding
-  error，或由人工目视确认交互效果。
+- **验证局限与应对**：样板初版仅验证了"构建 0 错误 + 运行无异常堆栈"，**这套方法已被两次
+  证明存在盲区**——`double`→`Thickness` 缺陷由最终审查静态分析发现，容器查询的两个缺陷由
+  代码审查阶段的 headless 实测发现，两者都顺利通过了构建，后者连 binding 日志都没有。
+  **后续项目一律改用可读回属性值的 headless 探针验证，不再依赖人工目视。** 做法很轻：
+  `Avalonia.Headless` + 直接 `new` 真实页面类 + `Measure`/`Arrange` + 读回属性值，
+  再挂一个过滤 `LogArea.Binding` 的 `ILogSink` 自动捕获静默绑定失败，不到 40 行。
+  探针建在仓库外、跑完即弃，因此不违反"不为演示项目写自动化测试"这条约束。
+  plan 里"人工目视核对"一类的验证步骤应当替换为这种可断言的检查——样板阶段
+  plan Task 5 Step 5 写的"核对列数依次为 1 → 2 → 4"若真执行了，当场就会暴露上述缺陷。
 
 ## 交付顺序与验证标准
 
