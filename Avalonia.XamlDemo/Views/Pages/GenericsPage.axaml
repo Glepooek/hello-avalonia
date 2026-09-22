@@ -1,0 +1,72 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             xmlns:sys="using:System"
+             xmlns:gen="using:System.Collections.Generic"
+             xmlns:models="using:Avalonia.XamlDemo.Models"
+             mc:Ignorable="d"
+             d:DesignWidth="860"
+             d:DesignHeight="560"
+             x:Class="Avalonia.XamlDemo.Views.Pages.GenericsPage">
+
+    <UserControl.Resources>
+        <!--  Open generic closed at the XAML level.  -->
+        <gen:List x:TypeArguments="sys:String" x:Key="Names">
+            <sys:String>甲</sys:String>
+            <sys:String>乙</sys:String>
+            <sys:String>丙</sys:String>
+        </gen:List>
+
+        <!--  The alternative: a named subclass that is already closed.  -->
+        <models:PriorityList x:Key="Priorities">
+            <models:PriorityLevel>Low</models:PriorityLevel>
+            <models:PriorityLevel>Normal</models:PriorityLevel>
+            <models:PriorityLevel>High</models:PriorityLevel>
+        </models:PriorityList>
+    </UserControl.Resources>
+
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="XAML 泛型：x:TypeArguments 与具名子类两条路"
+                               DocPath="xaml/generics" />
+
+            <TextBlock Classes="caption" Text="1. x:TypeArguments 在 XAML 里闭合开放泛型" />
+            <Border Classes="stage" Padding="10">
+                <StackPanel Spacing="6">
+                    <ItemsControl ItemsSource="{DynamicResource Names}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <StackPanel Orientation="Horizontal" Spacing="10" />
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                    </ItemsControl>
+                    <TextBlock Opacity="0.75" TextWrapping="Wrap"
+                               Text="写法：&lt;gen:List x:TypeArguments=&quot;sys:String&quot;&gt;。类型实参本身也要带命名空间前缀。" />
+                </StackPanel>
+            </Border>
+
+            <TextBlock Classes="caption" Text="2. 具名子类：把闭合动作放在 C# 里" />
+            <Border Classes="stage" Padding="10">
+                <StackPanel Spacing="6">
+                    <ItemsControl ItemsSource="{DynamicResource Priorities}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <StackPanel Orientation="Horizontal" Spacing="10" />
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                    </ItemsControl>
+                    <TextBlock Opacity="0.75" TextWrapping="Wrap"
+                               Text="PriorityList : List&lt;PriorityLevel&gt; 在 XAML 里就是个普通类型，不需要 x:TypeArguments。多处复用同一个闭合类型时这样更省事。" />
+                </StackPanel>
+            </Border>
+
+            <TextBlock Classes="caption" Text="3. 泛型控件怎么写" />
+            <Border Classes="stage" Padding="10">
+                <TextBlock TextWrapping="Wrap"
+                           Text="控件类型同样可以用 x:TypeArguments 实例化，但 Avalonia 内置控件几乎都是非泛型的——泛型主要出现在集合与 ViewModel 上。若自定义了泛型控件，根元素的 x:Class 那一侧需要用具名子类，因为 x:Class 不支持类型实参。" />
+            </Border>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

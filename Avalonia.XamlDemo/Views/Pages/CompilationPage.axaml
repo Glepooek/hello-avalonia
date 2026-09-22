@@ -1,0 +1,57 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             mc:Ignorable="d"
+             d:DesignWidth="860"
+             d:DesignHeight="560"
+             x:Class="Avalonia.XamlDemo.Views.Pages.CompilationPage">
+
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="XAML 编译：本项目开了编译型绑定，代价与收益"
+                               DocPath="xaml/compilation" />
+
+            <TextBlock Classes="caption" Text="1. 本程序集的编译设置" />
+            <Border Classes="stage" Padding="10">
+                <StackPanel Spacing="6">
+                    <TextBlock Name="CompiledFlagText" TextWrapping="Wrap" />
+                    <TextBlock Opacity="0.75" TextWrapping="Wrap"
+                               Text="AvaloniaUseCompiledBindingsByDefault=true 写在 .csproj 里。单个绑定可用 x:CompileBindings 局部覆盖。" />
+                </StackPanel>
+            </Border>
+
+            <TextBlock Classes="caption" Text="2. 编译型绑定拦下了什么" />
+            <Border Classes="stage" Padding="10">
+                <StackPanel Spacing="6">
+                    <TextBlock TextWrapping="Wrap" Text="属性名写错 → 编译期报错，而不是运行时悄悄绑不上" />
+                    <TextBlock TextWrapping="Wrap" Text="类型不匹配 → 编译期报错（如 x:Static 返回枚举填 string，报 AVLN3000）" />
+                    <TextBlock TextWrapping="Wrap" Text="缺 x:DataType → 编译期报错 AVLN2100，逼你声明数据类型" />
+                    <TextBlock TextWrapping="Wrap" Text="性能上少了一次反射查找" />
+                </StackPanel>
+            </Border>
+
+            <TextBlock Classes="caption" Text="3. 它拦不住什么" />
+            <Border Classes="stage" Padding="10">
+                <StackPanel Spacing="6">
+                    <TextBlock TextWrapping="Wrap" Text="值在运行时转换失败 — 只记一条 binding warning，界面不动" />
+                    <TextBlock TextWrapping="Wrap" Text="元素上的本地值压过样式 Setter — 连日志都没有" />
+                    <TextBlock TextWrapping="Wrap" Text="StringFormat 里的花括号写错 — 静默产出空串" />
+                    <TextBlock TextWrapping="Wrap" Opacity="0.75"
+                               Text="所以「构建 0 错误」永远不等于「界面是对的」。这三类都要靠运行时读回属性值才能发现。" />
+                </StackPanel>
+            </Border>
+
+            <TextBlock Classes="caption" Text="4. 元素名绑定不需要 x:DataType" />
+            <Border Classes="stage" Padding="10">
+                <StackPanel Spacing="6">
+                    <TextBox Name="Probe" Text="随便改" />
+                    <TextBlock Text="{Binding #Probe.Text, StringFormat='读到：{0}'}" />
+                    <TextBlock Opacity="0.75" TextWrapping="Wrap"
+                               Text="#name 形式在编译期就能确定目标元素的类型，不依赖 DataContext，因此本页没有声明 x:DataType 也能编译。" />
+                </StackPanel>
+            </Border>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

@@ -1,0 +1,47 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             mc:Ignorable="d"
+             d:DesignWidth="860"
+             d:DesignHeight="560"
+             x:Class="Avalonia.XamlDemo.Views.Pages.TypeConvertersPage">
+
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="类型转换器：XAML 里写的都是字符串"
+                               DocPath="xaml/type-converters" />
+
+            <TextBlock Classes="caption" Text="1. 同一个 Border，六个属性各自走了不同的转换器" />
+            <Border Classes="stage" Padding="10">
+                <StackPanel Orientation="Horizontal" Spacing="16">
+                    <Border Name="Sample"
+                            Background="#FF3366"
+                            BorderBrush="White"
+                            BorderThickness="1,2,3,4"
+                            CornerRadius="8"
+                            Width="140"
+                            Height="70" />
+                    <StackPanel Name="ReadoutHost" Spacing="4" VerticalAlignment="Center" />
+                </StackPanel>
+            </Border>
+
+            <TextBlock Classes="caption" Text="2. 常见的简写形式" />
+            <Border Classes="stage" Padding="10">
+                <StackPanel Spacing="6">
+                    <TextBlock TextWrapping="Wrap" Text="Thickness：&quot;4&quot; 四边相同；&quot;4,8&quot; 横向/纵向；&quot;1,2,3,4&quot; 左上右下" />
+                    <TextBlock TextWrapping="Wrap" Text="CornerRadius：同上，但四个值的顺序是左上、右上、右下、左下" />
+                    <TextBlock TextWrapping="Wrap" Text="Brush：颜色名、#RGB、#RRGGBB、#AARRGGBB 都接受" />
+                    <TextBlock TextWrapping="Wrap" Text="GridLength：&quot;Auto&quot;、&quot;*&quot;、&quot;2*&quot;、&quot;120&quot;" />
+                </StackPanel>
+            </Border>
+
+            <TextBlock Classes="caption" Text="3. 转换器不存在时会怎样" />
+            <Border Classes="stage" Padding="10">
+                <TextBlock TextWrapping="Wrap"
+                           Text="XAML 属性里写字面量走的是编译期转换，缺转换器会直接编译失败。但绑定不同：把 double 绑到 Thickness 没有可用转换，运行时只记一条 binding warning，界面纹丝不动——本仓库的 Avalonia.Shared/Converters/DoubleToThicknessConverter.cs 就是为此而生。" />
+            </Border>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

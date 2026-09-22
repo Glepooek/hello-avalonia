@@ -1,0 +1,68 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             xmlns:sys="using:System"
+             xmlns:models="using:Avalonia.XamlDemo.Models"
+             mc:Ignorable="d"
+             d:DesignWidth="860"
+             d:DesignHeight="560"
+             x:Class="Avalonia.XamlDemo.Views.Pages.DirectivesPage">
+
+    <UserControl.Resources>
+        <!--  x:Key is what makes a resource addressable.  -->
+        <sys:Double x:Key="BigFont">20</sys:Double>
+    </UserControl.Resources>
+
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="x: 指令：XAML 语言自身的关键字"
+                               DocPath="xaml/directives" />
+
+            <TextBlock Classes="caption" Text="1. x:Class — 把这个 XAML 文件和一个 C# 分部类绑定起来" />
+            <Border Classes="stage" Padding="10">
+                <TextBlock TextWrapping="Wrap"
+                           Text="本文件根元素上写着 x:Class=&quot;Avalonia.XamlDemo.Views.Pages.DirectivesPage&quot;，编译器据此生成 InitializeComponent，code-behind 才能是 partial class。" />
+            </Border>
+
+            <TextBlock Classes="caption" Text="2. x:Name — 生成字段，让 code-behind 和绑定都能找到这个元素" />
+            <Border Classes="stage" Padding="10">
+                <StackPanel Spacing="8">
+                    <TextBox Name="SourceBox" Text="改我试试" />
+                    <!--  #SourceBox is element-name binding; it needs no DataContext.  -->
+                    <TextBlock Text="{Binding #SourceBox.Text, StringFormat='元素名绑定读到：{0}'}" />
+                    <Button Content="从 code-behind 读取" Click="OnReadClick" HorizontalAlignment="Left" />
+                    <TextBlock Name="ReadResult" Opacity="0.75" Text="（还没读）" />
+                </StackPanel>
+            </Border>
+
+            <TextBlock Classes="caption" Text="3. x:Key — 资源字典里的索引键" />
+            <Border Classes="stage" Padding="10">
+                <TextBlock FontSize="{DynamicResource BigFont}" Text="这行字的字号来自资源 BigFont" />
+            </Border>
+
+            <TextBlock Classes="caption" Text="4. x:Static — 读取静态成员" />
+            <Border Classes="stage" Padding="10">
+                <StackPanel Spacing="6">
+                    <TextBlock Text="{x:Static models:DemoConstants.AppTitle}" />
+                    <!--
+                        A compiled-XAML gotcha: x:Static returning an enum cannot fill a
+                        string property directly — the build fails with AVLN3000. Routing
+                        it through a binding gives the value a conversion step.
+                    -->
+                    <TextBlock Text="{Binding Source={x:Static models:PriorityLevel.High}, StringFormat='枚举要包一层 Binding：{0}'}" />
+                </StackPanel>
+            </Border>
+
+            <TextBlock Classes="caption" Text="5. x:Type — 取类型对象而不是实例" />
+            <Border Classes="stage" Padding="10">
+                <StackPanel Spacing="6">
+                    <TextBlock Name="TypeText" />
+                    <TextBlock Opacity="0.75" TextWrapping="Wrap"
+                               Text="x:Type 的日常位置是 ControlTheme 的 x:Key 与 TargetType（见 Avalonia.Shared/Controls/DemoHeader.axaml）。它不能直接当 Binding 的 Source——编译型 XAML 会要求 x:DataType，报 AVLN2100。" />
+                </StackPanel>
+            </Border>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

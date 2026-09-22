@@ -2,6 +2,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:pages="using:Avalonia.XamlDemo.Views.Pages"
         mc:Ignorable="d"
         d:DesignWidth="900"
         d:DesignHeight="640"
@@ -13,5 +14,23 @@
         WindowStartupLocation="CenterScreen">
 
     <TabControl Margin="12">
+        <TabItem Header="命名空间">
+            <pages:NamespacesPage />
+        </TabItem>
+        <TabItem Header="x: 指令">
+            <pages:DirectivesPage />
+        </TabItem>
+        <TabItem Header="标记扩展">
+            <pages:MarkupExtensionsPage />
+        </TabItem>
+        <TabItem Header="类型转换器">
+            <pages:TypeConvertersPage />
+        </TabItem>
+        <TabItem Header="泛型">
+            <pages:GenericsPage />
+        </TabItem>
+        <TabItem Header="XAML 编译">
+            <pages:CompilationPage />
+        </TabItem>
     </TabControl>
 </Window>

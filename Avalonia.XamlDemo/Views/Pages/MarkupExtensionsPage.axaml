@@ -1,0 +1,56 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             xmlns:ext="using:Avalonia.XamlDemo.MarkupExtensions"
+             mc:Ignorable="d"
+             d:DesignWidth="860"
+             d:DesignHeight="560"
+             x:Class="Avalonia.XamlDemo.Views.Pages.MarkupExtensionsPage">
+
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="标记扩展：花括号里的都是它"
+                               DocPath="xaml/markup-extensions" />
+
+            <TextBlock Classes="caption" Text="1. 内置标记扩展" />
+            <Border Classes="stage" Padding="10">
+                <StackPanel Spacing="6">
+                    <!--
+                        Braces meant as literals inside a StringFormat must be doubled:
+                        a single {Binding} is parsed as a composite-format placeholder,
+                        fails, and silently yields an empty string.
+                    -->
+                    <TextBlock Text="{Binding #Slider.Value, StringFormat='{}{{Binding}} 读另一个元素：{0:F0}'}" />
+                    <Slider Name="Slider" Minimum="0" Maximum="100" Value="42" />
+                    <TextBlock Foreground="{DynamicResource SystemAccentColor}"
+                               Text="{}{DynamicResource} — 这行字的颜色随主题变化，换主题会重新求值" />
+                    <TextBlock Text="{}{StaticResource} — 只在加载时求值一次，之后不再跟随" />
+                    <TextBlock Text="{OnPlatform Windows='{}{OnPlatform} — 运行于 Windows', macOS='运行于 macOS', Default='运行于其它平台'}" />
+                </StackPanel>
+            </Border>
+
+            <TextBlock Classes="caption" Text="2. 自定义标记扩展：任何带 ProvideValue 的类都可以" />
+            <Border Classes="stage" Padding="10">
+                <StackPanel Spacing="6">
+                    <!--  Positional argument fills Text; Count is a named property.  -->
+                    <TextBlock Text="{ext:RepeatText 喵}" />
+                    <TextBlock Text="{ext:RepeatText 汪, Count=5}" />
+                    <TextBlock Opacity="0.75" TextWrapping="Wrap"
+                               Text="类名以 Extension 结尾时，XAML 里可以省略这个后缀：RepeatTextExtension 写成 {ext:RepeatText ...}。第一个位置参数由 [ConstructorArgument] 指明对应哪个属性。" />
+                </StackPanel>
+            </Border>
+
+            <TextBlock Classes="caption" Text="3. 大括号的转义：两种场合，两套规则" />
+            <Border Classes="stage" Padding="10">
+                <StackPanel Spacing="6">
+                    <TextBlock Text="{}{这段文字以大括号开头，前面的 {} 是转义标记}" />
+                    <TextBlock Text="{Binding #Slider.Value, StringFormat='{}{{双写}} 才是 StringFormat 里的字面括号：{0:F0}'}" />
+                    <TextBlock Opacity="0.75" TextWrapping="Wrap"
+                               Text="属性值以 { 开头时，前置一对空的 {} 告诉解析器这不是标记扩展。但 StringFormat 内部走的是 .NET 复合格式化，那里的字面括号必须双写成 {{ }}——只写单层会被当成占位符，解析失败后静默产出空字符串，既不报错也无日志。" />
+                </StackPanel>
+            </Border>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>
