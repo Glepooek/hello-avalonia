@@ -255,6 +255,43 @@ ReactiveUI、Prism 等会让读者分不清"这是 Avalonia 的能力"还是"这
   这套做法在本组共拦下 3 个写 plan 阶段的错误（枚举填 string、`x:Type` 作 Source、
   `StringFormat` 花括号），全部在编写期解决，未进入实现。
 
+### 样式绑定层实测结论（2026-10-07）
+
+三个项目（#4 Styling、#5 DataBinding、#6 DataTemplates）落地过程中验证到的结果：
+
+- **功能点映射的出入**：Styling 官方 16 个子页合成 9 个 Tab，容器查询与值优先级改为指路页；
+  Data Binding 官方 24 个子页，spec 漏了「异步与图片」，`binding-classes` 放进 #4；
+  Data Templates 官方 7 个子页，spec 漏了 `control-content`、`creating-data-templates-in-code`、
+  `reusing-data-templates`、`view-locator` 四页。旧 `Avalonia.DataTemplateDemo` 已拆入 #4 与 #6 并删除。
+- **两条"类型匹配"规则方向相反**：样式的类型选择器**不**匹配子类（`Button` 不命中
+  `ToggleButton`，要用 `:is(Button)`）；`DataTemplate DataType` **匹配**子类，并按声明顺序取
+  第一个——基类模板写在前面会截走所有子类。
+- **样式优先级再确认**：多个类冲突时比样式声明顺序，与 `Classes` 书写顺序无关；ControlTheme
+  的 Setter 低于任何 Style Setter；子类控件复用父类外观要用 `ControlTheme BasedOn`，
+  `StyleKeyOverride` 会让 `子类:伪类` 选择器静默失效。
+- **新增五种静默失败**：`ThemeDictionaries` 里的键用 `StaticResource` 取得 null；
+  `?.` 吞掉绑定警告的同时让 `FallbackValue` 失效（改配 `TargetNullValue`）；
+  标记扩展参数里以 `{` 开头的单引号字符串仍被当成嵌套扩展（要加 `{}`）；
+  `required` 成员在 XAML 实例化时不受检查；setter 抛普通异常时界面显示带类型名前缀的错误
+  文本（要抛 `DataValidationException`）。
+- **`StringFormat` 以 `{0}` 开头会构建失败**（执行期发现，`AVLN2000`）：`'{0} 岁'`、
+  `'{0:F1} °C'` 被 XAML 当成标记扩展，要写成 `'{}{0} 岁'`。以字面文字开头的格式串不受影响。
+  这是响亮失败，与规则 3 的静默失败是两件事。
+- **`Watermark` 在 12.1.2 已过时**（`AVLN5001`），统一改用 `PlaceholderText`。
+- **转换器不适合报错**：`ConvertBack` 返回 `BindingNotification` 或抛异常，界面看到的都是框架
+  生成的 `InvalidCastException` 文本。转换失败返回 `BindingOperations.DoNothing`，校验放进 ViewModel。
+- **`^` 绑定的时序**：替换 `Task` 属性后，新任务完成前界面停在旧结果，不回到 `FallbackValue`；
+  `IObservable` 订阅只在 `DataContext` 变化时释放，页面离开可视树时不释放。
+- **探针写法的坑**：`RaiseEvent(ClickEvent)` 不执行 `Command`（要 `Command.Execute(CommandParameter)`）；
+  headless 默认后端的 `Bitmap` 一律 1×1；命名颜色读回是名字（`Yellow`）而非十六进制；
+  Flyout 的 Presenter 在独立的弹出层里，要从 `Flyout.Content` 向上找。
+  进程级的日志 sink 会被「切到绑定调试页」这一动作触发，探针里遍历全部 Tab 的步骤必须排在
+  统计「普通页零警告」之后。
+- **页面级日志 sink 可以串联**：装一个只截 `LogArea.Binding` 的 sink、其余转交原 sink，
+  `LogToTrace` 的输出不受影响。绑定调试页用这个把错误显示在界面上。
+- **探针断言实际条数**：#4 为 28 条、#5 为 50 条、#6 为 31 条，全部通过且零警告日志；
+  plan 里写的 19 / 38 / 22 是漏数，以实际为准。
+
 ## 交付顺序与验证标准
 
 **第一阶段（样板）**：完成 `Avalonia.LayoutDemo`。选它作样板的理由——纯 UI、零外部依赖、

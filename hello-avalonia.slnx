@@ -1,6 +1,5 @@
 <Solution>
   <Project Path="Avalonia.DataBindingDemo/Avalonia.DataBindingDemo.csproj" />
-  <Project Path="Avalonia.DataTemplateDemo/Avalonia.DataTemplateDemo.csproj" />
   <Project Path="Avalonia.DataTemplatesDemo/Avalonia.DataTemplatesDemo.csproj" />
   <Project Path="Avalonia.FundamentalsDemo/Avalonia.FundamentalsDemo.csproj" />
   <Project Path="Avalonia.HtmlRendererDemo/Avalonia.HtmlRendererDemo.csproj" />
