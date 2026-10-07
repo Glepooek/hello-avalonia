@@ -22,7 +22,7 @@
 - **不引用 `Avalonia.Diagnostics`**（停在 11.3.22，v12 的 DevTools 已内置于主包）
 - **不引入 ReactiveUI、Prism 等第三方 MVVM/UI 框架**，只用官方 API + `CommunityToolkit.Mvvm`
 - **C# 与 XAML 注释用英文**；**界面文字（Tab 标题、说明条、按钮文案）用中文**；**标识符（类名、属性名、`x:Name`）用英文**
-- **每个演示页顶部必须有 `DemoHeader`**，含中文功能点描述 + 对应官方文档路径
+- **每个演示页顶部必须有 `DemoHeader`**，含中文功能点描述 + 对应官方文档路径。`DocPath` **不带 `docs/` 前缀**，写成 `分类名/子页名`（如 `styling/style-selector-syntax`、`data-binding/master-detail`、`data-templates/view-locator`），与 `Avalonia.FundamentalsDemo`、`Avalonia.XamlDemo`、`Avalonia.PropertySystemDemo` 三个已交付项目一致；`Avalonia.LayoutDemo/Views/Pages/PanelsPage.axaml:31` 那处带前缀的是样板期的旧写法，不沿袭
 - **每个功能点一个 `UserControl`**，放在 `Views/Pages/` 下
 - **不为演示项目写自动化测试**
 - **`AvaloniaUseCompiledBindingsByDefault` 设为 `true`**
@@ -1558,6 +1558,7 @@ using Avalonia.Markup.Xaml.Styling;
 using Avalonia.Media;
 using Avalonia.StylingDemo.Controls;
 using Avalonia.StylingDemo.Views.Pages;
+using Avalonia.StylingDemo.Views;
 using Avalonia.Styling;
 using Avalonia.Themes.Fluent;
 using Avalonia.Threading;
@@ -1617,12 +1618,39 @@ internal static class Probe
     private static void Check(string label, bool ok, string detail)
         => Console.WriteLine($"{(ok ? "PASS" : "FAIL")}  {label,-36} {detail}");
 
+    // The one artefact no page probe touches: the TabControl wiring in MainWindow.axaml.
+    // A tab pointing at the wrong page still builds with zero errors.
+    private static void RunShell()
+    {
+        var mw = new MainWindow();
+        mw.Show();
+        Dispatcher.UIThread.RunJobs();
+        var tabs = mw.GetVisualDescendants().OfType<TabControl>().First().Items.Cast<TabItem>().ToList();
+        Check("Shell: tab count and headers", tabs.Count == 9
+            && tabs.Select(t => t.Header as string).SequenceEqual(new[]
+            { "选择器", "样式类", "伪类", "ControlTheme", "主题变体", "容器查询", "字体", "样式共享", "优先级" }),
+            string.Join(",", tabs.Select(t => t.Header)));
+        for (var i = 0; i < tabs.Count && i < 9; i++)
+        {
+            tabs[i].IsSelected = true;
+            Dispatcher.UIThread.RunJobs();
+            var page = tabs[i].Content?.GetType().Name ?? "<null>";
+            Check($"Shell: tab {i} renders its page", page == PageNames[i], page);
+        }
+    }
+
+    private static readonly string[] PageNames =
+    { "SelectorsPage", "StyleClassesPage", "PseudoClassesPage", "ControlThemesPage", "ThemesPage",
+      "ContainerQueriesPage", "FontsPage", "SharingStylesPage", "PrecedencePage" };
+
     public static void Main()
     {
         var sink = new WarnSink();
         Logger.Sink = sink;
         AppBuilder.Configure<ProbeApp>().UseHeadless(new AvaloniaHeadlessPlatformOptions())
             .SetupWithoutStarting();
+
+        RunShell();
 
         // SelectorsPage
         var sel = new SelectorsPage();
@@ -1726,7 +1754,7 @@ internal static class Probe
 
 Run: `dotnet run --project C:\Temp\stylecheck\stylecheck.csproj`
 
-Expected: 18 行全部 `PASS`，且 `warning-or-worse log entries: 0`。`StaticCard` 取到 null 时
+Expected: 19 行全部 `PASS`，且 `warning-or-worse log entries: 0`。`StaticCard` 取到 null 时
 **不产生任何日志**（编写 plan 时已实测），所以这里没有例外——出现任何一条都要修。
 
 任何一行 `FAIL` 都要先修好再提交，**不要**把 FAIL 解释成"探针写得不对"就跳过。若确认是探针
@@ -1742,9 +1770,9 @@ feat: demonstrate the Styling category
 
 Nine pages covering selector syntax, style classes, pseudo-classes,
 control themes, theme variants, fonts and shared style files, plus two
-signpost pages for topics already demonstrated elsewhere. The Flyout-free
-parts of the old DataTemplateDemo styling (ButtonStyles, the yellow
-ControlTheme) move here.
+signpost pages for topics already demonstrated elsewhere. The styling
+content of the old DataTemplateDemo moves here: the shared button styles,
+the yellow ControlTheme, and the styled Flyout in the selector page.
 
 Verified with a throwaway headless probe: type selectors skip subclasses
 while :is() catches them, class conflicts resolve by declaration order,
@@ -3327,6 +3355,7 @@ using Avalonia.DataBindingDemo.Diagnostics;
 using Avalonia.DataBindingDemo.Models;
 using Avalonia.DataBindingDemo.ViewModels;
 using Avalonia.DataBindingDemo.Views.Pages;
+using Avalonia.DataBindingDemo.Views;
 using Avalonia.Headless;
 using Avalonia.Logging;
 using Avalonia.Markup.Xaml.Styling;
@@ -3395,6 +3424,28 @@ internal static class Probe
     private static void Check(string label, bool ok, string detail)
         => Console.WriteLine($"{(ok ? "PASS" : "FAIL")}  {label,-38} {detail}");
 
+    // The one artefact no page probe touches: the TabControl wiring in MainWindow.axaml.
+    // A tab pointing at the wrong page still builds with zero errors.
+    private static void RunShell()
+    {
+        var mw = new MainWindow();
+        mw.Show();
+        Dispatcher.UIThread.RunJobs();
+        var tabs = mw.GetVisualDescendants().OfType<TabControl>().First().Items.Cast<TabItem>().ToList();
+        Check("Shell: tab count and headers", tabs.Count == 12
+            && tabs.Select(t => t.Header as string).SequenceEqual(new[] { "绑定语法", "编译绑定", "集合", "主从视图", "多值绑定", "命令", "转换器", "校验", "集合视图", "异步与图片", "绑定调试", "标记扩展" }),
+            string.Join(",", tabs.Select(t => t.Header)));
+        for (var i = 0; i < tabs.Count && i < 12; i++)
+        {
+            tabs[i].IsSelected = true;
+            Dispatcher.UIThread.RunJobs();
+            var page = tabs[i].Content?.GetType().Name ?? "<null>";
+            Check($"Shell: tab {i} renders its page", page == PageNames[i], page);
+        }
+    }
+
+    private static readonly string[] PageNames = { "SyntaxPage", "CompiledBindingsPage", "CollectionsPage", "MasterDetailPage", "MultiBindingPage", "CommandsPage", "ConvertersPage", "ValidationPage", "CollectionViewsPage", "AsyncPage", "DebuggingPage", "MarkupExtensionsPage" };
+
     public static void Main()
     {
         var sink = new WarnSink();
@@ -3402,6 +3453,7 @@ internal static class Probe
         AppBuilder.Configure<ProbeApp>().UseHeadless(new AvaloniaHeadlessPlatformOptions())
             .SetupWithoutStarting();
 
+        RunShell();
         RunPages();
 
         // Only DebuggingPage breaks bindings on purpose; it runs last so its two warnings are
@@ -3578,7 +3630,7 @@ internal static class Probe
 
 Run: `dotnet run --project C:\Temp\bindcheck\bindcheck.csproj`
 
-Expected: 37 行全部 `PASS`，且 `warnings from the eleven ordinary pages: 0`。
+Expected: 38 行全部 `PASS`，且 `warnings from the eleven ordinary pages: 0`。
 
 `RunDebugging` 必须最后跑：它装的 `BindingLogSink` 是进程级的，提前装上会把其他页面的警告也收进
 `captured`，让「page sink caught both」一行失真。
@@ -4791,6 +4843,7 @@ using Avalonia.Controls;
 using Avalonia.Controls.Shapes;
 using Avalonia.DataTemplatesDemo.ViewModels;
 using Avalonia.DataTemplatesDemo.Views.Pages;
+using Avalonia.DataTemplatesDemo.Views;
 using Avalonia.Headless;
 using Avalonia.Logging;
 using Avalonia.Markup.Xaml.Styling;
@@ -4845,12 +4898,36 @@ internal static class Probe
     private static void Check(string label, bool ok, string detail)
         => Console.WriteLine($"{(ok ? "PASS" : "FAIL")}  {label,-38} {detail}");
 
+    // The one artefact no page probe touches: the TabControl wiring in MainWindow.axaml.
+    // A tab pointing at the wrong page still builds with zero errors.
+    private static void RunShell()
+    {
+        var mw = new MainWindow();
+        mw.Show();
+        Dispatcher.UIThread.RunJobs();
+        var tabs = mw.GetVisualDescendants().OfType<TabControl>().First().Items.Cast<TabItem>().ToList();
+        Check("Shell: tab count and headers", tabs.Count == 9
+            && tabs.Select(t => t.Header as string).SequenceEqual(new[] { "控件内容", "内联模板", "模板集合", "选择器", "代码建模板", "复用", "ViewLocator", "面板与树", "对比 ControlTemplate" }),
+            string.Join(",", tabs.Select(t => t.Header)));
+        for (var i = 0; i < tabs.Count && i < 9; i++)
+        {
+            tabs[i].IsSelected = true;
+            Dispatcher.UIThread.RunJobs();
+            var page = tabs[i].Content?.GetType().Name ?? "<null>";
+            Check($"Shell: tab {i} renders its page", page == PageNames[i], page);
+        }
+    }
+
+    private static readonly string[] PageNames = { "ControlContentPage", "ContentTemplatesPage", "TemplateCollectionPage", "SelectorPage", "CodeTemplatesPage", "ReusePage", "ViewLocatorPage", "PanelsAndTreesPage", "VersusControlTemplatePage" };
+
     public static void Main()
     {
         var sink = new WarnSink();
         Logger.Sink = sink;
         AppBuilder.Configure<ProbeApp>().UseHeadless(new AvaloniaHeadlessPlatformOptions())
             .SetupWithoutStarting();
+
+        RunShell();
 
         // ControlContentPage
         var cc = new ControlContentPage();
@@ -4948,7 +5025,7 @@ internal static class Probe
 
 Run: `dotnet run --project C:\Temp\tplcheck\tplcheck.csproj`
 
-Expected: 21 行全部 `PASS`，且 `warning-or-worse log entries: 0`。
+Expected: 22 行全部 `PASS`，且 `warning-or-worse log entries: 0`。
 
 - [ ] **Step 16: 清理探针并提交**
 
@@ -5042,19 +5119,43 @@ rm -rf Avalonia.DataTemplateDemo
 </Solution>
 ```
 
-- [ ] **Step 2: 更新 README 项目表格**
+- [ ] **Step 2: 更新 README 项目表格，按官方分类顺序重排**
 
-修改 `README.md`：删掉 `Avalonia.DataTemplateDemo` 那一行，在 `Avalonia.PropertySystemDemo`
-一行之后追加三行：
+spec 的收尾要求是「`README.md` 项目表格（按官方分类顺序重排）」，不是只增删行。当前表格
+的顺序是历史堆积的结果（MusicStore / WebViewDemo / HtmlRendererDemo / DataTemplateDemo /
+Layout / Fundamentals / Xaml / PropertySystem / Shared），既不是分类顺序，也没有把工具类项目
+和分类类项目分开。本步一次做完增、删、重排三件事。
+
+**重排后的顺序**，即 spec 项目清单表里 #1–#6、#7 的官方分类次序，随后是三个工具类项目，
+`Avalonia.Shared` 固定排在最后：
 
 ```markdown
+| 项目 | 演示内容 |
+|---|---|
+| [Avalonia.FundamentalsDemo](Avalonia.FundamentalsDemo) | 纯代码 UI、code-behind 与 MVVM 对照、TopLevel、视觉树与逻辑树、应用生命周期 |
+| [Avalonia.XamlDemo](Avalonia.XamlDemo) | 命名空间、x: 指令、标记扩展、类型转换器、泛型、XAML 编译 |
+| [Avalonia.LayoutDemo](Avalonia.LayoutDemo) | 8 种布局面板对照、对齐与 Margin/Padding、四种响应式手段 |
 | [Avalonia.StylingDemo](Avalonia.StylingDemo) | 选择器语法、样式类、伪类、ControlTheme、主题变体、嵌入字体、样式共享 |
 | [Avalonia.DataBindingDemo](Avalonia.DataBindingDemo) | 绑定语法与模式、编译绑定、集合与主从、多值绑定、命令、转换器、校验、集合视图、异步绑定、绑定调试 |
 | [Avalonia.DataTemplatesDemo](Avalonia.DataTemplatesDemo) | 内联模板、按类型匹配、模板选择器、代码建模板、复用、ViewLocator、面板与树模板 |
+| [Avalonia.PropertySystemDemo](Avalonia.PropertySystemDemo) | StyledProperty / DirectProperty / 附加属性、值优先级、元数据与回调 |
+| [Avalonia.MusicStore](Avalonia.MusicStore) | 专辑搜索（iTunes API）、购买、本地缓存、RESX 多语言 |
+| [Avalonia.WebViewDemo](Avalonia.WebViewDemo) | NativeWebView 嵌入控件、NativeWebDialog 原生窗口、JS ↔ C# 双向调用 |
+| [Avalonia.HtmlRendererDemo](Avalonia.HtmlRendererDemo) | HtmlPanel 富文本渲染、IconFont 与 PathIcon 图标 |
+| [Avalonia.Shared](Avalonia.Shared) | 共享类库：演示页说明条控件、窗口 Helper、Win32 互操作、消息载体、ViewModel 基类 |
 ```
+
+`Avalonia.DataTemplateDemo` 那一行随之消失（它已被拆分）。表格本身的行内容除新增三行外
+**逐字不动**——「按分类顺序重排」改的是行的次序，不是描述文案。
+
+后续两个 plan（交互图形层 #8–#11、应用服务层 #12–#15）追加新项目时，按同一顺序插到
+`Avalonia.PropertySystemDemo` 与其后之间，而不是继续往表尾堆。
 
 Run: `grep -c "DataTemplateDemo" README.md hello-avalonia.slnx`
 Expected: 两个文件都是 `0`（新项目名 `DataTemplatesDemo` 在 `Template` 后多一个 `s`，不含这个子串）。
+
+Run: `grep -n "^| \[" README.md`
+Expected: 输出顺序与上表一致，共 11 行。
 
 - [ ] **Step 3: 回写实测结论到 spec**
 
@@ -5104,13 +5205,29 @@ Expected: 无输出。
 Run: `git status --short`
 Expected: 只有本任务的删除与 `README.md`、`hello-avalonia.slnx`、`docs/` 改动，无遗留探针目录或临时文件。
 
-逐个启动三个项目确认能打开（烟雾测试，不替代各任务的探针断言）：
+逐个启动三个项目确认能打开（烟雾测试，不替代各任务的探针断言）。三个都是 WinExe，
+`dotnet run` 会**阻塞在 GUI 进程上直到窗口关闭**，所以每条都要加超时，并且必须真的关掉窗口
+再跑下一条——否则命令永远不返回：
 
 ```bash
-dotnet run --project Avalonia.StylingDemo
-dotnet run --project Avalonia.DataBindingDemo
-dotnet run --project Avalonia.DataTemplatesDemo
+timeout 60 dotnet run --project Avalonia.StylingDemo
+timeout 60 dotnet run --project Avalonia.DataBindingDemo
+timeout 60 dotnet run --project Avalonia.DataTemplatesDemo
 ```
+
+判定标准（每条都逐项确认，不要只看"没报错"）：
+
+1. 窗口真的出现，不是启动即退出——标题栏分别应为 `Avalonia Styling Demo`、
+   `Avalonia Data Binding Demo`、`Avalonia Data Templates Demo`
+2. 逐个点一遍全部 Tab（9 / 12 / 9 个），每个都切得动、都有内容，没有空白页
+3. 每页标识区应显示中文说明与官方文档路径
+
+`timeout` 返回 `124` 表示窗口一直开着直到超时被杀——这是**正常**的（说明它没崩溃），
+不代表失败；返回其他非零值、或根本没有窗口出现，才要停下来查。
+
+窗口标题以 Task 1 写进 `MainWindow.axaml` 的为准（三个项目的 `Title` 分别是
+`Avalonia Styling Demo`、`Avalonia Data Binding Demo`、`Avalonia Data Templates Demo`）。
+若标题对不上，说明 Task 1 的文件没照 brief 写，回去修 Task 1 而不是改这里的期望值。
 
 - [ ] **Step 5: 提交**
 
