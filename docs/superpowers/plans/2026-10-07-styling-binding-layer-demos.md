@@ -673,6 +673,13 @@ namespace Avalonia.StylingDemo.Controls
              d:DesignHeight="560"
              x:Class="Avalonia.StylingDemo.Views.Pages.SelectorsPage">
 
+    <UserControl.Resources>
+        <!--  Declared once, referenced by key from several buttons (migrated from the old DataTemplateDemo).  -->
+        <Flyout x:Key="SharedFlyout" ShowMode="Standard" Placement="BottomEdgeAlignedLeft">
+            <TextBlock Text="这是弹出层" />
+        </Flyout>
+    </UserControl.Resources>
+
     <UserControl.Styles>
         <!--  Every rule below paints one property, so each row shows exactly which elements it caught.  -->
         <Style Selector="Border.cell">
@@ -800,13 +807,11 @@ namespace Avalonia.StylingDemo.Controls
             <Button Classes="nested" Content="悬停我" />
 
             <TextBlock Classes="caption" Text="7. 样式也能管到弹出层：FlyoutPresenter 红底，悬停变蓝" />
-            <Button Name="FlyoutOwner" HorizontalAlignment="Left" Content="打开 Flyout">
-                <Button.Flyout>
-                    <Flyout ShowMode="Standard" Placement="BottomEdgeAlignedLeft">
-                        <TextBlock Text="这是弹出层" />
-                    </Flyout>
-                </Button.Flyout>
-            </Button>
+            <StackPanel Orientation="Horizontal" Spacing="8">
+                <Button Name="FlyoutOwner" Content="打开 Flyout" Flyout="{StaticResource SharedFlyout}" />
+                <Button Name="FlyoutOwner2" Content="同一个 Flyout 资源" Flyout="{StaticResource SharedFlyout}" />
+            </StackPanel>
+            <TextBlock Classes="hint" Text="两个按钮引用 UserControl.Resources 里同一个 x:Key=&quot;SharedFlyout&quot; 的 Flyout 实例，弹出时各自锚定在自己下方。" />
             <TextBlock Classes="hint" Text="弹出层是另一个顶层窗口，视觉树和页面断开；但它在逻辑树上挂在按钮下面，所以写在本页 UserControl.Styles 里的规则照样生效。" />
         </StackPanel>
     </ScrollViewer>
@@ -994,7 +999,7 @@ namespace Avalonia.StylingDemo.Views.Pages
                 <Border Classes="target">
                     <TextBlock Margin="8,0" VerticalAlignment="Center" Text="鼠标移上来" />
                 </Border>
-                <TextBox Classes="watch" Width="200" HorizontalAlignment="Left" Watermark="点进来获得焦点" />
+                <TextBox Classes="watch" Width="200" HorizontalAlignment="Left" PlaceholderText="点进来获得焦点" />
                 <StackPanel Orientation="Horizontal" Spacing="8">
                     <CheckBox Name="EnableBox" IsChecked="True" Content="启用右边的按钮" />
                     <Button Classes="watch" Content="被控制的按钮" IsEnabled="{Binding #EnableBox.IsChecked}" />
@@ -1754,7 +1759,7 @@ internal static class Probe
 
 Run: `dotnet run --project C:\Temp\stylecheck\stylecheck.csproj`
 
-Expected: 19 行全部 `PASS`，且 `warning-or-worse log entries: 0`。`StaticCard` 取到 null 时
+Expected: 28 行全部 `PASS`（执行期实测条数；初稿误写为 19），且 `warning-or-worse log entries: 0`。`StaticCard` 取到 null 时
 **不产生任何日志**（编写 plan 时已实测），所以这里没有例外——出现任何一条都要修。
 
 任何一行 `FAIL` 都要先修好再提交，**不要**把 FAIL 解释成"探针写得不对"就跳过。若确认是探针
@@ -1997,7 +2002,7 @@ namespace Avalonia.DataBindingDemo.ViewModels
                 <TextBlock Grid.Row="2" Grid.Column="1" Name="OneTimeText" VerticalAlignment="Center" Text="{Binding Message, Mode=OneTime}" />
                 <TextBlock Grid.Row="3" VerticalAlignment="Center" Text="OneWayToSource：只写回" />
                 <StackPanel Grid.Row="3" Grid.Column="1" Orientation="Horizontal" Spacing="8">
-                    <TextBox Name="ToSourceBox" Width="200" Text="{Binding LastTyped, Mode=OneWayToSource}" Watermark="在这里输入" />
+                    <TextBox Name="ToSourceBox" Width="200" Text="{Binding LastTyped, Mode=OneWayToSource}" PlaceholderText="在这里输入" />
                     <TextBlock VerticalAlignment="Center" Text="{Binding LastTyped, StringFormat='ViewModel 收到：{0}'}" />
                 </StackPanel>
             </Grid>
@@ -2578,7 +2583,7 @@ namespace Avalonia.DataBindingDemo.Views.Pages
 
             <TextBlock Classes="caption" Text="1. 内置转换器：不用写代码" />
             <StackPanel Spacing="6">
-                <TextBox Name="Input" Width="260" HorizontalAlignment="Left" Watermark="输入点什么" />
+                <TextBox Name="Input" Width="260" HorizontalAlignment="Left" PlaceholderText="输入点什么" />
                 <TextBlock Name="EmptyWarning" Foreground="#E8564A" Text="StringConverters.IsNullOrEmpty：框是空的"
                            IsVisible="{Binding #Input.Text, Converter={x:Static StringConverters.IsNullOrEmpty}}" />
                 <TextBlock Name="NotEmptyNote" Foreground="#6FE84A" Text="StringConverters.IsNotNullOrEmpty：有内容了"
@@ -2590,7 +2595,7 @@ namespace Avalonia.DataBindingDemo.Views.Pages
             <TextBlock Classes="caption" Text="2. 自定义 IValueConverter：摄氏 ⇄ 华氏，双向" />
             <StackPanel Orientation="Horizontal" Spacing="12">
                 <Slider Name="Celsius" Width="240" Minimum="-40" Maximum="100" Value="20" />
-                <TextBlock VerticalAlignment="Center" Text="{Binding #Celsius.Value, StringFormat='{0:F1} °C  ='}" />
+                <TextBlock VerticalAlignment="Center" Text="{Binding #Celsius.Value, StringFormat='{}{0:F1} °C  ='}" />
                 <TextBox Name="Fahrenheit" Width="80"
                          Text="{Binding #Celsius.Value, Converter={StaticResource CelsiusToFahrenheit}, Mode=TwoWay}" />
                 <TextBlock VerticalAlignment="Center" Text="°F" />
@@ -2846,7 +2851,7 @@ namespace Avalonia.DataBindingDemo.ViewModels
                            DocPath="data-binding/collection-views" />
 
         <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Spacing="12" Margin="0,0,0,8">
-            <TextBox Name="FilterBox" Width="180" Watermark="按姓名筛选" Text="{Binding Filter}" />
+            <TextBox Name="FilterBox" Width="180" PlaceholderText="按姓名筛选" Text="{Binding Filter}" />
             <CheckBox Name="SortBox" Content="按年龄排序" IsChecked="{Binding SortByAge}" />
             <CheckBox Name="GroupBox" Content="按城市分组" IsChecked="{Binding GroupByCity}" />
         </StackPanel>
@@ -2864,7 +2869,7 @@ namespace Avalonia.DataBindingDemo.ViewModels
                     <StackPanel Orientation="Horizontal" Spacing="12" Margin="16,0,0,0">
                         <TextBlock Width="60" Text="{Binding Name}" />
                         <TextBlock Width="60" Text="{Binding City}" />
-                        <TextBlock Text="{Binding Age, StringFormat='{0} 岁'}" />
+                        <TextBlock Text="{Binding Age, StringFormat='{}{0} 岁'}" />
                     </StackPanel>
                 </DataTemplate>
             </ListBox.DataTemplates>
@@ -3630,7 +3635,7 @@ internal static class Probe
 
 Run: `dotnet run --project C:\Temp\bindcheck\bindcheck.csproj`
 
-Expected: 38 行全部 `PASS`，且 `warnings from the eleven ordinary pages: 0`。
+Expected: 50 行全部 `PASS`（执行期实测条数；初稿误写为 38），且 `warnings from the eleven ordinary pages: 0`。
 
 `RunDebugging` 必须最后跑：它装的 `BindingLogSink` 是进程级的，提前装上会把其他页面的警告也收进
 `captured`，让「page sink caught both」一行失真。
@@ -5025,7 +5030,7 @@ internal static class Probe
 
 Run: `dotnet run --project C:\Temp\tplcheck\tplcheck.csproj`
 
-Expected: 22 行全部 `PASS`，且 `warning-or-worse log entries: 0`。
+Expected: 31 行全部 `PASS`（执行期实测条数；初稿误写为 22），且 `warning-or-worse log entries: 0`。
 
 - [ ] **Step 16: 清理探针并提交**
 
