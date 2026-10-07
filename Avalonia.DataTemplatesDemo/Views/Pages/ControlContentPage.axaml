@@ -1,0 +1,42 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             mc:Ignorable="d"
+             d:DesignWidth="860"
+             d:DesignHeight="560"
+             x:Class="Avalonia.DataTemplatesDemo.Views.Pages.ControlContentPage">
+
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="控件内容：Content 放进去的不是控件时，Avalonia 怎么画它"
+                               DocPath="data-templates/control-content" />
+
+            <TextBlock Classes="caption" Text="1. 放控件：原样显示" />
+            <ContentControl Name="ControlContent">
+                <Button Content="我本身就是控件" />
+            </ContentControl>
+
+            <TextBlock Classes="caption" Text="2. 放字符串：自动包一个 TextBlock" />
+            <ContentControl Name="StringContent" Content="一段普通字符串" />
+
+            <TextBlock Classes="caption" Text="3. 放普通对象、又没有模板：显示 ToString()" />
+            <ContentControl Name="ObjectContent" />
+            <Button Name="ObjectButton" HorizontalAlignment="Left" Margin="0,6,0,0" />
+            <TextBlock Classes="hint" Text="上面两处都放了一个 Circle 对象，显示的是它的类型全名——object.ToString() 的默认实现。Button 也是 ContentControl，规则相同。" />
+
+            <TextBlock Classes="caption" Text="4. 给它一个 DataTemplate" />
+            <ContentControl Name="TemplatedContent">
+                <ContentControl.ContentTemplate>
+                    <DataTemplate x:DataType="x:Object">
+                        <Border Classes="stage" Padding="8">
+                            <TextBlock Text="现在由 ContentTemplate 决定怎么画。" />
+                        </Border>
+                    </DataTemplate>
+                </ContentControl.ContentTemplate>
+            </ContentControl>
+            <TextBlock Classes="hint" Text="后面几页讲的就是这一步：模板写在哪里、怎样按类型自动挑选、怎样在代码里建。" />
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

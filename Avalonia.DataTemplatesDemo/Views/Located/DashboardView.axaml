@@ -1,0 +1,12 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:Avalonia.DataTemplatesDemo.ViewModels"
+             x:Class="Avalonia.DataTemplatesDemo.Views.Located.DashboardView"
+             x:DataType="vm:DashboardViewModel">
+    <Border Classes="stage" Padding="16">
+        <StackPanel Spacing="6">
+            <TextBlock FontSize="18" Text="📊 DashboardView" />
+            <TextBlock Name="SummaryText" Text="{Binding Summary}" />
+        </StackPanel>
+    </Border>
+</UserControl>

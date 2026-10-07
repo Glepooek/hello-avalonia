@@ -2,6 +2,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:pages="using:Avalonia.DataTemplatesDemo.Views.Pages"
         mc:Ignorable="d"
         d:DesignWidth="900"
         d:DesignHeight="640"
@@ -13,5 +14,32 @@
         WindowStartupLocation="CenterScreen">
 
     <TabControl Margin="12">
+        <TabItem Header="控件内容">
+            <pages:ControlContentPage />
+        </TabItem>
+        <TabItem Header="内联模板">
+            <pages:ContentTemplatesPage />
+        </TabItem>
+        <TabItem Header="模板集合">
+            <pages:TemplateCollectionPage />
+        </TabItem>
+        <TabItem Header="选择器">
+            <pages:SelectorPage />
+        </TabItem>
+        <TabItem Header="代码建模板">
+            <pages:CodeTemplatesPage />
+        </TabItem>
+        <TabItem Header="复用">
+            <pages:ReusePage />
+        </TabItem>
+        <TabItem Header="ViewLocator">
+            <pages:ViewLocatorPage />
+        </TabItem>
+        <TabItem Header="面板与树">
+            <pages:PanelsAndTreesPage />
+        </TabItem>
+        <TabItem Header="对比 ControlTemplate">
+            <pages:VersusControlTemplatePage />
+        </TabItem>
     </TabControl>
 </Window>

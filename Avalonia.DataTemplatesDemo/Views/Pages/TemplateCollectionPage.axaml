@@ -1,0 +1,49 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             xmlns:models="using:Avalonia.DataTemplatesDemo.Models"
+             mc:Ignorable="d"
+             d:DesignWidth="860"
+             d:DesignHeight="560"
+             x:Class="Avalonia.DataTemplatesDemo.Views.Pages.TemplateCollectionPage">
+
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="模板集合：按 DataType 自动挑模板，从上往下取第一个匹配的"
+                               DocPath="data-templates/data-template-collection" />
+
+            <TextBlock Classes="caption" Text="1. 具体类型在前：圆、方各走各的，三角形落到基类模板" />
+            <ItemsControl Name="SpecificFirst">
+                <ItemsControl.DataTemplates>
+                    <DataTemplate DataType="models:Circle">
+                        <TextBlock Foreground="#E8974A" Text="{Binding Radius, StringFormat='● 圆，半径 {0}'}" />
+                    </DataTemplate>
+                    <DataTemplate DataType="models:Square">
+                        <TextBlock Foreground="#4AC7E8" Text="{Binding Side, StringFormat='■ 方，边长 {0}'}" />
+                    </DataTemplate>
+                    <DataTemplate DataType="models:Shape">
+                        <TextBlock Opacity="0.6" Text="{Binding Name, StringFormat='（通用 Shape 模板）{0}'}" />
+                    </DataTemplate>
+                </ItemsControl.DataTemplates>
+            </ItemsControl>
+
+            <TextBlock Classes="caption" Text="2. 基类模板放在最前：所有形状都被它截走" />
+            <ItemsControl Name="BaseFirst">
+                <ItemsControl.DataTemplates>
+                    <DataTemplate DataType="models:Shape">
+                        <TextBlock Opacity="0.6" Text="{Binding Name, StringFormat='（通用 Shape 模板）{0}'}" />
+                    </DataTemplate>
+                    <DataTemplate DataType="models:Circle">
+                        <TextBlock Foreground="#E8974A" Text="{Binding Radius, StringFormat='● 圆，半径 {0}'}" />
+                    </DataTemplate>
+                </ItemsControl.DataTemplates>
+            </ItemsControl>
+            <TextBlock Classes="hint" Text="DataType 匹配子类（Circle 也是 Shape），而且不比较「谁更具体」，只看声明顺序。这一点和样式的类型选择器正好相反：Style Selector=&quot;Shape&quot; 不会命中子类。" />
+
+            <TextBlock Classes="caption" Text="3. 模板集合沿逻辑树向上查找" />
+            <TextBlock Classes="hint" Text="ItemsControl.DataTemplates 找不到匹配时，会继续查父元素、页面、Window，最后是 App.axaml 里的 Application.DataTemplates。「复用模板」页利用的正是这一点。" />
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

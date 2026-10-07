@@ -1,0 +1,67 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             xmlns:models="using:Avalonia.DataTemplatesDemo.Models"
+             mc:Ignorable="d"
+             d:DesignWidth="860"
+             d:DesignHeight="560"
+             x:Class="Avalonia.DataTemplatesDemo.Views.Pages.VersusControlTemplatePage">
+
+    <UserControl.Resources>
+        <!--  ControlTemplate: the button's own chrome. Knows nothing about Circle.  -->
+        <ControlTheme x:Key="PillButton" TargetType="Button">
+            <Setter Property="Padding" Value="16,6" />
+            <Setter Property="Template">
+                <ControlTemplate TargetType="Button">
+                    <Border Name="Chrome" Background="#30E8974A" BorderBrush="#E8974A" BorderThickness="2"
+                            CornerRadius="16" Padding="{TemplateBinding Padding}">
+                        <ContentPresenter Content="{TemplateBinding Content}"
+                                          ContentTemplate="{TemplateBinding ContentTemplate}" />
+                    </Border>
+                </ControlTemplate>
+            </Setter>
+        </ControlTheme>
+
+        <!--  DataTemplate: how a Circle looks. Knows nothing about buttons.  -->
+        <DataTemplate x:Key="CircleData" x:DataType="models:Circle">
+            <StackPanel Orientation="Horizontal" Spacing="6">
+                <Ellipse Width="14" Height="14" Fill="#4AC7E8" />
+                <TextBlock Text="{Binding Name}" />
+            </StackPanel>
+        </DataTemplate>
+    </UserControl.Resources>
+
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="DataTemplate 与 ControlTemplate：一个画数据，一个画控件"
+                               DocPath="data-templates/introduction-to-data-templates" />
+
+            <TextBlock Classes="caption" Text="四个按钮，Content 都是同一个 Circle 对象" />
+            <Grid ColumnDefinitions="Auto,Auto" RowDefinitions="Auto,Auto" ColumnSpacing="24" RowSpacing="12">
+                <StackPanel Grid.Row="0" Grid.Column="0" Spacing="4">
+                    <TextBlock Classes="hint" Text="两样都不换" />
+                    <Button Name="Neither" />
+                </StackPanel>
+                <StackPanel Grid.Row="0" Grid.Column="1" Spacing="4">
+                    <TextBlock Classes="hint" Text="只换 DataTemplate" />
+                    <Button Name="DataOnly" ContentTemplate="{StaticResource CircleData}" />
+                </StackPanel>
+                <StackPanel Grid.Row="1" Grid.Column="0" Spacing="4">
+                    <TextBlock Classes="hint" Text="只换 ControlTemplate" />
+                    <Button Name="ControlOnly" Theme="{StaticResource PillButton}" />
+                </StackPanel>
+                <StackPanel Grid.Row="1" Grid.Column="1" Spacing="4">
+                    <TextBlock Classes="hint" Text="两样都换" />
+                    <Button Name="Both" Theme="{StaticResource PillButton}" ContentTemplate="{StaticResource CircleData}" />
+                </StackPanel>
+            </Grid>
+
+            <Border Classes="stage" Padding="10" Margin="0,12,0,0">
+                <TextBlock TextWrapping="Wrap"
+                           Text="ControlTemplate 决定按钮的外框（Fluent 的方角灰底 → 药丸形橙边），对谁都一样；DataTemplate 决定框里的内容怎么画（类型全名 → 圆点加名字）。二者通过 ControlTemplate 里的 ContentPresenter 接头：它把 Content 交给 ContentTemplate 去画。自定义 ControlTemplate 时漏写 ContentTemplate=&quot;{TemplateBinding ContentTemplate}&quot;，DataTemplate 就会失效。" />
+            </Border>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

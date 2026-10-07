@@ -1,0 +1,50 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             xmlns:models="using:Avalonia.DataTemplatesDemo.Models"
+             mc:Ignorable="d"
+             d:DesignWidth="860"
+             d:DesignHeight="560"
+             x:Class="Avalonia.DataTemplatesDemo.Views.Pages.ReusePage">
+
+    <UserControl.Resources>
+        <!--  A keyed template is not applied automatically; every user names it explicitly.  -->
+        <DataTemplate x:Key="CircleCard" x:DataType="models:Circle">
+            <Border Classes="card" Padding="8" CornerRadius="6" Background="#30E8974A">
+                <TextBlock Text="{Binding Name, StringFormat='共享卡片：{0}'}" />
+            </Border>
+        </DataTemplate>
+    </UserControl.Resources>
+
+    <UserControl.DataTemplates>
+        <!--  An unkeyed template in DataTemplates applies to every Square under this page.  -->
+        <DataTemplate DataType="models:Square">
+            <TextBlock Foreground="#4AC7E8" Text="{Binding Side, StringFormat='页面级隐式模板：边长 {0}'}" />
+        </DataTemplate>
+    </UserControl.DataTemplates>
+
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="复用模板：放进资源按键引用，或放进 DataTemplates 按类型共享"
+                               DocPath="data-templates/reusing-data-templates" />
+
+            <TextBlock Classes="caption" Text="1. x:Key + StaticResource：同一个模板给三个不同的控件用" />
+            <StackPanel Orientation="Horizontal" Spacing="12">
+                <ContentControl Name="ReuseContent" ContentTemplate="{StaticResource CircleCard}" />
+                <ListBox Name="ReuseList" Width="220" ItemTemplate="{StaticResource CircleCard}" />
+                <ComboBox Name="ReuseCombo" Width="220" ItemTemplate="{StaticResource CircleCard}" />
+            </StackPanel>
+
+            <TextBlock Classes="caption" Text="2. 不带 x:Key、放进 UserControl.DataTemplates：页内所有 Square 自动套用" />
+            <StackPanel Spacing="4">
+                <ContentControl Name="ImplicitA" />
+                <Border Padding="8" BorderBrush="#40FFFFFF" BorderThickness="1">
+                    <ContentControl Name="ImplicitB" />
+                </Border>
+            </StackPanel>
+            <TextBlock Classes="hint" Text="第二个 Square 嵌在 Border 里，照样被找到：模板沿逻辑树向上查找。要整个应用共享，就把模板放进 App.axaml 的 Application.DataTemplates，或放进一个 ResourceDictionary 文件再 ResourceInclude。" />
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

@@ -1,0 +1,43 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             xmlns:models="using:Avalonia.DataTemplatesDemo.Models"
+             mc:Ignorable="d"
+             d:DesignWidth="860"
+             d:DesignHeight="560"
+             x:Class="Avalonia.DataTemplatesDemo.Views.Pages.ContentTemplatesPage">
+
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="内联模板：ContentTemplate 画一个对象，ItemTemplate 画每一项"
+                               DocPath="data-templates/content-templates" />
+
+            <TextBlock Classes="caption" Text="1. ContentControl.ContentTemplate" />
+            <ContentControl Name="SingleCircle">
+                <ContentControl.ContentTemplate>
+                    <DataTemplate x:DataType="models:Circle">
+                        <StackPanel Orientation="Horizontal" Spacing="8">
+                            <Ellipse Width="{Binding Radius}" Height="{Binding Radius}" Fill="#E8974A" />
+                            <TextBlock VerticalAlignment="Center" Text="{Binding Radius, StringFormat='半径 {0}'}" />
+                        </StackPanel>
+                    </DataTemplate>
+                </ContentControl.ContentTemplate>
+            </ContentControl>
+
+            <TextBlock Classes="caption" Text="2. ListBox.ItemTemplate：同一个模板套在每一项上" />
+            <ListBox Name="CircleList" Height="180">
+                <ListBox.ItemTemplate>
+                    <DataTemplate x:DataType="models:Circle">
+                        <StackPanel Orientation="Horizontal" Spacing="8">
+                            <Ellipse Width="{Binding Radius}" Height="{Binding Radius}" Fill="#4AC7E8" />
+                            <TextBlock VerticalAlignment="Center" Text="{Binding Name}" />
+                        </StackPanel>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+            <TextBlock Classes="hint" Text="模板内部的 DataContext 就是当前这一项，所以 {Binding Radius} 读的是 Circle.Radius。x:DataType 让这些绑定在编译期检查。" />
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

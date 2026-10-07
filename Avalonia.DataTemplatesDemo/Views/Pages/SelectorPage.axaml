@@ -1,0 +1,62 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             xmlns:models="using:Avalonia.DataTemplatesDemo.Models"
+             xmlns:templates="using:Avalonia.DataTemplatesDemo.DataTemplates"
+             mc:Ignorable="d"
+             d:DesignWidth="860"
+             d:DesignHeight="560"
+             x:Class="Avalonia.DataTemplatesDemo.Views.Pages.SelectorPage">
+
+    <StackPanel Margin="12">
+        <shared:DemoHeader Title="模板选择器：同一类型的数据，按属性值换模板"
+                           DocPath="data-templates/data-template-collection" />
+
+        <TextBlock Classes="caption" Text="男性用红色模板，女性用黄色模板" />
+        <ListBox Name="PeopleList">
+            <ListBox.DataTemplates>
+                <templates:PersonDataTemplateSelector>
+                    <templates:PersonDataTemplateSelector.MaleDataTemplate>
+                        <DataTemplate x:DataType="models:Person">
+                            <StackPanel Classes="male" Orientation="Horizontal" Background="#E8564A" Spacing="8">
+                                <TextBlock VerticalAlignment="Center" FontSize="40" Text="{Binding Id}" />
+                                <StackPanel>
+                                    <TextBlock FontSize="20" Text="{Binding Name}" />
+                                    <TextBlock FontSize="20" Text="{Binding Address}" />
+                                </StackPanel>
+                            </StackPanel>
+                        </DataTemplate>
+                    </templates:PersonDataTemplateSelector.MaleDataTemplate>
+                    <templates:PersonDataTemplateSelector.FemaleDataTemplate>
+                        <DataTemplate x:DataType="models:Person">
+                            <StackPanel Classes="female" Orientation="Horizontal" Background="#E8D24A" Spacing="8">
+                                <TextBlock VerticalAlignment="Center" FontSize="40" Foreground="Black" Text="{Binding Id}" />
+                                <StackPanel>
+                                    <TextBlock FontSize="20" Foreground="Black" Text="{Binding Name}" />
+                                    <TextBlock FontSize="20" Foreground="Black" Text="{Binding Address}" />
+                                </StackPanel>
+                            </StackPanel>
+                        </DataTemplate>
+                    </templates:PersonDataTemplateSelector.FemaleDataTemplate>
+                </templates:PersonDataTemplateSelector>
+            </ListBox.DataTemplates>
+            <ListBox.Styles>
+                <Style Selector="ListBoxItem">
+                    <Setter Property="Height" Value="80" />
+                </Style>
+            </ListBox.Styles>
+            <ListBox.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <StackPanel Orientation="Horizontal" />
+                </ItemsPanelTemplate>
+            </ListBox.ItemsPanel>
+        </ListBox>
+
+        <Border Classes="stage" Padding="10" Margin="0,12,0,0">
+            <TextBlock TextWrapping="Wrap"
+                       Text="WPF 有专门的 DataTemplateSelector 基类，Avalonia 没有：任何实现 IDataTemplate 的类都可以放进 DataTemplates 集合，Match 决定接不接这一项，Build 决定画成什么。PersonDataTemplateSelector 在 Build 里看 Sex 属性，把活转交给两个普通 DataTemplate。" />
+        </Border>
+    </StackPanel>
+</UserControl>

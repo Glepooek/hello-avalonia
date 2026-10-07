@@ -1,0 +1,26 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             mc:Ignorable="d"
+             d:DesignWidth="860"
+             d:DesignHeight="560"
+             x:Class="Avalonia.DataTemplatesDemo.Views.Pages.CodeTemplatesPage">
+
+    <StackPanel Margin="12">
+        <shared:DemoHeader Title="在代码里建模板：FuncDataTemplate&lt;T&gt;"
+                           DocPath="data-templates/creating-data-templates-in-code" />
+
+        <TextBlock Classes="caption" Text="1. 构造函数里用 lambda 建控件树" />
+        <ListBox Name="CodeList" Height="150" />
+
+        <TextBlock Classes="caption" Text="2. 带匹配条件：只接半径大于 20 的圆，其余落到下一个模板" />
+        <ItemsControl Name="FilteredList" />
+
+        <Border Classes="stage" Padding="10" Margin="0,12,0,0">
+            <TextBlock TextWrapping="Wrap"
+                       Text="不要在代码里 new DataTemplate：那是给 XAML 编译器用的类型，它的 Content 期望编译器生成的模板结果，塞一个控件进去会在运行时抛 InvalidCastException。代码里一律用 Avalonia.Controls.Templates 下的 FuncDataTemplate&lt;T&gt;。" />
+        </Border>
+    </StackPanel>
+</UserControl>

@@ -1,0 +1,47 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             xmlns:models="using:Avalonia.DataTemplatesDemo.Models"
+             mc:Ignorable="d"
+             d:DesignWidth="860"
+             d:DesignHeight="560"
+             x:Class="Avalonia.DataTemplatesDemo.Views.Pages.PanelsAndTreesPage">
+
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="另外两种模板：ItemsPanelTemplate 换容器，TreeDataTemplate 画层级"
+                               DocPath="data-templates/introduction-to-data-templates" />
+
+            <TextBlock Classes="caption" Text="1. ItemsPanelTemplate：同一组数据，换一个面板来排" />
+            <Grid ColumnDefinitions="*,*" ColumnSpacing="12">
+                <StackPanel Grid.Column="0">
+                    <TextBlock Classes="hint" Text="默认：竖排 StackPanel（实际是虚拟化面板）" />
+                    <ListBox Name="DefaultPanelList" Height="140" />
+                </StackPanel>
+                <StackPanel Grid.Column="1">
+                    <TextBlock Classes="hint" Text="换成 WrapPanel：自动换行" />
+                    <ListBox Name="WrapPanelList" Height="140">
+                        <ListBox.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <WrapPanel />
+                            </ItemsPanelTemplate>
+                        </ListBox.ItemsPanel>
+                    </ListBox>
+                </StackPanel>
+            </Grid>
+            <TextBlock Classes="hint" Text="ItemsPanelTemplate 只决定「装项的那个面板」是什么，不管每项长什么样——那是 ItemTemplate 的事。换成非虚拟化面板会失去虚拟化，几千项时要注意。" />
+
+            <TextBlock Classes="caption" Text="2. TreeDataTemplate：ItemsSource 指向子节点集合" />
+            <TreeView Name="FolderTree" Height="180">
+                <TreeView.ItemTemplate>
+                    <TreeDataTemplate DataType="models:Folder" ItemsSource="{Binding Children}">
+                        <TextBlock Text="{Binding Title, StringFormat='📁 {0}'}" />
+                    </TreeDataTemplate>
+                </TreeView.ItemTemplate>
+            </TreeView>
+            <TextBlock Classes="hint" Text="TreeDataTemplate 比 DataTemplate 多一个 ItemsSource：它是一个绑定，对每个节点求值得到它的子节点。同一个模板递归套用到每一层。" />
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

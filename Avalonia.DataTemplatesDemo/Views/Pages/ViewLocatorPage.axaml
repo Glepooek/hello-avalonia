@@ -1,0 +1,35 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             xmlns:vm="using:Avalonia.DataTemplatesDemo.ViewModels"
+             xmlns:local="using:Avalonia.DataTemplatesDemo"
+             mc:Ignorable="d"
+             d:DesignWidth="860"
+             d:DesignHeight="560"
+             x:Class="Avalonia.DataTemplatesDemo.Views.Pages.ViewLocatorPage"
+             x:DataType="vm:ViewLocatorViewModel">
+
+    <UserControl.DataTemplates>
+        <local:ViewLocator />
+    </UserControl.DataTemplates>
+
+    <StackPanel Margin="12">
+        <shared:DemoHeader Title="ViewLocator：按命名约定从 ViewModel 找到 View"
+                           DocPath="data-templates/view-locator" />
+
+        <StackPanel Orientation="Horizontal" Spacing="8">
+            <Button Content="DashboardViewModel" Command="{Binding ShowDashboardCommand}" />
+            <Button Content="SettingsViewModel" Command="{Binding ShowSettingsCommand}" />
+            <Button Content="MissingViewModel（没有对应视图）" Command="{Binding ShowMissingCommand}" />
+        </StackPanel>
+
+        <ContentControl Name="Host" Margin="0,12,0,0" Content="{Binding Current}" />
+
+        <TextBlock Classes="hint" Margin="0,12,0,0"
+                   Text="ViewModel 只换 Current，不引用任何 View 类型。ContentControl 拿到一个对象后查 DataTemplates，ViewLocator.Match 认出名字以 ViewModel 结尾，Build 把 ViewModels. 换成 Views.Located.、ViewModel 换成 View，再反射创建。" />
+        <TextBlock Classes="hint"
+                   Text="反射查找与 AOT 裁剪不兼容。正式项目若要发布为 NativeAOT，应改成显式的类型映射表。" />
+    </StackPanel>
+</UserControl>
