@@ -1,0 +1,75 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             mc:Ignorable="d"
+             d:DesignWidth="860"
+             d:DesignHeight="560"
+             x:Class="Avalonia.StylingDemo.Views.Pages.StyleClassesPage">
+
+    <UserControl.Styles>
+        <Style Selector="Border.swatch">
+            <Setter Property="Width" Value="140" />
+            <Setter Property="Height" Value="36" />
+            <Setter Property="CornerRadius" Value="4" />
+            <Setter Property="Background" Value="#30FFFFFF" />
+        </Style>
+        <Style Selector="Border.green">
+            <Setter Property="Background" Value="#6FE84A" />
+        </Style>
+        <!--  Declared after .green, so it wins whenever both classes are present —
+              regardless of the order they appear in the Classes attribute.  -->
+        <Style Selector="Border.yellow">
+            <Setter Property="Background" Value="#E8D24A" />
+        </Style>
+        <Style Selector="Border.warn">
+            <Setter Property="BorderBrush" Value="#E8564A" />
+            <Setter Property="BorderThickness" Value="3" />
+        </Style>
+        <Style Selector="Border.swatch.green.warn">
+            <!--  A compound class selector: needs all three at once.  -->
+            <Setter Property="Opacity" Value="0.5" />
+        </Style>
+    </UserControl.Styles>
+
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="样式类：用名字给元素打标签，样式按标签挑元素"
+                               DocPath="styling/style-classes" />
+
+            <TextBlock Classes="caption" Text="1. Classes 里写多个类，用空格分隔" />
+            <StackPanel Orientation="Horizontal" Spacing="8">
+                <Border Classes="swatch" />
+                <Border Classes="swatch green" />
+                <Border Classes="swatch green warn" />
+            </StackPanel>
+            <TextBlock Classes="hint" Text="第三个同时有 swatch、green、warn，因此额外命中复合选择器 Border.swatch.green.warn（半透明）。" />
+
+            <TextBlock Classes="caption" Text="2. 冲突时比的是样式声明顺序，不是 Classes 里的书写顺序" />
+            <StackPanel Orientation="Horizontal" Spacing="8">
+                <Border Classes="swatch green yellow">
+                    <TextBlock Margin="8,0" VerticalAlignment="Center" Foreground="Black" Text='"green yellow"' />
+                </Border>
+                <Border Classes="swatch yellow green">
+                    <TextBlock Margin="8,0" VerticalAlignment="Center" Foreground="Black" Text='"yellow green"' />
+                </Border>
+            </StackPanel>
+            <TextBlock Classes="hint" Text="两块都是黄色：Border.yellow 在样式表里声明在 Border.green 之后。" />
+
+            <TextBlock Classes="caption" Text="3. Classes.类名 绑定到布尔值：开关驱动类名增删" />
+            <StackPanel Orientation="Horizontal" Spacing="12">
+                <ToggleSwitch Name="WarnSwitch" OffContent="正常" OnContent="警告" />
+                <Border Name="BoundSwatch" Classes="swatch" Classes.warn="{Binding #WarnSwitch.IsChecked}" />
+            </StackPanel>
+            <TextBlock Classes="hint" Text="对应官方 data-binding/binding-classes 一页。IsChecked 是 bool?，绑定照样生效。" />
+
+            <TextBlock Classes="caption" Text="4. 在代码里增删类" />
+            <StackPanel Orientation="Horizontal" Spacing="8">
+                <Button Content="切换 green" Click="OnToggleGreen" />
+                <Border Name="CodeSwatch" Classes="swatch" />
+                <TextBlock Name="CodeClassesText" VerticalAlignment="Center" />
+            </StackPanel>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

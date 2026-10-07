@@ -1,0 +1,59 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             mc:Ignorable="d"
+             d:DesignWidth="860"
+             d:DesignHeight="560"
+             x:Class="Avalonia.StylingDemo.Views.Pages.SharingStylesPage">
+
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <!--  ResourceInclude merges values; nothing changes until a key is looked up.  -->
+                <ResourceInclude Source="avares://Avalonia.StylingDemo/Styles/Palette.axaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+
+    <UserControl.Styles>
+        <!--  StyleInclude brings in rules: matching buttons on this page restyle immediately.  -->
+        <StyleInclude Source="avares://Avalonia.StylingDemo/Styles/ButtonStyles.axaml" />
+    </UserControl.Styles>
+
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="样式共享：StyleInclude 带进规则，ResourceInclude 带进值"
+                               DocPath="styling/sharing-styles" />
+
+            <TextBlock Classes="caption" Text="1. StyleInclude：引入 Styles/ButtonStyles.axaml" />
+            <StackPanel Orientation="Horizontal" Spacing="8">
+                <Button Name="CallButton" Classes="call" Content="call" />
+                <Button Name="IconButton" Classes="icon" Content="i" />
+                <Button Content="无类名" />
+            </StackPanel>
+            <TextBlock Classes="hint" Text="样式文件的作用域取决于它被 Include 到哪里：这里放在 UserControl.Styles，别的页面上带 call 类的按钮不受影响。要全局生效就放进 App.axaml 的 Application.Styles。" />
+
+            <TextBlock Classes="caption" Text="2. ResourceInclude：引入 Styles/Palette.axaml 里的画刷与圆角" />
+            <StackPanel Orientation="Horizontal" Spacing="8">
+                <Border Name="AccentSwatch" Width="120" Height="40"
+                        Background="{StaticResource PaletteAccent}"
+                        CornerRadius="{StaticResource PaletteRadius}" />
+                <Border Width="120" Height="40"
+                        Background="{StaticResource PaletteMuted}"
+                        CornerRadius="{StaticResource PaletteRadius}" />
+            </StackPanel>
+
+            <TextBlock Classes="caption" Text="3. 本仓库就是一个跨程序集共享的例子" />
+            <Border Classes="stage" Padding="10">
+                <StackPanel Spacing="4">
+                    <TextBlock TextWrapping="Wrap"
+                               Text="页面顶部的说明条、小节标题（caption）、提示文字（hint）、演示边框（stage）都来自 Avalonia.Shared 程序集，每个演示项目在 App.axaml 里用一行 StyleInclude 引入：" />
+                    <SelectableTextBlock FontFamily="Consolas, monospace"
+                                         Text="&lt;StyleInclude Source=&quot;avares://Avalonia.Shared/Themes/SharedStyles.axaml&quot; /&gt;" />
+                </StackPanel>
+            </Border>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

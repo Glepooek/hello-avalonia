@@ -1,0 +1,83 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             mc:Ignorable="d"
+             d:DesignWidth="860"
+             d:DesignHeight="560"
+             x:Class="Avalonia.StylingDemo.Views.Pages.ThemesPage">
+
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <!--  One key, two values: the theme variant in effect decides which one a lookup gets.  -->
+            <ResourceDictionary.ThemeDictionaries>
+                <ResourceDictionary x:Key="Light">
+                    <SolidColorBrush x:Key="CardBrush" Color="#FFEEEEEE" />
+                    <SolidColorBrush x:Key="CardText" Color="#FF202020" />
+                </ResourceDictionary>
+                <ResourceDictionary x:Key="Dark">
+                    <SolidColorBrush x:Key="CardBrush" Color="#FF222222" />
+                    <SolidColorBrush x:Key="CardText" Color="#FFEEEEEE" />
+                </ResourceDictionary>
+            </ResourceDictionary.ThemeDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+
+    <UserControl.Styles>
+        <Style Selector="Border.card">
+            <Setter Property="Width" Value="220" />
+            <Setter Property="Height" Value="60" />
+            <Setter Property="CornerRadius" Value="6" />
+            <Setter Property="Padding" Value="10" />
+        </Style>
+    </UserControl.Styles>
+
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="主题与变体：Light / Dark 切换，以及局部换肤"
+                               DocPath="styling/theme-variants" />
+
+            <TextBlock Classes="caption" Text="1. 切换整个应用的主题变体" />
+            <StackPanel Orientation="Horizontal" Spacing="8">
+                <Button Content="Light" Click="OnLight" />
+                <Button Content="Dark" Click="OnDark" />
+                <Button Content="跟随系统（Default）" Click="OnDefault" />
+                <TextBlock Name="ActualText" VerticalAlignment="Center" />
+            </StackPanel>
+            <TextBlock Classes="hint" Text="改的是 Application.RequestedThemeVariant。Fluent 的所有控件都通过 DynamicResource 取色，因此整窗即时换肤。" />
+
+            <TextBlock Classes="caption" Text="2. ThemeVariantScope：只给一块区域换主题" />
+            <StackPanel Orientation="Horizontal" Spacing="12">
+                <ThemeVariantScope RequestedThemeVariant="Light">
+                    <Border Classes="card" Background="{DynamicResource CardBrush}">
+                        <StackPanel Spacing="4">
+                            <TextBlock Foreground="{DynamicResource CardText}" Text="这块永远是 Light" />
+                            <Button Content="Fluent 按钮也跟着变" />
+                        </StackPanel>
+                    </Border>
+                </ThemeVariantScope>
+                <ThemeVariantScope RequestedThemeVariant="Dark">
+                    <Border Classes="card" Background="{DynamicResource CardBrush}">
+                        <StackPanel Spacing="4">
+                            <TextBlock Foreground="{DynamicResource CardText}" Text="这块永远是 Dark" />
+                            <Button Content="Fluent 按钮也跟着变" />
+                        </StackPanel>
+                    </Border>
+                </ThemeVariantScope>
+            </StackPanel>
+
+            <TextBlock Classes="caption" Text="3. ThemeDictionaries 必须配 DynamicResource" />
+            <StackPanel Orientation="Horizontal" Spacing="12">
+                <Border Name="DynamicCard" Classes="card" Background="{DynamicResource CardBrush}">
+                    <TextBlock Foreground="{DynamicResource CardText}" Text="DynamicResource：随主题换色" />
+                </Border>
+                <Border Name="StaticCard" Classes="card" BorderBrush="#40FFFFFF" BorderThickness="1"
+                        Background="{StaticResource CardBrush}">
+                    <TextBlock Text="StaticResource：背景是 null" />
+                </Border>
+            </StackPanel>
+            <TextBlock Classes="hint" Text="右边那块没有背景色：StaticResource 在加载时查找一次，而 ThemeDictionaries 里的键要等知道当前变体后才能解析，于是取到 null——不报错，也没有日志。" />
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

@@ -2,6 +2,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:pages="using:Avalonia.StylingDemo.Views.Pages"
         mc:Ignorable="d"
         d:DesignWidth="900"
         d:DesignHeight="640"
@@ -13,5 +14,32 @@
         WindowStartupLocation="CenterScreen">
 
     <TabControl Margin="12">
+        <TabItem Header="选择器">
+            <pages:SelectorsPage />
+        </TabItem>
+        <TabItem Header="样式类">
+            <pages:StyleClassesPage />
+        </TabItem>
+        <TabItem Header="伪类">
+            <pages:PseudoClassesPage />
+        </TabItem>
+        <TabItem Header="ControlTheme">
+            <pages:ControlThemesPage />
+        </TabItem>
+        <TabItem Header="主题变体">
+            <pages:ThemesPage />
+        </TabItem>
+        <TabItem Header="容器查询">
+            <pages:ContainerQueriesPage />
+        </TabItem>
+        <TabItem Header="字体">
+            <pages:FontsPage />
+        </TabItem>
+        <TabItem Header="样式共享">
+            <pages:SharingStylesPage />
+        </TabItem>
+        <TabItem Header="优先级">
+            <pages:PrecedencePage />
+        </TabItem>
     </TabControl>
 </Window>

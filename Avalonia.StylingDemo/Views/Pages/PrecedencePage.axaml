@@ -1,0 +1,26 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             mc:Ignorable="d"
+             d:DesignWidth="860"
+             d:DesignHeight="560"
+             x:Class="Avalonia.StylingDemo.Views.Pages.PrecedencePage">
+
+    <StackPanel Margin="12">
+        <shared:DemoHeader Title="属性值优先级：完整演示在 Avalonia.PropertySystemDemo"
+                           DocPath="properties/value-precedence" />
+
+        <Border Classes="stage" Padding="12">
+            <StackPanel Spacing="8">
+                <TextBlock TextWrapping="Wrap"
+                           Text="官方文档在 Styling 与 Property System 两个分类下都列了这一页。它讲的是属性系统如何在多个来源之间选值，样式只是来源之一，因此完整演示放在属性系统项目里。" />
+                <SelectableTextBlock FontFamily="Consolas, monospace"
+                                     Text="dotnet run --project Avalonia.PropertySystemDemo   →  「值优先级」标签页" />
+                <TextBlock Classes="hint"
+                           Text="与样式最相关的一条：写在元素上的值（LocalValue）永远压过所有 Style Setter，连伪类也救不回来。ControlTheme 的 Setter 则低于 Style——本项目「ControlTheme」页第 3 节有说明。" />
+            </StackPanel>
+        </Border>
+    </StackPanel>
+</UserControl>

@@ -8,4 +8,12 @@
         <!--  Brings in DemoHeader plus the shared caption, hint and stage styles.  -->
         <StyleInclude Source="avares://Avalonia.Shared/Themes/SharedStyles.axaml" />
     </Application.Styles>
+
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceInclude Source="avares://Avalonia.StylingDemo/Controls/ToggleChip.axaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Application.Resources>
 </Application>

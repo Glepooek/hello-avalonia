@@ -1,0 +1,13 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:controls="using:Avalonia.StylingDemo.Controls">
+
+    <!--
+        Borrow the Fluent Button look through BasedOn rather than overriding StyleKeyOverride.
+        StyleKeyOverride would make the style system treat every ToggleChip as a plain Button,
+        so a "controls|ToggleChip:on" selector would silently never match.
+    -->
+    <ControlTheme x:Key="{x:Type controls:ToggleChip}"
+                  TargetType="controls:ToggleChip"
+                  BasedOn="{StaticResource {x:Type Button}}" />
+</ResourceDictionary>

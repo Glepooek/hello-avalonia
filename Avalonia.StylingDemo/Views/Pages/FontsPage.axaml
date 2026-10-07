@@ -1,0 +1,58 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             mc:Ignorable="d"
+             d:DesignWidth="860"
+             d:DesignHeight="560"
+             x:Class="Avalonia.StylingDemo.Views.Pages.FontsPage">
+
+    <UserControl.Resources>
+        <!--  "<assembly>/<folder>#<family name>". The family name comes from the font file's
+              own name table, not from the file name — here they happen to coincide.  -->
+        <FontFamily x:Key="IconFont">avares://Avalonia.StylingDemo/Assets/Fonts#iconfont</FontFamily>
+    </UserControl.Resources>
+
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="字体与排版：嵌入字体文件，调整字距行高"
+                               DocPath="styling/custom-fonts" />
+
+            <TextBlock Classes="caption" Text="1. 嵌入的图标字体：每个字符是一个图标" />
+            <StackPanel Orientation="Horizontal" Spacing="16">
+                <TextBlock Name="IconSample" FontFamily="{StaticResource IconFont}" FontSize="32" Text="&#xe603;" />
+                <TextBlock FontFamily="{StaticResource IconFont}" FontSize="32" Text="&#xe604;" />
+                <TextBlock FontFamily="{StaticResource IconFont}" FontSize="32" Text="&#xe60c;" />
+                <TextBlock FontFamily="{StaticResource IconFont}" FontSize="32" Text="&#xe610;" />
+            </StackPanel>
+            <TextBlock Classes="hint" Text="字体文件放在 Assets/Fonts/ 下，由 csproj 里的 AvaloniaResource Include=&quot;Assets\**&quot; 打进程序集。码位 U+E603、E604、E60C、E610。" />
+
+            <TextBlock Classes="caption" Text="2. 字体回退链：前一个找不到就用下一个" />
+            <TextBlock FontFamily="不存在的字体, Consolas, monospace" Text="FontFamily=&quot;不存在的字体, Consolas, monospace&quot;" />
+
+            <TextBlock Classes="caption" Text="3. 排版属性（拖动滑块）" />
+            <Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto" Margin="0,0,0,6">
+                <TextBlock Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" Margin="0,0,8,0"
+                           Text="{Binding #SpacingSlider.Value, StringFormat='LetterSpacing {0:F1}'}" />
+                <Slider Grid.Row="0" Grid.Column="1" Name="SpacingSlider" Minimum="0" Maximum="10" Value="0" />
+                <TextBlock Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Margin="0,0,8,0"
+                           Text="{Binding #LineSlider.Value, StringFormat='LineHeight {0:F0}'}" />
+                <Slider Grid.Row="1" Grid.Column="1" Name="LineSlider" Minimum="16" Maximum="48" Value="20" />
+            </Grid>
+            <Border Classes="stage" Padding="10">
+                <TextBlock FontSize="16"
+                           LetterSpacing="{Binding #SpacingSlider.Value}"
+                           LineHeight="{Binding #LineSlider.Value}"
+                           TextWrapping="Wrap"
+                           Text="Avalonia 的 TextBlock 支持字距、行高、下划线、删除线与 OpenType 特性。The quick brown fox jumps over the lazy dog." />
+            </Border>
+            <StackPanel Orientation="Horizontal" Spacing="16" Margin="0,8,0,0">
+                <TextBlock TextDecorations="Underline" Text="Underline" />
+                <TextBlock TextDecorations="Strikethrough" Text="Strikethrough" />
+                <TextBlock FontStyle="Italic" Text="Italic" />
+                <TextBlock FontWeight="Black" Text="Black" />
+            </StackPanel>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

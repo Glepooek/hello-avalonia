@@ -1,0 +1,148 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             mc:Ignorable="d"
+             d:DesignWidth="860"
+             d:DesignHeight="560"
+             x:Class="Avalonia.StylingDemo.Views.Pages.SelectorsPage">
+
+    <UserControl.Styles>
+        <!--  Every rule below paints one property, so each row shows exactly which elements it caught.  -->
+        <Style Selector="Border.cell">
+            <Setter Property="Background" Value="#30FFFFFF" />
+            <Setter Property="Width" Value="56" />
+            <Setter Property="Height" Value="28" />
+            <Setter Property="Margin" Value="3" />
+            <Setter Property="CornerRadius" Value="3" />
+        </Style>
+
+        <!--  1. Child (>) versus descendant (space).  -->
+        <Style Selector="StackPanel#ChildRow > Border.cell">
+            <Setter Property="Background" Value="#E8564A" />
+        </Style>
+        <Style Selector="StackPanel#DescendantRow Border.cell">
+            <Setter Property="Background" Value="#4AC7E8" />
+        </Style>
+
+        <!--  2. A type selector matches the exact type only; :is() also takes subclasses.  -->
+        <Style Selector="WrapPanel#ExactRow Button">
+            <Setter Property="Background" Value="#E8564A" />
+        </Style>
+        <Style Selector="WrapPanel#IsRow :is(Button)">
+            <Setter Property="Background" Value="#6FE84A" />
+        </Style>
+
+        <!--  3. Attribute selector on a live property value.  -->
+        <Style Selector="CheckBox[IsChecked=True]">
+            <Setter Property="Foreground" Value="#6FE84A" />
+        </Style>
+
+        <!--  4. :not() and :nth-child().  -->
+        <Style Selector="StackPanel#NotRow > Border.cell:not(.keep)">
+            <Setter Property="Opacity" Value="0.25" />
+        </Style>
+        <Style Selector="StackPanel#NthRow > Border.cell:nth-child(2n)">
+            <Setter Property="Background" Value="#E8D24A" />
+        </Style>
+
+        <!--  5. /template/ reaches inside a control's template. Without it, PART_ContentPresenter
+              is invisible to the selector: it lives in the visual tree, not the logical one.  -->
+        <Style Selector="Button.round /template/ ContentPresenter#PART_ContentPresenter">
+            <Setter Property="CornerRadius" Value="16" />
+        </Style>
+
+        <!--  6. Nesting: ^ stands for the enclosing selector.  -->
+        <Style Selector="Button.nested">
+            <Setter Property="Width" Value="160" />
+            <Style Selector="^:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+                <Setter Property="Background" Value="#4A7BE8" />
+            </Style>
+        </Style>
+
+        <!--  Migrated from the old DataTemplateDemo. The flyout opens in a separate popup root,
+              yet these styles still reach it: a flyout's presenter is a logical child of its owner.  -->
+        <Style Selector="FlyoutPresenter">
+            <Setter Property="Background" Value="#E8564A" />
+            <Setter Property="Margin" Value="0,5,0,0" />
+            <Style Selector="^:pointerover">
+                <Setter Property="Background" Value="#4A7BE8" />
+            </Style>
+        </Style>
+    </UserControl.Styles>
+
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="选择器语法：每一行只有一条规则在起作用"
+                               DocPath="styling/style-selector-syntax" />
+
+            <TextBlock Classes="caption" Text="1. 子代 &gt; 与后代（空格）：中间隔了一层 Border 的那两个，只被后代选择器选中" />
+            <StackPanel Name="ChildRow" Orientation="Horizontal">
+                <Border Classes="cell" />
+                <Border Classes="cell" />
+                <Border Padding="4" BorderBrush="#40FFFFFF" BorderThickness="1">
+                    <Border Classes="cell" />
+                </Border>
+            </StackPanel>
+            <StackPanel Name="DescendantRow" Orientation="Horizontal">
+                <Border Classes="cell" />
+                <Border Classes="cell" />
+                <Border Padding="4" BorderBrush="#40FFFFFF" BorderThickness="1">
+                    <Border Classes="cell" />
+                </Border>
+            </StackPanel>
+            <TextBlock Classes="hint" Text="上行用 StackPanel#ChildRow &gt; Border.cell（红），下行用 StackPanel#DescendantRow Border.cell（蓝）。" />
+
+            <TextBlock Classes="caption" Text="2. 类型选择器不匹配子类 —— 这一条与 CSS 的直觉相反" />
+            <WrapPanel Name="ExactRow">
+                <Button Margin="3" Content="Button" />
+                <ToggleButton Margin="3" Content="ToggleButton" />
+                <RepeatButton Margin="3" Content="RepeatButton" />
+            </WrapPanel>
+            <WrapPanel Name="IsRow">
+                <Button Margin="3" Content="Button" />
+                <ToggleButton Margin="3" Content="ToggleButton" />
+                <RepeatButton Margin="3" Content="RepeatButton" />
+            </WrapPanel>
+            <TextBlock Classes="hint" Text="上行规则写 Button，只染红了第一个；下行写 :is(Button)，三个都染绿——ToggleButton 和 RepeatButton 都派生自 Button。" />
+
+            <TextBlock Classes="caption" Text="3. 属性选择器 [Property=Value]：勾选时文字变绿" />
+            <CheckBox Content="点我切换 IsChecked" />
+
+            <TextBlock Classes="caption" Text="4. :not() 与 :nth-child()" />
+            <StackPanel Name="NotRow" Orientation="Horizontal">
+                <Border Classes="cell keep" />
+                <Border Classes="cell" />
+                <Border Classes="cell keep" />
+                <Border Classes="cell" />
+            </StackPanel>
+            <StackPanel Name="NthRow" Orientation="Horizontal">
+                <Border Classes="cell" />
+                <Border Classes="cell" />
+                <Border Classes="cell" />
+                <Border Classes="cell" />
+            </StackPanel>
+            <TextBlock Classes="hint" Text="上行：没有 .keep 类的变淡。下行：偶数位（第 2、4 个）变黄，计数从 1 开始。" />
+
+            <TextBlock Classes="caption" Text="5. /template/ 改写控件模板内部的元素" />
+            <StackPanel Orientation="Horizontal" Spacing="8">
+                <Button Content="普通按钮" />
+                <Button Classes="round" Content="模板里的 ContentPresenter 被改成了圆角" />
+            </StackPanel>
+
+            <TextBlock Classes="caption" Text="6. 嵌套样式：^ 代表外层选择器（悬停看效果）" />
+            <Button Classes="nested" Content="悬停我" />
+
+            <TextBlock Classes="caption" Text="7. 样式也能管到弹出层：FlyoutPresenter 红底，悬停变蓝" />
+            <Button Name="FlyoutOwner" HorizontalAlignment="Left" Content="打开 Flyout">
+                <Button.Flyout>
+                    <Flyout ShowMode="Standard" Placement="BottomEdgeAlignedLeft">
+                        <TextBlock Text="这是弹出层" />
+                    </Flyout>
+                </Button.Flyout>
+            </Button>
+            <TextBlock Classes="hint" Text="弹出层是另一个顶层窗口，视觉树和页面断开；但它在逻辑树上挂在按钮下面，所以写在本页 UserControl.Styles 里的规则照样生效。" />
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

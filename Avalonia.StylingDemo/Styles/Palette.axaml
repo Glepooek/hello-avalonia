@@ -1,0 +1,9 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <!--  A resource dictionary carries values, not rules: merging it changes nothing on screen
+          until something looks a key up. Contrast with ButtonStyles.axaml, which restyles
+          matching controls the moment it is included.  -->
+    <SolidColorBrush x:Key="PaletteAccent" Color="#E8974A" />
+    <SolidColorBrush x:Key="PaletteMuted" Color="#556070" />
+    <CornerRadius x:Key="PaletteRadius">8</CornerRadius>
+</ResourceDictionary>

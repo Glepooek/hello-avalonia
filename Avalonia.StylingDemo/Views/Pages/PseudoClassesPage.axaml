@@ -1,0 +1,61 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             xmlns:controls="using:Avalonia.StylingDemo.Controls"
+             mc:Ignorable="d"
+             d:DesignWidth="860"
+             d:DesignHeight="560"
+             x:Class="Avalonia.StylingDemo.Views.Pages.PseudoClassesPage">
+
+    <UserControl.Styles>
+        <Style Selector="Border.target">
+            <Setter Property="Width" Value="200" />
+            <Setter Property="Height" Value="40" />
+            <Setter Property="CornerRadius" Value="4" />
+            <Setter Property="Background" Value="#30FFFFFF" />
+        </Style>
+        <Style Selector="Border.target:pointerover">
+            <Setter Property="Background" Value="#4A7BE8" />
+        </Style>
+        <Style Selector="TextBox.watch:focus">
+            <Setter Property="BorderBrush" Value="#6FE84A" />
+        </Style>
+        <Style Selector="Button.watch:disabled">
+            <Setter Property="Opacity" Value="0.3" />
+        </Style>
+        <Style Selector="controls|ToggleChip:on">
+            <Setter Property="Background" Value="#E8974A" />
+            <Setter Property="Foreground" Value="Black" />
+        </Style>
+    </UserControl.Styles>
+
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="伪类：控件自己报告的状态，样式按状态切换"
+                               DocPath="styling/pseudoclasses" />
+
+            <TextBlock Classes="caption" Text="1. 内置伪类：:pointerover / :focus / :disabled" />
+            <StackPanel Spacing="8">
+                <Border Classes="target">
+                    <TextBlock Margin="8,0" VerticalAlignment="Center" Text="鼠标移上来" />
+                </Border>
+                <TextBox Classes="watch" Width="200" HorizontalAlignment="Left" PlaceholderText="点进来获得焦点" />
+                <StackPanel Orientation="Horizontal" Spacing="8">
+                    <CheckBox Name="EnableBox" IsChecked="True" Content="启用右边的按钮" />
+                    <Button Classes="watch" Content="被控制的按钮" IsEnabled="{Binding #EnableBox.IsChecked}" />
+                </StackPanel>
+            </StackPanel>
+            <TextBlock Classes="hint" Text="伪类不能在 XAML 里手动设置，只能由控件自己根据状态打上。Classes 里看得到它们（带冒号前缀）。" />
+
+            <TextBlock Classes="caption" Text="2. 自定义伪类 :on —— ToggleChip 点一下就锁定" />
+            <StackPanel Orientation="Horizontal" Spacing="12">
+                <controls:ToggleChip Name="Chip" Content="点我切换 :on" />
+                <TextBlock VerticalAlignment="Center"
+                           Text="{Binding #Chip.IsOn, StringFormat='IsOn = {0}'}" />
+            </StackPanel>
+            <TextBlock Classes="hint" Text="ToggleChip 在 IsOn 变化时调用 PseudoClasses.Set(&quot;:on&quot;, IsOn)。样式 controls|ToggleChip:on 就是按这个状态挑元素的。" />
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

@@ -1,0 +1,80 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             mc:Ignorable="d"
+             d:DesignWidth="860"
+             d:DesignHeight="560"
+             x:Class="Avalonia.StylingDemo.Views.Pages.ControlThemesPage">
+
+    <UserControl.Resources>
+        <!--  Replaces the whole template: none of Fluent's visuals survive.  -->
+        <ControlTheme x:Key="YellowButtonTheme" TargetType="Button">
+            <Setter Property="Width" Value="200" />
+            <Setter Property="Height" Value="40" />
+            <Setter Property="Background" Value="Yellow" />
+            <Setter Property="Foreground" Value="Black" />
+            <Setter Property="BorderBrush" Value="Blue" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="Template">
+                <ControlTemplate TargetType="Button">
+                    <Border Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="4">
+                        <ContentPresenter HorizontalAlignment="Center"
+                                          VerticalAlignment="Center"
+                                          Content="{TemplateBinding Content}"
+                                          Foreground="{TemplateBinding Foreground}" />
+                    </Border>
+                </ControlTemplate>
+            </Setter>
+            <!--  Pseudo-class styles live inside the theme and use ^ for the themed control.  -->
+            <Style Selector="^:pointerover">
+                <Setter Property="Background" Value="#4A7BE8" />
+            </Style>
+        </ControlTheme>
+
+        <!--  Keeps Fluent's template and adds setters on top.  -->
+        <ControlTheme x:Key="WideButtonTheme"
+                      TargetType="Button"
+                      BasedOn="{StaticResource {x:Type Button}}">
+            <Setter Property="Width" Value="200" />
+        </ControlTheme>
+
+        <!--  Inherits a theme that already inherits Fluent: setters stack up both levels.  -->
+        <ControlTheme x:Key="TallWideButtonTheme"
+                      TargetType="Button"
+                      BasedOn="{StaticResource WideButtonTheme}">
+            <Setter Property="Height" Value="56" />
+        </ControlTheme>
+    </UserControl.Resources>
+
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="ControlTheme：控件的整套外观，一个控件同时只用一个"
+                               DocPath="styling/control-themes" />
+
+            <TextBlock Classes="caption" Text="1. 重写模板：Fluent 的外观全部丢弃" />
+            <StackPanel Orientation="Horizontal" Spacing="8">
+                <Button Content="Fluent 默认" />
+                <Button Name="YellowButton" Theme="{StaticResource YellowButtonTheme}" Content="自定义模板" />
+            </StackPanel>
+            <TextBlock Classes="hint" Text="悬停时变蓝的规则写在 ControlTheme 内部的 ^:pointerover 里——主题自带的状态样式随主题一起换掉。" />
+
+            <TextBlock Classes="caption" Text="2. BasedOn：保留 Fluent 模板，只追加 Setter" />
+            <StackPanel Orientation="Horizontal" Spacing="8">
+                <Button Name="WideButton" Theme="{StaticResource WideButtonTheme}" Content="继承一层：Width=200" />
+                <Button Name="TallWideButton" Theme="{StaticResource TallWideButtonTheme}" Content="继承两层：再加 Height=56" />
+            </StackPanel>
+            <TextBlock Classes="hint" Text="{}{StaticResource {x:Type Button}} 取到的就是 Fluent 给 Button 的默认 ControlTheme。" />
+
+            <TextBlock Classes="caption" Text="3. ControlTheme 与 Style 的分工" />
+            <Border Classes="stage" Padding="10">
+                <TextBlock TextWrapping="Wrap"
+                           Text="Style 按选择器批量挑元素，可以层层叠加；ControlTheme 通过 Theme 属性指定给单个控件，一次只生效一个，并且优先级低于所有 Style——所以用 Style 去覆盖主题里的 Setter 总能成功，反过来不行。WPF 的 Style 在 Avalonia 里被拆成了这两样东西。" />
+            </Border>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

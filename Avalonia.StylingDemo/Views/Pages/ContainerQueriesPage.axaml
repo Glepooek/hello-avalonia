@@ -1,0 +1,26 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             mc:Ignorable="d"
+             d:DesignWidth="860"
+             d:DesignHeight="560"
+             x:Class="Avalonia.StylingDemo.Views.Pages.ContainerQueriesPage">
+
+    <StackPanel Margin="12">
+        <shared:DemoHeader Title="容器查询：完整演示在 Avalonia.LayoutDemo"
+                           DocPath="styling/container-queries" />
+
+        <Border Classes="stage" Padding="12">
+            <StackPanel Spacing="8">
+                <TextBlock TextWrapping="Wrap"
+                           Text="容器查询让样式随某个祖先控件的尺寸生效，官方文档把它列在 Styling 分类下，但它最常见的用途是响应式布局，因此完整演示放在布局项目里。" />
+                <SelectableTextBlock FontFamily="Consolas, monospace"
+                                     Text="dotnet run --project Avalonia.LayoutDemo   →  「响应式布局」标签页第 1 节" />
+                <TextBlock Classes="hint"
+                           Text="那一节还记录了 Avalonia 12.1.2 的两个静默陷阱：目标属性上写本地值会永久压制查询；min-width:a and max-width:b 只有右侧条件生效，区间要用单条件层叠表达。" />
+            </StackPanel>
+        </Border>
+    </StackPanel>
+</UserControl>
