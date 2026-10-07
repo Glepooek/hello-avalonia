@@ -1,0 +1,11 @@
+<Application xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="Avalonia.EventsDemo.App"
+             RequestedThemeVariant="Dark">
+
+    <Application.Styles>
+        <FluentTheme />
+        <!--  Brings in DemoHeader plus the shared caption, hint and stage styles.  -->
+        <StyleInclude Source="avares://Avalonia.Shared/Themes/SharedStyles.axaml" />
+    </Application.Styles>
+</Application>
