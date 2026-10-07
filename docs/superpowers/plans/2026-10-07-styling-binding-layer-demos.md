@@ -5095,11 +5095,13 @@ Expected: `migration complete`。任何一项缺失就回到对应任务补上�
 
 ```bash
 git rm -r -q Avalonia.DataTemplateDemo
-rm -rf Avalonia.DataTemplateDemo
+git status --short
 ```
 
-`git rm` 删掉受版本控制的文件；第二行清掉本地残留的 `bin/` `obj/`（它们不在 git 里）。
-`rm -rf` 可能触发权限确认——这是删除操作，等用户批准，不要换别的命令绕过。
+**只跑 `git rm`，不要追加 `rm -rf Avalonia.DataTemplateDemo`。** 受版本控制的内容由 `git rm`
+删除，这一步在 git 里完全可恢复（`git checkout HEAD~1 -- Avalonia.DataTemplateDemo`）；
+目录里剩下的 `bin/`、`obj/` 不在版本控制内，属于本地残留，留给用户手动清理。
+`rm -rf` 不可恢复，用户此前已明确拒绝过这类命令，不要用别的写法绕过。
 
 修改 `hello-avalonia.slnx`，删掉 `Avalonia.DataTemplateDemo` 那一行：
 
