@@ -1,0 +1,44 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             xmlns:vm="using:Avalonia.DataBindingDemo.ViewModels"
+             mc:Ignorable="d"
+             d:DesignWidth="760"
+             d:DesignHeight="560"
+             x:Class="Avalonia.DataBindingDemo.Views.Pages.AsyncPage"
+             x:DataType="vm:AsyncViewModel">
+
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="异步与图片：^ 运算符直接绑 Task 与 IObservable"
+                               DocPath="data-binding/how-to-bind-to-a-task-result" />
+
+            <TextBlock Classes="caption" Text="1. Task^：任务完成后显示结果，之前显示 FallbackValue" />
+            <StackPanel Orientation="Horizontal" Spacing="12">
+                <TextBlock Name="GreetingText" VerticalAlignment="Center"
+                           Text="{Binding Greeting^, FallbackValue='加载中……（2 秒）'}" />
+                <Button Content="重新加载" Command="{Binding ReloadCommand}" />
+            </StackPanel>
+            <TextBlock Classes="hint" Text="不写 FallbackValue 的话，任务完成前文本是空的。注意「重新加载」时并不会回到 FallbackValue：新任务完成前，界面一直停在上一次的结果上。要显示加载状态，就得另设 IsLoading 属性（或用异步命令的 IsRunning，见「命令」页）。" />
+
+            <TextBlock Classes="caption" Text="2. IObservable^：每推一个值界面更新一次" />
+            <TextBlock Name="ClockText" FontSize="24" Text="{Binding Clock^}" />
+            <TextBlock Classes="hint" Text="ClockObservable 是十几行的手写实现，没有引入 System.Reactive。绑定只在 DataContext 换掉时 Dispose 订阅——切到别的标签页时页面离开了可视树，计时器却仍在跑。" />
+
+            <TextBlock Classes="caption" Text="3. 绑定图片" />
+            <StackPanel Orientation="Horizontal" Spacing="16">
+                <StackPanel Spacing="4">
+                    <Image Name="BoundImage" Width="64" Height="64" Source="{Binding Logo}" />
+                    <TextBlock Classes="hint" Text="绑定 Bitmap 属性" />
+                </StackPanel>
+                <StackPanel Spacing="4">
+                    <Image Name="UriImage" Width="64" Height="64" Source="/Assets/avalonia-logo.ico" />
+                    <TextBlock Classes="hint" Text="XAML 里直接写路径" />
+                </StackPanel>
+            </StackPanel>
+            <TextBlock Classes="hint" Text="XAML 的字符串路径由类型转换器变成 Bitmap；ViewModel 里要自己用 AssetLoader.Open 打开资源流。图片要从网络加载时，把 Bitmap 换成 Task&lt;Bitmap&gt; 再用 ^ 绑定。" />
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

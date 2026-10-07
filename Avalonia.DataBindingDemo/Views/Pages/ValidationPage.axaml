@@ -1,0 +1,38 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             xmlns:vm="using:Avalonia.DataBindingDemo.ViewModels"
+             mc:Ignorable="d"
+             d:DesignWidth="760"
+             d:DesignHeight="560"
+             x:Class="Avalonia.DataBindingDemo.Views.Pages.ValidationPage"
+             x:DataType="vm:ValidationViewModel">
+
+    <ScrollViewer>
+        <StackPanel Margin="12" Spacing="4">
+            <shared:DemoHeader Title="绑定校验：错误从 ViewModel 流回界面，显示在输入框下方"
+                               DocPath="data-binding/binding-validation" />
+
+            <TextBlock Classes="caption" Text="1. DataAnnotations + ObservableValidator" />
+            <TextBlock Text="用户名（必填，至少 3 个字符）" />
+            <TextBox Name="UserNameBox" Width="300" HorizontalAlignment="Left" Text="{Binding UserName}" />
+            <TextBlock Text="邮箱" />
+            <TextBox Name="EmailBox" Width="300" HorizontalAlignment="Left" Text="{Binding Email}" />
+            <TextBlock Classes="hint" Text="[NotifyDataErrorInfo] 让生成的 setter 在赋值后跑一遍特性校验，并通过 INotifyDataErrorInfo.ErrorsChanged 通知界面。" />
+
+            <TextBlock Classes="caption" Text="2. setter 里抛异常" />
+            <TextBlock Text="年龄（0–150）" />
+            <TextBox Name="AgeBox" Width="300" HorizontalAlignment="Left" Text="{Binding Age}" />
+            <TextBlock Classes="hint" Text="输入 200：setter 抛 DataValidationException，Age 保持旧值。输入 abc：根本到不了 setter，是 string → int 的转换失败，框架同样把它显示成错误。" />
+
+            <TextBlock Classes="caption" Text="3. 有错误时提交按钮不可用" />
+            <StackPanel Orientation="Horizontal" Spacing="8">
+                <Button Name="SubmitButton" Content="提交" Command="{Binding SubmitCommand}" />
+                <TextBlock VerticalAlignment="Center" Text="{Binding SubmitResult}" />
+            </StackPanel>
+            <TextBlock Classes="hint" Text="年龄错误不会让按钮变灰：异常校验发生在绑定层，ViewModel 的 HasErrors 并不知道。这是两种校验方式最大的区别。" />
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

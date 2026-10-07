@@ -1,0 +1,58 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             xmlns:vm="using:Avalonia.DataBindingDemo.ViewModels"
+             mc:Ignorable="d"
+             d:DesignWidth="760"
+             d:DesignHeight="560"
+             x:Class="Avalonia.DataBindingDemo.Views.Pages.SyntaxPage"
+             x:DataType="vm:SyntaxViewModel">
+
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="绑定语法：源从哪里来，值往哪边流"
+                               DocPath="data-binding/data-binding-syntax" />
+
+            <TextBlock Classes="caption" Text="1. 默认源是 DataContext，并沿逻辑树向下继承" />
+            <Border Classes="stage" Padding="10">
+                <StackPanel Spacing="4">
+                    <TextBlock Text="{Binding Message, StringFormat='页面的 DataContext.Message = {0}'}" />
+                    <Border Padding="8" BorderBrush="#40FFFFFF" BorderThickness="1">
+                        <TextBlock Name="InheritedText" Text="{Binding Message, StringFormat='嵌套两层的子元素也读到：{0}'}" />
+                    </Border>
+                </StackPanel>
+            </Border>
+
+            <TextBlock Classes="caption" Text="2. 绑定模式" />
+            <Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto,Auto,Auto" RowSpacing="6" ColumnSpacing="8">
+                <TextBlock Grid.Row="0" VerticalAlignment="Center" Text="TwoWay（TextBox 默认）" />
+                <TextBox Grid.Row="0" Grid.Column="1" Name="TwoWayBox" Text="{Binding Message}" />
+                <TextBlock Grid.Row="1" VerticalAlignment="Center" Text="OneWay（TextBlock 默认）" />
+                <TextBlock Grid.Row="1" Grid.Column="1" Name="OneWayText" VerticalAlignment="Center" Text="{Binding Message}" />
+                <TextBlock Grid.Row="2" VerticalAlignment="Center" Text="OneTime：只取初值" />
+                <TextBlock Grid.Row="2" Grid.Column="1" Name="OneTimeText" VerticalAlignment="Center" Text="{Binding Message, Mode=OneTime}" />
+                <TextBlock Grid.Row="3" VerticalAlignment="Center" Text="OneWayToSource：只写回" />
+                <StackPanel Grid.Row="3" Grid.Column="1" Orientation="Horizontal" Spacing="8">
+                    <TextBox Name="ToSourceBox" Width="200" Text="{Binding LastTyped, Mode=OneWayToSource}" PlaceholderText="在这里输入" />
+                    <TextBlock VerticalAlignment="Center" Text="{Binding LastTyped, StringFormat='ViewModel 收到：{0}'}" />
+                </StackPanel>
+            </Grid>
+            <TextBlock Classes="hint" Text="在第一行改文字：OneWay 行跟着变，OneTime 行停在初值。" />
+
+            <TextBlock Classes="caption" Text="3. 换一个源：#元素名 与 $parent" />
+            <StackPanel Orientation="Horizontal" Spacing="12">
+                <Slider Name="Source" Width="200" Minimum="0" Maximum="100" Value="40" />
+                <TextBlock Name="ElementText" VerticalAlignment="Center"
+                           Text="{Binding #Source.Value, StringFormat='#Source.Value = {0:F0}'}" />
+            </StackPanel>
+            <TextBlock Name="ParentText" Margin="0,6,0,0"
+                       Text="{Binding $parent[Window].Title, StringFormat='$parent[Window].Title = {0}'}" />
+            <TextBlock Classes="hint" Text="#Name 等价于 ElementName；$parent[类型] 沿视觉树向上找第一个该类型的祖先，$parent[类型;1] 跳过第一个。$self 指元素自己。" />
+
+            <TextBlock Classes="caption" Text="4. 绑定样式类" />
+            <TextBlock Classes="hint" Text="Classes.类名=&quot;{Binding 布尔值}&quot; 的完整演示在 Avalonia.StylingDemo 的「样式类」页第 3 节。" />
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

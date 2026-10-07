@@ -1,0 +1,52 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             xmlns:vm="using:Avalonia.DataBindingDemo.ViewModels"
+             xmlns:models="using:Avalonia.DataBindingDemo.Models"
+             mc:Ignorable="d"
+             d:DesignWidth="760"
+             d:DesignHeight="560"
+             x:Class="Avalonia.DataBindingDemo.Views.Pages.MasterDetailPage"
+             x:DataType="vm:MasterDetailViewModel">
+
+    <DockPanel Margin="12">
+        <shared:DemoHeader DockPanel.Dock="Top"
+                           Title="主从视图：列表的 SelectedItem 就是详情区的 DataContext"
+                           DocPath="data-binding/master-detail" />
+
+        <TextBlock DockPanel.Dock="Bottom" Classes="hint"
+                   Text="在右边改名字，左边列表同一行立刻更新：两边绑的是同一个 Contact 对象，而 Contact 实现了 INotifyPropertyChanged。" />
+
+        <Grid ColumnDefinitions="220,*" ColumnSpacing="12">
+            <ListBox Grid.Column="0" Name="MasterList"
+                     ItemsSource="{Binding Contacts}"
+                     SelectedItem="{Binding Selected}">
+                <ListBox.ItemTemplate>
+                    <DataTemplate x:DataType="models:Contact">
+                        <TextBlock Text="{Binding Name}" />
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+
+            <Border Grid.Column="1" Classes="stage" Padding="12">
+                <Panel>
+                    <TextBlock Name="EmptyHint" Text="← 选一个联系人"
+                               IsVisible="{Binding Selected, Converter={x:Static ObjectConverters.IsNull}}" />
+                    <!--  Re-rooting the DataContext lets every binding below use short paths.  -->
+                    <StackPanel Name="DetailPanel" Spacing="8"
+                                DataContext="{Binding Selected}"
+                                x:DataType="models:Contact"
+                                IsVisible="{Binding $self.DataContext, Converter={x:Static ObjectConverters.IsNotNull}}">
+                        <TextBlock Text="姓名" />
+                        <TextBox Name="DetailName" Text="{Binding Name}" />
+                        <TextBlock Text="城市" />
+                        <TextBox Text="{Binding City}" />
+                        <TextBlock Text="{Binding Age, StringFormat='年龄 {0}'}" />
+                    </StackPanel>
+                </Panel>
+            </Border>
+        </Grid>
+    </DockPanel>
+</UserControl>

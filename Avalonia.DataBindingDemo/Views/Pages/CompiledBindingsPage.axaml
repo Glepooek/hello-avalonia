@@ -1,0 +1,50 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             mc:Ignorable="d"
+             d:DesignWidth="760"
+             d:DesignHeight="560"
+             x:Class="Avalonia.DataBindingDemo.Views.Pages.CompiledBindingsPage">
+
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="编译绑定：路径在构建时检查，写错就编不过"
+                               DocPath="data-binding/compiled-bindings" />
+
+            <TextBlock Classes="caption" Text="1. 本项目开启了 AvaloniaUseCompiledBindingsByDefault" />
+            <Border Classes="stage" Padding="10">
+                <StackPanel Spacing="6">
+                    <TextBlock TextWrapping="Wrap"
+                               Text="所以每个 {Binding} 都按 x:DataType 声明的类型在构建期解析。把 SyntaxPage.axaml 里的 Message 改成 Mesage 再构建，会得到 AVLN 开头的编译错误，而不是运行时一条容易漏看的警告。" />
+                    <SelectableTextBlock FontFamily="Consolas, monospace"
+                                         Text="&lt;AvaloniaUseCompiledBindingsByDefault&gt;true&lt;/AvaloniaUseCompiledBindingsByDefault&gt;" />
+                </StackPanel>
+            </Border>
+
+            <TextBlock Classes="caption" Text="2. 编译绑定的路径必须能静态确定类型" />
+            <StackPanel Orientation="Horizontal" Spacing="12">
+                <Slider Name="Source" Width="200" Minimum="0" Maximum="10" Value="3" />
+                <TextBlock Name="CompiledText" VerticalAlignment="Center"
+                           Text="{Binding #Source.Value, StringFormat='编译绑定 #Source.Value = {0:F1}'}" />
+            </StackPanel>
+            <TextBlock Classes="hint" Text="#元素名 的类型由 XAML 编译器从元素声明里推出来，因此本页没有 x:DataType 也能编译。" />
+
+            <TextBlock Classes="caption" Text="3. 逃生口：ReflectionBinding 与 x:CompileBindings=&quot;False&quot;" />
+            <StackPanel Spacing="4">
+                <TextBlock Name="ReflectionText"
+                           Text="{ReflectionBinding #Source.Value, StringFormat='ReflectionBinding 同样读到 {0:F1}'}" />
+                <StackPanel x:CompileBindings="False">
+                    <TextBlock Name="UncompiledText"
+                               Text="{Binding #Source.Value, StringFormat='整块关闭编译绑定后也读到 {0:F1}'}" />
+                </StackPanel>
+            </StackPanel>
+            <TextBlock Classes="hint" Text="两者都在运行时用反射解析：写错路径不会编译失败，只会在日志里留一条 Binding 警告——「绑定调试」页演示怎么把它找出来。只有 DataContext 类型在编译期确实未知时才用。" />
+
+            <TextBlock Classes="caption" Text="4. 在代码里建绑定" />
+            <TextBlock Name="CodeBoundText" />
+            <TextBlock Classes="hint" Text="见 CompiledBindingsPage.axaml.cs：control.Bind(属性, new Binding(...))。代码里的 Binding 永远是反射绑定。" />
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

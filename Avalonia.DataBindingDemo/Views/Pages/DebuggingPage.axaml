@@ -1,0 +1,57 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             xmlns:vm="using:Avalonia.DataBindingDemo.ViewModels"
+             mc:Ignorable="d"
+             d:DesignWidth="760"
+             d:DesignHeight="560"
+             x:Class="Avalonia.DataBindingDemo.Views.Pages.DebuggingPage"
+             x:DataType="vm:DebuggingViewModel">
+
+    <DockPanel Margin="12">
+        <shared:DemoHeader DockPanel.Dock="Top"
+                           Title="绑定调试：绑定失败不抛异常，只在日志里留一行"
+                           DocPath="data-binding/binding-debugging" />
+
+        <StackPanel DockPanel.Dock="Top">
+            <TextBlock Classes="caption" Text="1. 中间节点为 null 时的三种写法（Selected 当前为 null）" />
+            <Button Content="切换 Selected（null ⇄ 张三）" Command="{Binding ToggleCommand}" />
+            <Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto,Auto" ColumnSpacing="12" RowSpacing="4" Margin="0,6,0,0">
+                <TextBlock Grid.Row="0" FontFamily="Consolas, monospace" Text="Selected.Name, FallbackValue=…" />
+                <TextBlock Grid.Row="0" Grid.Column="1" Name="FallbackText"
+                           Text="{Binding Selected.Name, FallbackValue='（未选择）'}" />
+                <TextBlock Grid.Row="1" FontFamily="Consolas, monospace" Text="Selected?.Name" />
+                <TextBlock Grid.Row="1" Grid.Column="1" Name="NullCondText"
+                           Text="{Binding Selected?.Name}" />
+                <TextBlock Grid.Row="2" FontFamily="Consolas, monospace" Text="Selected?.Name, TargetNullValue=…" />
+                <TextBlock Grid.Row="2" Grid.Column="1" Name="TargetNullText"
+                           Text="{Binding Selected?.Name, TargetNullValue='（未选择）'}" />
+            </Grid>
+            <TextBlock Classes="hint" Text="第一行显示回退值，但下方日志多一条 Value is null。第二行没有日志，可文本是空的——?. 让 FallbackValue 失效。第三行既安静又有占位文本：?. 配 TargetNullValue。" />
+
+            <TextBlock Classes="caption" Text="2. 拼错的反射绑定：编译通过，运行时静默失败" />
+            <TextBlock Name="TypoText" FontFamily="Consolas, monospace"
+                       Text="{ReflectionBinding Selectd.Name, FallbackValue='{}{ReflectionBinding Selectd.Name} → 看下方日志'}" />
+
+            <TextBlock Classes="caption" Text="3. 本页截获的 Binding 警告（实时）" />
+        </StackPanel>
+
+        <TextBlock DockPanel.Dock="Bottom" Classes="hint"
+                   Text="其他排查手段：运行时按 F12 打开 DevTools 查看任一控件的 DataContext 与绑定值；Program.cs 的 LogToTrace(LogEventLevel.Debug) 让同样的日志出现在 IDE 输出窗口。" />
+
+        <Border Classes="stage" Padding="6">
+            <ScrollViewer>
+                <ItemsControl Name="LogList">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate x:DataType="x:String">
+                            <SelectableTextBlock FontFamily="Consolas, monospace" FontSize="12"
+                                                 TextWrapping="Wrap" Text="{Binding}" />
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </ScrollViewer>
+        </Border>
+    </DockPanel>
+</UserControl>

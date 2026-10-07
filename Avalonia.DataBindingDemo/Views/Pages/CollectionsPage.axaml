@@ -1,0 +1,54 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             xmlns:vm="using:Avalonia.DataBindingDemo.ViewModels"
+             xmlns:models="using:Avalonia.DataBindingDemo.Models"
+             mc:Ignorable="d"
+             d:DesignWidth="760"
+             d:DesignHeight="560"
+             x:Class="Avalonia.DataBindingDemo.Views.Pages.CollectionsPage"
+             x:DataType="vm:CollectionsViewModel">
+
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="绑定到集合：ObservableCollection 让列表自己增删行"
+                               DocPath="data-binding/how-to-bind-to-a-collection" />
+
+            <StackPanel Orientation="Horizontal" Spacing="8">
+                <Button Content="两边各加一人" Command="{Binding AddCommand}" />
+                <Button Content="删左边最后一人" Command="{Binding RemoveLastCommand}" />
+            </StackPanel>
+
+            <Grid ColumnDefinitions="*,*" ColumnSpacing="12" Margin="0,8,0,0">
+                <StackPanel Grid.Column="0">
+                    <TextBlock Classes="caption" Text="ObservableCollection" />
+                    <TextBlock Name="LiveCount" Text="{Binding Contacts.Count, StringFormat='共 {0} 人'}" />
+                    <ListBox Name="LiveList" Height="200" ItemsSource="{Binding Contacts}" />
+                </StackPanel>
+                <StackPanel Grid.Column="1">
+                    <TextBlock Classes="caption" Text="List（不通知）" />
+                    <TextBlock Name="FrozenCount" Text="{Binding FrozenContacts.Count, StringFormat='共 {0} 人'}" />
+                    <ListBox Name="FrozenList" Height="200" ItemsSource="{Binding FrozenContacts}" />
+                </StackPanel>
+            </Grid>
+            <TextBlock Classes="hint" Text="右边的 List 里其实也加进去了，但它不发 CollectionChanged，列表与计数都停在 3。没有给 ItemTemplate 时，ListBox 显示每项的 ToString()。" />
+
+            <TextBlock Classes="caption" Text="同一个集合也能绑到 TabControl：每个联系人一页" />
+            <TabControl Name="ContactTabs" Height="120" ItemsSource="{Binding Contacts}">
+                <TabControl.ItemTemplate>
+                    <DataTemplate x:DataType="models:Contact">
+                        <TextBlock Text="{Binding Name}" />
+                    </DataTemplate>
+                </TabControl.ItemTemplate>
+                <TabControl.ContentTemplate>
+                    <DataTemplate x:DataType="models:Contact">
+                        <TextBlock Margin="8" Text="{Binding Age, StringFormat='年龄 {0}'}" />
+                    </DataTemplate>
+                </TabControl.ContentTemplate>
+            </TabControl>
+            <TextBlock Classes="hint" Text="ItemTemplate 决定标签头，ContentTemplate 决定内容区——这是官方 how-to-bind-to-a-collection 一页的例子。" />
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

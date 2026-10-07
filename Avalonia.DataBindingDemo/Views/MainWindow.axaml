@@ -2,6 +2,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:pages="using:Avalonia.DataBindingDemo.Views.Pages"
         mc:Ignorable="d"
         d:DesignWidth="900"
         d:DesignHeight="640"
@@ -13,5 +14,41 @@
         WindowStartupLocation="CenterScreen">
 
     <TabControl Margin="12" TabStripPlacement="Left">
+        <TabItem Header="绑定语法">
+            <pages:SyntaxPage />
+        </TabItem>
+        <TabItem Header="编译绑定">
+            <pages:CompiledBindingsPage />
+        </TabItem>
+        <TabItem Header="集合">
+            <pages:CollectionsPage />
+        </TabItem>
+        <TabItem Header="主从视图">
+            <pages:MasterDetailPage />
+        </TabItem>
+        <TabItem Header="多值绑定">
+            <pages:MultiBindingPage />
+        </TabItem>
+        <TabItem Header="命令">
+            <pages:CommandsPage />
+        </TabItem>
+        <TabItem Header="转换器">
+            <pages:ConvertersPage />
+        </TabItem>
+        <TabItem Header="校验">
+            <pages:ValidationPage />
+        </TabItem>
+        <TabItem Header="集合视图">
+            <pages:CollectionViewsPage />
+        </TabItem>
+        <TabItem Header="异步与图片">
+            <pages:AsyncPage />
+        </TabItem>
+        <TabItem Header="绑定调试">
+            <pages:DebuggingPage />
+        </TabItem>
+        <TabItem Header="标记扩展">
+            <pages:MarkupExtensionsPage />
+        </TabItem>
     </TabControl>
 </Window>

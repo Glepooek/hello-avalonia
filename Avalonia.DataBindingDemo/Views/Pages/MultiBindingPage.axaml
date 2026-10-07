@@ -1,0 +1,70 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             xmlns:conv="using:Avalonia.DataBindingDemo.Converters"
+             mc:Ignorable="d"
+             d:DesignWidth="760"
+             d:DesignHeight="560"
+             x:Class="Avalonia.DataBindingDemo.Views.Pages.MultiBindingPage">
+
+    <UserControl.Resources>
+        <conv:RgbToBrushConverter x:Key="RgbToBrush" />
+    </UserControl.Resources>
+
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="多值绑定：几个源合成一个值"
+                               DocPath="data-binding/multi-binding" />
+
+            <TextBlock Classes="caption" Text="1. 自定义 IMultiValueConverter：三个滑块合成一种颜色" />
+            <Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto,Auto" ColumnSpacing="8">
+                <TextBlock Grid.Row="0" VerticalAlignment="Center" Text="R" />
+                <Slider Grid.Row="0" Grid.Column="1" Name="Red" Maximum="255" Value="232" />
+                <TextBlock Grid.Row="1" VerticalAlignment="Center" Text="G" />
+                <Slider Grid.Row="1" Grid.Column="1" Name="Green" Maximum="255" Value="151" />
+                <TextBlock Grid.Row="2" VerticalAlignment="Center" Text="B" />
+                <Slider Grid.Row="2" Grid.Column="1" Name="Blue" Maximum="255" Value="74" />
+            </Grid>
+            <Border Name="Mixed" Height="48" CornerRadius="6">
+                <Border.Background>
+                    <MultiBinding Converter="{StaticResource RgbToBrush}">
+                        <Binding Path="#Red.Value" />
+                        <Binding Path="#Green.Value" />
+                        <Binding Path="#Blue.Value" />
+                    </MultiBinding>
+                </Border.Background>
+            </Border>
+
+            <TextBlock Classes="caption" Text="2. 不写转换器：MultiBinding 的 StringFormat" />
+            <StackPanel Orientation="Horizontal" Spacing="8">
+                <TextBox Name="Family" Width="100" Text="欧阳" />
+                <TextBox Name="Given" Width="100" Text="修" />
+                <TextBlock Name="FullName" VerticalAlignment="Center">
+                    <TextBlock.Text>
+                        <MultiBinding StringFormat="{}全名：{0}{1}">
+                            <Binding Path="#Family.Text" />
+                            <Binding Path="#Given.Text" />
+                        </MultiBinding>
+                    </TextBlock.Text>
+                </TextBlock>
+            </StackPanel>
+            <TextBlock Classes="hint" Text="开头的 {} 是转义：告诉 XAML 后面的花括号不是标记扩展。" />
+
+            <TextBlock Classes="caption" Text="3. 内置的 BoolConverters.And / Or：两个勾都打上才能点" />
+            <StackPanel Orientation="Horizontal" Spacing="8">
+                <CheckBox Name="Agree" Content="同意条款" />
+                <CheckBox Name="Adult" Content="已满 18 岁" />
+                <Button Name="SubmitButton" Content="提交">
+                    <Button.IsEnabled>
+                        <MultiBinding Converter="{x:Static BoolConverters.And}">
+                            <Binding Path="#Agree.IsChecked" />
+                            <Binding Path="#Adult.IsChecked" />
+                        </MultiBinding>
+                    </Button.IsEnabled>
+                </Button>
+            </StackPanel>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

@@ -1,0 +1,44 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             xmlns:vm="using:Avalonia.DataBindingDemo.ViewModels"
+             xmlns:models="using:Avalonia.DataBindingDemo.Models"
+             mc:Ignorable="d"
+             d:DesignWidth="760"
+             d:DesignHeight="560"
+             x:Class="Avalonia.DataBindingDemo.Views.Pages.CollectionViewsPage"
+             x:DataType="vm:CollectionViewsViewModel">
+
+    <DockPanel Margin="12">
+        <shared:DemoHeader DockPanel.Dock="Top"
+                           Title="集合视图：排序、筛选、分组都在 ViewModel 里做"
+                           DocPath="data-binding/collection-views" />
+
+        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Spacing="12" Margin="0,0,0,8">
+            <TextBox Name="FilterBox" Width="180" PlaceholderText="按姓名筛选" Text="{Binding Filter}" />
+            <CheckBox Name="SortBox" Content="按年龄排序" IsChecked="{Binding SortByAge}" />
+            <CheckBox Name="GroupBox" Content="按城市分组" IsChecked="{Binding GroupByCity}" />
+        </StackPanel>
+
+        <TextBlock DockPanel.Dock="Bottom" Classes="hint"
+                   Text="Avalonia 没有 CollectionViewSource。每次条件变化 ViewModel 重算一遍 Rows；分组时组头也是 Rows 里的一项，靠 DataTemplate 的 DataType 区分渲染方式。" />
+
+        <ListBox Name="RowList" ItemsSource="{Binding Rows}">
+            <ListBox.DataTemplates>
+                <DataTemplate DataType="models:ContactGroupHeader">
+                    <TextBlock FontWeight="Bold" Foreground="#E8974A"
+                               Text="{Binding Key, StringFormat='【{0}】'}" />
+                </DataTemplate>
+                <DataTemplate DataType="models:Contact">
+                    <StackPanel Orientation="Horizontal" Spacing="12" Margin="16,0,0,0">
+                        <TextBlock Width="60" Text="{Binding Name}" />
+                        <TextBlock Width="60" Text="{Binding City}" />
+                        <TextBlock Text="{Binding Age, StringFormat='{}{0} 岁'}" />
+                    </StackPanel>
+                </DataTemplate>
+            </ListBox.DataTemplates>
+        </ListBox>
+    </DockPanel>
+</UserControl>

@@ -1,0 +1,24 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             mc:Ignorable="d"
+             d:DesignWidth="760"
+             d:DesignHeight="560"
+             x:Class="Avalonia.DataBindingDemo.Views.Pages.MarkupExtensionsPage">
+
+    <StackPanel Margin="12">
+        <shared:DemoHeader Title="标记扩展：完整演示在 Avalonia.XamlDemo"
+                           DocPath="data-binding/markup-extensions" />
+
+        <Border Classes="stage" Padding="12">
+            <StackPanel Spacing="8">
+                <TextBlock TextWrapping="Wrap"
+                           Text="{}{Binding} 本身就是一个标记扩展。官方文档在 Data Binding 与 XAML 两个分类下都讲了标记扩展；内置扩展一览与自定义 MarkupExtension 的写法放在 XAML 项目里。" />
+                <SelectableTextBlock FontFamily="Consolas, monospace"
+                                     Text="dotnet run --project Avalonia.XamlDemo   →  「标记扩展」标签页" />
+            </StackPanel>
+        </Border>
+    </StackPanel>
+</UserControl>

@@ -1,0 +1,47 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             xmlns:conv="using:Avalonia.DataBindingDemo.Converters"
+             mc:Ignorable="d"
+             d:DesignWidth="760"
+             d:DesignHeight="560"
+             x:Class="Avalonia.DataBindingDemo.Views.Pages.ConvertersPage">
+
+    <UserControl.Resources>
+        <conv:CelsiusToFahrenheitConverter x:Key="CelsiusToFahrenheit" />
+    </UserControl.Resources>
+
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="转换器：源与目标类型不一致时，中间插一层翻译"
+                               DocPath="data-binding/how-to-create-a-custom-data-binding-converter" />
+
+            <TextBlock Classes="caption" Text="1. 内置转换器：不用写代码" />
+            <StackPanel Spacing="6">
+                <TextBox Name="Input" Width="260" HorizontalAlignment="Left" PlaceholderText="输入点什么" />
+                <TextBlock Name="EmptyWarning" Foreground="#E8564A" Text="StringConverters.IsNullOrEmpty：框是空的"
+                           IsVisible="{Binding #Input.Text, Converter={x:Static StringConverters.IsNullOrEmpty}}" />
+                <TextBlock Name="NotEmptyNote" Foreground="#6FE84A" Text="StringConverters.IsNotNullOrEmpty：有内容了"
+                           IsVisible="{Binding #Input.Text, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
+                <TextBlock Text="{Binding !#Input.IsFocused, StringFormat='! 取反：输入框没有焦点 = {0}'}" />
+            </StackPanel>
+            <TextBlock Classes="hint" Text="还有 ObjectConverters.IsNull / IsNotNull、BoolConverters.And / Or / Not。! 和 !! 是取反与转 bool 的简写，直接写在路径前面。" />
+
+            <TextBlock Classes="caption" Text="2. 自定义 IValueConverter：摄氏 ⇄ 华氏，双向" />
+            <StackPanel Orientation="Horizontal" Spacing="12">
+                <Slider Name="Celsius" Width="240" Minimum="-40" Maximum="100" Value="20" />
+                <TextBlock VerticalAlignment="Center" Text="{Binding #Celsius.Value, StringFormat='{}{0:F1} °C  ='}" />
+                <TextBox Name="Fahrenheit" Width="80"
+                         Text="{Binding #Celsius.Value, Converter={StaticResource CelsiusToFahrenheit}, Mode=TwoWay}" />
+                <TextBlock VerticalAlignment="Center" Text="°F" />
+            </StackPanel>
+            <TextBlock Classes="hint" Text="拖滑块走 Convert；在右边输入 212 走 ConvertBack，滑块跳到 100。输入非数字时 ConvertBack 返回 DoNothing，滑块不动。" />
+
+            <TextBlock Classes="caption" Text="3. 一次性转换器：FuncValueConverter" />
+            <TextBlock Name="FuncText" Text="{Binding #Celsius.Value, Converter={x:Static conv:InlineConverters.Thermometer}}" />
+            <TextBlock Classes="hint" Text="FuncValueConverter&lt;TIn, TOut&gt; 用一个 lambda 就能建单向转换器，放在静态字段里用 x:Static 引用。" />
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>
