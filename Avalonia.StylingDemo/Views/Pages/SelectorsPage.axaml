@@ -8,6 +8,13 @@
              d:DesignHeight="560"
              x:Class="Avalonia.StylingDemo.Views.Pages.SelectorsPage">
 
+    <UserControl.Resources>
+        <!--  Declared once, referenced by key from several buttons (migrated from the old DataTemplateDemo).  -->
+        <Flyout x:Key="SharedFlyout" ShowMode="Standard" Placement="BottomEdgeAlignedLeft">
+            <TextBlock Text="这是弹出层" />
+        </Flyout>
+    </UserControl.Resources>
+
     <UserControl.Styles>
         <!--  Every rule below paints one property, so each row shows exactly which elements it caught.  -->
         <Style Selector="Border.cell">
@@ -135,13 +142,11 @@
             <Button Classes="nested" Content="悬停我" />
 
             <TextBlock Classes="caption" Text="7. 样式也能管到弹出层：FlyoutPresenter 红底，悬停变蓝" />
-            <Button Name="FlyoutOwner" HorizontalAlignment="Left" Content="打开 Flyout">
-                <Button.Flyout>
-                    <Flyout ShowMode="Standard" Placement="BottomEdgeAlignedLeft">
-                        <TextBlock Text="这是弹出层" />
-                    </Flyout>
-                </Button.Flyout>
-            </Button>
+            <StackPanel Orientation="Horizontal" Spacing="8">
+                <Button Name="FlyoutOwner" Content="打开 Flyout" Flyout="{StaticResource SharedFlyout}" />
+                <Button Name="FlyoutOwner2" Content="同一个 Flyout 资源" Flyout="{StaticResource SharedFlyout}" />
+            </StackPanel>
+            <TextBlock Classes="hint" Text="两个按钮引用 UserControl.Resources 里同一个 x:Key=&quot;SharedFlyout&quot; 的 Flyout 实例，弹出时各自锚定在自己下方。" />
             <TextBlock Classes="hint" Text="弹出层是另一个顶层窗口，视觉树和页面断开；但它在逻辑树上挂在按钮下面，所以写在本页 UserControl.Styles 里的规则照样生效。" />
         </StackPanel>
     </ScrollViewer>
