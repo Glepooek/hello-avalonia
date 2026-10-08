@@ -1,0 +1,33 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             mc:Ignorable="d"
+             d:DesignWidth="860"
+             d:DesignHeight="560"
+             x:Class="Avalonia.EventsDemo.Views.Pages.HandledPage">
+
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="Handled：把事件标记为已处理，截断后续的冒泡"
+                               DocPath="input-interaction/routed-events" />
+
+            <TextBlock Classes="caption" Text="1. 在 TextBox 里打字，同一个 KeyDown 经过三层" />
+            <CheckBox Name="HandleBox" Content="内层在 KeyDown 冒泡时置 Handled = true" />
+            <Border Name="Outer" Classes="stage" Padding="12" Margin="0,6,0,0">
+                <Border Name="Middle" Classes="stage" Padding="12">
+                    <TextBox Name="Entry" Width="260" HorizontalAlignment="Left" PlaceholderText="在这里按键" />
+                </Border>
+            </Border>
+
+            <StackPanel Orientation="Horizontal" Spacing="16" Margin="0,8,0,6">
+                <TextBlock Text="{Binding #Entry.Text, StringFormat='TextBox.Text = [{0}]'}" VerticalAlignment="Center" />
+                <Button Content="清空" Click="OnClear" />
+            </StackPanel>
+            <ListBox Name="LogList" Height="200" />
+            <TextBlock Classes="hint"
+                       Text="勾选后：middle:bubble 与 outer:bubble 不再出现，TextBox 也不再收到字符（Text 保持为空）。但「outer（handledEventsToo）」那一行仍然出现——它是用 handledEventsToo 注册的，专门用来无视 Handled。" />
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

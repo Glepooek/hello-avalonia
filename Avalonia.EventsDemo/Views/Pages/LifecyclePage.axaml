@@ -1,0 +1,33 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             mc:Ignorable="d"
+             d:DesignWidth="860"
+             d:DesignHeight="560"
+             x:Class="Avalonia.EventsDemo.Views.Pages.LifecyclePage">
+
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="生命周期事件：控件从创建到离开可视树，8 个事件按什么顺序触发"
+                               DocPath="events/lifecycle-events" />
+
+            <TextBlock Classes="caption" Text="1. 加入与移除一个按钮" />
+            <StackPanel Orientation="Horizontal" Spacing="8">
+                <Button Name="AddButton" Content="加入按钮" Click="OnAdd" />
+                <Button Name="RemoveButton" Content="移除按钮" Click="OnRemove" IsEnabled="False" />
+                <Button Content="清空日志" Click="OnClear" />
+            </StackPanel>
+            <Border Classes="stage" Height="70" Margin="0,8,0,0">
+                <!--  The probed child is added here at runtime.  -->
+                <Panel Name="Slot" />
+            </Border>
+
+            <TextBlock Classes="caption" Text="2. 触发顺序" />
+            <ListBox Name="LogList" Height="220" />
+            <TextBlock Classes="hint"
+                       Text="注意 Initialized 在两个 Attached 之后才出现——这与 WPF 经验相反。SizeChanged 与 Loaded 发生在第一次布局之后。移除时没有 Initialized，Loaded 的对偶是 Unloaded。" />
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

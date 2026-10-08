@@ -1,0 +1,38 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             mc:Ignorable="d"
+             d:DesignWidth="860"
+             d:DesignHeight="560"
+             x:Class="Avalonia.EventsDemo.Views.Pages.InputEventsPage">
+
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="输入事件：指针、键盘、文本三类事件各带什么参数"
+                               DocPath="events/input-events" />
+
+            <TextBlock Classes="caption" Text="1. 在下面的区域里移动、点击、滚动、按键" />
+            <!--  Background must be set: a Border without one is invisible to hit testing.  -->
+            <Border Name="Pad" Classes="stage" Height="90" Background="#20FFFFFF" Focusable="True"
+                    PointerEntered="OnEntered" PointerExited="OnExited"
+                    PointerPressed="OnPressed" PointerReleased="OnReleased"
+                    PointerWheelChanged="OnWheel"
+                    KeyDown="OnKeyDown" KeyUp="OnKeyUp">
+                <TextBlock Text="点这里获得焦点，再按键" HorizontalAlignment="Center" VerticalAlignment="Center" />
+            </Border>
+
+            <TextBlock Classes="caption" Text="2. 文本输入事件（区别于 KeyDown：它给出的是字符，不是按键）" />
+            <TextBox Name="Entry" Width="260" HorizontalAlignment="Left" PlaceholderText="在这里打字" />
+
+            <StackPanel Orientation="Horizontal" Spacing="8" Margin="0,12,0,6">
+                <TextBlock Classes="caption" Margin="0" VerticalAlignment="Center" Text="3. 事件流" />
+                <Button Content="清空" Click="OnClear" />
+            </StackPanel>
+            <ListBox Name="LogList" Height="200" />
+            <TextBlock Classes="hint"
+                       Text="PointerMoved 太密，这里没有挂。按 A 键会同时看到 KeyDown(A)、TextInput(a)、KeyUp(A)；按方向键只有 KeyDown/KeyUp 而没有 TextInput——它不产生字符。" />
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

@@ -1,0 +1,44 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             mc:Ignorable="d"
+             d:DesignWidth="860"
+             d:DesignHeight="560"
+             x:Class="Avalonia.EventsDemo.Views.Pages.RoutingPage">
+
+    <UserControl.Styles>
+        <Style Selector="Border.layer">
+            <Setter Property="BorderThickness" Value="2" />
+            <Setter Property="Padding" Value="16" />
+            <Setter Property="CornerRadius" Value="4" />
+        </Style>
+    </UserControl.Styles>
+
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="路由事件的三个阶段：Tunnel 从外向内，Bubble 从内向外，Direct 只在源元素"
+                               DocPath="input-interaction/routed-events" />
+
+            <TextBlock Classes="caption" Text="1. 点击最里面的格子，看 PointerPressed 怎么走" />
+            <Border Name="Outer" Classes="layer" Background="#203A6FB0" BorderBrush="#3A6FB0" HorizontalAlignment="Left">
+                <Border Name="Middle" Classes="layer" Background="#20B07A3A" BorderBrush="#B07A3A">
+                    <Border Name="Inner" Classes="layer" Background="#203AB06F" BorderBrush="#3AB06F" Width="140" Height="60">
+                        <TextBlock Text="Inner" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                    </Border>
+                </Border>
+            </Border>
+
+            <StackPanel Orientation="Horizontal" Spacing="8" Margin="0,8,0,6">
+                <Button Content="清空" Click="OnClear" />
+            </StackPanel>
+            <ListBox Name="LogList" Height="190" />
+            <TextBlock Classes="hint"
+                       Text="顺序是 outer:tunnel → middle:tunnel → inner:tunnel → inner:bubble → middle:bubble → outer:bubble。Tunnel 是预览，Bubble 才是常规处理；两者共用同一个事件参数。" />
+
+            <TextBlock Classes="caption" Text="2. 常见事件的路由策略（读自事件对象，不是凭记忆写的）" />
+            <TextBlock Name="StrategyTable" FontFamily="Consolas, Menlo, monospace" />
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>
