@@ -1,0 +1,34 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:controls="using:Avalonia.CustomControlsDemo.Controls">
+
+    <!--  The key is the control type, so Meter needs no explicit Theme= in XAML.  -->
+    <ControlTheme x:Key="{x:Type controls:Meter}" TargetType="controls:Meter">
+        <Setter Property="Height" Value="22" />
+        <Setter Property="Template">
+            <ControlTemplate>
+                <Border Background="#303040" CornerRadius="4" ClipToBounds="True">
+                    <Panel>
+                        <!--  RenderTransformOrigin at the left edge, so the scale grows rightward.  -->
+                        <Border Name="PART_Fill" Background="#4A7BE8" RenderTransformOrigin="0%,50%" />
+                        <TextBlock Text="{TemplateBinding Display}" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                    </Panel>
+                </Border>
+            </ControlTemplate>
+        </Setter>
+
+        <!--  ^ is the styled control; /template/ crosses into the template's name scope.  -->
+        <Style Selector="^:full /template/ Border#PART_Fill">
+            <Setter Property="Background" Value="#4AE87B" />
+        </Style>
+    </ControlTheme>
+
+    <!--  A second theme for the same control type: swapping it retemplates the instance.  -->
+    <ControlTheme x:Key="TextMeter" TargetType="controls:Meter">
+        <Setter Property="Template">
+            <ControlTemplate>
+                <TextBlock Text="{TemplateBinding Display}" FontSize="28" />
+            </ControlTemplate>
+        </Setter>
+    </ControlTheme>
+</ResourceDictionary>

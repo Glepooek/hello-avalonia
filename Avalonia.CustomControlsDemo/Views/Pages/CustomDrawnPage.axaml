@@ -1,0 +1,17 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             xmlns:controls="using:Avalonia.CustomControlsDemo.Controls"
+             x:Class="Avalonia.CustomControlsDemo.Views.Pages.CustomDrawnPage">
+    <DockPanel>
+        <shared:DemoHeader DockPanel.Dock="Top" Title="自绘控件（Render）"
+                           DocPath="custom-controls/custom-drawn-controls" />
+        <StackPanel Margin="16" Spacing="12">
+            <TextBlock Classes="caption" Text="RingGauge 重写 Render，用 DrawingContext 画轨道、圆弧和文字。" />
+            <Slider Name="GaugeSlider" Minimum="0" Maximum="100" Value="35" Width="300" HorizontalAlignment="Left" />
+            <controls:RingGauge Name="Gauge" HorizontalAlignment="Left"
+                                Value="{Binding #GaugeSlider.Value}" />
+            <TextBlock Classes="hint" Text="没有 AffectsRender 时属性会变但画面不动；有了它，每次赋值都触发一次重绘。" />
+        </StackPanel>
+    </DockPanel>
+</UserControl>

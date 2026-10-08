@@ -1,0 +1,16 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             xmlns:controls="using:Avalonia.CustomControlsDemo.Controls"
+             x:Class="Avalonia.CustomControlsDemo.Views.Pages.UserControlPage">
+    <DockPanel>
+        <shared:DemoHeader DockPanel.Dock="Top" Title="用户控件（UserControl）"
+                           DocPath="controls/primitives/usercontrol" />
+        <StackPanel Margin="16" Spacing="12">
+            <TextBlock Classes="caption" Text="LabeledSlider 是 UserControl：内部拼一个 TextBlock + Slider + TextBlock，对外暴露 4 个 StyledProperty。" />
+            <controls:LabeledSlider Name="Size" Label="Size" Minimum="10" Maximum="50" Value="20" />
+            <controls:LabeledSlider Name="Fade" Label="Opacity" Minimum="0" Maximum="100" Value="{Binding #Size.Value, Mode=TwoWay}" />
+            <TextBlock Classes="hint" Text="第二个滑块的 Value 绑到第一个的 Value：能双向联动，正因为 Value 的 defaultBindingMode 是 TwoWay。" />
+        </StackPanel>
+    </DockPanel>
+</UserControl>

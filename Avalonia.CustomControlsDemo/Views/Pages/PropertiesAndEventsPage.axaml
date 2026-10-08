@@ -1,0 +1,16 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             x:Class="Avalonia.CustomControlsDemo.Views.Pages.PropertiesAndEventsPage">
+    <DockPanel>
+        <shared:DemoHeader DockPanel.Dock="Top" Title="自定义属性与事件"
+                           DocPath="custom-controls/defining-properties" />
+        <StackPanel Margin="16" Spacing="12">
+            <TextBlock Classes="caption" Text="这一页不重复演示，只指路。" />
+            <TextBlock TextWrapping="Wrap" Text="• 定义 StyledProperty / DirectProperty / AttachedProperty：见 Avalonia.PropertySystemDemo。" />
+            <TextBlock TextWrapping="Wrap" Text="• 自定义路由事件（RoutedEvent.Register + AddHandler）：见 Avalonia.EventsDemo。" />
+            <TextBlock TextWrapping="Wrap" Text="• 本项目里它们的真实用法：Meter.Value 是带 coerce 的 StyledProperty，Meter.Display 是 DirectProperty，RingGauge.Value 用了 AffectsRender，LabeledSlider.Value 指定了 defaultBindingMode。" />
+            <TextBlock Classes="hint" Text="PropertySystemDemo 与 EventsDemo 是各自一个独立可运行的项目，在解决方案里并列。" />
+        </StackPanel>
+    </DockPanel>
+</UserControl>

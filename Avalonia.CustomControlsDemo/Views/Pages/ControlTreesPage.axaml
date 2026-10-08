@@ -1,0 +1,22 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             xmlns:controls="using:Avalonia.CustomControlsDemo.Controls"
+             x:Class="Avalonia.CustomControlsDemo.Views.Pages.ControlTreesPage">
+    <DockPanel>
+        <shared:DemoHeader DockPanel.Dock="Top" Title="控件树：逻辑树与视觉树"
+                           DocPath="custom-controls/control-trees" />
+        <StackPanel Margin="16" Spacing="12" DataContext="来自父级的 DataContext">
+            <TextBlock Classes="caption" Text="两个宿主的子元素都 Bind(Text, new Binding())，绑的是继承来的 DataContext。" />
+            <StackPanel Orientation="Horizontal" Spacing="8">
+                <TextBlock Text="只在视觉树：" Width="120" />
+                <controls:OnlyVisualHost Name="VisualOnly" />
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Spacing="8">
+                <TextBlock Text="视觉树 + 逻辑树：" Width="120" />
+                <controls:VisualAndLogicalHost Name="Both" />
+            </StackPanel>
+            <TextBlock Name="Readout" Classes="hint" />
+        </StackPanel>
+    </DockPanel>
+</UserControl>

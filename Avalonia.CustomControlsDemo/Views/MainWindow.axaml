@@ -1,6 +1,7 @@
 <Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:pages="using:Avalonia.CustomControlsDemo.Views.Pages"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
         d:DesignWidth="900"
@@ -13,5 +14,26 @@
         WindowStartupLocation="CenterScreen">
 
     <TabControl Margin="12" TabStripPlacement="Left">
+        <TabItem Header="用户控件">
+            <pages:UserControlPage />
+        </TabItem>
+        <TabItem Header="模板化控件">
+            <pages:TemplatedControlPage />
+        </TabItem>
+        <TabItem Header="自绘控件">
+            <pages:CustomDrawnPage />
+        </TabItem>
+        <TabItem Header="属性与事件">
+            <pages:PropertiesAndEventsPage />
+        </TabItem>
+        <TabItem Header="控件树">
+            <pages:ControlTreesPage />
+        </TabItem>
+        <TabItem Header="自定义面板">
+            <pages:CustomPanelPage />
+        </TabItem>
+        <TabItem Header="自定义 Flyout">
+            <pages:CustomFlyoutPage />
+        </TabItem>
     </TabControl>
 </Window>

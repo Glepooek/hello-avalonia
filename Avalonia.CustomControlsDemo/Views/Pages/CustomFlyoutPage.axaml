@@ -1,0 +1,23 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             xmlns:controls="using:Avalonia.CustomControlsDemo.Controls"
+             x:Class="Avalonia.CustomControlsDemo.Views.Pages.CustomFlyoutPage">
+    <DockPanel>
+        <shared:DemoHeader DockPanel.Dock="Top" Title="自定义 Flyout"
+                           DocPath="custom-controls/custom-flyout" />
+        <StackPanel Margin="16" Spacing="12">
+            <TextBlock Classes="caption" Text="SwatchFlyout : PopupFlyoutBase，重写 CreatePresenter 返回自己的内容。" />
+            <StackPanel Orientation="Horizontal" Spacing="12">
+                <Button Name="PickButton" Content="选颜色">
+                    <Button.Flyout>
+                        <controls:SwatchFlyout Placement="BottomEdgeAlignedLeft" ColorPicked="OnColorPicked" />
+                    </Button.Flyout>
+                </Button>
+                <Border Name="Chosen" Width="32" Height="32" CornerRadius="4" BorderBrush="Gray" BorderThickness="1" />
+                <TextBlock Name="ChosenText" VerticalAlignment="Center" Text="尚未选择" />
+            </StackPanel>
+            <TextBlock Classes="hint" Text="点一个色块：事件触发、结果显示在右侧、Flyout 关闭。点空白处同样会关闭（light dismiss 由基类提供）。" />
+        </StackPanel>
+    </DockPanel>
+</UserControl>

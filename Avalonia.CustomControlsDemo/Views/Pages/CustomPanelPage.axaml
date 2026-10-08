@@ -1,0 +1,26 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             xmlns:controls="using:Avalonia.CustomControlsDemo.Controls"
+             x:Class="Avalonia.CustomControlsDemo.Views.Pages.CustomPanelPage">
+    <DockPanel>
+        <shared:DemoHeader DockPanel.Dock="Top" Title="自定义面板（Panel）"
+                           DocPath="custom-controls/custom-panel" />
+        <StackPanel Margin="16" Spacing="8">
+            <TextBlock Classes="caption" Text="RadialPanel 只重写 MeasureOverride 与 ArrangeOverride，子元素沿圆周均分。" />
+            <StackPanel Orientation="Horizontal" Spacing="8">
+                <TextBlock Text="Radius" VerticalAlignment="Center" />
+                <Slider Name="RadiusSlider" Minimum="20" Maximum="140" Value="80" Width="180" />
+                <TextBlock Text="StartAngle" VerticalAlignment="Center" />
+                <Slider Name="AngleSlider" Minimum="0" Maximum="360" Value="0" Width="180" />
+                <Button Name="AddButton" Content="加一个" Click="OnAddClick" />
+                <Button Name="RemoveButton" Content="减一个" Click="OnRemoveClick" />
+            </StackPanel>
+            <Border Classes="stage" Height="340">
+                <controls:RadialPanel Name="Radial"
+                                      Radius="{Binding #RadiusSlider.Value}"
+                                      StartAngle="{Binding #AngleSlider.Value}" />
+            </Border>
+        </StackPanel>
+    </DockPanel>
+</UserControl>

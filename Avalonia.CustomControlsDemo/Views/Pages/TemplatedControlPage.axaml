@@ -1,0 +1,18 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             xmlns:controls="using:Avalonia.CustomControlsDemo.Controls"
+             x:Class="Avalonia.CustomControlsDemo.Views.Pages.TemplatedControlPage">
+    <DockPanel>
+        <shared:DemoHeader DockPanel.Dock="Top" Title="模板化控件（TemplatedControl）"
+                           DocPath="custom-controls/templated-controls" />
+        <StackPanel Margin="16" Spacing="12">
+            <TextBlock Classes="caption" Text="Meter 的外观全在 Meter.axaml 的 ControlTheme 里；控件只认 PART_Fill 部件和 :full 伪类。" />
+            <Slider Name="ValueSlider" Minimum="0" Maximum="100" Value="40" Width="300" HorizontalAlignment="Left" />
+            <controls:Meter Name="TheMeter" Width="300" HorizontalAlignment="Left"
+                            Value="{Binding #ValueSlider.Value}" />
+            <Button Name="SwapButton" Content="换模板（TextMeter）" Click="OnSwapClick" />
+            <TextBlock Classes="hint" Text="拖到 100：:full 伪类出现，填充色由蓝变绿。换模板后 PART_Fill 消失，控件不崩溃（OnApplyTemplate 里对部件判空）。" />
+        </StackPanel>
+    </DockPanel>
+</UserControl>

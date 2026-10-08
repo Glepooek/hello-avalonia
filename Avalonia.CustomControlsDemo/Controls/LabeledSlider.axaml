@@ -1,0 +1,14 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Name="Root"
+             x:Class="Avalonia.CustomControlsDemo.Controls.LabeledSlider">
+    <StackPanel Orientation="Horizontal" Spacing="8">
+        <TextBlock Width="80" VerticalAlignment="Center" Text="{Binding #Root.Label}" />
+        <Slider Name="Inner" Width="220"
+                Minimum="{Binding #Root.Minimum}"
+                Maximum="{Binding #Root.Maximum}"
+                Value="{Binding #Root.Value, Mode=TwoWay}" />
+        <TextBlock Width="40" VerticalAlignment="Center"
+                   Text="{Binding #Root.Value, StringFormat='{}{0:F0}'}" />
+    </StackPanel>
+</UserControl>
