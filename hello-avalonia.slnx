@@ -1,4 +1,5 @@
 <Solution>
+  <Project Path="Avalonia.AppDevelopmentDemo/Avalonia.AppDevelopmentDemo.csproj" />
   <Project Path="Avalonia.CustomControlsDemo/Avalonia.CustomControlsDemo.csproj" />
   <Project Path="Avalonia.DataBindingDemo/Avalonia.DataBindingDemo.csproj" />
   <Project Path="Avalonia.DataTemplatesDemo/Avalonia.DataTemplatesDemo.csproj" />
@@ -13,6 +14,7 @@
   <Project Path="Avalonia.ServicesDemo/Avalonia.ServicesDemo.csproj" />
   <Project Path="Avalonia.Shared/Avalonia.Shared.csproj" />
   <Project Path="Avalonia.StylingDemo/Avalonia.StylingDemo.csproj" />
+  <Project Path="Avalonia.TestingDemo/Avalonia.TestingDemo.csproj" />
   <Project Path="Avalonia.WebViewDemo/Avalonia.WebViewDemo.csproj" />
   <Project Path="Avalonia.XamlDemo/Avalonia.XamlDemo.csproj" />
 </Solution>

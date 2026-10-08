@@ -1,0 +1,33 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             mc:Ignorable="d"
+             d:DesignWidth="760"
+             d:DesignHeight="560"
+             x:Class="Avalonia.AppDevelopmentDemo.Views.Pages.UnhandledExceptionsPage">
+
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="未处理异常：UI 线程上的最后一道防线"
+                               DocPath="app-development/setting-unhandled-exceptions" />
+
+            <TextBlock Classes="caption" Text="1. 在 UI 线程上抛一个异常" />
+            <StackPanel Orientation="Horizontal" Spacing="8">
+                <Button Name="ThrowButton" Content="Post 一个会抛异常的回调" Click="OnThrow" />
+            </StackPanel>
+
+            <TextBlock Classes="caption" Text="2. 处理器收到了什么" />
+            <Border Classes="stage" Padding="10">
+                <StackPanel Spacing="4">
+                    <TextBlock Name="CountLine" Text="处理器被调用：0 次" />
+                    <TextBlock Name="MessageLine" Text="最近一次异常：（无）" TextWrapping="Wrap" />
+                </StackPanel>
+            </Border>
+
+            <TextBlock Classes="hint" Margin="0,12,0,0" TextWrapping="Wrap"
+                       Text="Dispatcher.UIThread.UnhandledException 只管 UI 线程派发的回调。处理器里设 e.Handled = true 就吞掉异常，应用继续运行；不设，异常继续向上抛，经典桌面应用会退出——所以本页的处理器固定吞掉，只演示这条路径。后台 Task 里没人 await 的异常走 TaskScheduler.UnobservedTaskException，不经过这个事件。" />
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

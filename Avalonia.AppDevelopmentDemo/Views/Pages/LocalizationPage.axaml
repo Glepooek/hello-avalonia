@@ -1,0 +1,33 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             mc:Ignorable="d"
+             d:DesignWidth="760"
+             d:DesignHeight="560"
+             x:Class="Avalonia.AppDevelopmentDemo.Views.Pages.LocalizationPage">
+
+    <StackPanel Margin="12">
+        <shared:DemoHeader Title="本地化：RESX 资源，运行时切换语言"
+                           DocPath="app-development/localizing" />
+
+        <TextBlock Classes="caption" Text="1. 语言" />
+        <StackPanel Orientation="Horizontal" Spacing="8">
+            <RadioButton Name="ChineseRadio" GroupName="Lang" Content="zh-CN（默认资源）" IsChecked="True" IsCheckedChanged="OnLangChanged" />
+            <RadioButton Name="EnglishRadio" GroupName="Lang" Content="en-US" IsCheckedChanged="OnLangChanged" />
+        </StackPanel>
+
+        <TextBlock Classes="caption" Text="2. 从资源读出的文字" />
+        <Border Classes="stage" Padding="10">
+            <StackPanel Spacing="4">
+                <TextBlock Name="GreetingText" FontSize="20" />
+                <TextBlock Name="FarewellText" />
+                <TextBlock Name="CultureText" Classes="hint" />
+            </StackPanel>
+        </Border>
+
+        <TextBlock Classes="hint" Margin="0,12,0,0" TextWrapping="Wrap"
+                   Text="这里是最小版本：ResourceManager.GetString(key, culture) 直接按指定文化取值，不改线程文化。把 .resx 排除出 AvaloniaResource（见 csproj），否则运行时找不到。完整用法（x:Static 绑定、资源类生成）在 Avalonia.MusicStore。" />
+    </StackPanel>
+</UserControl>

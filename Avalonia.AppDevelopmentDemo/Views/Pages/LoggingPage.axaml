@@ -1,0 +1,39 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             mc:Ignorable="d"
+             d:DesignWidth="760"
+             d:DesignHeight="560"
+             x:Class="Avalonia.AppDevelopmentDemo.Views.Pages.LoggingPage">
+
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="日志：Avalonia 自己的日志与应用的 ILogger，是两套"
+                               DocPath="app-development/logging-errors-and-warnings" />
+
+            <TextBlock Classes="caption" Text="1. 应用日志（Microsoft.Extensions.Logging）" />
+            <StackPanel Orientation="Horizontal" Spacing="8">
+                <Button Name="AppLogButton" Content="写 Debug / Warning / Error" Click="OnAppLog" />
+                <Button Name="AppClearButton" Content="清空" Click="OnAppClear" />
+            </StackPanel>
+            <Border Classes="stage" Padding="10" MinHeight="80">
+                <ItemsControl Name="AppEntries" />
+            </Border>
+
+            <TextBlock Classes="caption" Text="2. Avalonia 日志（Logger.Sink）" />
+            <StackPanel Orientation="Horizontal" Spacing="8">
+                <Button Name="AvaloniaLogButton" Content="触发一条绑定警告" Click="OnAvaloniaLog" />
+                <Button Name="AvaloniaClearButton" Content="清空" Click="OnAvaloniaClear" />
+            </StackPanel>
+            <Border Classes="stage" Padding="10" MinHeight="80">
+                <ItemsControl Name="AvaloniaEntries" />
+            </Border>
+            <StackPanel Name="Probe" IsVisible="False" />
+
+            <TextBlock Classes="hint" Margin="0,12,0,0" TextWrapping="Wrap"
+                       Text="两套日志互不相通：ILogger 是应用自己的，Logger.Sink 接的是框架内部（绑定、布局、样式）的消息。WinExe 没有控制台，所以这里用自定义 ILoggerProvider 与 ILogSink 把消息收进列表。AppBuilder.LogToTrace() 则是把框架日志送到调试输出。" />
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

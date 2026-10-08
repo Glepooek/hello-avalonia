@@ -1,0 +1,48 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             mc:Ignorable="d"
+             d:DesignWidth="760"
+             d:DesignHeight="560"
+             x:Class="Avalonia.AppDevelopmentDemo.Views.Pages.DependencyInjectionPage">
+
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="依赖注入：三种生命周期，以及作用域校验的响亮失败"
+                               DocPath="app-development/dependency-injection" />
+
+            <TextBlock Classes="caption" Text="1. 同一作用域里解析两次" />
+            <StackPanel Orientation="Horizontal" Spacing="8">
+                <Button Name="ResolveButton" Content="解析" Click="OnResolve" />
+            </StackPanel>
+            <Border Classes="stage" Padding="10">
+                <StackPanel Spacing="4">
+                    <TextBlock Name="TransientLine" Text="Transient：（未解析）" />
+                    <TextBlock Name="ScopedLine" Text="Scoped：（未解析）" />
+                    <TextBlock Name="SingletonLine" Text="Singleton：（未解析）" />
+                </StackPanel>
+            </Border>
+
+            <TextBlock Classes="caption" Text="2. 构造函数注入" />
+            <StackPanel Orientation="Horizontal" Spacing="8">
+                <Button Name="GreetButton" Content="Greeter 问候" Click="OnGreet" />
+            </StackPanel>
+            <Border Classes="stage" Padding="10">
+                <TextBlock Name="GreetLine" Text="（未调用）" />
+            </Border>
+
+            <TextBlock Classes="caption" Text="3. 从根容器解析 Scoped 服务" />
+            <StackPanel Orientation="Horizontal" Spacing="8">
+                <Button Name="RootScopedButton" Content="从根容器解析 Scoped" Click="OnRootScoped" />
+            </StackPanel>
+            <Border Classes="stage" Padding="10">
+                <TextBlock Name="ScopeErrorLine" Text="（未调用）" TextWrapping="Wrap" />
+            </Border>
+
+            <TextBlock Classes="hint" Margin="0,12,0,0"
+                       Text="每个 Counter 实例带一个递增的 Id，所以 Id 相同就是同一个实例。ValidateScopes = true 时，从根容器拿 Scoped 服务会立刻抛 InvalidOperationException，而不是悄悄把它当成单例用。" />
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

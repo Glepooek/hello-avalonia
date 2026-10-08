@@ -1,0 +1,45 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             mc:Ignorable="d"
+             d:DesignWidth="760"
+             d:DesignHeight="560"
+             x:Class="Avalonia.AppDevelopmentDemo.Views.Pages.AccessibilityPage">
+
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="无障碍：AutomationProperties 与 AutomationPeer"
+                               DocPath="app-development/accessibility" />
+
+            <TextBlock Classes="caption" Text="1. 带自动化属性的按钮" />
+            <Button Name="Target" Content="确定"
+                    AutomationProperties.AutomationId="ok-btn"
+                    AutomationProperties.Name="Confirm"
+                    AutomationProperties.HelpText="Confirms the form" />
+
+            <TextBlock Classes="caption" Text="2. 读回 AutomationPeer（屏幕阅读器看到的就是这些）" />
+            <StackPanel Orientation="Horizontal" Spacing="8">
+                <Button Name="ReadButton" Content="读取 Peer" Click="OnRead" />
+            </StackPanel>
+            <Border Classes="stage" Padding="10">
+                <StackPanel Spacing="4">
+                    <TextBlock Name="PeerType" Text="Peer 类型：（未读取）" />
+                    <TextBlock Name="PeerName" Text="Name：" />
+                    <TextBlock Name="PeerId" Text="AutomationId：" />
+                    <TextBlock Name="PeerHelp" Text="HelpText：" />
+                    <TextBlock Name="PeerControl" Text="ControlType：" />
+                </StackPanel>
+            </Border>
+
+            <TextBlock Classes="caption" Text="3. 把装饰性元素从无障碍树里拿掉" />
+            <Border Name="Decoration" Height="24" Background="LightSteelBlue"
+                    AutomationProperties.AccessibilityView="Raw" />
+            <TextBlock Name="ViewLine" Classes="hint" />
+
+            <TextBlock Classes="hint" Margin="0,12,0,0" TextWrapping="Wrap"
+                       Text="Name 是读出来的名字，HelpText 是补充说明，AutomationId 是给自动化测试定位用的稳定标识（#14 的测试就靠它）。AccessibilityView 为 Raw 的元素只在「原始视图」出现，普通屏幕阅读器会跳过。" />
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

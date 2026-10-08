@@ -1,0 +1,26 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             mc:Ignorable="d"
+             d:DesignWidth="760"
+             d:DesignHeight="560"
+             x:Class="Avalonia.AppDevelopmentDemo.Views.Pages.WebContentPage">
+
+    <StackPanel Margin="12">
+        <shared:DemoHeader Title="嵌入 Web 内容：完整演示在 Avalonia.WebViewDemo"
+                           DocPath="app-development/embedding-web-content" />
+
+        <Border Classes="stage" Padding="12">
+            <StackPanel Spacing="8">
+                <TextBlock TextWrapping="Wrap"
+                           Text="Avalonia 12 的 Web 内容由 Avalonia.Controls.WebView 提供（NativeWebView 与 WebView 控件）。它依赖各平台的原生浏览器组件，不适合放进一个要保持轻量的页面标签里，所以完整演示放在单独的项目。" />
+                <SelectableTextBlock FontFamily="Consolas, monospace"
+                                     Text="dotnet run --project Avalonia.WebViewDemo" />
+                <TextBlock Classes="hint"
+                           Text="另有 Avalonia.HtmlRendererDemo：不用浏览器，直接把 HTML 子集渲染成 Avalonia 控件。" />
+            </StackPanel>
+        </Border>
+    </StackPanel>
+</UserControl>

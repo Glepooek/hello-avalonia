@@ -1,0 +1,43 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             mc:Ignorable="d"
+             d:DesignWidth="760"
+             d:DesignHeight="560"
+             x:Class="Avalonia.AppDevelopmentDemo.Views.Pages.ThreadingPage">
+
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="线程模型：控件只能在 UI 线程上访问"
+                               DocPath="app-development/threading" />
+
+            <TextBlock Classes="caption" Text="1. 在后台线程直接写控件" />
+            <StackPanel Orientation="Horizontal" Spacing="8">
+                <Button Name="DirectButton" Content="后台线程直接写 Text" Click="OnDirect" />
+            </StackPanel>
+
+            <TextBlock Classes="caption" Text="2. 用 Dispatcher.UIThread.Post 回到 UI 线程" />
+            <StackPanel Orientation="Horizontal" Spacing="8">
+                <Button Name="PostButton" Content="后台线程 Post 回来写" Click="OnPost" />
+            </StackPanel>
+
+            <TextBlock Classes="caption" Text="3. async / await 自动回到 UI 线程" />
+            <StackPanel Orientation="Horizontal" Spacing="8">
+                <Button Name="AwaitButton" Content="await Task.Run 之后写" Click="OnAwait" />
+            </StackPanel>
+
+            <TextBlock Classes="caption" Text="4. 结果" />
+            <Border Classes="stage" Padding="10">
+                <StackPanel Spacing="4">
+                    <TextBlock Name="Target" Text="（被写的控件）" />
+                    <TextBlock Name="Result" Text="（还没有操作）" TextWrapping="Wrap" />
+                </StackPanel>
+            </Border>
+
+            <TextBlock Classes="hint" Margin="0,12,0,0" TextWrapping="Wrap"
+                       Text="Dispatcher.UIThread.CheckAccess() 回答「我现在在 UI 线程吗」。从后台线程碰控件会抛 InvalidOperationException；Post 是不等待的投递，InvokeAsync 返回可 await 的任务。await 之后的代码回到原来的同步上下文，所以在 UI 线程上 await 之后依然在 UI 线程。" />
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

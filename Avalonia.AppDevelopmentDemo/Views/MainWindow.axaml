@@ -1,0 +1,48 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:pages="using:Avalonia.AppDevelopmentDemo.Views.Pages"
+        mc:Ignorable="d"
+        d:DesignWidth="900"
+        d:DesignHeight="640"
+        x:Class="Avalonia.AppDevelopmentDemo.Views.MainWindow"
+        Icon="/Assets/avalonia-logo.ico"
+        Title="Avalonia App Development Demo"
+        Width="900"
+        Height="640"
+        WindowStartupLocation="CenterScreen">
+
+    <TabControl Margin="12" TabStripPlacement="Left">
+        <TabItem Header="依赖注入">
+            <pages:DependencyInjectionPage />
+        </TabItem>
+        <TabItem Header="本地化">
+            <pages:LocalizationPage />
+        </TabItem>
+        <TabItem Header="Web 内容">
+            <pages:WebContentPage />
+        </TabItem>
+        <TabItem Header="日志">
+            <pages:LoggingPage />
+        </TabItem>
+        <TabItem Header="未处理异常">
+            <pages:UnhandledExceptionsPage />
+        </TabItem>
+        <TabItem Header="资源">
+            <pages:ResourcesPage />
+        </TabItem>
+        <TabItem Header="数据校验">
+            <pages:DataValidationPage />
+        </TabItem>
+        <TabItem Header="线程模型">
+            <pages:ThreadingPage />
+        </TabItem>
+        <TabItem Header="窗口管理">
+            <pages:WindowManagementPage />
+        </TabItem>
+        <TabItem Header="无障碍">
+            <pages:AccessibilityPage />
+        </TabItem>
+    </TabControl>
+</Window>

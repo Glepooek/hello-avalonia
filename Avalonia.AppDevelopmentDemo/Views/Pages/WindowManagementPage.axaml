@@ -1,0 +1,41 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             mc:Ignorable="d"
+             d:DesignWidth="760"
+             d:DesignHeight="560"
+             x:Class="Avalonia.AppDevelopmentDemo.Views.Pages.WindowManagementPage">
+
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="窗口管理：Show、ShowDialog、Owner、关闭拦截"
+                               DocPath="app-development/window-management" />
+
+            <TextBlock Classes="caption" Text="1. 打开窗口" />
+            <StackPanel Orientation="Horizontal" Spacing="8">
+                <Button Name="ShowButton" Content="Show(owner)：非模态子窗口" Click="OnShow" />
+                <Button Name="DialogButton" Content="ShowDialog&lt;string?&gt;：模态，取返回值" Click="OnDialog" />
+                <Button Name="GuardButton" Content="拦截关闭的窗口" Click="OnGuard" />
+            </StackPanel>
+
+            <TextBlock Classes="caption" Text="2. 结果" />
+            <Border Classes="stage" Padding="10">
+                <TextBlock Name="Result" Text="（还没有操作）" TextWrapping="Wrap" />
+            </Border>
+
+            <TextBlock Classes="caption" Text="3. 当前窗口的属性" />
+            <Border Classes="stage" Padding="10">
+                <StackPanel Spacing="4">
+                    <TextBlock Name="StateLine" />
+                    <TextBlock Name="DecorationsLine" />
+                    <TextBlock Name="ScreenLine" />
+                </StackPanel>
+            </Border>
+
+            <TextBlock Classes="hint" Margin="0,12,0,0" TextWrapping="Wrap"
+                       Text="ShowDialog&lt;T&gt; 的 T 就是 Close(result) 传回的类型。Closing 事件里设 e.Cancel = true 可以阻止关闭。过时提示：Window.SystemDecorations 已被 WindowDecorations 取代。" />
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

@@ -1,0 +1,24 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             mc:Ignorable="d"
+             d:DesignWidth="760"
+             d:DesignHeight="560"
+             x:Class="Avalonia.AppDevelopmentDemo.Views.Pages.DataValidationPage">
+
+    <StackPanel Margin="12">
+        <shared:DemoHeader Title="数据校验：完整演示在 Avalonia.DataBindingDemo"
+                           DocPath="app-development/data-validation" />
+
+        <Border Classes="stage" Padding="12">
+            <StackPanel Spacing="8">
+                <TextBlock TextWrapping="Wrap"
+                           Text="数据校验靠绑定把 INotifyDataErrorInfo 或 DataValidationException 的错误传到控件的 DataValidationErrors 上。它是数据绑定的一部分，完整演示放在数据绑定项目里。" />
+                <SelectableTextBlock FontFamily="Consolas, monospace"
+                                     Text="dotnet run --project Avalonia.DataBindingDemo   →  「校验」标签页" />
+            </StackPanel>
+        </Border>
+    </StackPanel>
+</UserControl>

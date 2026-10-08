@@ -1,0 +1,52 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             mc:Ignorable="d"
+             d:DesignWidth="760"
+             d:DesignHeight="560"
+             x:Class="Avalonia.AppDevelopmentDemo.Views.Pages.ResourcesPage">
+
+    <UserControl.Resources>
+        <SolidColorBrush x:Key="Brand" Color="Red" />
+    </UserControl.Resources>
+
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="资源：一次性查找与动态绑定的差别"
+                               DocPath="app-development/resources" />
+
+            <TextBlock Classes="caption" Text="1. 两个色块，都取自资源 Brand" />
+            <StackPanel Orientation="Horizontal" Spacing="12">
+                <StackPanel Spacing="4">
+                    <Border Name="StaticSwatch" Width="120" Height="48" CornerRadius="4" />
+                    <TextBlock Classes="hint" Text="TryFindResource 一次取值" />
+                </StackPanel>
+                <StackPanel Spacing="4">
+                    <Border Name="DynamicSwatch" Width="120" Height="48" CornerRadius="4"
+                            Background="{DynamicResource Brand}" />
+                    <TextBlock Classes="hint" Text="DynamicResource" />
+                </StackPanel>
+            </StackPanel>
+
+            <TextBlock Classes="caption" Text="2. 替换字典里的 Brand" />
+            <StackPanel Orientation="Horizontal" Spacing="8">
+                <Button Name="ReplaceButton" Content="把 Brand 换成蓝色画刷" Click="OnReplace" />
+                <Button Name="MutateButton" Content="改同一个画刷的 Color" Click="OnMutate" />
+                <Button Name="ResetButton" Content="还原" Click="OnReset" />
+            </StackPanel>
+
+            <TextBlock Classes="caption" Text="3. 读回" />
+            <Border Classes="stage" Padding="10">
+                <StackPanel Spacing="4">
+                    <TextBlock Name="StaticLine" />
+                    <TextBlock Name="DynamicLine" />
+                </StackPanel>
+            </Border>
+
+            <TextBlock Classes="hint" Margin="0,12,0,0" TextWrapping="Wrap"
+                       Text="替换字典里的项：只有 DynamicResource（或 GetResourceObservable 绑定）会跟着变，一次性取值的不会。直接改同一个画刷实例的 Color：两者都会变，因为它们拿的是同一个对象。查找方法：FindResource 找不到返回 null，TryFindResource 返回 bool，都沿逻辑树向上，最后到 Application.Resources。" />
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>
