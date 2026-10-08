@@ -1,0 +1,38 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             xmlns:vm="using:Avalonia.TestingDemo.ViewModels"
+             mc:Ignorable="d"
+             d:DesignWidth="760"
+             d:DesignHeight="420"
+             x:Class="Avalonia.TestingDemo.Views.Pages.FormPage"
+             x:DataType="vm:FormViewModel">
+
+    <UserControl.DataContext>
+        <vm:FormViewModel />
+    </UserControl.DataContext>
+
+    <StackPanel Margin="12" Spacing="6">
+        <shared:DemoHeader Title="被测面板二：表单，两项都合法后「提交」才启用"
+                           DocPath="testing/headless-xunit" />
+
+        <TextBlock Classes="caption" Text="姓名" />
+        <TextBox Name="NameBox" AutomationProperties.AutomationId="name-box"
+                 Width="280" HorizontalAlignment="Left" Text="{Binding Name}" />
+        <TextBlock Name="NameError" AutomationProperties.AutomationId="name-error"
+                   Foreground="Firebrick" Text="{Binding NameError}" />
+
+        <TextBlock Classes="caption" Text="年龄" />
+        <TextBox Name="AgeBox" AutomationProperties.AutomationId="age-box"
+                 Width="280" HorizontalAlignment="Left" Text="{Binding Age}" />
+        <TextBlock Name="AgeError" AutomationProperties.AutomationId="age-error"
+                   Foreground="Firebrick" Text="{Binding AgeError}" />
+
+        <Button Name="SubmitButton" AutomationProperties.AutomationId="submit-btn"
+                Content="提交" Command="{Binding SubmitCommand}" />
+        <TextBlock Name="StatusText" AutomationProperties.AutomationId="status-text"
+                   Text="{Binding Status}" />
+    </StackPanel>
+</UserControl>

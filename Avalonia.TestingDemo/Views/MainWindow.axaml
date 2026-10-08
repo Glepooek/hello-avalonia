@@ -1,0 +1,27 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:pages="using:Avalonia.TestingDemo.Views.Pages"
+        mc:Ignorable="d"
+        d:DesignWidth="900"
+        d:DesignHeight="640"
+        x:Class="Avalonia.TestingDemo.Views.MainWindow"
+        Icon="/Assets/avalonia-logo.ico"
+        Title="Avalonia Testing Demo"
+        Width="900"
+        Height="640"
+        WindowStartupLocation="CenterScreen">
+
+    <TabControl Margin="12">
+        <TabItem Header="计数器">
+            <pages:CounterPage />
+        </TabItem>
+        <TabItem Header="表单">
+            <pages:FormPage />
+        </TabItem>
+        <TabItem Header="列表">
+            <pages:ListPage />
+        </TabItem>
+    </TabControl>
+</Window>

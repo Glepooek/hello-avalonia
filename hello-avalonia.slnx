@@ -15,6 +15,7 @@
   <Project Path="Avalonia.Shared/Avalonia.Shared.csproj" />
   <Project Path="Avalonia.StylingDemo/Avalonia.StylingDemo.csproj" />
   <Project Path="Avalonia.TestingDemo/Avalonia.TestingDemo.csproj" />
+  <Project Path="Avalonia.TestingDemo.Tests/Avalonia.TestingDemo.Tests.csproj" />
   <Project Path="Avalonia.WebViewDemo/Avalonia.WebViewDemo.csproj" />
   <Project Path="Avalonia.XamlDemo/Avalonia.XamlDemo.csproj" />
 </Solution>
