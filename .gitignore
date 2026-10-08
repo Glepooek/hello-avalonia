@@ -430,3 +430,4 @@ FodyWeavers.xsd
 
 # Superpowers SDD scratch workspace
 .superpowers/
+.codegraph/
