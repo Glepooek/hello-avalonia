@@ -2,6 +2,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:pages="using:Avalonia.InputDemo.Views.Pages"
         mc:Ignorable="d"
         d:DesignWidth="900"
         d:DesignHeight="640"
@@ -13,5 +14,29 @@
         WindowStartupLocation="CenterScreen">
 
     <TabControl Margin="12" TabStripPlacement="Left">
+        <TabItem Header="指针">
+            <pages:PointerPage />
+        </TabItem>
+        <TabItem Header="焦点">
+            <pages:FocusPage />
+        </TabItem>
+        <TabItem Header="手势">
+            <pages:GesturesPage />
+        </TabItem>
+        <TabItem Header="键盘与 HotKey">
+            <pages:KeyboardPage />
+        </TabItem>
+        <TabItem Header="交互的写法">
+            <pages:InteractivityPage />
+        </TabItem>
+        <TabItem Header="拖放">
+            <pages:DragDropPage />
+        </TabItem>
+        <TabItem Header="文本输入">
+            <pages:TextInputPage />
+        </TabItem>
+        <TabItem Header="路由事件">
+            <pages:RoutedEventsPage />
+        </TabItem>
     </TabControl>
 </Window>

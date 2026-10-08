@@ -1,0 +1,37 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             mc:Ignorable="d"
+             d:DesignWidth="860"
+             d:DesignHeight="560"
+             x:Class="Avalonia.InputDemo.Views.Pages.PointerPage">
+
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="指针设备：鼠标、触摸、手写笔共用一套指针事件，用捕获把拖动锁在手里"
+                               DocPath="input-interaction/pointer" />
+
+            <TextBlock Classes="caption" Text="1. 在灰色区域里移动、按键、滚动滚轮" />
+            <!--  Background is required: a Border without one is invisible to pointer hit testing.  -->
+            <Border Name="Pad" Classes="stage" Height="80" Background="#20FFFFFF"
+                    PointerMoved="OnPadMoved" PointerPressed="OnPadPressed" PointerWheelChanged="OnPadWheel" />
+            <TextBlock Name="Readout" FontFamily="Consolas, Menlo, monospace" Margin="0,6,0,0"
+                       Text="（还没有事件）" />
+
+            <TextBlock Classes="caption" Text="2. 指针捕获：拖动红色方块，拖出画布也不会丢" />
+            <Border Classes="stage" Width="300" HorizontalAlignment="Left">
+                <Canvas Name="Track" Width="300" Height="50">
+                    <Border Name="Handle" Width="40" Height="40" Canvas.Top="5" CornerRadius="4"
+                            Background="#E8564A"
+                            PointerPressed="OnHandlePressed" PointerMoved="OnHandleMoved"
+                            PointerReleased="OnHandleReleased" PointerCaptureLost="OnHandleCaptureLost" />
+                </Canvas>
+            </Border>
+            <TextBlock Name="DragState" Margin="0,6,0,0" Text="空闲" />
+            <TextBlock Classes="hint"
+                       Text="不捕获时，指针一离开方块，PointerMoved 就不再送给它；Capture 之后，不管指针跑到哪里都继续送，直到松开（Capture(null)）或被别人抢走（PointerCaptureLost）。方块被夹在 0–260 之间，所以把鼠标拖到画布外，方块停在边缘。" />
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

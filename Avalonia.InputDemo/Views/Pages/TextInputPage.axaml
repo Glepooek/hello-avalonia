@@ -1,0 +1,43 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             xmlns:ti="using:Avalonia.Input.TextInput"
+             mc:Ignorable="d"
+             d:DesignWidth="860"
+             d:DesignHeight="560"
+             x:Class="Avalonia.InputDemo.Views.Pages.TextInputPage">
+
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="文本输入与 IME：拦截字符、给软键盘提示、开关输入法"
+                               DocPath="input-interaction/text-input" />
+
+            <TextBlock Classes="caption" Text="1. 只允许数字：在 Tunnel 阶段拦下非数字字符" />
+            <TextBox Name="DigitsBox" Width="260" HorizontalAlignment="Left" PlaceholderText="试试输入字母" />
+            <TextBlock Classes="hint"
+                       Text="TextInput 事件给的是「字符」而不是按键。在 Tunnel 阶段把 Handled 置真，TextBox 就收不到这个字符。这样拦下的只是键入；它不是完整的输入校验，校验要放进绑定（见 DataBindingDemo 的校验页）。" />
+
+            <TextBlock Classes="caption" Text="2. TextInputOptions：给软键盘的提示（桌面端键盘不会变，移动端会）" />
+            <StackPanel Spacing="6">
+                <TextBox Width="260" HorizontalAlignment="Left" PlaceholderText="邮箱，回车键为「发送」"
+                         ti:TextInputOptions.ContentType="Email"
+                         ti:TextInputOptions.ReturnKeyType="Send" />
+                <TextBox Width="260" HorizontalAlignment="Left" PlaceholderText="数字键盘"
+                         ti:TextInputOptions.ContentType="Digits" />
+                <TextBox Name="OptionsBox" Width="260" HorizontalAlignment="Left" PlaceholderText="密码，可显示"
+                         PasswordChar="●" RevealPassword="False" ti:TextInputOptions.IsSensitive="True" />
+                <CheckBox Content="显示密码" IsChecked="{Binding #OptionsBox.RevealPassword}" />
+            </StackPanel>
+            <TextBlock Name="OptionsReadout" Margin="0,6,0,0" FontFamily="Consolas, Menlo, monospace" />
+
+            <TextBlock Classes="caption" Text="3. 开关输入法（IME）" />
+            <CheckBox Name="ImeBox" IsChecked="True" Content="允许输入法" />
+            <TextBox Name="ImeEntry" Width="260" HorizontalAlignment="Left" PlaceholderText="切到中文输入法试试"
+                     InputMethod.IsInputMethodEnabled="{Binding #ImeBox.IsChecked}" />
+            <TextBlock Classes="hint"
+                       Text="取消勾选后，这个输入框不再接受输入法的组合输入（拼音候选框不出现）；这对「只收英文代码」的框很有用。TextInputOptions 里的 ContentType、ReturnKeyType、IsSensitive、Multiline 等值是给平台输入法的提示，桌面上不会有可见变化，所以这里读回数值证明它们生效。" />
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

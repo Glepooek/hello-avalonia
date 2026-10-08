@@ -1,0 +1,26 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             mc:Ignorable="d"
+             d:DesignWidth="860"
+             d:DesignHeight="560"
+             x:Class="Avalonia.InputDemo.Views.Pages.RoutedEventsPage">
+
+    <StackPanel Margin="12">
+        <shared:DemoHeader Title="路由事件：完整演示在 Avalonia.EventsDemo"
+                           DocPath="input-interaction/routed-events" />
+
+        <Border Classes="stage" Padding="12">
+            <StackPanel Spacing="8">
+                <TextBlock TextWrapping="Wrap"
+                           Text="输入事件几乎都是路由事件（Tunnel / Bubble / Direct）。官方文档把它放在 Input &amp; Interaction 下，但它本质上属于事件机制，因此完整演示放在 Events 项目里。" />
+                <SelectableTextBlock FontFamily="Consolas, monospace"
+                                     Text="dotnet run --project Avalonia.EventsDemo   →  「路由三阶段」「Handled」「自定义路由事件」三个标签页" />
+                <TextBlock Classes="hint"
+                           Text="那里用三层嵌套元素演示 Tunnel/Bubble 的触发顺序，演示 Handled 如何截断冒泡、handledEventsToo 如何越过截断，并自己声明一个路由事件。" />
+            </StackPanel>
+        </Border>
+    </StackPanel>
+</UserControl>

@@ -1,0 +1,51 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             mc:Ignorable="d"
+             d:DesignWidth="860"
+             d:DesignHeight="560"
+             x:Class="Avalonia.InputDemo.Views.Pages.DragDropPage">
+
+    <UserControl.Styles>
+        <!--  The idle look lives in a Style, not on the element, so the :over class can override it.  -->
+        <Style Selector="Border.target">
+            <Setter Property="Background" Value="#20FFFFFF" />
+            <Setter Property="BorderBrush" Value="#40FFFFFF" />
+        </Style>
+        <Style Selector="Border.target.over">
+            <Setter Property="Background" Value="#404A7BE8" />
+            <Setter Property="BorderBrush" Value="#4A7BE8" />
+        </Style>
+    </UserControl.Styles>
+
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="拖放：DoDragDropAsync 发起，AllowDrop 与四个拖放事件接收"
+                               DocPath="input-interaction/drag-and-drop" />
+
+            <TextBlock Classes="caption" Text="1. 按住左边的文字，拖到右边" />
+            <StackPanel Orientation="Horizontal" Spacing="24">
+                <StackPanel Spacing="4">
+                    <TextBox Name="SourceBox" Text="拖我走" Width="160" />
+                    <!--  Press on this handle to start the drag. A TextBox itself would swallow the press for text selection.  -->
+                    <Border Name="Handle" Classes="stage" Padding="8,6" Background="#20FFFFFF" Cursor="Hand"
+                            PointerPressed="OnHandlePressed">
+                        <TextBlock Text="⠿ 按住这里拖动" HorizontalAlignment="Center" />
+                    </Border>
+                </StackPanel>
+
+                <Border Name="Target" Classes="stage target" Width="260" Height="100" BorderThickness="2"
+                        DragDrop.AllowDrop="True">
+                    <TextBlock Name="Dropped" Text="放到这里" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                </Border>
+            </StackPanel>
+
+            <TextBlock Classes="caption" Text="2. 拖放事件流" />
+            <ListBox Name="LogList" Height="190" />
+            <TextBlock Classes="hint"
+                       Text="DragEnter / DragOver / DragLeave / Drop 四个事件落在目标上；DragOver 里设置的 DragEffects 决定光标与是否允许放下（这里仅接受带文本的数据，空数据得到 None）。发起端的 DoDragDropAsync 在放下后返回最终的效果。DataObject 与 DataFormats 是旧 API，12.1.2 起用 DataTransfer 与 DataTransferItem。" />
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

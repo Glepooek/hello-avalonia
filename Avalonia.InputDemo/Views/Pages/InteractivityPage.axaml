@@ -1,0 +1,49 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             xmlns:vm="using:Avalonia.InputDemo.ViewModels"
+             mc:Ignorable="d"
+             d:DesignWidth="860"
+             d:DesignHeight="560"
+             x:DataType="vm:InteractivityViewModel"
+             x:Class="Avalonia.InputDemo.Views.Pages.InteractivityPage">
+
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="交互的三种写法：Click 处理器、Command、Tapped，以及菜单里的快捷键"
+                               DocPath="input-interaction/commanding" />
+
+            <TextBlock Classes="caption" Text="1. 同一个动作：计数 +1" />
+            <TextBlock Text="{Binding Count, StringFormat='计数 = {0}'}" FontSize="20" />
+
+            <StackPanel Orientation="Horizontal" Spacing="12" Margin="0,8,0,0">
+                <!--  Style 1: an event handler in code-behind. Always enabled; the VM knows nothing.  -->
+                <Button Content="Click 处理器" Click="OnClickHandler" />
+                <!--  Style 2: a command. CanExecute drives IsEnabled with no extra code.  -->
+                <Button Content="Command" Command="{Binding IncrementCommand}" />
+                <!--  Style 3: a gesture on a non-button element.  -->
+                <Border Classes="stage" Padding="10,6" Background="#20FFFFFF" Tapped="OnTapped">
+                    <TextBlock Text="Tapped 手势" />
+                </Border>
+            </StackPanel>
+            <CheckBox Content="解锁 Command（取消勾选则按钮自动变灰）" IsChecked="{Binding Unlocked}" Margin="0,8,0,0" />
+            <TextBlock Name="HandlerReadout" Margin="0,6,0,0" Text="" />
+            <TextBlock Classes="hint"
+                       Text="Click 处理器与 Tapped 直接改了 code-behind 里的 VM，不受 CanExecute 约束；Command 是唯一遵守「解锁」开关的。需要「可用性」跟着状态走的动作，用 Command。" />
+
+            <TextBlock Classes="caption" Text="2. 菜单里的快捷键：InputGesture 与 HotKey" />
+            <Menu HorizontalAlignment="Left">
+                <!--  Only displays the text. Pressing Ctrl+1 does nothing. Write D1, not 1: Ctrl+1 parses as Key.Back (enum value 1), Ctrl+2 as Key.Tab.  -->
+                <MenuItem Header="只写 InputGesture" Command="{Binding IncrementCommand}" InputGesture="Ctrl+D1" />
+                <!--  Actually binds the key. The menu shows no hint text.  -->
+                <MenuItem Header="只写 HotKey" Command="{Binding IncrementCommand}" HotKey="Ctrl+D2" />
+                <!--  The usual pairing: HotKey triggers, InputGesture displays.  -->
+                <MenuItem Header="两个都写" Command="{Binding IncrementCommand}" HotKey="Ctrl+D3" InputGesture="Ctrl+D3" />
+            </Menu>
+            <TextBlock Classes="hint"
+                       Text="这是一个典型的「界面写了快捷键、按下去没反应」：InputGesture 只负责在菜单右侧显示文字，真正注册按键的是 HotKey。先勾选上面的「解锁」，再依次按 Ctrl+1、Ctrl+2、Ctrl+3，只有后两个会让计数增加。手势要写 Ctrl+D1 而不是 Ctrl+1：后者会被解析成枚举数值 1，即 Ctrl+Back。" />
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

@@ -1,0 +1,46 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             mc:Ignorable="d"
+             d:DesignWidth="860"
+             d:DesignHeight="560"
+             x:Class="Avalonia.InputDemo.Views.Pages.FocusPage">
+
+    <UserControl.Styles>
+        <!--  :focus-visible appears only for keyboard-driven focus. Plain :focus would also light up on click.  -->
+        <Style Selector="Button.ring:focus-visible">
+            <Setter Property="BorderBrush" Value="#E8974A" />
+            <Setter Property="BorderThickness" Value="3" />
+        </Style>
+    </UserControl.Styles>
+
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="焦点：Tab 顺序、IsTabStop、FocusManager，以及只对键盘出现的 :focus-visible"
+                               DocPath="input-interaction/focus" />
+
+            <TextBlock Classes="caption" Text="1. 按 Tab / Shift+Tab 在四个按钮间移动" />
+            <StackPanel Name="Row" Orientation="Horizontal" Spacing="8" GotFocus="OnRowGotFocus">
+                <Button Name="BtnA" Classes="ring" Content="A" KeyboardNavigation.TabIndex="1" />
+                <Button Name="BtnB" Classes="ring" Content="B" KeyboardNavigation.TabIndex="2" />
+                <Button Name="BtnC" Classes="ring" Content="C（IsTabStop=False）" IsTabStop="False" KeyboardNavigation.TabIndex="3" />
+                <Button Name="BtnD" Classes="ring" Content="D" KeyboardNavigation.TabIndex="4" />
+            </StackPanel>
+            <TextBlock Name="FocusReadout" Margin="0,6,0,0" Text="还没有焦点" />
+            <TextBlock Classes="hint"
+                       Text="C 被 Tab 跳过，但用鼠标点它仍然能获得焦点——IsTabStop 只管键盘导航。点一下 A 与按 Tab 到 A，读数里的 :focus-visible 不同，橙色描边也只在后者出现。" />
+
+            <TextBlock Classes="caption" Text="2. 用代码设置焦点，并指定它是怎么来的" />
+            <StackPanel Orientation="Horizontal" Spacing="8">
+                <Button Content="Focus(Tab) → B" Click="OnFocusViaTab" />
+                <Button Content="Focus(Pointer) → B" Click="OnFocusViaPointer" />
+                <Button Content="读取 FocusManager 当前焦点" Click="OnQueryFocus" />
+            </StackPanel>
+            <TextBlock Name="QueryReadout" Margin="0,6,0,0" Text="" />
+            <TextBlock Classes="hint"
+                       Text="NavigationMethod 是 Focus() 的参数：Tab 与 Directional 表示键盘导航，会带上 :focus-visible；Pointer 与 Unspecified 不会。第三个按钮读到的是它自己——点它时焦点已经移到了它身上。" />
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>
