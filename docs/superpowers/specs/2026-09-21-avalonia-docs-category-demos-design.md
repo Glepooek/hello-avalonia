@@ -292,6 +292,43 @@ ReactiveUI、Prism 等会让读者分不清"这是 Avalonia 的能力"还是"这
 - **探针断言实际条数**：#4 为 28 条、#5 为 50 条、#6 为 31 条，全部通过且零警告日志；
   plan 里写的 19 / 38 / 22 是漏数，以实际为准。
 
+### 交互图形层实测结论（2026-10-08）
+
+四个项目（#8 Events、#9 Input、#10 Graphics、#11 CustomControls）落地过程中验证到的结果：
+
+- **功能点映射的出入**：Events 官方子页合成 5 个 Tab；Input 8 个；Graphics 13 个；CustomControls 7 个，
+  其中「属性与事件」是指向 #7 与 #8 的路标页。
+- **去重规则落地**：路由事件主体在 #8（#9 只留路标）；焦点管理完整在 #9；定义属性在 #7
+  （#11 路标）；自定义路由事件在 #8（#11 路标）。
+- **新增静默失败**（plan 规则 26–28 及执行时发现的几条）：非控件对象不能命名（`AVLN2000`），
+  但元素名绑定可以绑它们的属性；`GeometryCombineMode` 只有四个值；`coerce` 回调的第一个参数是
+  `AvaloniaObject`；`PopupFlyoutBase` 要 `using Avalonia.Controls.Primitives`。
+- **派生自现有控件要覆盖 `StyleKeyOverride`**：`Notifier : Button` 不覆盖时按自身类型找主题，
+  找不到就没有模板，不渲染、点不了，既不报错也不记日志。有自己 ControlTheme 的控件（`Meter`）
+  则相反，不要覆盖。
+- **XAML 里的数字键会被解析成枚举数值**：`HotKey="Ctrl+2"` 注册的是 `Ctrl+Back`，`Ctrl+3` 是
+  `Ctrl+Tab`；要写 `Ctrl+D2`。菜单项的 `InputGesture` 仍只显示文字、不注册按键。
+- **`Canvas.Left` 默认是 `NaN`**：`DoubleTransition` 没有起点可插值，小球原地不动，不报错。
+  被 Transition 驱动的附加属性要先写显式起始值（它是起点，不是会压住样式的本地值）。
+- **页面里元素名不能与继承属性重名**：`Name="Opacity"` 让生成的字段遮住 `Visual.Opacity`（`CS0108`）。
+- **`Handled` 只拦 `KeyDown`**：之后的 `TextInput` 仍会写进 `TextBox`，页面说明里的
+  「不再收到字符」只对 KeyDown 阶段成立。
+- **headless 的边界**：`Render` 会被调用，自绘控件可以断言重绘次数；无限动画只前进 1–2 帧，
+  `Animation.RunAsync` 不推进，动画页的断言只落在类的切换与 `Transitions` 的终值上；
+  `DoDragDropAsync` 的发起端无法验证，只测了接收端，需真机目视。
+- **探针写法的坑**：`KeyPressQwerty` 只发 KeyDown/KeyUp、不发 TextInput，要补 `KeyTextInput`；
+  带修饰键的组合会被 HotKey/KeyBinding 拦截，到不了控件的 KeyDown；命令禁用要断言
+  `IsEffectivelyEnabled` 而非 `IsEnabled`；未绑定 `DataContext` 的 `TextBlock.Text` 读回 `null`
+  而非 `""`；`TransformOperations` 在 `Avalonia.Media.Transformation` 命名空间。
+- **探针断言实际条数**：#8 为 23 条、#9 为 44 条、#10 为 70 条、#11 为 53 条，全部通过且零警告日志。
+- **执行时更正的 plan 错误**：
+  - Task 2：`Notifier` 缺 `StyleKeyOverride`；探针的 `Handled off` 断言漏了 `KeyTextInput`。
+  - Task 3：菜单 `Ctrl+1/2/3` 改为 `Ctrl+D1/D2/D3`；`IsEnabled` 断言改 `IsEffectivelyEnabled`；
+    键盘读数探针先发不带修饰键的 K。
+  - Task 4：`EasingPage` 小球补 `Canvas.Left="0"`；探针补 `using`。
+  - Task 5：`LabeledSlider` 的 `Name="Opacity"` 改为 `Fade`；`Child.Text == ""` 改为
+    `string.IsNullOrEmpty`。
+
 ## 交付顺序与验证标准
 
 **第一阶段（样板）**：完成 `Avalonia.LayoutDemo`。选它作样板的理由——纯 UI、零外部依赖、
