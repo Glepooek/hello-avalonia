@@ -19,5 +19,11 @@
         <PackageVersion Include="CommunityToolkit.Mvvm" Version="8.4.2" />
         <PackageVersion Include="MessageBox.Avalonia" Version="12.0.0" />
         <PackageVersion Include="iTunesSearch" Version="1.0.44" />
+        <PackageVersion Include="Microsoft.Extensions.DependencyInjection" Version="10.0.12" />
+        <PackageVersion Include="Microsoft.Extensions.Logging.Console" Version="10.0.12" />
+        <PackageVersion Include="Avalonia.Headless.XUnit" Version="12.1.2" />
+        <PackageVersion Include="xunit.v3" Version="3.2.2" />
+        <PackageVersion Include="xunit.runner.visualstudio" Version="3.1.5" />
+        <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="18.10.1" />
     </ItemGroup>
 </Project>

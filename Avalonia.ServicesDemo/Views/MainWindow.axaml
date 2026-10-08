@@ -1,0 +1,42 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:pages="using:Avalonia.ServicesDemo.Views.Pages"
+        mc:Ignorable="d"
+        d:DesignWidth="900"
+        d:DesignHeight="640"
+        x:Class="Avalonia.ServicesDemo.Views.MainWindow"
+        Icon="/Assets/avalonia-logo.ico"
+        Title="Avalonia Services Demo"
+        Width="900"
+        Height="640"
+        WindowStartupLocation="CenterScreen">
+
+    <TabControl Margin="12" TabStripPlacement="Left">
+        <TabItem Header="剪贴板">
+            <pages:ClipboardPage />
+        </TabItem>
+        <TabItem Header="文件对话框">
+            <pages:FileDialogsPage />
+        </TabItem>
+        <TabItem Header="StorageProvider">
+            <pages:StorageProviderPage />
+        </TabItem>
+        <TabItem Header="焦点管理">
+            <pages:FocusManagerPage />
+        </TabItem>
+        <TabItem Header="Launcher">
+            <pages:LauncherPage />
+        </TabItem>
+        <TabItem Header="平台设置">
+            <pages:PlatformSettingsPage />
+        </TabItem>
+        <TabItem Header="移动端服务">
+            <pages:MobileServicesPage />
+        </TabItem>
+        <TabItem Header="可激活生命周期">
+            <pages:ActivatableLifetimePage />
+        </TabItem>
+    </TabControl>
+</Window>

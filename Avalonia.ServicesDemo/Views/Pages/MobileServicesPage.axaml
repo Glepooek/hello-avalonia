@@ -1,0 +1,35 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             mc:Ignorable="d"
+             d:DesignWidth="760"
+             d:DesignHeight="560"
+             x:Class="Avalonia.ServicesDemo.Views.Pages.MobileServicesPage">
+
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="移动端服务：InputPane 与 InsetsManager 在桌面上可能不存在，先检测再使用"
+                               DocPath="services/input-pane" />
+
+            <TextBlock Classes="caption" Text="1. 当前平台的服务可用性" />
+            <Border Classes="stage" Padding="10">
+                <StackPanel Spacing="4">
+                    <TextBlock Name="InputPaneLine" />
+                    <TextBlock Name="InsetsLine" />
+                </StackPanel>
+            </Border>
+
+            <TextBlock Classes="caption" Text="2. 为什么要检测" />
+            <TextBlock Classes="hint"
+                       Text="这两个服务面向触屏设备：InputPane 报告软键盘是否弹出、遮住了哪块区域；InsetsManager 报告刘海、状态栏、手势条占用的安全区。桌面平台没有对应概念，TopLevel 上这两个属性返回 null，直接 .State 或 .SafeAreaPadding 会 NullReferenceException。" />
+
+            <TextBlock Classes="caption" Text="3. 正确的写法" />
+            <Border Classes="stage" Padding="10">
+                <SelectableTextBlock FontFamily="Consolas, monospace"
+                                     Text="if (TopLevel.GetTopLevel(this)?.InputPane is { } pane)&#x0a;{&#x0a;    pane.StateChanged += (s, e) =&gt; Adjust(e.EndRect);&#x0a;}" />
+            </Border>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

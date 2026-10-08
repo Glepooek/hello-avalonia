@@ -1,0 +1,70 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             mc:Ignorable="d"
+             d:DesignWidth="760"
+             d:DesignHeight="560"
+             x:Class="Avalonia.ServicesDemo.Views.Pages.ActivatableLifetimePage">
+
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="可激活生命周期：应用进入/离开后台、被深链接或文件唤起，平台支持差异很大"
+                               DocPath="services/activatable-lifetime" />
+
+            <TextBlock Classes="caption" Text="1. 当前平台" />
+            <Border Classes="stage" Padding="10">
+                <StackPanel Spacing="4">
+                    <TextBlock Name="AvailabilityLine" />
+                    <TextBlock Name="WindowLine" />
+                </StackPanel>
+            </Border>
+
+            <TextBlock Classes="caption" Text="2. ActivationKind 的四个取值与平台支持（取自官方文档）" />
+            <Border Classes="stage" Padding="10">
+                <Grid ColumnDefinitions="120,*,*,*,*,*,*" RowDefinitions="Auto,Auto,Auto,Auto" RowSpacing="4">
+                    <TextBlock Grid.Column="1" Text="Windows" FontWeight="SemiBold" />
+                    <TextBlock Grid.Column="2" Text="macOS" FontWeight="SemiBold" />
+                    <TextBlock Grid.Column="3" Text="Linux" FontWeight="SemiBold" />
+                    <TextBlock Grid.Column="4" Text="Browser" FontWeight="SemiBold" />
+                    <TextBlock Grid.Column="5" Text="Android" FontWeight="SemiBold" />
+                    <TextBlock Grid.Column="6" Text="iOS" FontWeight="SemiBold" />
+
+                    <TextBlock Grid.Row="1" Text="Background" />
+                    <TextBlock Grid.Row="1" Grid.Column="1" Text="✖" />
+                    <TextBlock Grid.Row="1" Grid.Column="2" Text="✔" />
+                    <TextBlock Grid.Row="1" Grid.Column="3" Text="✖" />
+                    <TextBlock Grid.Row="1" Grid.Column="4" Text="✔" />
+                    <TextBlock Grid.Row="1" Grid.Column="5" Text="✔" />
+                    <TextBlock Grid.Row="1" Grid.Column="6" Text="✔" />
+
+                    <TextBlock Grid.Row="2" Text="File / OpenUri" />
+                    <TextBlock Grid.Row="2" Grid.Column="1" Text="✖" />
+                    <TextBlock Grid.Row="2" Grid.Column="2" Text="✔" />
+                    <TextBlock Grid.Row="2" Grid.Column="3" Text="✖" />
+                    <TextBlock Grid.Row="2" Grid.Column="4" Text="✖" />
+                    <TextBlock Grid.Row="2" Grid.Column="5" Text="✔" />
+                    <TextBlock Grid.Row="2" Grid.Column="6" Text="✔" />
+
+                    <TextBlock Grid.Row="3" Text="Reopen" />
+                    <TextBlock Grid.Row="3" Grid.Column="1" Text="✖" />
+                    <TextBlock Grid.Row="3" Grid.Column="2" Text="✔" />
+                    <TextBlock Grid.Row="3" Grid.Column="3" Text="✖" />
+                    <TextBlock Grid.Row="3" Grid.Column="4" Text="✖" />
+                    <TextBlock Grid.Row="3" Grid.Column="5" Text="✖" />
+                    <TextBlock Grid.Row="3" Grid.Column="6" Text="✖" />
+                </Grid>
+            </Border>
+
+            <TextBlock Classes="caption" Text="3. 窗口级别的替代：Activated / Deactivated" />
+            <Border Classes="stage" Padding="10">
+                <StackPanel Spacing="4">
+                    <TextBlock Name="ActivationCounts" />
+                    <TextBlock Classes="hint"
+                               Text="切到别的程序再切回来，计数会增加。这是 Window 自己的事件，所有桌面平台都有，和应用级的 IActivatableLifetime 是两回事。" />
+                </StackPanel>
+            </Border>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

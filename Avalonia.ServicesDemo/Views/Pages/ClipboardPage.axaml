@@ -1,0 +1,41 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             mc:Ignorable="d"
+             d:DesignWidth="760"
+             d:DesignHeight="560"
+             x:Class="Avalonia.ServicesDemo.Views.Pages.ClipboardPage">
+
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="剪贴板：读写文本、用 DataTransfer 写入、清空，并看当前有哪些格式"
+                               DocPath="services/clipboard" />
+
+            <TextBlock Classes="caption" Text="1. 写入文本" />
+            <StackPanel Orientation="Horizontal" Spacing="8">
+                <TextBox Name="Source" Width="260" Text="来自 Avalonia 的文本" />
+                <Button Name="SetTextButton" Content="SetTextAsync" Click="OnSetText" />
+                <Button Name="SetDataButton" Content="SetDataAsync (DataTransfer)" Click="OnSetData" />
+                <Button Name="ClearButton" Content="ClearAsync" Click="OnClear" />
+            </StackPanel>
+
+            <TextBlock Classes="caption" Text="2. 读回" />
+            <StackPanel Orientation="Horizontal" Spacing="8">
+                <Button Name="ReadButton" Content="TryGetTextAsync" Click="OnRead" />
+                <Button Name="FormatsButton" Content="列出格式 (TryGetDataAsync)" Click="OnFormats" />
+            </StackPanel>
+            <Border Classes="stage" Padding="10" Margin="0,8,0,0">
+                <TextBlock Name="Result" Text="（还没有读取）" TextWrapping="Wrap" />
+            </Border>
+
+            <TextBlock Classes="caption" Text="3. 粘贴测试" />
+            <TextBox Name="PasteTarget" Width="360" HorizontalAlignment="Left"
+                     PlaceholderText="在这里按 Ctrl+V 粘贴上面写入的内容" />
+
+            <TextBlock Classes="hint" Margin="0,12,0,0"
+                       Text="12.x 的剪贴板不再使用 IDataObject / DataObject / DataFormats，改用 DataTransfer、DataTransferItem。TryGetDataAsync 返回的对象要 using 释放；SetDataAsync 之后所有权交给 Avalonia，不要自己释放。" />
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

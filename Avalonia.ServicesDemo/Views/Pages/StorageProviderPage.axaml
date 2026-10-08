@@ -1,0 +1,43 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             mc:Ignorable="d"
+             d:DesignWidth="760"
+             d:DesignHeight="560"
+             x:Class="Avalonia.ServicesDemo.Views.Pages.StorageProviderPage">
+
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="StorageProvider：能力探测、按路径取文件夹、知名文件夹、枚举内容"
+                               DocPath="services/storage/storage-provider" />
+
+            <TextBlock Classes="caption" Text="1. 能力探测" />
+            <Border Classes="stage" Padding="10">
+                <TextBlock Name="Capabilities" />
+            </Border>
+
+            <TextBlock Classes="caption" Text="2. 知名文件夹（WellKnownFolder）" />
+            <StackPanel Orientation="Horizontal" Spacing="8">
+                <ComboBox Name="FolderBox" Width="160" />
+                <Button Name="ListButton" Content="列出内容" Click="OnList" />
+            </StackPanel>
+
+            <TextBlock Classes="caption" Text="3. 按路径取文件夹" />
+            <StackPanel Orientation="Horizontal" Spacing="8">
+                <TextBox Name="PathBox" Width="360" />
+                <Button Name="PathButton" Content="TryGetFolderFromPathAsync" Click="OnPath" />
+            </StackPanel>
+
+            <TextBlock Classes="caption" Text="4. 结果" />
+            <Border Classes="stage" Padding="10">
+                <TextBlock Name="Result" Text="（还没有操作）" TextWrapping="Wrap" />
+            </Border>
+            <ListBox Name="Items" Height="160" Margin="0,8,0,0" />
+
+            <TextBlock Classes="hint" Margin="0,12,0,0"
+                       Text="CanOpen / CanSave / CanPickFolder 为 False 只表示不能弹出选择器；TryGetFolderFromPathAsync、TryGetWellKnownFolderAsync 与枚举仍可使用。路径找不到时返回 null，不抛异常。" />
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

@@ -1,0 +1,26 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             mc:Ignorable="d"
+             d:DesignWidth="760"
+             d:DesignHeight="560"
+             x:Class="Avalonia.ServicesDemo.Views.Pages.FocusManagerPage">
+
+    <StackPanel Margin="12">
+        <shared:DemoHeader Title="Focus Manager：完整演示在 Avalonia.InputDemo"
+                           DocPath="services/focus-manager" />
+
+        <Border Classes="stage" Padding="12">
+            <StackPanel Spacing="8">
+                <TextBlock TextWrapping="Wrap"
+                           Text="FocusManager 通过 TopLevel.FocusManager 取得，既是一个服务，也是输入交互的一部分。官方文档把它同时列在 Services 和 Input &amp; Interaction 下，完整演示放在更贴合的 Input 项目里。" />
+                <SelectableTextBlock FontFamily="Consolas, monospace"
+                                     Text="dotnet run --project Avalonia.InputDemo   →  「焦点」标签页" />
+                <TextBlock Classes="hint"
+                           Text="那里演示 GetFocusedElement、Tab 顺序、IsTabStop、NavigationMethod 与 :focus-visible 的区别。" />
+            </StackPanel>
+        </Border>
+    </StackPanel>
+</UserControl>

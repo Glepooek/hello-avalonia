@@ -10,6 +10,7 @@
   <Project Path="Avalonia.LayoutDemo/Avalonia.LayoutDemo.csproj" />
   <Project Path="Avalonia.MusicStore/Avalonia.MusicStore.csproj" />
   <Project Path="Avalonia.PropertySystemDemo/Avalonia.PropertySystemDemo.csproj" />
+  <Project Path="Avalonia.ServicesDemo/Avalonia.ServicesDemo.csproj" />
   <Project Path="Avalonia.Shared/Avalonia.Shared.csproj" />
   <Project Path="Avalonia.StylingDemo/Avalonia.StylingDemo.csproj" />
   <Project Path="Avalonia.WebViewDemo/Avalonia.WebViewDemo.csproj" />

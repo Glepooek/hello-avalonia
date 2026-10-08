@@ -1,0 +1,37 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             mc:Ignorable="d"
+             d:DesignWidth="760"
+             d:DesignHeight="560"
+             x:Class="Avalonia.ServicesDemo.Views.Pages.LauncherPage">
+
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="Launcher：用系统默认程序打开网址、文件与文件夹"
+                               DocPath="services/launcher" />
+
+            <TextBlock Classes="caption" Text="1. 打开网址" />
+            <StackPanel Orientation="Horizontal" Spacing="8">
+                <TextBox Name="UriBox" Width="320" Text="https://avaloniaui.net" />
+                <Button Name="UriButton" Content="LaunchUriAsync" Click="OnUri" />
+            </StackPanel>
+
+            <TextBlock Classes="caption" Text="2. 打开文件夹（仅桌面，非沙箱）" />
+            <StackPanel Orientation="Horizontal" Spacing="8">
+                <TextBox Name="DirBox" Width="320" />
+                <Button Name="DirButton" Content="LaunchDirectoryInfoAsync" Click="OnDirectory" />
+            </StackPanel>
+
+            <TextBlock Classes="caption" Text="3. 结果" />
+            <Border Classes="stage" Padding="10">
+                <TextBlock Name="Result" Text="（还没有操作）" TextWrapping="Wrap" />
+            </Border>
+
+            <TextBlock Classes="hint" Margin="0,12,0,0"
+                       Text="返回 true 只表示系统接受了请求，不保证真的有程序被打开；返回 false 常见于没有可用的启动器（例如无头环境）。LaunchFileAsync 接收 IStorageItem，来自 StorageProvider 或剪贴板；LaunchFileInfoAsync / LaunchDirectoryInfoAsync 是直接收 FileInfo / DirectoryInfo 的扩展方法，只在 Windows、macOS、Linux 上可用。" />
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

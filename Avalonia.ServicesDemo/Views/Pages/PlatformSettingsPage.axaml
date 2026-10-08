@@ -1,0 +1,57 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             mc:Ignorable="d"
+             d:DesignWidth="760"
+             d:DesignHeight="560"
+             x:Class="Avalonia.ServicesDemo.Views.Pages.PlatformSettingsPage">
+
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="PlatformSettings：读取系统主题、强调色、点击参数与快捷键配置"
+                               DocPath="services/platform-settings" />
+
+            <TextBlock Classes="caption" Text="1. 颜色值（GetColorValues）" />
+            <Border Classes="stage" Padding="10">
+                <StackPanel Spacing="6">
+                    <TextBlock Name="ThemeLine" />
+                    <TextBlock Name="ContrastLine" />
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <TextBlock Text="强调色" VerticalAlignment="Center" />
+                        <Border Name="AccentSwatch" Width="28" Height="28" CornerRadius="4" />
+                        <TextBlock Name="AccentLine" VerticalAlignment="Center" />
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+
+            <TextBlock Classes="caption" Text="2. 系统变化事件（ColorValuesChanged）" />
+            <Border Classes="stage" Padding="10">
+                <StackPanel Spacing="4">
+                    <TextBlock Name="ChangeLine" Text="在系统设置里切换深浅色或强调色，这里会更新" />
+                    <TextBlock Classes="hint"
+                               Text="这是系统级的变化，不是应用的 ThemeVariant。要让应用跟随系统，把 RequestedThemeVariant 设为 Default。" />
+                </StackPanel>
+            </Border>
+
+            <TextBlock Classes="caption" Text="3. 点击与悬停参数" />
+            <Border Classes="stage" Padding="10">
+                <StackPanel Spacing="4">
+                    <TextBlock Name="TapLine" />
+                    <TextBlock Name="DoubleTapLine" />
+                    <TextBlock Name="HoldLine" />
+                </StackPanel>
+            </Border>
+
+            <TextBlock Classes="caption" Text="4. 快捷键配置（HotkeyConfiguration）" />
+            <Border Classes="stage" Padding="10">
+                <StackPanel Spacing="4">
+                    <TextBlock Name="CopyLine" />
+                    <TextBlock Name="PasteLine" />
+                    <TextBlock Name="UndoLine" />
+                </StackPanel>
+            </Border>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>
