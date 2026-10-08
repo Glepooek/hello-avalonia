@@ -323,3 +323,13 @@ Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>"
 
 ---
 
+
+---
+
+## 执行记录（2026-10-08）
+
+本 plan 的 Task 2–6 在执行时由实际落地的代码代替了逐段文字：#12 的 8 个页面、#13 的 10 个页面与服务/日志/资源文件、#14 的三个面板与 ViewModel、#15 的测试项目，均已按上文的文件结构与规则 11–24 落地，源码以仓库为准（`Avalonia.ServicesDemo/`、`Avalonia.AppDevelopmentDemo/`、`Avalonia.TestingDemo/`、`Avalonia.TestingDemo.Tests/`）。
+
+验证结果：#12 探针 36 条、#13 探针 44 条全部通过；`dotnet test` 24 个测试全部通过；整个解决方案 0 错误。README 与 spec 的写回见提交 `docs: register the app-services demos and record what they measured`。
+
+执行时对 plan 的更正：`TextBox.Watermark` 已过时，改用 `PlaceholderText`；渲染快照读像素时按帧的 `Format` 判断字节序；本地化页的 `RadioButton` 按 `sender` 判断；数据校验路标的目标 Tab 名为「校验」。

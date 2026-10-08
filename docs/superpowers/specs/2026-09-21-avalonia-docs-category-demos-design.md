@@ -138,7 +138,7 @@ Performance optimization（优化建议清单，无可交互演示）、Native p
 | `Microsoft.Extensions.DependencyInjection` | DI 容器演示 | #13 |
 | `Microsoft.Extensions.Logging.Console` | 日志演示 | #13 |
 | `Avalonia.Headless.XUnit` | 无头 UI 测试 | #15 |
-| `xunit` | 测试框架 | #15 |
+| `xunit.v3` | 测试框架（原写 `xunit`，见「应用服务层实测结论」） | #15 |
 | `xunit.runner.visualstudio` | 测试运行器 | #15 |
 | `Microsoft.NET.Test.Sdk` | 测试宿主 | #15 |
 
@@ -328,6 +328,43 @@ ReactiveUI、Prism 等会让读者分不清"这是 Avalonia 的能力"还是"这
   - Task 4：`EasingPage` 小球补 `Canvas.Left="0"`；探针补 `using`。
   - Task 5：`LabeledSlider` 的 `Name="Opacity"` 改为 `Fade`；`Child.Text == ""` 改为
     `string.IsNullOrEmpty`。
+
+### 应用服务层实测结论（2026-10-08）
+
+四个项目（#12 Services、#13 AppDevelopment、#14 TestingDemo、#15 TestingDemo.Tests）落地过程中验证到的结果：
+
+- **技术风险第 1 点已解除，但测试框架要换成 xunit v3**：`Avalonia.Headless.XUnit` 12.1.2 存在且可用，
+  它依赖 `xunit.v3.extensibility.core`。同时引用 `xunit` 2.9.3 会让 `[InlineData]` 报 `CS0433`。
+  实际用 `xunit.v3` 3.2.2，测试项目写 `<OutputType>Exe</OutputType>`，配 `xunit.runner.visualstudio`
+  3.1.5 与 `Microsoft.NET.Test.Sdk` 18.10.1。上文包清单已据此更正。
+- **渲染快照要显式启用 Skia**：默认 headless 绘图下 `CaptureRenderedFrame` 的位图是 1×1。
+  `TestAppBuilder` 里写 `.UseSkia().UseHeadless(new AvaloniaHeadlessPlatformOptions { UseHeadlessDrawing = false })`。
+  读像素时字节序要看帧的 `Format`，不能假设 BGRA（本次实测红蓝互换才暴露）。
+- **技术风险第 3 点的实测**：headless 下 `StorageProvider` 与 `Launcher` 是 Noop 实现
+  （`CanOpen`/`CanSave`/`CanPickFolder` 全为 `False`，`LaunchUriAsync` 返回 `False`），`InputPane`、
+  `InsetsManager`、`IActivatableLifetime` 为 `null`。因此这几页做成"先检测、再使用"的演示。
+  `TryGetFolderFromPathAsync` 与 `TryGetWellKnownFolderAsync` 在 headless 里仍能拿到真实目录。
+- **功能点映射的出入**：Services 官方 9 页，做成 8 个 Tab（spec 漏了 `insets-manager` 与
+  `activatable-lifetime`；Focus Manager 是指向 #9 的路标）；App Development 官方 14 页，做成 10 个 Tab
+  （Web 内容与数据校验是路标）；Testing 官方 2 页并入 #15 的测试类。**`ui-testing-with-appium` 未做**：
+  它需要外部驱动与真实应用进程，无法在仓库内自洽运行。
+- **API 形态**：`PlatformSettings` 要用 `this.GetPlatformSettings()`（`using Avalonia.VisualTree;`），
+  `TopLevel.PlatformSettings` 不存在；剪贴板用 12.x 的 `SetTextAsync` / `TryGetTextAsync` / `DataTransfer`，
+  不用旧的 `IDataObject`；`Window.SystemDecorations` 已过时，用 `WindowDecorations`；
+  `TextBox.Watermark` 已过时，用 `PlaceholderText`（`AVLN5001`）。
+- **DI 作用域校验**：`ValidateScopes = true` 时，从根容器解析 `Scoped` 服务立刻抛
+  `InvalidOperationException`，不会悄悄当单例用。
+- **资源查找的差别**：替换字典里的项后，`TryFindResource` 一次性取出的值不更新，`DynamicResource` 会更新；
+  直接改同一个画刷的 `Color` 则两者都更新（拿的是同一个对象）。
+- **两套日志互不相通**：`Logger.Sink` 接框架内部消息（绑定、布局），`ILogger` 是应用自己的。`WinExe` 没有
+  控制台，`AddConsole()` 看不到输出，所以用自定义 `ILoggerProvider` / `ILogSink` 把消息收进列表。
+  `Logger.Sink` 是进程级的，页面在 `OnLoaded` 保存旧 sink、`OnUnloaded` 还原。
+- **RadioButton 的事件顺序**：`IsCheckedChanged` 触发时，另一个按钮还没取消选中。要按 `sender` 判断，
+  不能读兄弟按钮的状态（本地化页最初因此在切回中文时仍显示英文）。
+- **`.resx` 要排除出 `AvaloniaResource`**，否则运行时 `ResourceManager` 找不到；清单资源名以程序集名为前缀。
+- **探针断言实际条数**：#12 为 36 条、#13 为 44 条，全部通过；#15 自身 24 个测试全部通过。
+- **执行时更正的错误**：`DataValidationPage` 的路标把目标 Tab 写成「数据校验」，实际叫「校验」；
+  探针里资源色值的比较串改用颜色名（`Red`/`Blue`/`Green`）而非十六进制。
 
 ## 交付顺序与验证标准
 

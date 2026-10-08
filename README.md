@@ -17,6 +17,10 @@ Avalonia UI 学习示例集合。每个项目演示一个独立主题，可单�
 | [Avalonia.InputDemo](Avalonia.InputDemo) | 指针、焦点与导航、手势、键盘与 HotKey、事件/命令/手势三种交互写法、拖放、文本输入过滤 |
 | [Avalonia.GraphicsDemo](Avalonia.GraphicsDemo) | 画刷与渐变、变换、形状与几何、自定义绘制、特效、裁剪与命中、图标、渲染选项、关键帧动画、控件过渡、页面过渡、缓动函数、合成动画 |
 | [Avalonia.CustomControlsDemo](Avalonia.CustomControlsDemo) | UserControl、TemplatedControl 与 ControlTheme、自绘控件、控件树、自定义 Panel、自定义 Flyout |
+| [Avalonia.ServicesDemo](Avalonia.ServicesDemo) | 剪贴板、文件对话框、StorageProvider、Launcher、平台设置，以及 InputPane / InsetsManager / IActivatableLifetime 的可用性检测 |
+| [Avalonia.AppDevelopmentDemo](Avalonia.AppDevelopmentDemo) | 依赖注入、本地化、日志、未处理异常、资源查找、线程模型、窗口管理、无障碍 |
+| [Avalonia.TestingDemo](Avalonia.TestingDemo) | 被测应用：计数器、表单、列表三个易于断言的面板 |
+| [Avalonia.TestingDemo.Tests](Avalonia.TestingDemo.Tests) | xUnit v3 + Headless 测试：控件查找、模拟输入、ViewModel 单测、渲染像素断言（`dotnet test`） |
 | [Avalonia.MusicStore](Avalonia.MusicStore) | 专辑搜索（iTunes API）、购买、本地缓存、RESX 多语言 |
 | [Avalonia.WebViewDemo](Avalonia.WebViewDemo) | NativeWebView 嵌入控件、NativeWebDialog 原生窗口、JS ↔ C# 双向调用 |
 | [Avalonia.HtmlRendererDemo](Avalonia.HtmlRendererDemo) | HtmlPanel 富文本渲染、IconFont 与 PathIcon 图标 |
@@ -33,6 +37,7 @@ Avalonia UI 学习示例集合。每个项目演示一个独立主题，可单�
 ```bash
 dotnet build hello-avalonia.slnx
 dotnet run --project Avalonia.WebViewDemo
+dotnet test Avalonia.TestingDemo.Tests
 ```
 
 ## 约定
