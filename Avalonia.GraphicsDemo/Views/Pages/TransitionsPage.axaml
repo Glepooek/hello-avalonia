@@ -1,0 +1,66 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             mc:Ignorable="d"
+             d:DesignWidth="860"
+             d:DesignHeight="560"
+             x:Class="Avalonia.GraphicsDemo.Views.Pages.TransitionsPage">
+
+    <UserControl.Styles>
+        <!--  Resting state and the hover state both live in styles: the Transitions on the element
+              animate between them. A local Width on the element would block every change.  -->
+        <Style Selector="Border.card">
+            <Setter Property="Width" Value="120" />
+            <Setter Property="Height" Value="56" />
+            <Setter Property="CornerRadius" Value="6" />
+            <Setter Property="Background" Value="#4A7BE8" />
+            <Setter Property="HorizontalAlignment" Value="Left" />
+            <Setter Property="RenderTransformOrigin" Value="50%,50%" />
+            <Setter Property="RenderTransform" Value="none" />
+        </Style>
+        <Style Selector="Border.card:pointerover">
+            <Setter Property="Width" Value="260" />
+            <Setter Property="Background" Value="#E8974A" />
+            <Setter Property="RenderTransform" Value="rotate(6deg)" />
+        </Style>
+    </UserControl.Styles>
+
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="控件过渡：属性一变，Transitions 负责把变化「走」完"
+                               DocPath="graphics-animation/control-transitions" />
+
+            <TextBlock Classes="caption" Text="1. 鼠标移上去：宽度（Double）、背景（Brush）、旋转（TransformOperations）各自过渡" />
+            <Border Name="Smooth" Classes="card">
+                <Border.Transitions>
+                    <Transitions>
+                        <DoubleTransition Property="Width" Duration="0:0:0.4" Easing="CubicEaseOut" />
+                        <BrushTransition Property="Background" Duration="0:0:0.4" />
+                        <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.4" />
+                    </Transitions>
+                </Border.Transitions>
+                <TextBlock Text="有过渡" HorizontalAlignment="Center" VerticalAlignment="Center" />
+            </Border>
+
+            <TextBlock Classes="caption" Text="2. 同样的样式，没有 Transitions：瞬变" />
+            <Border Name="Abrupt" Classes="card">
+                <TextBlock Text="无过渡" HorizontalAlignment="Center" VerticalAlignment="Center" />
+            </Border>
+
+            <TextBlock Classes="caption" Text="3. 弹跳缓动" />
+            <Border Name="Bouncy" Classes="card">
+                <Border.Transitions>
+                    <Transitions>
+                        <DoubleTransition Property="Width" Duration="0:0:0.8" Easing="BounceEaseOut" />
+                    </Transitions>
+                </Border.Transitions>
+                <TextBlock Text="BounceEaseOut" HorizontalAlignment="Center" VerticalAlignment="Center" />
+            </Border>
+
+            <TextBlock Classes="hint" Margin="0,12,0,0"
+                       Text="Transition 只管「属性值变了之后怎么走过去」，谁让属性变不管：这里是 :pointerover 伪类的样式，代码里直接赋值也一样会被过渡。静止值与悬停值都写在样式里，元素上不写 Width / Background——元素上的本地值优先级最高，会让样式的变化根本不发生，Transition 也就无事可做，而且没有任何警告（本组规则 2）。没有 Transitions 的第二块卡片是对照：同样的样式，变化是瞬间完成的。" />
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

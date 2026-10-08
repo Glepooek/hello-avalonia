@@ -1,0 +1,90 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             mc:Ignorable="d"
+             d:DesignWidth="860"
+             d:DesignHeight="560"
+             x:Class="Avalonia.GraphicsDemo.Views.Pages.ClipAndHitPage">
+
+    <UserControl.Styles>
+        <Style Selector="Border.probe">
+            <Setter Property="Width" Value="140" />
+            <Setter Property="Height" Value="60" />
+            <Setter Property="BorderBrush" Value="#E8974A" />
+            <Setter Property="BorderThickness" Value="3" />
+            <Setter Property="CornerRadius" Value="4" />
+        </Style>
+    </UserControl.Styles>
+
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="裁剪、遮罩与命中测试"
+                               DocPath="graphics-animation/clipping-and-masking" />
+
+            <TextBlock Classes="caption" Text="1. 三种裁剪/遮罩，对同一张渐变图" />
+            <WrapPanel>
+                <StackPanel Margin="0,0,16,12">
+                    <!--  Clip takes any geometry; the triangle is written in path mini-language.  -->
+                    <Border Width="120" Height="90" Clip="M0,0 L120,0 L60,90 Z">
+                        <Border.Background>
+                            <LinearGradientBrush StartPoint="0%,0%" EndPoint="100%,100%">
+                                <GradientStop Color="#4A7BE8" Offset="0" />
+                                <GradientStop Color="#E8564A" Offset="1" />
+                            </LinearGradientBrush>
+                        </Border.Background>
+                    </Border>
+                    <TextBlock Classes="hint" Text="Clip=&quot;M0,0 L120,0 L60,90 Z&quot;" />
+                </StackPanel>
+
+                <StackPanel Margin="0,0,16,12">
+                    <!--  ClipToBounds with CornerRadius rounds the corners of a child that would otherwise poke out.  -->
+                    <Border Width="120" Height="90" CornerRadius="30" ClipToBounds="True" Background="#303040">
+                        <Rectangle Width="200" Height="40" Fill="#E8D54A" />
+                    </Border>
+                    <TextBlock Classes="hint" Text="ClipToBounds + CornerRadius" />
+                </StackPanel>
+
+                <StackPanel Margin="0,0,16,12">
+                    <Border Width="120" Height="90">
+                        <Border.Background>
+                            <LinearGradientBrush StartPoint="0%,0%" EndPoint="100%,100%">
+                                <GradientStop Color="#4A7BE8" Offset="0" />
+                                <GradientStop Color="#E8564A" Offset="1" />
+                            </LinearGradientBrush>
+                        </Border.Background>
+                        <Border.OpacityMask>
+                            <RadialGradientBrush>
+                                <GradientStop Color="White" Offset="0.4" />
+                                <GradientStop Color="Transparent" Offset="1" />
+                            </RadialGradientBrush>
+                        </Border.OpacityMask>
+                    </Border>
+                    <TextBlock Classes="hint" Text="OpacityMask（径向渐变做柔边）" />
+                </StackPanel>
+            </WrapPanel>
+            <TextBlock Classes="hint"
+                       Text="Clip 是硬边裁剪（可以是任何几何）；OpacityMask 按画刷的 alpha 通道决定每个像素的透明度，所以能做柔边。ClipToBounds 只裁到控件自己的矩形，配 CornerRadius 才有圆角。" />
+
+            <TextBlock Classes="caption" Text="2. 命中测试：点点三个框的正中央，看哪个收到 Tapped" />
+            <StackPanel Orientation="Horizontal" Spacing="16">
+                <StackPanel>
+                    <Border Name="NoBrush" Classes="probe" Tapped="OnTapped" />
+                    <TextBlock Classes="hint" Text="没有 Background" />
+                </StackPanel>
+                <StackPanel>
+                    <Border Name="Clear" Classes="probe" Background="Transparent" Tapped="OnTapped" />
+                    <TextBlock Classes="hint" Text="Background=Transparent" />
+                </StackPanel>
+                <StackPanel>
+                    <Border Name="Invisible" Classes="probe" Background="#40E8564A" IsHitTestVisible="False" Tapped="OnTapped" />
+                    <TextBlock Classes="hint" Text="IsHitTestVisible=False" />
+                </StackPanel>
+            </StackPanel>
+            <TextBlock Name="HitReadout" Margin="0,8,0,0" FontFamily="Consolas, Menlo, monospace" />
+            <TextBlock Classes="hint"
+                       Text="三个框看起来一样（都有橙色描边），但正中央只有第二个会响应：没有 Background 的元素不参与命中，点中间等于点到身后；Transparent 是「看不见但可点」；IsHitTestVisible=False 是「看得见但不可点」。需要透明可点区域时一定要显式写 Transparent。" />
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

@@ -1,0 +1,45 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             mc:Ignorable="d"
+             d:DesignWidth="860"
+             d:DesignHeight="560"
+             x:Class="Avalonia.GraphicsDemo.Views.Pages.CompositionPage">
+
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="合成动画：绕过布局与样式，直接驱动合成层的 Visual"
+                               DocPath="graphics-animation/composition-animations" />
+
+            <TextBlock Classes="caption" Text="1. 被驱动的控件" />
+            <Border Classes="stage" Width="260" Height="140" HorizontalAlignment="Left">
+                <Border Name="Target" Width="80" Height="80" CornerRadius="8" Background="#E8974A"
+                        HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <TextBlock Text="合成层" Foreground="Black" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                </Border>
+            </Border>
+
+            <TextBlock Classes="caption" Text="2. 直接改合成属性（立即生效，不触发布局）" />
+            <Grid ColumnDefinitions="Auto,260" RowDefinitions="Auto,Auto,Auto">
+                <TextBlock Grid.Row="0" Text="Opacity" VerticalAlignment="Center" Margin="0,0,12,0" />
+                <Slider Name="OpacitySlider" Grid.Row="0" Grid.Column="1" Minimum="0" Maximum="1" Value="1" ValueChanged="OnSliderChanged" />
+                <TextBlock Grid.Row="1" Text="Scale" VerticalAlignment="Center" Margin="0,0,12,0" />
+                <Slider Name="ScaleSlider" Grid.Row="1" Grid.Column="1" Minimum="0.5" Maximum="1.5" Value="1" ValueChanged="OnSliderChanged" />
+                <TextBlock Grid.Row="2" Text="RotationAngle" VerticalAlignment="Center" Margin="0,0,12,0" />
+                <Slider Name="AngleSlider" Grid.Row="2" Grid.Column="1" Minimum="0" Maximum="360" Value="0" ValueChanged="OnSliderChanged" />
+            </Grid>
+
+            <TextBlock Classes="caption" Text="3. 用 Compositor 创建关键帧动画" />
+            <StackPanel Orientation="Horizontal" Spacing="8">
+                <Button Content="淡出再淡入（Opacity）" Click="OnFade" />
+                <Button Content="转一圈（RotationAngle）" Click="OnSpin" />
+            </StackPanel>
+            <TextBlock Name="Status" Margin="0,6,0,0" FontFamily="Consolas, Menlo, monospace" />
+
+            <TextBlock Classes="hint" Margin="0,8,0,0"
+                       Text="合成动画在渲染线程上跑：UI 线程被卡住时它也不卡。代价是它只动合成层的属性（Opacity、Scale、Offset、RotationAngle 等），不改控件自己的属性——所以读控件的 Opacity 读不到动画中途的值，布局也不会因此重算。取 Visual 要在控件挂上可视树之后（Loaded），挂载前 GetElementVisual 返回 null。需要改布局或绑定的动画，仍然用 Style.Animations。" />
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

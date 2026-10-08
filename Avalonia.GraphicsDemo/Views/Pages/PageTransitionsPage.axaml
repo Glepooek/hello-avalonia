@@ -1,0 +1,36 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             mc:Ignorable="d"
+             d:DesignWidth="860"
+             d:DesignHeight="560"
+             x:Class="Avalonia.GraphicsDemo.Views.Pages.PageTransitionsPage">
+
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="页面过渡：内容被替换时，旧内容怎么离开、新内容怎么进来"
+                               DocPath="graphics-animation/page-transitions" />
+
+            <TextBlock Classes="caption" Text="1. 选一种过渡，再点「下一页」" />
+            <StackPanel Orientation="Horizontal" Spacing="12">
+                <ComboBox Name="KindBox" Width="220" SelectedIndex="0">
+                    <ComboBoxItem Content="PageSlide（水平）" />
+                    <ComboBoxItem Content="PageSlide（垂直）" />
+                    <ComboBoxItem Content="CrossFade" />
+                    <ComboBoxItem Content="组合：PageSlide + CrossFade" />
+                </ComboBox>
+                <Button Content="下一页" Click="OnNext" />
+                <TextBlock Name="Readout" VerticalAlignment="Center" />
+            </StackPanel>
+
+            <Border Classes="stage" Width="360" Height="140" ClipToBounds="True" Margin="0,8,0,0" HorizontalAlignment="Left">
+                <TransitioningContentControl Name="Pager" />
+            </Border>
+
+            <TextBlock Classes="hint" Margin="0,8,0,0"
+                       Text="TransitioningContentControl 的 PageTransition 属性接收任何 IPageTransition。PageSlide 让新旧内容沿一条轴滑动，CrossFade 让它们淡入淡出，CompositePageTransition 把多个过渡同时播放。外面的 Border 设了 ClipToBounds，否则滑出去的内容会画到框外。" />
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

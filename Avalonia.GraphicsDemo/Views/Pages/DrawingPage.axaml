@@ -1,0 +1,43 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             xmlns:controls="using:Avalonia.GraphicsDemo.Controls"
+             mc:Ignorable="d"
+             d:DesignWidth="860"
+             d:DesignHeight="560"
+             x:Class="Avalonia.GraphicsDemo.Views.Pages.DrawingPage">
+
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="自定义绘制：DrawingContext 的图元与状态栈，以及 DrawingImage"
+                               DocPath="graphics-animation/drawing-graphics" />
+
+            <TextBlock Classes="caption" Text="1. 在 Render(DrawingContext) 里画场景，勾选看状态栈的作用" />
+            <StackPanel Orientation="Horizontal" Spacing="12" Margin="0,0,0,8">
+                <CheckBox Content="PushClip（只留左半）" IsChecked="{Binding #Scene.UseClip, Mode=TwoWay}" />
+                <CheckBox Content="PushTransform（旋转+平移）" IsChecked="{Binding #Scene.UseTransform, Mode=TwoWay}" />
+                <CheckBox Content="PushOpacity（0.4）" IsChecked="{Binding #Scene.UseOpacity, Mode=TwoWay}" />
+            </StackPanel>
+            <controls:Sketch Name="Scene" HorizontalAlignment="Left" />
+            <TextBlock Classes="hint"
+                       Text="场景里有矩形、椭圆、线、文字四种图元（DrawRectangle / DrawEllipse / DrawLine / DrawText）。三个 Push 都返回要 Dispose 的作用域：作用域内画的东西才受影响，Dispose 后恢复。控件的属性登记了 AffectsRender，所以勾选后会自动重绘——少了这一行，属性变了但画面不变。" />
+
+            <TextBlock Classes="caption" Text="2. DrawingImage：不写代码的绘制，当作 Image.Source 用" />
+            <Image Width="160" Height="100" HorizontalAlignment="Left">
+                <Image.Source>
+                    <DrawingImage>
+                        <DrawingGroup>
+                            <GeometryDrawing Brush="#4A7BE8" Geometry="M0,0 L160,0 L160,100 L0,100 Z" />
+                            <GeometryDrawing Brush="#E8974A" Geometry="M80,10 L150,90 L10,90 Z" />
+                            <GeometryDrawing Brush="White" Geometry="M80,40 A12,12 0 1 1 79.9,40 Z" />
+                        </DrawingGroup>
+                    </DrawingImage>
+                </Image.Source>
+            </Image>
+            <TextBlock Classes="hint"
+                       Text="DrawingImage 把一组 GeometryDrawing 包成可缩放的矢量图，Image 用它时按 Stretch 缩放且不会糊。需要在运行时按条件作画才写 Render；静态图形用 DrawingImage 更省事。" />
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

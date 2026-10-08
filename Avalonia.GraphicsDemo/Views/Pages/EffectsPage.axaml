@@ -1,0 +1,63 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             mc:Ignorable="d"
+             d:DesignWidth="860"
+             d:DesignHeight="560"
+             x:Class="Avalonia.GraphicsDemo.Views.Pages.EffectsPage">
+
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="特效：模糊与投影，作用在控件及其全部子元素上"
+                               DocPath="graphics-animation/effects" />
+
+            <TextBlock Classes="caption" Text="1. BlurEffect" />
+            <StackPanel Orientation="Horizontal" Spacing="12">
+                <Slider Name="BlurSlider" Minimum="0" Maximum="12" Value="4" Width="220" />
+                <TextBlock VerticalAlignment="Center" Text="{Binding #BlurSlider.Value, StringFormat='Radius = {0:F1}'}" />
+            </StackPanel>
+            <Border Classes="stage" Padding="24" HorizontalAlignment="Left" Margin="0,8,0,0">
+                <StackPanel Orientation="Horizontal" Spacing="12">
+                    <Button Content="被模糊的按钮">
+                        <Button.Effect>
+                            <BlurEffect Radius="{Binding #BlurSlider.Value}" />
+                        </Button.Effect>
+                    </Button>
+                    <TextBlock Text="被模糊的文字" VerticalAlignment="Center">
+                        <TextBlock.Effect>
+                            <BlurEffect Radius="{Binding #BlurSlider.Value}" />
+                        </TextBlock.Effect>
+                    </TextBlock>
+                </StackPanel>
+            </Border>
+
+            <TextBlock Classes="caption" Text="2. DropShadowEffect" />
+            <Grid ColumnDefinitions="Auto,260" RowDefinitions="Auto,Auto,Auto,Auto" Margin="0,0,0,8">
+                <TextBlock Grid.Row="0" Text="OffsetX" VerticalAlignment="Center" Margin="0,0,12,0" />
+                <Slider Name="OffsetXSlider" Grid.Row="0" Grid.Column="1" Minimum="-20" Maximum="20" Value="6" />
+                <TextBlock Grid.Row="1" Text="OffsetY" VerticalAlignment="Center" Margin="0,0,12,0" />
+                <Slider Name="OffsetYSlider" Grid.Row="1" Grid.Column="1" Minimum="-20" Maximum="20" Value="6" />
+                <TextBlock Grid.Row="2" Text="BlurRadius" VerticalAlignment="Center" Margin="0,0,12,0" />
+                <Slider Name="ShadowBlurSlider" Grid.Row="2" Grid.Column="1" Minimum="0" Maximum="30" Value="12" />
+                <TextBlock Grid.Row="3" Text="Opacity" VerticalAlignment="Center" Margin="0,0,12,0" />
+                <Slider Name="ShadowOpacitySlider" Grid.Row="3" Grid.Column="1" Minimum="0" Maximum="1" Value="0.7" />
+            </Grid>
+            <Border Classes="stage" Padding="40" HorizontalAlignment="Left">
+                <Border Width="140" Height="70" Background="#E8974A" CornerRadius="8">
+                    <Border.Effect>
+                        <DropShadowEffect Color="Black"
+                                          OffsetX="{Binding #OffsetXSlider.Value}"
+                                          OffsetY="{Binding #OffsetYSlider.Value}"
+                                          BlurRadius="{Binding #ShadowBlurSlider.Value}"
+                                          Opacity="{Binding #ShadowOpacitySlider.Value}" />
+                    </Border.Effect>
+                    <TextBlock Text="投影" Foreground="Black" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                </Border>
+            </Border>
+            <TextBlock Classes="hint"
+                       Text="Effect 作用在整个控件（含子元素）渲染出的位图上，所以模糊的按钮里文字也会糊。特效有渲染开销，不要给大面积、频繁重绘的控件加；投影只需要阴影时，也可以用 BoxShadow（Border 的属性）代替。" />
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

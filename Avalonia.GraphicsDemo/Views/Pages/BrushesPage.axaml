@@ -1,0 +1,108 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             mc:Ignorable="d"
+             d:DesignWidth="860"
+             d:DesignHeight="560"
+             x:Class="Avalonia.GraphicsDemo.Views.Pages.BrushesPage">
+
+    <UserControl.Styles>
+        <Style Selector="Border.swatch">
+            <Setter Property="Width" Value="130" />
+            <Setter Property="Height" Value="90" />
+            <Setter Property="CornerRadius" Value="6" />
+        </Style>
+    </UserControl.Styles>
+
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="画刷与渐变：纯色、线性、径向、锥形、图案平铺、视觉画刷"
+                               DocPath="graphics-animation/brushes" />
+
+            <TextBlock Classes="caption" Text="1. 六种画刷填充同一种形状" />
+            <WrapPanel>
+                <StackPanel Margin="0,0,12,12">
+                    <Border Classes="swatch" Background="#E8974A" />
+                    <TextBlock Classes="hint" Text="纯色 SolidColorBrush" />
+                </StackPanel>
+
+                <StackPanel Margin="0,0,12,12">
+                    <Border Classes="swatch">
+                        <Border.Background>
+                            <!--  The middle stop's Offset is bound to the slider below.  -->
+                            <LinearGradientBrush StartPoint="0%,0%" EndPoint="100%,100%">
+                                <GradientStop Color="#4A7BE8" Offset="0" />
+                                <GradientStop Color="#E8564A" Offset="{Binding #StopSlider.Value}" />
+                                <GradientStop Color="#E8D54A" Offset="1" />
+                            </LinearGradientBrush>
+                        </Border.Background>
+                    </Border>
+                    <TextBlock Classes="hint" Text="线性 LinearGradientBrush" />
+                </StackPanel>
+
+                <StackPanel Margin="0,0,12,12">
+                    <Border Classes="swatch">
+                        <Border.Background>
+                            <RadialGradientBrush Center="50%,50%" GradientOrigin="30%,30%" RadiusX="70%" RadiusY="70%">
+                                <GradientStop Color="#FFFFFF" Offset="0" />
+                                <GradientStop Color="#4A7BE8" Offset="1" />
+                            </RadialGradientBrush>
+                        </Border.Background>
+                    </Border>
+                    <TextBlock Classes="hint" Text="径向 RadialGradientBrush" />
+                </StackPanel>
+
+                <StackPanel Margin="0,0,12,12">
+                    <Border Classes="swatch">
+                        <Border.Background>
+                            <ConicGradientBrush Center="50%,50%" Angle="0">
+                                <GradientStop Color="#E8564A" Offset="0" />
+                                <GradientStop Color="#E8D54A" Offset="0.33" />
+                                <GradientStop Color="#4AE87B" Offset="0.66" />
+                                <GradientStop Color="#E8564A" Offset="1" />
+                            </ConicGradientBrush>
+                        </Border.Background>
+                    </Border>
+                    <TextBlock Classes="hint" Text="锥形 ConicGradientBrush" />
+                </StackPanel>
+
+                <StackPanel Margin="0,0,12,12">
+                    <Border Classes="swatch">
+                        <Border.Background>
+                            <!--  Element form is required: Fill="{DrawingBrush}" would be read as a markup extension.  -->
+                            <DrawingBrush TileMode="Tile" DestinationRect="0,0,20,20">
+                                <DrawingBrush.Drawing>
+                                    <GeometryDrawing Brush="#4A7BE8" Geometry="M0,0 L10,0 L10,10 L0,10 Z M10,10 L20,10 L20,20 L10,20 Z" />
+                                </DrawingBrush.Drawing>
+                            </DrawingBrush>
+                        </Border.Background>
+                    </Border>
+                    <TextBlock Classes="hint" Text="图案 DrawingBrush（平铺）" />
+                </StackPanel>
+
+                <StackPanel Margin="0,0,12,12">
+                    <Border Classes="swatch">
+                        <Border.Background>
+                            <VisualBrush Stretch="Uniform">
+                                <VisualBrush.Visual>
+                                    <TextBlock Text="Aa" FontSize="48" Foreground="White" />
+                                </VisualBrush.Visual>
+                            </VisualBrush>
+                        </Border.Background>
+                    </Border>
+                    <TextBlock Classes="hint" Text="视觉 VisualBrush" />
+                </StackPanel>
+            </WrapPanel>
+
+            <TextBlock Classes="caption" Text="2. 拖动滑块，线性渐变的中间停靠点跟着动" />
+            <StackPanel Orientation="Horizontal" Spacing="12">
+                <Slider Name="StopSlider" Minimum="0.05" Maximum="0.95" Value="0.5" Width="260" />
+                <TextBlock VerticalAlignment="Center" Text="{Binding #StopSlider.Value, StringFormat='中间停靠点 Offset = {0:F2}'}" />
+            </StackPanel>
+            <TextBlock Classes="hint"
+                       Text="渐变由一串 GradientStop（颜色 + 0~1 的位置）定义；起点终点用相对坐标（百分比）时与控件尺寸无关。径向渐变多一个 GradientOrigin（高光点），锥形渐变绕 Center 转一圈，所以首尾两个停靠点颜色要一致才无接缝。" />
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

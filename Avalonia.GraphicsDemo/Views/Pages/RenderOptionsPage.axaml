@@ -1,0 +1,61 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             mc:Ignorable="d"
+             d:DesignWidth="860"
+             d:DesignHeight="560"
+             x:Class="Avalonia.GraphicsDemo.Views.Pages.RenderOptionsPage">
+
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="渲染选项：位图插值、混合模式、边缘与文本抗锯齿"
+                               DocPath="graphics-animation/image-interpolation" />
+
+            <TextBlock Classes="caption" Text="1. 位图插值：把 8×8 的棋盘格放大到 160×160" />
+            <StackPanel Orientation="Horizontal" Spacing="12">
+                <ComboBox Name="InterpolationBox" Width="180" VerticalAlignment="Center" />
+                <Border Classes="stage">
+                    <Image Name="Pixels" Width="160" Height="160" />
+                </Border>
+            </StackPanel>
+            <TextBlock Classes="hint"
+                       Text="None 是最近邻（保留硬边的像素风），LowQuality 以上是双线性/双三次（放大后变糊）。像素画、二维码、放大镜这类场景要选 None。" />
+
+            <TextBlock Classes="caption" Text="2. 位图混合模式：两张棋盘格叠在一起" />
+            <StackPanel Orientation="Horizontal" Spacing="12">
+                <ComboBox Name="BlendBox" Width="180" VerticalAlignment="Center" />
+                <Border Classes="stage" Width="200" Height="140">
+                    <Panel>
+                        <Image Name="BlendBottom" Width="120" Height="120" HorizontalAlignment="Left" Margin="10,0,0,0" />
+                        <Image Name="BlendTop" Width="120" Height="120" HorizontalAlignment="Right" Margin="0,0,10,0" />
+                    </Panel>
+                </Border>
+            </StackPanel>
+            <TextBlock Classes="hint" Text="混合模式只作用于位图（Image），决定上层像素与下层像素怎么合成；重叠区域的颜色随模式变化。" />
+
+            <TextBlock Classes="caption" Text="3. 边缘与文本" />
+            <StackPanel Orientation="Horizontal" Spacing="32">
+                <StackPanel>
+                    <Line StartPoint="0,0" EndPoint="120,40" Stroke="White" StrokeThickness="1"
+                          RenderOptions.EdgeMode="Aliased" />
+                    <TextBlock Classes="hint" Text="EdgeMode=Aliased（锯齿）" />
+                </StackPanel>
+                <StackPanel>
+                    <Line StartPoint="0,0" EndPoint="120,40" Stroke="White" StrokeThickness="1"
+                          RenderOptions.EdgeMode="Antialias" />
+                    <TextBlock Classes="hint" Text="EdgeMode=Antialias（默认）" />
+                </StackPanel>
+                <StackPanel>
+                    <TextBlock Text="Hello 你好 0123" FontSize="18" TextOptions.TextRenderingMode="Alias" />
+                    <TextBlock Classes="hint" Text="TextRenderingMode=Alias" />
+                </StackPanel>
+                <StackPanel>
+                    <TextBlock Text="Hello 你好 0123" FontSize="18" TextOptions.TextRenderingMode="Antialias" />
+                    <TextBlock Classes="hint" Text="TextRenderingMode=Antialias" />
+                </StackPanel>
+            </StackPanel>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

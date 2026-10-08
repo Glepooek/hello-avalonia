@@ -1,0 +1,82 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             mc:Ignorable="d"
+             d:DesignWidth="860"
+             d:DesignHeight="560"
+             x:Class="Avalonia.GraphicsDemo.Views.Pages.ShapesPage">
+
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="形状与几何：六种形状、描边属性、路径语言、几何合并"
+                               DocPath="graphics-animation/shapes-and-geometries" />
+
+            <TextBlock Classes="caption" Text="1. 六种形状（共用下面滑块的描边粗细）" />
+            <StackPanel Orientation="Horizontal" Spacing="12">
+                <Slider Name="ThickSlider" Minimum="1" Maximum="14" Value="4" Width="220" />
+                <TextBlock VerticalAlignment="Center" Text="{Binding #ThickSlider.Value, StringFormat='StrokeThickness = {0:F0}'}" />
+            </StackPanel>
+            <WrapPanel Margin="0,8,0,0">
+                <StackPanel Margin="0,0,16,12">
+                    <Rectangle Width="100" Height="60" RadiusX="10" RadiusY="10" Fill="#304A7BE8"
+                               Stroke="#4A7BE8" StrokeThickness="{Binding #ThickSlider.Value}" />
+                    <TextBlock Classes="hint" Text="Rectangle（RadiusX/Y）" />
+                </StackPanel>
+                <StackPanel Margin="0,0,16,12">
+                    <Ellipse Width="100" Height="60" Fill="#30E8974A" Stroke="#E8974A"
+                             StrokeThickness="{Binding #ThickSlider.Value}" />
+                    <TextBlock Classes="hint" Text="Ellipse" />
+                </StackPanel>
+                <StackPanel Margin="0,0,16,12">
+                    <Line StartPoint="0,0" EndPoint="100,60" Stroke="#4AE87B"
+                          StrokeThickness="{Binding #ThickSlider.Value}" StrokeLineCap="Round" />
+                    <TextBlock Classes="hint" Text="Line（线帽 Round）" />
+                </StackPanel>
+                <StackPanel Margin="0,0,16,12">
+                    <Polyline Points="0,60 25,0 50,60 75,0 100,60" Stroke="#E8564A"
+                              StrokeThickness="{Binding #ThickSlider.Value}" StrokeJoin="Round" />
+                    <TextBlock Classes="hint" Text="Polyline（连接 Round）" />
+                </StackPanel>
+                <StackPanel Margin="0,0,16,12">
+                    <Polygon Points="50,0 100,60 0,60" Fill="#30E8D54A" Stroke="#E8D54A"
+                             StrokeThickness="{Binding #ThickSlider.Value}" StrokeJoin="Miter" />
+                    <TextBlock Classes="hint" Text="Polygon（连接 Miter）" />
+                </StackPanel>
+                <StackPanel Margin="0,0,16,12">
+                    <Path Data="M0,50 C 20,-20 60,-20 80,50 S 100,80 100,40" Stroke="White"
+                          StrokeThickness="{Binding #ThickSlider.Value}" StrokeDashArray="4,3" />
+                    <TextBlock Classes="hint" Text="Path + StrokeDashArray=&quot;4,3&quot;" />
+                </StackPanel>
+            </WrapPanel>
+            <TextBlock Classes="hint"
+                       Text="StrokeDashArray 的数字是「实线长, 空白长, …」，单位是 StrokeThickness 的倍数，所以滑块拉粗后虚线的段也跟着变长。StrokeLineCap 管线两端（Flat / Round / Square），StrokeJoin 管折角（Miter 尖 / Round 圆 / Bevel 平）。" />
+
+            <TextBlock Classes="caption" Text="2. 路径迷你语言：M 移动 · L 直线 · C 三次贝塞尔 · S 平滑贝塞尔 · A 弧 · Z 闭合" />
+            <SelectableTextBlock FontFamily="Consolas, Menlo, monospace" Text="M0,50 C 20,-20 60,-20 80,50 S 100,80 100,40" />
+            <TextBlock Classes="hint"
+                       Text="上面第六个形状就是这条路径。大写字母用绝对坐标，小写字母用相对当前点的坐标。同一份 Data 可以写成 StreamGeometry 放进资源复用（见「图标」页）。" />
+
+            <TextBlock Classes="caption" Text="3. CombinedGeometry：两个几何做布尔运算" />
+            <StackPanel Orientation="Horizontal" Spacing="16">
+                <ComboBox Name="ModeBox" Width="160" VerticalAlignment="Center" />
+                <Path Name="CombinedPath" Fill="#E8974A" Width="120" Height="90">
+                    <Path.Data>
+                        <!--  CombinedGeometry cannot be named (neither Name nor x:Name, AVLN2000);
+                              code-behind reaches it through the named Path's Data.  -->
+                        <CombinedGeometry GeometryCombineMode="Xor">
+                            <CombinedGeometry.Geometry1>
+                                <EllipseGeometry Center="40,45" RadiusX="35" RadiusY="35" />
+                            </CombinedGeometry.Geometry1>
+                            <CombinedGeometry.Geometry2>
+                                <RectangleGeometry Rect="40,20,60,50" />
+                            </CombinedGeometry.Geometry2>
+                        </CombinedGeometry>
+                    </Path.Data>
+                </Path>
+            </StackPanel>
+            <TextBlock Classes="hint" Text="Union 并集 · Intersect 交集 · Xor 异或 · Exclude 差集（几何 1 减去几何 2）。" />
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

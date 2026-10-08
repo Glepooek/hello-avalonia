@@ -2,6 +2,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:pages="using:Avalonia.GraphicsDemo.Views.Pages"
         mc:Ignorable="d"
         d:DesignWidth="900"
         d:DesignHeight="640"
@@ -13,5 +14,44 @@
         WindowStartupLocation="CenterScreen">
 
     <TabControl Margin="12" TabStripPlacement="Left">
+        <TabItem Header="画刷与渐变">
+            <pages:BrushesPage />
+        </TabItem>
+        <TabItem Header="变换">
+            <pages:TransformsPage />
+        </TabItem>
+        <TabItem Header="形状与几何">
+            <pages:ShapesPage />
+        </TabItem>
+        <TabItem Header="自定义绘制">
+            <pages:DrawingPage />
+        </TabItem>
+        <TabItem Header="特效">
+            <pages:EffectsPage />
+        </TabItem>
+        <TabItem Header="裁剪与命中">
+            <pages:ClipAndHitPage />
+        </TabItem>
+        <TabItem Header="图标">
+            <pages:IconsPage />
+        </TabItem>
+        <TabItem Header="渲染选项">
+            <pages:RenderOptionsPage />
+        </TabItem>
+        <TabItem Header="关键帧动画">
+            <pages:AnimationsPage />
+        </TabItem>
+        <TabItem Header="控件过渡">
+            <pages:TransitionsPage />
+        </TabItem>
+        <TabItem Header="页面过渡">
+            <pages:PageTransitionsPage />
+        </TabItem>
+        <TabItem Header="缓动函数">
+            <pages:EasingPage />
+        </TabItem>
+        <TabItem Header="合成动画">
+            <pages:CompositionPage />
+        </TabItem>
     </TabControl>
 </Window>

@@ -1,0 +1,85 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             mc:Ignorable="d"
+             d:DesignWidth="860"
+             d:DesignHeight="560"
+             x:Class="Avalonia.GraphicsDemo.Views.Pages.TransformsPage">
+
+    <UserControl.Styles>
+        <Style Selector="Border.tile">
+            <Setter Property="Width" Value="110" />
+            <Setter Property="Height" Value="44" />
+            <Setter Property="Background" Value="#4A7BE8" />
+            <Setter Property="CornerRadius" Value="4" />
+        </Style>
+        <Style Selector="Border.neighbor">
+            <Setter Property="Width" Value="60" />
+            <Setter Property="Height" Value="44" />
+            <Setter Property="Background" Value="#555555" />
+            <Setter Property="CornerRadius" Value="4" />
+        </Style>
+    </UserControl.Styles>
+
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="变换：RenderTransform 只改绘制，LayoutTransform 会推开邻居"
+                               DocPath="graphics-animation/transforms" />
+
+            <TextBlock Classes="caption" Text="1. 同一个旋转角度，两种变换" />
+            <StackPanel Orientation="Horizontal" Spacing="12">
+                <Slider Name="AngleSlider" Minimum="0" Maximum="90" Value="0" Width="260" />
+                <TextBlock VerticalAlignment="Center" Text="{Binding #AngleSlider.Value, StringFormat='角度 = {0:F0}°'}" />
+            </StackPanel>
+
+            <TextBlock Margin="0,10,0,4" Text="RenderTransform（灰块不动）" />
+            <Border Classes="stage" Padding="40,50" HorizontalAlignment="Left">
+                <StackPanel Orientation="Horizontal" Spacing="4">
+                    <Border Name="RenderLeft" Classes="neighbor" />
+                    <Border Classes="tile" RenderTransformOrigin="50%,50%">
+                        <Border.RenderTransform>
+                            <RotateTransform Angle="{Binding #AngleSlider.Value}" />
+                        </Border.RenderTransform>
+                    </Border>
+                    <Border Name="RenderRight" Classes="neighbor" />
+                </StackPanel>
+            </Border>
+
+            <TextBlock Margin="0,10,0,4" Text="LayoutTransformControl（右边灰块被推开）" />
+            <Border Classes="stage" Padding="40,50" HorizontalAlignment="Left">
+                <StackPanel Orientation="Horizontal" Spacing="4">
+                    <Border Name="LayoutLeft" Classes="neighbor" />
+                    <LayoutTransformControl>
+                        <LayoutTransformControl.LayoutTransform>
+                            <RotateTransform Angle="{Binding #AngleSlider.Value}" />
+                        </LayoutTransformControl.LayoutTransform>
+                        <Border Classes="tile" />
+                    </LayoutTransformControl>
+                    <Border Name="LayoutRight" Classes="neighbor" />
+                </StackPanel>
+            </Border>
+            <TextBlock Classes="hint"
+                       Text="RenderTransform 在布局完成之后才应用，所以旋转后的蓝块会盖住邻居、也可能画到容器外；LayoutTransformControl 先变换再布局，容器按旋转后的包围盒算尺寸，邻居被推开。代价是 LayoutTransform 要重新布局，滑块拖动时开销更大。" />
+
+            <TextBlock Classes="caption" Text="2. RenderTransform 的字符串语法与原点" />
+            <StackPanel Orientation="Horizontal" Spacing="40" Margin="0,20,0,20">
+                <StackPanel>
+                    <Border Classes="tile" RenderTransform="rotate(30deg) scale(1.2)" RenderTransformOrigin="50%,50%" />
+                    <TextBlock Classes="hint" Margin="0,18,0,0" Text="rotate(30deg) scale(1.2)&#x0A;原点 50%,50%（默认）" />
+                </StackPanel>
+                <StackPanel>
+                    <Border Classes="tile" RenderTransform="rotate(30deg) scale(1.2)" RenderTransformOrigin="0%,0%" />
+                    <TextBlock Classes="hint" Margin="0,18,0,0" Text="同样的变换&#x0A;原点 0%,0%（左上角）" />
+                </StackPanel>
+                <StackPanel>
+                    <Border Classes="tile" RenderTransform="skew(15deg,0) translate(10px,0)" />
+                    <TextBlock Classes="hint" Margin="0,18,0,0" Text="skew(15deg,0) translate(10px,0)" />
+                </StackPanel>
+            </StackPanel>
+            <TextBlock Classes="hint"
+                       Text="多个变换写在一个字符串里，从左到右依次应用。原点决定旋转/缩放绕哪一点转，用百分比时与控件尺寸无关。" />
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

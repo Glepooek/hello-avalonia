@@ -1,0 +1,58 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             mc:Ignorable="d"
+             d:DesignWidth="860"
+             d:DesignHeight="560"
+             x:Class="Avalonia.GraphicsDemo.Views.Pages.IconsPage">
+
+    <UserControl.Resources>
+        <!--  A path string compiled once into a reusable geometry resource.  -->
+        <StreamGeometry x:Key="StarGeometry">M12,2 L15.09,8.26 L22,9.27 L17,14.14 L18.18,21.02 L12,17.77 L5.82,21.02 L7,14.14 L2,9.27 L8.91,8.26 Z</StreamGeometry>
+    </UserControl.Resources>
+
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="图标：PathIcon、几何资源、DrawingImage 三种写法"
+                               DocPath="graphics-animation/adding-icons" />
+
+            <TextBlock Classes="caption" Text="1. 同一颗星，三种写法（滑块调大小，颜色随 Foreground）" />
+            <StackPanel Orientation="Horizontal" Spacing="12">
+                <Slider Name="SizeSlider" Minimum="16" Maximum="96" Value="48" Width="220" />
+                <TextBlock VerticalAlignment="Center" Text="{Binding #SizeSlider.Value, StringFormat='大小 = {0:F0}'}" />
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal" Spacing="32" Margin="0,12,0,0">
+                <StackPanel>
+                    <PathIcon Width="{Binding #SizeSlider.Value}" Height="{Binding #SizeSlider.Value}"
+                              Foreground="#E8D54A"
+                              Data="M12,2 L15.09,8.26 L22,9.27 L17,14.14 L18.18,21.02 L12,17.77 L5.82,21.02 L7,14.14 L2,9.27 L8.91,8.26 Z" />
+                    <TextBlock Classes="hint" Text="PathIcon Data=&quot;…&quot;" />
+                </StackPanel>
+
+                <StackPanel>
+                    <PathIcon Width="{Binding #SizeSlider.Value}" Height="{Binding #SizeSlider.Value}"
+                              Foreground="#4AE87B"
+                              Data="{StaticResource StarGeometry}" />
+                    <TextBlock Classes="hint" Text="PathIcon + StreamGeometry 资源" />
+                </StackPanel>
+
+                <StackPanel>
+                    <Image Width="{Binding #SizeSlider.Value}" Height="{Binding #SizeSlider.Value}">
+                        <Image.Source>
+                            <DrawingImage>
+                                <GeometryDrawing Brush="#E8564A" Geometry="{StaticResource StarGeometry}" />
+                            </DrawingImage>
+                        </Image.Source>
+                    </Image>
+                    <TextBlock Classes="hint" Text="Image + DrawingImage" />
+                </StackPanel>
+            </StackPanel>
+
+            <TextBlock Classes="hint" Margin="0,12,0,0"
+                       Text="PathIcon 继承 Foreground，所以放进按钮、菜单时会自动跟着主题与禁用状态变色；DrawingImage 的颜色写死在 Brush 里，适合多色图标。几何数据放资源里，同一个图标出现几十次也只解析一次。字体图标（iconfont）的写法见 Avalonia.StylingDemo 的「字体」页与 Avalonia.HtmlRendererDemo。" />
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

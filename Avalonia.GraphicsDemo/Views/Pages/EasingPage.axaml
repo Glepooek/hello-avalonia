@@ -1,0 +1,40 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             mc:Ignorable="d"
+             d:DesignWidth="860"
+             d:DesignHeight="560"
+             x:Class="Avalonia.GraphicsDemo.Views.Pages.EasingPage">
+
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="缓动函数：把「时间进度 0→1」映射成「值进度」的曲线"
+                               DocPath="graphics-animation/easing-functions" />
+
+            <TextBlock Classes="caption" Text="1. 选一个缓动函数" />
+            <ComboBox Name="EasingBox" Width="220" />
+
+            <TextBlock Classes="caption" Text="2. 曲线：横轴是时间，纵轴是值（虚线是 0 与 1）" />
+            <Border Classes="stage" Width="320" Height="170" HorizontalAlignment="Left">
+                <Canvas Width="300" Height="160">
+                    <Line StartPoint="0,130" EndPoint="300,130" Stroke="#60FFFFFF" StrokeDashArray="3,3" />
+                    <Line StartPoint="0,30" EndPoint="300,30" Stroke="#60FFFFFF" StrokeDashArray="3,3" />
+                    <Polyline Name="Curve" Stroke="#E8974A" StrokeThickness="2" />
+                </Canvas>
+            </Border>
+            <TextBlock Name="Samples" Classes="hint" FontFamily="Consolas, Menlo, monospace" />
+
+            <TextBlock Classes="caption" Text="3. 小球按同一个函数走一趟" />
+            <Border Classes="stage" Width="320" Height="50" HorizontalAlignment="Left">
+                <Canvas Width="300" Height="40">
+                    <Border Name="Ball" Width="24" Height="24" CornerRadius="12" Background="#4A7BE8" Canvas.Left="0" Canvas.Top="8" />
+                </Canvas>
+            </Border>
+            <Button Content="走一趟" Click="OnRun" Margin="0,8,0,0" />
+            <TextBlock Classes="hint" Margin="0,8,0,0"
+                       Text="In 是先慢后快，Out 是先快后慢，InOut 两头慢中间快。Back 会越过终点再回来，Elastic 像弹簧来回摆，Bounce 像球落地反弹——它们的值会超出 0~1，曲线因此冲出虚线。同一个函数既能用在 Transition，也能用在关键帧动画的 Easing 属性上。" />
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>
