@@ -139,7 +139,7 @@ spec 第二阶段分 4 组，本 plan 只实现**第一组「基础层」**：#1
 
 三份骨架除项目名外完全一致，因此合成一个任务——拆开会让审查者连看三遍同样的 diff。
 
-- [ ] **Step 1: 用脚本批量生成三份骨架的目录与二进制文件**
+- [x] **Step 1: 用脚本批量生成三份骨架的目录与二进制文件**
 
 在仓库根目录执行。图标与 manifest 从样板项目复制，避免手工重建二进制文件：
 
@@ -155,7 +155,7 @@ grep -l "Avalonia.LayoutDemo" Avalonia.*Demo/app.manifest || echo "manifest name
 最后一行应输出 `manifest names rewritten`。若输出了文件路径，说明 `sed` 替换没生效，
 检查样板 manifest 里的 `assemblyIdentity` 名称是否确实是 `Avalonia.LayoutDemo`。
 
-- [ ] **Step 2: 创建三个 .csproj**
+- [x] **Step 2: 创建三个 .csproj**
 
 三份内容除项目名外一致。`Avalonia.FundamentalsDemo/Avalonia.FundamentalsDemo.csproj`：
 
@@ -195,7 +195,7 @@ grep -l "Avalonia.LayoutDemo" Avalonia.*Demo/app.manifest || echo "manifest name
 注意**不要**加 `Avalonia.Diagnostics` 引用：它停在 11.3.22，v12 的 DevTools 已内置于主包，
 样板阶段已把这条定为规则（见 Global Constraints）。
 
-- [ ] **Step 3: 创建三个 Program.cs**
+- [x] **Step 3: 创建三个 Program.cs**
 
 `Avalonia.FundamentalsDemo/Program.cs`：
 
@@ -224,7 +224,7 @@ namespace Avalonia.FundamentalsDemo
 另两个项目同此，只把 `namespace` 换成 `Avalonia.XamlDemo` /
 `Avalonia.PropertySystemDemo`。
 
-- [ ] **Step 4: 创建三个 App.axaml 与 App.axaml.cs**
+- [x] **Step 4: 创建三个 App.axaml 与 App.axaml.cs**
 
 `Avalonia.FundamentalsDemo/App.axaml`：
 
@@ -275,7 +275,7 @@ namespace Avalonia.FundamentalsDemo
 另两个项目同此，把 `x:Class`、`namespace`、`using` 里的 `Avalonia.FundamentalsDemo`
 换成对应项目名。
 
-- [ ] **Step 5: 创建三个 MainWindow**
+- [x] **Step 5: 创建三个 MainWindow**
 
 `Avalonia.FundamentalsDemo/Views/MainWindow.axaml`：
 
@@ -319,7 +319,7 @@ namespace Avalonia.FundamentalsDemo.Views
 另两个项目的 `Title` 分别为 `Avalonia XAML Demo` 和
 `Avalonia Property System Demo`，`x:Class` 与 `namespace` 随项目名变化。
 
-- [ ] **Step 6: 注册到解决方案**
+- [x] **Step 6: 注册到解决方案**
 
 修改 `hello-avalonia.slnx`，按字母序插入三行。`Avalonia.FundamentalsDemo` 在
 `Avalonia.DataTemplateDemo` 之后，`Avalonia.PropertySystemDemo` 在 `Avalonia.MusicStore`
@@ -339,7 +339,7 @@ namespace Avalonia.FundamentalsDemo.Views
 </Solution>
 ```
 
-- [ ] **Step 7: 构建验证**
+- [x] **Step 7: 构建验证**
 
 Run: `dotnet build hello-avalonia.slnx 2>&1 | tail -5`
 Expected: `0 个错误`。三个新项目均出现在构建输出中。
@@ -348,7 +348,7 @@ Expected: `0 个错误`。三个新项目均出现在构建输出中。
 `Bitmap.Save` 过时警告、`Avalonia.HtmlRendererDemo` 的 MSB3245 `System.Xaml`、
 几个项目的 CS8618/CS8604。
 
-- [ ] **Step 8: 提交**
+- [x] **Step 8: 提交**
 
 ```bash
 git add Avalonia.FundamentalsDemo/ Avalonia.XamlDemo/ Avalonia.PropertySystemDemo/ hello-avalonia.slnx
@@ -389,7 +389,7 @@ EOF
   `TreesViewModel` 含 `ObservableCollection<TreeNodeInfo> VisualTree`、
   `ObservableCollection<TreeNodeInfo> LogicalTree`、`void Refresh(Control root)`。
 
-- [ ] **Step 1: 创建树节点模型**
+- [x] **Step 1: 创建树节点模型**
 
 创建 `Avalonia.FundamentalsDemo/Models/TreeNodeInfo.cs`：
 
@@ -420,7 +420,7 @@ namespace Avalonia.FundamentalsDemo.Models
 **为什么快照而不是直接绑活控件**：`TreeView` 会把 item 作为内容承载，直接把活控件塞进去
 等于把它从原来的视觉树上摘下来——演示视觉树的页面反而会破坏视觉树。
 
-- [ ] **Step 2: 创建 MVVM 页的 ViewModel**
+- [x] **Step 2: 创建 MVVM 页的 ViewModel**
 
 创建 `Avalonia.FundamentalsDemo/ViewModels/MvvmViewModel.cs`：
 
@@ -459,7 +459,7 @@ namespace Avalonia.FundamentalsDemo.ViewModels
 注意 `[NotifyCanExecuteChangedFor]`：没有它，`Input` 变化时按钮的可用状态不会刷新——
 这是 CommunityToolkit 源生成器里最常被漏掉的一环。
 
-- [ ] **Step 3: 创建树快照的 ViewModel**
+- [x] **Step 3: 创建树快照的 ViewModel**
 
 创建 `Avalonia.FundamentalsDemo/ViewModels/TreesViewModel.cs`：
 
@@ -526,7 +526,7 @@ namespace Avalonia.FundamentalsDemo.ViewModels
 以上 API 形态（`Visual.GetVisualChildren()`、`ILogical.LogicalChildren`）已在
 Avalonia 12.1.2 上编译验证过，可直接使用。
 
-- [ ] **Step 4: 创建 CodedUiPage**
+- [x] **Step 4: 创建 CodedUiPage**
 
 创建 `Avalonia.FundamentalsDemo/Views/Pages/CodedUiPage.axaml`：
 
@@ -608,7 +608,7 @@ namespace Avalonia.FundamentalsDemo.Views.Pages
 }
 ```
 
-- [ ] **Step 5: 创建 CodeBehindPage**
+- [x] **Step 5: 创建 CodeBehindPage**
 
 创建 `Avalonia.FundamentalsDemo/Views/Pages/CodeBehindPage.axaml`：
 
@@ -690,7 +690,7 @@ namespace Avalonia.FundamentalsDemo.Views.Pages
 }
 ```
 
-- [ ] **Step 6: 创建 MvvmPage**
+- [x] **Step 6: 创建 MvvmPage**
 
 创建 `Avalonia.FundamentalsDemo/Views/Pages/MvvmPage.axaml`：
 
@@ -762,7 +762,7 @@ namespace Avalonia.FundamentalsDemo.Views.Pages
 }
 ```
 
-- [ ] **Step 7: 创建 TopLevelPage**
+- [x] **Step 7: 创建 TopLevelPage**
 
 创建 `Avalonia.FundamentalsDemo/Views/Pages/TopLevelPage.axaml`：
 
@@ -862,7 +862,7 @@ namespace Avalonia.FundamentalsDemo.Views.Pages
 以上 API（`RenderScaling`、`ClientSize`、`Screens.ScreenCount`、`Clipboard`、
 `StorageProvider`、`InputPane`、`OnAttachedToVisualTree` 签名）已在 12.1.2 编译验证。
 
-- [ ] **Step 8: 创建 TreesPage**
+- [x] **Step 8: 创建 TreesPage**
 
 创建 `Avalonia.FundamentalsDemo/Views/Pages/TreesPage.axaml`：
 
@@ -966,7 +966,7 @@ namespace Avalonia.FundamentalsDemo.Views.Pages
 高度并各自滚动。放进 `StackPanel` 会让它们按内容无限伸展，外层滚动条接管一切，树本身
 反而不能独立滚动。
 
-- [ ] **Step 9: 创建 LifetimesPage**
+- [x] **Step 9: 创建 LifetimesPage**
 
 创建 `Avalonia.FundamentalsDemo/Views/Pages/LifetimesPage.axaml`：
 
@@ -1099,7 +1099,7 @@ namespace Avalonia.FundamentalsDemo.Views.Pages
 以上 API（`AssetLoader.Open`、`desktop.Windows.Count`、`ApplicationLifetime` 的模式匹配）
 已在 12.1.2 编译验证。
 
-- [ ] **Step 10: 挂到 MainWindow 的 TabControl**
+- [x] **Step 10: 挂到 MainWindow 的 TabControl**
 
 修改 `Avalonia.FundamentalsDemo/Views/MainWindow.axaml`——在根 `Window` 元素上补命名空间
 声明：
@@ -1133,12 +1133,12 @@ namespace Avalonia.FundamentalsDemo.Views.Pages
     </TabControl>
 ```
 
-- [ ] **Step 11: 构建**
+- [x] **Step 11: 构建**
 
 Run: `dotnet build hello-avalonia.slnx 2>&1 | tail -5`
 Expected: `0 个错误`，且没有新增警告（既有警告清单见 Task 1 Step 7）。
 
-- [ ] **Step 12: 用 headless 探针断言页面行为**
+- [x] **Step 12: 用 headless 探针断言页面行为**
 
 **不要用目视核对代替这一步。** 样板阶段的教训：plan 里写着"核对列数依次为 1 → 2 → 4"，
 执行时标记为通过，实际上那个演示在任何宽度下都是 1 列——目视在"整页看着是活的"时最容易
@@ -1297,7 +1297,7 @@ Expected: 六行全部 `PASS`，且最后一行 `warning-or-worse log entries: 0
 任何一行 `FAIL` 或出现 binding warning 都要先修好再提交——**不要**把 FAIL 解释成
 "探针写得不对"就跳过。若确认是探针本身的问题（例如控件名拼错），修探针后重跑。
 
-- [ ] **Step 13: 清理探针并提交**
+- [x] **Step 13: 清理探针并提交**
 
 ```bash
 rm -rf /c/Temp/fundcheck
@@ -1378,7 +1378,7 @@ EOF
 前两条是编译期失败，改不对就构建不过；第三条才是危险的那个。**XAML 的类型装配是响亮
 失败的，值的流转（绑定、格式化、样式优先级）才是静默失败的重灾区。**
 
-- [ ] **Step 1: 创建模型与常量**
+- [x] **Step 1: 创建模型与常量**
 
 创建 `Avalonia.XamlDemo/Models/PriorityLevel.cs`：
 
@@ -1412,7 +1412,7 @@ namespace Avalonia.XamlDemo.Models
 }
 ```
 
-- [ ] **Step 2: 创建自定义标记扩展**
+- [x] **Step 2: 创建自定义标记扩展**
 
 创建 `Avalonia.XamlDemo/MarkupExtensions/RepeatTextExtension.cs`：
 
@@ -1448,7 +1448,7 @@ namespace Avalonia.XamlDemo.MarkupExtensions
 }
 ```
 
-- [ ] **Step 3: 创建 NamespacesPage**
+- [x] **Step 3: 创建 NamespacesPage**
 
 创建 `Avalonia.XamlDemo/Views/Pages/NamespacesPage.axaml`：
 
@@ -1535,7 +1535,7 @@ namespace Avalonia.XamlDemo.Views.Pages
 }
 ```
 
-- [ ] **Step 4: 创建 DirectivesPage**
+- [x] **Step 4: 创建 DirectivesPage**
 
 创建 `Avalonia.XamlDemo/Views/Pages/DirectivesPage.axaml`：
 
@@ -1644,7 +1644,7 @@ namespace Avalonia.XamlDemo.Views.Pages
 的返回值类型编译期可知。所以 `x:Type` 在本页用 code-behind 展示，XAML 里指向它的
 真实用途（`ControlTheme.TargetType`）。
 
-- [ ] **Step 5: 创建 MarkupExtensionsPage**
+- [x] **Step 5: 创建 MarkupExtensionsPage**
 
 创建 `Avalonia.XamlDemo/Views/Pages/MarkupExtensionsPage.axaml`：
 
@@ -1724,7 +1724,7 @@ namespace Avalonia.XamlDemo.Views.Pages
 }
 ```
 
-- [ ] **Step 6: 创建 TypeConvertersPage**
+- [x] **Step 6: 创建 TypeConvertersPage**
 
 创建 `Avalonia.XamlDemo/Views/Pages/TypeConvertersPage.axaml`：
 
@@ -1808,7 +1808,7 @@ namespace Avalonia.XamlDemo.Views.Pages
 }
 ```
 
-- [ ] **Step 7: 创建 GenericsPage**
+- [x] **Step 7: 创建 GenericsPage**
 
 创建 `Avalonia.XamlDemo/Views/Pages/GenericsPage.axaml`：
 
@@ -1904,7 +1904,7 @@ namespace Avalonia.XamlDemo.Views.Pages
 }
 ```
 
-- [ ] **Step 8: 创建 CompilationPage**
+- [x] **Step 8: 创建 CompilationPage**
 
 创建 `Avalonia.XamlDemo/Views/Pages/CompilationPage.axaml`：
 
@@ -2001,7 +2001,7 @@ namespace Avalonia.XamlDemo.Views.Pages
 它在 12.1.2 中不是公开类型（实测 `CS0122`）。上面这种反射程序集自身的写法不依赖内部 API，
 已实测可用：开启编译型 XAML 的程序集里确实存在 `CompiledAvaloniaXaml` 命名空间。
 
-- [ ] **Step 9: 挂到 MainWindow 的 TabControl**
+- [x] **Step 9: 挂到 MainWindow 的 TabControl**
 
 修改 `Avalonia.XamlDemo/Views/MainWindow.axaml`——在根 `Window` 元素上补命名空间声明：
 
@@ -2034,7 +2034,7 @@ namespace Avalonia.XamlDemo.Views.Pages
     </TabControl>
 ```
 
-- [ ] **Step 10: 构建**
+- [x] **Step 10: 构建**
 
 Run: `dotnet build hello-avalonia.slnx 2>&1 | tail -5`
 Expected: `0 个错误`，无新增警告。
@@ -2042,7 +2042,7 @@ Expected: `0 个错误`，无新增警告。
 若报 `AVLN3000` 或 `AVLN2100`，对照本任务开头的实测结论表——多半是某处把 `{x:Static}`
 枚举或 `{x:Type}` 直接填进了字符串属性。
 
-- [ ] **Step 11: 用 headless 探针断言页面行为**
+- [x] **Step 11: 用 headless 探针断言页面行为**
 
 把 Task 2 Step 12 的探针工程复制一份到 `C:\Temp\xamlcheck`，`ProjectReference` 改指
 `Avalonia.XamlDemo`，`Program.cs` 的断言部分替换为：
@@ -2102,7 +2102,7 @@ Run: `dotnet run --project C:\Temp\xamlcheck\xamlcheck.csproj`
 
 Expected: 六行全部 `PASS`，`warning-or-worse log entries: 0`。
 
-- [ ] **Step 12: 清理探针并提交**
+- [x] **Step 12: 清理探针并提交**
 
 ```bash
 rm -rf /c/Temp/xamlcheck
@@ -2162,7 +2162,7 @@ EOF
 
 最后一行就是样板阶段那个缺陷的最小复现，本任务的 `PrecedencePage` 把它做成可交互演示。
 
-- [ ] **Step 1: 创建 GaugeControl**
+- [x] **Step 1: 创建 GaugeControl**
 
 创建 `Avalonia.PropertySystemDemo/Controls/GaugeControl.cs`：
 
@@ -2260,7 +2260,7 @@ namespace Avalonia.PropertySystemDemo.Controls
 </ResourceDictionary>
 ```
 
-- [ ] **Step 2: 创建附加属性宿主**
+- [x] **Step 2: 创建附加属性宿主**
 
 创建 `Avalonia.PropertySystemDemo/Controls/HighlightBehavior.cs`：
 
@@ -2303,7 +2303,7 @@ namespace Avalonia.PropertySystemDemo.Controls
 }
 ```
 
-- [ ] **Step 3: 在 App.axaml 里引入 GaugeControl 的主题**
+- [x] **Step 3: 在 App.axaml 里引入 GaugeControl 的主题**
 
 修改 `Avalonia.PropertySystemDemo/App.axaml`，在 `StyleInclude` 之后补一段
 `Application.Resources`：
@@ -2320,7 +2320,7 @@ namespace Avalonia.PropertySystemDemo.Controls
 
 `Application.Styles` 部分保持 Task 1 的原样不动。
 
-- [ ] **Step 4: 创建 StyledPropertyPage**
+- [x] **Step 4: 创建 StyledPropertyPage**
 
 创建 `Avalonia.PropertySystemDemo/Views/Pages/StyledPropertyPage.axaml`：
 
@@ -2414,7 +2414,7 @@ namespace Avalonia.PropertySystemDemo.Views.Pages
 }
 ```
 
-- [ ] **Step 5: 创建 DirectPropertyPage**
+- [x] **Step 5: 创建 DirectPropertyPage**
 
 创建 `Avalonia.PropertySystemDemo/Views/Pages/DirectPropertyPage.axaml`：
 
@@ -2497,7 +2497,7 @@ namespace Avalonia.PropertySystemDemo.Views.Pages
 }
 ```
 
-- [ ] **Step 6: 创建 AttachedPropertyPage**
+- [x] **Step 6: 创建 AttachedPropertyPage**
 
 创建 `Avalonia.PropertySystemDemo/Views/Pages/AttachedPropertyPage.axaml`：
 
@@ -2616,7 +2616,7 @@ namespace Avalonia.PropertySystemDemo.Views.Pages
 `Selector="Button[(controls|HighlightBehavior.IsHighlighted)=True]"`——
 命名空间前缀用 `|` 而不是 `:`，整个属性名要用圆括号包住。
 
-- [ ] **Step 7: 创建 PrecedenceViewModel 与 PrecedencePage**
+- [x] **Step 7: 创建 PrecedenceViewModel 与 PrecedencePage**
 
 这是本组最重要的一页：它把样板阶段那个静默缺陷做成可交互的演示。
 
@@ -2753,7 +2753,7 @@ namespace Avalonia.PropertySystemDemo.Views.Pages
 }
 ```
 
-- [ ] **Step 8: 创建 MetadataPage**
+- [x] **Step 8: 创建 MetadataPage**
 
 创建 `Avalonia.PropertySystemDemo/Views/Pages/MetadataPage.axaml`：
 
@@ -2867,7 +2867,7 @@ namespace Avalonia.PropertySystemDemo.Views.Pages
 生效（背景确实变为 `#ffe8974a`）；`ProbeA`/`ProbeB` 分别读回 300 / 150；
 `FontSize` 继承随滑块从 14 联动到 26。
 
-- [ ] **Step 9: 挂到 MainWindow 的 TabControl**
+- [x] **Step 9: 挂到 MainWindow 的 TabControl**
 
 修改 `Avalonia.PropertySystemDemo/Views/MainWindow.axaml`——补命名空间声明：
 
@@ -2897,12 +2897,12 @@ namespace Avalonia.PropertySystemDemo.Views.Pages
     </TabControl>
 ```
 
-- [ ] **Step 10: 构建**
+- [x] **Step 10: 构建**
 
 Run: `dotnet build hello-avalonia.slnx 2>&1 | tail -5`
 Expected: `0 个错误`，无新增警告。
 
-- [ ] **Step 11: 用 headless 探针断言页面行为**
+- [x] **Step 11: 用 headless 探针断言页面行为**
 
 复制 Task 2 Step 12 的探针工程到 `C:\Temp\propcheck`，`ProjectReference` 改指
 `Avalonia.PropertySystemDemo`，`ProbeApp.Initialize` 里额外合并 `GaugeControl` 的主题
@@ -2980,7 +2980,7 @@ Expected: 七行全部 `PASS`，`warning-or-worse log entries: 0`。
 `StyledProperty: class sets Value` 这条最关键：它验证的正是"元素上没写本地值，样式才能
 生效"。若这条 FAIL 且 `after=0`，回去检查 `StyledGauge` 元素上是不是多写了 `Value`。
 
-- [ ] **Step 12: 清理探针并提交**
+- [x] **Step 12: 清理探针并提交**
 
 ```bash
 rm -rf /c/Temp/propcheck
@@ -3015,7 +3015,7 @@ EOF
 - Consumes: Task 1–4 完成的三个项目
 - Produces: 无代码产物。把本组的实测结论回写到 spec，供后续三组 plan 引用。
 
-- [ ] **Step 1: 更新 README 项目表格**
+- [x] **Step 1: 更新 README 项目表格**
 
 修改 `README.md`，在 `Avalonia.LayoutDemo` 一行之后插入三行（按官方文档分类顺序，
 Fundamentals 与 XAML 在 Layout 之前，但表格目前是按加入时间排的，所以追加在后面即可）：
@@ -3026,7 +3026,7 @@ Fundamentals 与 XAML 在 Layout 之前，但表格目前是按加入时间排�
 | [Avalonia.PropertySystemDemo](Avalonia.PropertySystemDemo) | StyledProperty / DirectProperty / 附加属性、值优先级、元数据与回调 |
 ```
 
-- [ ] **Step 2: 回写实测结论到 spec**
+- [x] **Step 2: 回写实测结论到 spec**
 
 在 spec 的「样板阶段实测结论」小节之后，新增一节：
 
@@ -3056,7 +3056,7 @@ Fundamentals 与 XAML 在 Layout 之前，但表格目前是按加入时间排�
   `StringFormat` 花括号），全部在编写期解决，未进入实现。
 ```
 
-- [ ] **Step 3: 全量构建与最终验证**
+- [x] **Step 3: 全量构建与最终验证**
 
 Run: `dotnet build hello-avalonia.slnx 2>&1 | tail -5`
 Expected: 全部 9 个项目构建成功，`0 个错误`。
@@ -3072,7 +3072,7 @@ dotnet run --project Avalonia.XamlDemo
 dotnet run --project Avalonia.PropertySystemDemo
 ```
 
-- [ ] **Step 4: 提交**
+- [x] **Step 4: 提交**
 
 ```bash
 git add README.md docs/
@@ -3089,7 +3089,7 @@ EOF
 )"
 ```
 
-- [ ] **Step 5: 交回用户 review**
+- [x] **Step 5: 交回用户 review**
 
 本组完成。向用户报告：
 

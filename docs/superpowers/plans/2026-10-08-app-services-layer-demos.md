@@ -158,7 +158,7 @@ spec 第二阶段分 4 组，本 plan 只实现**第四组「应用服务层」*
   - 6 个包版本，供 Task 3、Task 5 的 `.csproj` 用无版本的 `PackageReference` 引用
   - 三个可运行的空壳窗口，页面命名空间分别为 `Avalonia.ServicesDemo.Views.Pages`、`Avalonia.AppDevelopmentDemo.Views.Pages`、`Avalonia.TestingDemo.Views.Pages`
 
-- [ ] **Step 1: 声明六个新包**
+- [x] **Step 1: 声明六个新包**
 
 在 `Directory.Packages.props` 的 `iTunesSearch` 行之后、`</ItemGroup>` 之前追加（注意是 `xunit.v3`，不是 spec 里的 `xunit`，见规则 11）：
 
@@ -174,7 +174,7 @@ spec 第二阶段分 4 组，本 plan 只实现**第四组「应用服务层」*
 Run: `dotnet restore hello-avalonia.slnx 2>&1 | grep -E "error|个错误"`
 Expected: 无输出（新增的包还没有项目引用，restore 不受影响）。
 
-- [ ] **Step 2: 用脚本从 EventsDemo 派生三份骨架**
+- [x] **Step 2: 用脚本从 EventsDemo 派生三份骨架**
 
 在仓库根目录执行。`sed` 把项目名与窗口标题一并替换；EventsDemo 的窗口里已有 5 个 `TabItem`，第二段 `sed -i` 把 `<TabControl>` 与 `</TabControl>` 之间的内容删光，得到空壳；两个多 Tab 的项目顺手改成竖排（Step 4 的内容在这里一并完成）。`.csproj` 随后单独创建（Step 3）：
 
@@ -195,7 +195,7 @@ grep -c "TabItem" Avalonia.ServicesDemo/Views/MainWindow.axaml Avalonia.AppDevel
 
 Expected: 第一行 `no EventsDemo leftovers`，随后三行计数都是 `:0`（三个窗口都是空的 `TabControl`）。这段脚本已在仓库外的草稿目录里实测跑通。
 
-- [ ] **Step 3: 创建三个 .csproj**
+- [x] **Step 3: 创建三个 .csproj**
 
 `Avalonia.ServicesDemo/Avalonia.ServicesDemo.csproj`（与 EventsDemo 逐字相同，无新增包）：
 
@@ -266,14 +266,14 @@ Expected: 第一行 `no EventsDemo leftovers`，随后三行计数都是 `:0`（
 
 `Microsoft.Extensions.Logging.Console` 在这里的作用是**传递引入 `Microsoft.Extensions.Logging`**（`ILoggerFactory`、`AddLogging` 都在里面）；`WinExe` 没有控制台窗口，所以 `AddConsole()` 本身看不到输出（规则 24）。
 
-- [ ] **Step 4: 确认两个多 Tab 项目已竖排**
+- [x] **Step 4: 确认两个多 Tab 项目已竖排**
 
 Step 2 的脚本已经把 `Avalonia.ServicesDemo`（8 Tab）与 `Avalonia.AppDevelopmentDemo`（10 Tab）的 `TabControl` 改成竖排，`Avalonia.TestingDemo`（3 Tab）保持横排。核对：
 
 Run: `grep -c 'TabStripPlacement="Left"' Avalonia.ServicesDemo/Views/MainWindow.axaml Avalonia.AppDevelopmentDemo/Views/MainWindow.axaml Avalonia.TestingDemo/Views/MainWindow.axaml`
 Expected: `:1`、`:1`、`:0`。
 
-- [ ] **Step 5: 注册到解决方案**
+- [x] **Step 5: 注册到解决方案**
 
 修改 `hello-avalonia.slnx`，按字母序插入三行（`Avalonia.TestingDemo.Tests` 在 Task 5 才创建，到时再加）：
 
@@ -300,7 +300,7 @@ Expected: `:1`、`:1`、`:0`。
 </Solution>
 ```
 
-- [ ] **Step 6: 构建验证**
+- [x] **Step 6: 构建验证**
 
 Run: `dotnet build hello-avalonia.slnx 2>&1 | grep -E "个错误"`
 Expected: `0 个错误`。
@@ -308,7 +308,7 @@ Expected: `0 个错误`。
 Run: `dotnet build hello-avalonia.slnx 2>&1 | grep -E "warning" | grep -E "ServicesDemo|AppDevelopmentDemo|TestingDemo" | grep -v MSB3884`
 Expected: 无输出。
 
-- [ ] **Step 7: 提交**
+- [x] **Step 7: 提交**
 
 提交信息用 `-m` 两段（避免 heredoc 嵌套）：
 
@@ -337,7 +337,7 @@ Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>"
 
 **探针依赖的元素名：** Clipboard：`Source`、`SetTextButton`、`ReadButton`、`ClearButton`、`SetDataButton`、`FormatsButton`、`Result`；FileDialogs：`OpenButton`、`SaveButton`、`FolderButton`、`Result`、`FileText`；StorageProvider：`Capabilities`、`FolderBox`、`PathBox`、`PathButton`、`ListButton`、`Result`；Launcher：`UriBox`、`UriButton`、`Result`；PlatformSettings：`ThemeLine`、`AccentSwatch`、`DoubleTapLine`、`HoldLine`、`CopyLine`；MobileServices：`InputPaneLine`、`InsetsLine`；ActivatableLifetime：`AvailabilityLine`、`WindowLine`、`ActivationCounts`。
 
-- [ ] **Step 1: 写 MainWindow 的 8 个 Tab**
+- [x] **Step 1: 写 MainWindow 的 8 个 Tab**
 
 把 `Avalonia.ServicesDemo/Views/MainWindow.axaml` 的 `<TabControl>` 换成下面的内容（`Window` 根元素保持 Task 1 生成的样子，需有 `xmlns:pages="using:Avalonia.ServicesDemo.Views.Pages"`）：
 
@@ -354,7 +354,7 @@ Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>"
     </TabControl>
 ```
 
-- [ ] **Step 2: 写 8 个页面**
+- [x] **Step 2: 写 8 个页面**
 
 以下源码就是落地并通过探针的版本，逐字照抄。
 
@@ -1241,12 +1241,12 @@ namespace Avalonia.ServicesDemo.Views.Pages
 }
 ```
 
-- [ ] **Step 3: 构建**
+- [x] **Step 3: 构建**
 
 Run: `dotnet build Avalonia.ServicesDemo 2>&1 | grep -E "error|个错误"`
 Expected: `0 个错误`。LSP 对 `InitializeComponent` 与命名元素报的 `CS0103` 是误报，以 `dotnet build` 为准（规则 10）。
 
-- [ ] **Step 4: 跑 headless 探针（仓库外，不提交）**
+- [x] **Step 4: 跑 headless 探针（仓库外，不提交）**
 
 在 `C:\Temp\probe-services\` 下建两个文件。csproj 要关掉中央包管理，否则 `NU1008`：
 
@@ -1442,7 +1442,7 @@ static class Program
 Run: `cd C:/Temp/probe-services && dotnet run 2>&1 | tail -45`
 Expected: 末行 `36 passed, 0 failed`。注意探针里 `ProjectReference` 要指向仓库里的 `Avalonia.ServicesDemo.csproj`。
 
-- [ ] **Step 5: 提交**
+- [x] **Step 5: 提交**
 
 ```bash
 git add Avalonia.ServicesDemo/
@@ -1467,7 +1467,7 @@ Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>"
 - `RadioButton.IsCheckedChanged` 触发时，同组另一个按钮还没取消选中——要按 `sender` 判断，不能读兄弟按钮的状态。
 - `Logger.Sink` 是进程级的：页面在 `OnLoaded` 记下旧 sink、换成自己的，`OnUnloaded` 再还原。
 
-- [ ] **Step 1: 写服务、日志提供者与两份资源**
+- [x] **Step 1: 写服务、日志提供者与两份资源**
 
 **`Avalonia.AppDevelopmentDemo/Services/IClock.cs`**
 
@@ -1594,7 +1594,7 @@ namespace Avalonia.AppDevelopmentDemo.Logging
 </root>
 ```
 
-- [ ] **Step 2: 写 MainWindow 的 10 个 Tab**
+- [x] **Step 2: 写 MainWindow 的 10 个 Tab**
 
 ```xml
     <TabControl Margin="12" TabStripPlacement="Left">
@@ -1613,7 +1613,7 @@ namespace Avalonia.AppDevelopmentDemo.Logging
 
 窗口根元素需有 `xmlns:pages="using:Avalonia.AppDevelopmentDemo.Views.Pages"`。
 
-- [ ] **Step 3: 写 10 个页面**
+- [x] **Step 3: 写 10 个页面**
 
 以下源码就是落地并通过探针的版本，逐字照抄。`DataValidationPage` 的路标要写「校验」标签页（`Avalonia.DataBindingDemo` 里该 Tab 叫「校验」）。
 
@@ -2568,12 +2568,12 @@ namespace Avalonia.AppDevelopmentDemo.Views.Pages
 }
 ```
 
-- [ ] **Step 4: 构建**
+- [x] **Step 4: 构建**
 
 Run: `dotnet build Avalonia.AppDevelopmentDemo 2>&1 | grep -E "error|个错误"`
 Expected: `0 个错误`。
 
-- [ ] **Step 5: 跑 headless 探针（仓库外，不提交）**
+- [x] **Step 5: 跑 headless 探针（仓库外，不提交）**
 
 建 `C:\Temp\probe-appdev\` 两个文件。探针里断言资源色值用颜色名（`Red`/`Blue`/`Green`），因为 `Color.ToString()` 对命名色返回名字而不是十六进制：
 
@@ -2755,7 +2755,7 @@ static class Program
 Run: `cd C:/Temp/probe-appdev && dotnet run 2>&1 | tail -50`
 Expected: 末行 `44 passed, 0 failed`。
 
-- [ ] **Step 6: 提交**
+- [x] **Step 6: 提交**
 
 ```bash
 git add Avalonia.AppDevelopmentDemo/
@@ -2782,7 +2782,7 @@ Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>"
 
 **设计要点：** 每个页面在自己的 XAML 里写 `<UserControl.DataContext>`，所以 `new CounterPage()` 就是一个自带状态的完整面板，测试里不用再配 DataContext。
 
-- [ ] **Step 1: 写三个 ViewModel**
+- [x] **Step 1: 写三个 ViewModel**
 
 **`Avalonia.TestingDemo/ViewModels/CounterViewModel.cs`**
 
@@ -2911,7 +2911,7 @@ namespace Avalonia.TestingDemo.ViewModels
 }
 ```
 
-- [ ] **Step 2: 写三个页面**
+- [x] **Step 2: 写三个页面**
 
 `TextBox.Watermark` 在 12.x 已过时（`AVLN5001`），用 `PlaceholderText`。
 
@@ -3092,7 +3092,7 @@ namespace Avalonia.TestingDemo.Views.Pages
 }
 ```
 
-- [ ] **Step 3: 写 MainWindow 的 3 个 Tab**
+- [x] **Step 3: 写 MainWindow 的 3 个 Tab**
 
 ```xml
     <TabControl Margin="12">
@@ -3102,7 +3102,7 @@ namespace Avalonia.TestingDemo.Views.Pages
     </TabControl>
 ```
 
-- [ ] **Step 4: 构建**
+- [x] **Step 4: 构建**
 
 Run: `dotnet build Avalonia.TestingDemo 2>&1 | grep -E "warning|个错误|个警告" | grep -v CS8618`
 Expected: `0 个错误`，无 `AVLN` 警告。（`Avalonia.Shared` 里已有的 `CS8618` 与本任务无关。）
@@ -3126,7 +3126,7 @@ Expected: `0 个错误`，无 `AVLN` 警告。（`Avalonia.Shared` 里已有的 
 - 命令禁用断言 `IsEffectivelyEnabled`（规则 6）。
 - 渲染快照要 Skia，`TestAppBuilder` 里 `UseHeadlessDrawing = false`（规则 13）；读像素时按帧的 `Format` 判断字节序，**不要假设 BGRA**——实测 `CaptureRenderedFrame` 返回 RGBA，假设错了红蓝会互换。
 
-- [ ] **Step 1: 建项目、注册到解决方案，先写 ViewModel 测试**
+- [x] **Step 1: 建项目、注册到解决方案，先写 ViewModel 测试**
 
 **`Avalonia.TestingDemo.Tests/Avalonia.TestingDemo.Tests.csproj`**
 
@@ -3287,7 +3287,7 @@ namespace Avalonia.TestingDemo.Tests
 Run: `dotnet test Avalonia.TestingDemo.Tests 2>&1 | grep -E "error|通过!|失败!"`
 Expected: `通过:    12`，失败 0。
 
-- [ ] **Step 2: 写 UI 辅助与控件查找、交互测试**
+- [x] **Step 2: 写 UI 辅助与控件查找、交互测试**
 
 **`Avalonia.TestingDemo.Tests/UiHelpers.cs`**
 
@@ -3499,7 +3499,7 @@ namespace Avalonia.TestingDemo.Tests
 
 `InteractionTests.cs` 用到 `.Cast<string>()`，需要 `using System.Linq;`（已在上面的源码里）。
 
-- [ ] **Step 3: 写渲染快照测试**
+- [x] **Step 3: 写渲染快照测试**
 
 **`Avalonia.TestingDemo.Tests/RenderSnapshotTests.cs`**
 
@@ -3573,12 +3573,12 @@ namespace Avalonia.TestingDemo.Tests
 }
 ```
 
-- [ ] **Step 4: 跑全部测试**
+- [x] **Step 4: 跑全部测试**
 
 Run: `dotnet test Avalonia.TestingDemo.Tests 2>&1 | grep -E "error|通过!|失败!"`
 Expected: `通过:    24`，失败 0。
 
-- [ ] **Step 5: 提交**
+- [x] **Step 5: 提交**
 
 ```bash
 git add Avalonia.TestingDemo/ Avalonia.TestingDemo.Tests/ hello-avalonia.slnx
@@ -3594,7 +3594,7 @@ Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>"
 **Files:**
 - Modify: `README.md`、`docs/superpowers/specs/2026-09-21-avalonia-docs-category-demos-design.md`
 
-- [ ] **Step 1: README 加 5 行并补测试命令**
+- [x] **Step 1: README 加 5 行并补测试命令**
 
 在 `Avalonia.CustomControlsDemo` 行之后、`Avalonia.MusicStore` 行之前（官方分类顺序），加：
 
@@ -3607,7 +3607,7 @@ Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>"
 
 「构建与运行」代码块里 `dotnet run --project Avalonia.WebViewDemo` 之后加一行 `dotnet test Avalonia.TestingDemo.Tests`。
 
-- [ ] **Step 2: spec 的包清单更正**
+- [x] **Step 2: spec 的包清单更正**
 
 把「依赖与技术选型」表里的 `xunit` 行改为：
 
@@ -3615,11 +3615,11 @@ Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>"
 | `xunit.v3` | 测试框架（原写 `xunit`，见「应用服务层实测结论」） | #15 |
 ```
 
-- [ ] **Step 3: spec 追加「应用服务层实测结论」小节**
+- [x] **Step 3: spec 追加「应用服务层实测结论」小节**
 
 在 `## 交付顺序与验证标准` 之前追加 `### 应用服务层实测结论（2026-10-08）`，记录：技术风险第 1 点已解除但测试框架换成 xunit v3（`CS0433` 与 `OutputType=Exe`）；渲染快照要 Skia 且按 `Format` 读字节序；第 3 点的实测（headless 下 `StorageProvider`/`Launcher` 为 Noop，`InputPane`/`InsetsManager`/`IActivatableLifetime` 为 `null`）；功能点映射的出入（Services 8 个 Tab、App Development 10 个 Tab、Testing 并入 #15、**Appium 未做**）；API 形态（`GetPlatformSettings()`、12.x 剪贴板、`WindowDecorations`、`PlaceholderText`）；DI 作用域校验、资源查找差别、两套日志互不相通、`RadioButton` 事件顺序、`.resx` 要排除出 `AvaloniaResource`；探针条数（#12 为 36、#13 为 44，#15 自身 24 个测试）。
 
-- [ ] **Step 4: 全量验证**
+- [x] **Step 4: 全量验证**
 
 Run: `dotnet build hello-avalonia.slnx 2>&1 | grep -E "个错误"`
 Expected: `0 个错误`。
@@ -3630,7 +3630,7 @@ Expected: 无输出。
 Run: `dotnet test hello-avalonia.slnx 2>&1 | grep -E "通过!|失败!"`
 Expected: `通过:    24`，失败 0。
 
-- [ ] **Step 5: 提交**
+- [x] **Step 5: 提交**
 
 ```bash
 git add README.md docs/superpowers/specs/2026-09-21-avalonia-docs-category-demos-design.md

@@ -208,7 +208,7 @@ spec 第二阶段分 4 组，本 plan 只实现**第三组「交互图形层」*
   - `Avalonia.Shared.Helpers.EventLog`——`ObservableCollection<string> Entries { get; }`、`void Write(string message)`、`void Clear()`。Task 2–5 的页面都靠它写事件流
   - 四个可运行的空壳窗口。页面命名空间分别为 `Avalonia.EventsDemo.Views.Pages`、`Avalonia.InputDemo.Views.Pages`、`Avalonia.GraphicsDemo.Views.Pages`、`Avalonia.CustomControlsDemo.Views.Pages`，供 Task 2–5 挂页面
 
-- [ ] **Step 1: 用脚本批量生成四份骨架的目录与二进制文件**
+- [x] **Step 1: 用脚本批量生成四份骨架的目录与二进制文件**
 
 在仓库根目录执行：
 
@@ -223,7 +223,7 @@ grep -l "Avalonia.LayoutDemo" Avalonia.EventsDemo/app.manifest Avalonia.InputDem
 
 Expected: 最后一行输出 `manifest names rewritten`。
 
-- [ ] **Step 2: 创建四个 .csproj**
+- [x] **Step 2: 创建四个 .csproj**
 
 四份内容逐字相同（文件里没有项目名）。`Avalonia.EventsDemo/Avalonia.EventsDemo.csproj`：
 
@@ -258,7 +258,7 @@ Expected: 最后一行输出 `manifest names rewritten`。
 
 复制为 `Avalonia.InputDemo/Avalonia.InputDemo.csproj`、`Avalonia.GraphicsDemo/Avalonia.GraphicsDemo.csproj`、`Avalonia.CustomControlsDemo/Avalonia.CustomControlsDemo.csproj`。与样式绑定层三项目逐字相同，**不新增任何包**。
 
-- [ ] **Step 3: 创建四个 Program.cs**
+- [x] **Step 3: 创建四个 Program.cs**
 
 `Avalonia.EventsDemo/Program.cs`：
 
@@ -286,7 +286,7 @@ namespace Avalonia.EventsDemo
 
 另三个项目只把 `namespace` 换成 `Avalonia.InputDemo` / `Avalonia.GraphicsDemo` / `Avalonia.CustomControlsDemo`。
 
-- [ ] **Step 4: 创建四个 App.axaml 与 App.axaml.cs**
+- [x] **Step 4: 创建四个 App.axaml 与 App.axaml.cs**
 
 `Avalonia.EventsDemo/App.axaml`：
 
@@ -338,7 +338,7 @@ namespace Avalonia.EventsDemo
 
 `Application.Resources` 这一节本组四个项目**一开始都不需要**（自定义控件的 ControlTheme 各自由页面或 Task 5 加），Task 5 再给 CustomControlsDemo 补。
 
-- [ ] **Step 5: 创建四个 MainWindow**
+- [x] **Step 5: 创建四个 MainWindow**
 
 `Avalonia.EventsDemo/Views/MainWindow.axaml`（5 个 Tab，横排放得下）：
 
@@ -388,7 +388,7 @@ namespace Avalonia.EventsDemo.Views
 
 理由与 StylingDemo 的 12 Tab 相同：横排会横向滚动，spec 明确把这当作要避免的体验问题。13 个竖排项在 640 高度内放得下。
 
-- [ ] **Step 6: 创建共享的事件日志**
+- [x] **Step 6: 创建共享的事件日志**
 
 `Avalonia.Shared/Helpers/EventLog.cs`：
 
@@ -427,7 +427,7 @@ namespace Avalonia.Shared.Helpers
 
 放在 `Avalonia.Shared` 而不是各项目里：本组 33 个页面里至少 20 个要写"触发了什么"，而它的实现只有十几行——spec 的判断标准是复制次数而非代码行数。它与 Avalonia 类型无关（只用 `ObservableCollection`），不增加 `Avalonia.Shared` 的依赖。
 
-- [ ] **Step 7: 注册到解决方案**
+- [x] **Step 7: 注册到解决方案**
 
 修改 `hello-avalonia.slnx`，按字母序插入四行：
 
@@ -451,7 +451,7 @@ namespace Avalonia.Shared.Helpers
 </Solution>
 ```
 
-- [ ] **Step 8: 构建验证**
+- [x] **Step 8: 构建验证**
 
 Run: `dotnet build hello-avalonia.slnx 2>&1 | grep -E "个错误"`
 Expected: `0 个错误`。
@@ -459,7 +459,7 @@ Expected: `0 个错误`。
 Run: `dotnet build hello-avalonia.slnx 2>&1 | grep -E "warning" | grep -E "EventsDemo|InputDemo|GraphicsDemo|CustomControlsDemo" | grep -v MSB3884`
 Expected: 无输出。仓库既有的 MSB3884（`MinimumRecommendedRules.ruleset` 不存在）每个项目一条，新增项目必然让它增加，所以判据只排除它。
 
-- [ ] **Step 9: 提交**
+- [x] **Step 9: 提交**
 
 ```bash
 git add Avalonia.Shared/Helpers/EventLog.cs Avalonia.EventsDemo/ Avalonia.InputDemo/ Avalonia.GraphicsDemo/ Avalonia.CustomControlsDemo/ hello-avalonia.slnx
@@ -502,7 +502,7 @@ EOF
 
 code-behind 里 `LogList.ItemsSource = _log.Entries;`。不用绑定而用赋值：页面无 `DataContext`，且 `ListBox.ItemsSource` 在赋值后会随 `ObservableCollection` 的变化自动刷新。
 
-- [ ] **Step 1: 创建自定义路由事件的两个类型**
+- [x] **Step 1: 创建自定义路由事件的两个类型**
 
 `Avalonia.EventsDemo/Controls/PingEventArgs.cs`：
 
@@ -561,7 +561,7 @@ namespace Avalonia.EventsDemo.Controls
 
 实测验证过：`Notifier.Ping` 的 XAML 附加订阅（`local:Notifier.Ping="OnPing"` 写在父元素上）在 12.1.2 编译并收到事件。
 
-- [ ] **Step 2: 生命周期页 LifecyclePage**
+- [x] **Step 2: 生命周期页 LifecyclePage**
 
 演示：一个按钮被「加入」与「移除」时，8 个生命周期事件按什么顺序触发。
 
@@ -666,7 +666,7 @@ namespace Avalonia.EventsDemo.Views.Pages
 }
 ```
 
-- [ ] **Step 3: 输入事件页 InputEventsPage**
+- [x] **Step 3: 输入事件页 InputEventsPage**
 
 演示：鼠标、键盘、文本三类输入事件各自触发时，参数里有什么。
 
@@ -767,7 +767,7 @@ namespace Avalonia.EventsDemo.Views.Pages
 
 `Border` 上直接写 `Background="#20FFFFFF"` 是对的：这个属性不是由样式驱动的（规则 2 不适用），而且它同时满足规则 15（没有 Background 的元素不参与命中，指针事件根本不会到这里）。
 
-- [ ] **Step 4: 路由三阶段页 RoutingPage**
+- [x] **Step 4: 路由三阶段页 RoutingPage**
 
 演示：三层嵌套元素（Outer > Middle > Inner）上，同一个事件在 Tunnel 与 Bubble 两个阶段的触发顺序。再加一张表，列出常见事件各自的 `RoutingStrategies`。
 
@@ -872,7 +872,7 @@ namespace Avalonia.EventsDemo.Views.Pages
 
 `PointerEnteredEvent` 是 **Direct**：只在进入的元素本身触发，不冒泡也不隧道，所以不能指望在父级里收到子元素的 `PointerEntered`（要父级知道子元素被悬停，要靠子元素的 `:pointerover` 伪类或自己订阅）。
 
-- [ ] **Step 5: Handled 拦截页 HandledPage**
+- [x] **Step 5: Handled 拦截页 HandledPage**
 
 演示：内层把 `Handled` 置真，外层的冒泡处理器就不再触发；用 `handledEventsToo: true` 注册的处理器仍然触发。
 
@@ -970,7 +970,7 @@ namespace Avalonia.EventsDemo.Views.Pages
 }
 ```
 
-- [ ] **Step 6: 自定义路由事件页 CustomRoutedEventPage**
+- [x] **Step 6: 自定义路由事件页 CustomRoutedEventPage**
 
 演示：`Notifier` 点击时触发自定义冒泡事件 `Ping`，由祖先元素在 XAML 里用附加语法订阅，也在代码里用 CLR 包装订阅。
 
@@ -1050,7 +1050,7 @@ namespace Avalonia.EventsDemo.Views.Pages
 
 两种订阅的差别在日志里一眼可见：点 Alpha 两行（自己的 `+=` 与祖先的附加订阅），点 Beta 只有祖先那一行。这就是「路由」的意义——不需要知道事件从哪个具体控件来。
 
-- [ ] **Step 7: 挂 5 个 Tab**
+- [x] **Step 7: 挂 5 个 Tab**
 
 修改 `Avalonia.EventsDemo/Views/MainWindow.axaml`，在 `<Window>` 上加 `xmlns:pages="using:Avalonia.EventsDemo.Views.Pages"`，`TabControl` 改为：
 
@@ -1074,7 +1074,7 @@ namespace Avalonia.EventsDemo.Views.Pages
     </TabControl>
 ```
 
-- [ ] **Step 8: 构建**
+- [x] **Step 8: 构建**
 
 Run: `dotnet build Avalonia.EventsDemo 2>&1 | grep -E "个错误|error"`
 Expected: `0 个错误`。
@@ -1082,7 +1082,7 @@ Expected: `0 个错误`。
 Run: `dotnet build hello-avalonia.slnx 2>&1 | grep -E "warning" | grep -E "EventsDemo" | grep -v MSB3884`
 Expected: 无输出。
 
-- [ ] **Step 9: 用 headless 探针断言页面行为**
+- [x] **Step 9: 用 headless 探针断言页面行为**
 
 **不要用目视核对代替这一步**。在**仓库外**建探针。创建 `C:\Temp\eventscheck\eventscheck.csproj`：
 
@@ -1307,7 +1307,7 @@ Handled 页分两个实例测：页面的 `EventLog` 是私有字段，探针清
 
 若任何一条 `FAIL`，**以探针输出为准修正页面或说明文字**，并在 spec 回写时注明"（执行期修正）"。
 
-- [ ] **Step 10: 清理探针并提交**
+- [x] **Step 10: 清理探针并提交**
 
 ```bash
 rm -rf /c/Temp/eventscheck
@@ -1341,7 +1341,7 @@ EOF
 
 日志列表沿用 Task 2 约定：`<ListBox Name="LogList" Height="…" />`，code-behind 里 `LogList.ItemsSource = _log.Entries;`。
 
-- [ ] **Step 1: 指针页 PointerPage**
+- [x] **Step 1: 指针页 PointerPage**
 
 演示：指针读数（类型、按键、位置、滚轮）与指针捕获——拖动一个小方块，鼠标移出画布后仍持续收到移动事件。
 
@@ -1452,7 +1452,7 @@ namespace Avalonia.InputDemo.Views.Pages
 }
 ```
 
-- [ ] **Step 2: 焦点页 FocusPage**
+- [x] **Step 2: 焦点页 FocusPage**
 
 演示：Tab 顺序与 `IsTabStop`、`TabIndex`；`FocusManager` 读当前焦点；`NavigationMethod` 决定 `:focus-visible` 是否出现；用 `Focus(NavigationMethod.…)` 对照。
 
@@ -1550,7 +1550,7 @@ namespace Avalonia.InputDemo.Views.Pages
 
 `Row` 上的 `GotFocus="OnRowGotFocus"` 是 XAML 属性订阅冒泡事件，事件参数类型是 `Avalonia.Input.FocusChangedEventArgs`（带 `NavigationMethod`）——**不是 `GotFocusEventArgs`，那个类型在 12.1.2 里不存在**（实测 CS0246），这是编写本 plan 时纠的第一个错。
 
-- [ ] **Step 3: 手势页 GesturesPage**
+- [x] **Step 3: 手势页 GesturesPage**
 
 演示：`Tapped` / `DoubleTapped` / `RightTapped` / `Holding` 四个常用手势用计数器展示；`Pinch` / `Scroll` / `Swipe` / 触控板手势只在有触屏或触控板时触发，页面注册它们并给出说明。
 
@@ -1661,7 +1661,7 @@ namespace Avalonia.InputDemo.Views.Pages
 
 实测依据：这几个参数类型（`PinchEventArgs`、`ScrollGestureEventArgs`、`SwipeGestureEventArgs`、`PointerDeltaEventArgs`，全部在 `Avalonia.Input`）已逐个编译验证，不需要执行时再查。
 
-- [ ] **Step 4: 键盘页 KeyboardPage**
+- [x] **Step 4: 键盘页 KeyboardPage**
 
 演示：按键读数（`Key`、`PhysicalKey`、`KeyModifiers`、`KeySymbol`）；`HotKey` 触发按钮；`KeyBindings` 触发命令；二者的差别。
 
@@ -1753,7 +1753,7 @@ namespace Avalonia.InputDemo.Views.Pages
 
 实测依据：`Button.HotKey = new KeyGesture(Key.S, Control)` 与 `Window.KeyBindings` 里 `KeyBinding{Gesture, Command}` 都经 headless `KeyPressQwerty(PhysicalKey, RawInputModifiers)` 验证触发；XAML 里 `HotKey="Ctrl+S"` 字符串形式读回 `Ctrl+S`。`KeyBindings` 在 `UserControl` 上同样生效（探针里焦点在内部 `TextBox`、手势 `Ctrl+Shift+K` 触发一次）。
 
-- [ ] **Step 5: 交互写法页 InteractivityPage 与它的 ViewModel**
+- [x] **Step 5: 交互写法页 InteractivityPage 与它的 ViewModel**
 
 演示：同一个「计数 +1」动作的三种触发写法（`Click` 处理器 / `Command` / `Tapped`），以及菜单项里 `InputGesture` 与 `HotKey` 的区别。
 
@@ -1875,7 +1875,7 @@ namespace Avalonia.InputDemo.Views.Pages
 
 实测依据：`MenuItem` 同时写 `InputGesture="Ctrl+1"` 与 `HotKey="Ctrl+2"`、`HotKey="Ctrl+3"` 的三个菜单项，焦点在 `TextBox` 时按 `Ctrl+1/2/3`，命令执行次数读回 `0 / 1 / 1`。
 
-- [ ] **Step 6: 拖放页 DragDropPage**
+- [x] **Step 6: 拖放页 DragDropPage**
 
 演示：从一个文本源拖到一个目标，目标在拖入时高亮、按数据类型决定是否接受、放下时读出文本。
 
@@ -2003,7 +2003,7 @@ namespace Avalonia.InputDemo.Views.Pages
 
 **`DoDragDropAsync` 在 headless 里无法发起**（它要平台的拖放循环），所以这页的探针（Step 11）直接构造 `DragEventArgs` 并 `RaiseEvent` 到目标上，验证的是接收端三件事：`DragOver` 的效果判定、`Drop` 读出文本、`:over` 类的增删。发起端靠真机目视。构造函数是 `new DragEventArgs(DragDrop.DragOverEvent, dataTransfer, target, point, KeyModifiers.None)`，已实测。
 
-- [ ] **Step 7: 文本输入页 TextInputPage**
+- [x] **Step 7: 文本输入页 TextInputPage**
 
 演示：`TextInput` 事件在 Tunnel 阶段拦截非数字；`TextInputOptions` 给软键盘的提示（内容类型、回车键类型）；`InputMethod.IsInputMethodEnabled` 开关输入法。
 
@@ -2097,7 +2097,7 @@ namespace Avalonia.InputDemo.Views.Pages
 
 实测依据：`ti:TextInputOptions.ContentType="Email"` + `ReturnKeyType="Send"` 读回 `Email` / `Send`；`InputMethod.IsInputMethodEnabled="{Binding #ImeBox.IsChecked}"` 取消勾选后读回 `False`；Tunnel 拦截 `KeyTextInput("a")` 被吞、`"7"` 通过，文本为 `'7'`。
 
-- [ ] **Step 8: 路由事件指路页 RoutedEventsPage**
+- [x] **Step 8: 路由事件指路页 RoutedEventsPage**
 
 按 spec 去重规则，路由事件完整实现放在 #8。本页沿用 StylingDemo `ContainerQueriesPage` 的指路页格式。
 
@@ -2149,7 +2149,7 @@ namespace Avalonia.InputDemo.Views.Pages
 }
 ```
 
-- [ ] **Step 9: 挂 8 个 Tab**
+- [x] **Step 9: 挂 8 个 Tab**
 
 修改 `Avalonia.InputDemo/Views/MainWindow.axaml`，在 `<Window>` 上加 `xmlns:pages="using:Avalonia.InputDemo.Views.Pages"`，`TabControl` 改为（竖排，Task 1 已设 `TabStripPlacement="Left"`）：
 
@@ -2182,7 +2182,7 @@ namespace Avalonia.InputDemo.Views.Pages
     </TabControl>
 ```
 
-- [ ] **Step 10: 构建**
+- [x] **Step 10: 构建**
 
 Run: `dotnet build Avalonia.InputDemo 2>&1 | grep -E "个错误|error"`
 Expected: `0 个错误`。
@@ -2190,7 +2190,7 @@ Expected: `0 个错误`。
 Run: `dotnet build hello-avalonia.slnx 2>&1 | grep -E "warning" | grep -E "InputDemo" | grep -v MSB3884`
 Expected: 无输出。
 
-- [ ] **Step 11: 用 headless 探针断言页面行为**
+- [x] **Step 11: 用 headless 探针断言页面行为**
 
 创建 `C:\Temp\inputcheck\inputcheck.csproj`（与 Task 2 的 `eventscheck.csproj` 相同，只把 `ProjectReference` 改成 `Avalonia.InputDemo\Avalonia.InputDemo.csproj`）。
 
@@ -2441,7 +2441,7 @@ Expected: 全部 `PASS`，末行 `N passed, 0 failed`。**N 是执行期实测�
 
 若任何一条 `FAIL`，**以探针输出为准修正页面或说明文字**，并在 spec 回写时注明"（执行期修正）"。
 
-- [ ] **Step 12: 清理探针并提交**
+- [x] **Step 12: 清理探针并提交**
 
 ```bash
 rm -rf /c/Temp/inputcheck
@@ -2474,7 +2474,7 @@ EOF
 
 **动画/过渡/合成页（Step 9–13）的探针限制**见规则 21、25：只能断言「落在区间内」与「随时间变化」，不能断言确切值。
 
-- [ ] **Step 1: 画刷页 BrushesPage**
+- [x] **Step 1: 画刷页 BrushesPage**
 
 演示：纯色、线性、径向、锥形渐变与图案画刷（`DrawingBrush` 平铺）、`VisualBrush`；渐变中间停靠点的位置用滑块实时改。
 
@@ -2610,7 +2610,7 @@ namespace Avalonia.GraphicsDemo.Views.Pages
 
 `Border.swatch` 的 `Width`/`Height` 写在样式里而不是元素上，符合规则 2 的习惯（尽管这两个属性本页没有别的样式去覆盖它）。
 
-- [ ] **Step 2: 变换页 TransformsPage**
+- [x] **Step 2: 变换页 TransformsPage**
 
 演示：`RenderTransform`（渲染变换，只改绘制，不影响布局）与 `LayoutTransformControl`（布局变换，邻居会被推开）在同一旋转角度下的对照；以及 `RenderTransform` 字符串语法与 `RenderTransformOrigin`。
 
@@ -2723,7 +2723,7 @@ namespace Avalonia.GraphicsDemo.Views.Pages
 }
 ```
 
-- [ ] **Step 3: 形状页 ShapesPage**
+- [x] **Step 3: 形状页 ShapesPage**
 
 演示：六种形状、描边属性（粗细 / 虚线 / 线帽 / 连接），路径迷你语言，`CombinedGeometry` 的四种合并模式。
 
@@ -2848,7 +2848,7 @@ namespace Avalonia.GraphicsDemo.Views.Pages
 
 下拉框直接从枚举取值，不手写列表。实测 `GeometryCombineMode` 在 12.1.2 只有 `Union`、`Intersect`、`Xor`、`Exclude` 四个值（没有 `Exclude1From2`/`Exclude2From1`——那是 WPF 的写法，编写本 plan 时按 WPF 经验写错过一次，探针打印枚举后纠正）。
 
-- [ ] **Step 4: 自定义绘制页 DrawingPage 与自绘控件 Sketch**
+- [x] **Step 4: 自定义绘制页 DrawingPage 与自绘控件 Sketch**
 
 演示：`DrawingContext` 的几个图元，以及 `PushClip` / `PushTransform` / `PushOpacity` 这类「状态栈」——它们是 `using` 作用域，作用域内画的东西才受影响。再加 `DrawingImage` 作为不写代码的绘制方式。
 
@@ -3005,7 +3005,7 @@ namespace Avalonia.GraphicsDemo.Views.Pages
 
 **headless 下 `Render` 能否被调用，需要在探针里确认**（后端不同行为不同），所以 Step 16 的探针用一个继承 `Sketch` 的计数子类验证；若 headless 不调用 `Render`，该条断言降级为「切换开关后属性读回正确」，并把原因写进 spec 回写。
 
-- [ ] **Step 5: 特效页 EffectsPage**
+- [x] **Step 5: 特效页 EffectsPage**
 
 演示：`BlurEffect` 与 `DropShadowEffect`，参数用滑块实时改。
 
@@ -3094,7 +3094,7 @@ namespace Avalonia.GraphicsDemo.Views.Pages
 }
 ```
 
-- [ ] **Step 6: 裁剪遮罩与命中测试页 ClipAndHitPage**
+- [x] **Step 6: 裁剪遮罩与命中测试页 ClipAndHitPage**
 
 演示：`Clip`（任意几何裁剪）、`ClipToBounds` 配 `CornerRadius`、`OpacityMask`；以及命中测试——`Background` 为空与 `Transparent` 的区别、`IsHitTestVisible="False"`。
 
@@ -3231,7 +3231,7 @@ namespace Avalonia.GraphicsDemo.Views.Pages
 
 **这页的 `Background` 本身就是被测对象，所以第一个框刻意不写**——这是规则 15 的反面教材，别「顺手补上」。
 
-- [ ] **Step 7: 图标页 IconsPage**
+- [x] **Step 7: 图标页 IconsPage**
 
 演示：三种图标写法——`PathIcon` 写路径数据、`PathIcon` 引用 `StreamGeometry` 资源、`Image` + `DrawingImage`。
 
@@ -3315,7 +3315,7 @@ namespace Avalonia.GraphicsDemo.Views.Pages
 }
 ```
 
-- [ ] **Step 8: 渲染选项页 RenderOptionsPage**
+- [x] **Step 8: 渲染选项页 RenderOptionsPage**
 
 演示：位图插值（放大 8×8 的棋盘格，是「像素风」还是「糊」）、位图混合模式、边缘抗锯齿、文本渲染模式。位图在 code-behind 里生成，不依赖外部图片文件。
 
@@ -3456,7 +3456,7 @@ namespace Avalonia.GraphicsDemo.Views.Pages
 
 `BitmapInterpolationMode`、`BitmapBlendingMode` 在 `Avalonia.Media`，`WriteableBitmap` 在 `Avalonia.Media.Imaging`，`PixelFormats`/`AlphaFormat` 在 `Avalonia.Platform`。8 像素宽、4 字节每像素，`Lock()` 读回 `RowBytes=32`，行跨度恰好等于一行像素，所以可以一次性 `Marshal.Copy`；换成别的宽度就要按 `frame.RowBytes` 逐行拷。以上枚举取值与整段位图写法都已实测：`BitmapInterpolationMode` 为 `Unspecified/None/LowQuality/MediumQuality/HighQuality`；`BitmapBlendingMode` 有 28 个值（`SourceOver`、`Plus`、`Multiply`、`Screen` 等）；`TextRenderingMode` 为 `Unspecified/SubpixelAntialias/Antialias/Alias`；`EdgeMode` 为 `Unspecified/Antialias/Aliased`。本页 XAML 里用到的 `Alias`、`Antialias`、`Aliased` 都在其中。
 
-- [ ] **Step 9: 关键帧动画页 AnimationsPage**
+- [x] **Step 9: 关键帧动画页 AnimationsPage**
 
 演示：`Style.Animations` 里的 `Animation` + `KeyFrame`，用样式类开关动画；`Duration`、`IterationCount`、`PlaybackDirection`、`Delay`、`FillMode` 各自的效果。**动画由类名驱动**：加上 `run` 类才开始，去掉就停（规则 21：不用 `RunAsync`）。
 
@@ -3586,7 +3586,7 @@ namespace Avalonia.GraphicsDemo.Views.Pages
 }
 ```
 
-- [ ] **Step 10: 控件过渡页 TransitionsPage**
+- [x] **Step 10: 控件过渡页 TransitionsPage**
 
 演示：`Transitions` 让属性变化「平滑」而不是瞬变——悬停时宽度、背景色、旋转各自过渡，缓动函数可换。与上一页不同：动画是「自己跑」，过渡是「被动响应属性变化」。
 
@@ -3682,7 +3682,7 @@ namespace Avalonia.GraphicsDemo.Views.Pages
 
 已实测（headless，`w.MouseMove` 悬停 + 反复 `ForceRenderTimerTick`）：无 `Transitions` 的卡片悬停后**立即** `Width=260`；有 `Transitions` 的卡片宽度依次读回 `164,199,223,239,247,255,259,260`，终值 `259.86`，背景色读回 `#ffde946a`（蓝橙之间的中间色，说明 `BrushTransition` 在走），`RenderTransform` 是 `TransformOperations` 类型。`:pointerover` 在 headless 里随 `MouseMove` 正确打上。
 
-- [ ] **Step 11: 页面过渡页 PageTransitionsPage**
+- [x] **Step 11: 页面过渡页 PageTransitionsPage**
 
 演示：`TransitioningContentControl` 在内容替换时播放 `IPageTransition`：`PageSlide`（水平/垂直）、`CrossFade`、两者用 `CompositePageTransition` 组合。
 
@@ -3795,7 +3795,7 @@ namespace Avalonia.GraphicsDemo.Views.Pages
 
 `PageSlide(TimeSpan, SlideAxis)`、`CrossFade(TimeSpan)` 两个构造函数与 `SlideAxis` 的 `Horizontal`/`Vertical` 两个值、`CompositePageTransition.PageTransitions` 集合都已读回确认；`TransitioningContentControl` 换 `Content` 后读回新内容也已实测。
 
-- [ ] **Step 12: 缓动函数页 EasingPage**
+- [x] **Step 12: 缓动函数页 EasingPage**
 
 演示：选一个缓动函数，画出它的曲线，并让小球按它走一趟——曲线是 `Ease(t)` 的直接采样，小球是用同一个函数做的 `DoubleTransition`，两者对得上。
 
@@ -3921,7 +3921,7 @@ namespace Avalonia.GraphicsDemo.Views.Pages
 
 实测依据：`Easing` 在 `Avalonia.Animation.Easings` 命名空间下有这些具体子类（`LinearEasing`、`SplineEasing`、`SpringEasing`，以及 Back / Bounce / Circular / Cubic / Elastic / Exponential / Quadratic / Quartic / Quintic / Sine 各自的 `EaseIn` / `EaseOut` / `EaseInOut`）；`Easing.Parse("CubicEaseOut")` 返回 `CubicEaseOut`；`DoubleTransition { Property = Canvas.LeftProperty }` 在 headless 里读回 `7,80,144,188,220,246,267,280,288,295,298,300`，完整走到终点；`BounceEaseOut.Ease(0.5)` 为 `0.719`，`ElasticEaseOut.Ease(0.5)` 为 `1.022`（超出 1，所以曲线会冲出上方虚线）。`Curve.Points` 在 Avalonia 12 里是 `IList<Point>`，用 `AvaloniaList<Point>` 赋值即可。
 
-- [ ] **Step 13: 合成动画页 CompositionPage**
+- [x] **Step 13: 合成动画页 CompositionPage**
 
 演示：`ElementComposition.GetElementVisual(control)` 拿到控件在合成层的 `CompositionVisual`，直接改它的 `Opacity` / `Scale` / `RotationAngle`（客户端同步属性），再用 `Compositor` 创建关键帧动画并 `StartAnimation`——合成动画跑在渲染线程上，不占 UI 线程。
 
@@ -4062,7 +4062,7 @@ namespace Avalonia.GraphicsDemo.Views.Pages
 
 **`CompositionVisual` 在哪个命名空间**：`Avalonia.Rendering.Composition`（`ElementComposition`、`CompositionVisual`、`Compositor` 都在这里），`Vector3D` 在 `Avalonia`，所以页面里不需要额外 using。
 
-- [ ] **Step 14: 挂 13 个 Tab**
+- [x] **Step 14: 挂 13 个 Tab**
 
 修改 `Avalonia.GraphicsDemo/Views/MainWindow.axaml`，在 `<Window>` 上加 `xmlns:pages="using:Avalonia.GraphicsDemo.Views.Pages"`，`TabControl` 改为（竖排，Task 1 已设 `TabStripPlacement="Left"`）：
 
@@ -4110,7 +4110,7 @@ namespace Avalonia.GraphicsDemo.Views.Pages
     </TabControl>
 ```
 
-- [ ] **Step 15: 构建**
+- [x] **Step 15: 构建**
 
 Run: `dotnet build Avalonia.GraphicsDemo 2>&1 | grep -E "个错误|error"`
 Expected: `0 个错误`。
@@ -4118,7 +4118,7 @@ Expected: `0 个错误`。
 Run: `dotnet build hello-avalonia.slnx 2>&1 | grep -E "warning" | grep -E "GraphicsDemo" | grep -v MSB3884`
 Expected: 无输出。
 
-- [ ] **Step 16: 用 headless 探针断言页面行为**
+- [x] **Step 16: 用 headless 探针断言页面行为**
 
 创建 `C:\Temp\graphicscheck\graphicscheck.csproj`（与 Task 2 的 `eventscheck.csproj` 相同，只把 `ProjectReference` 改成 `Avalonia.GraphicsDemo\Avalonia.GraphicsDemo.csproj`）。
 
@@ -4523,7 +4523,7 @@ Expected: 全部 `PASS`，末行 `N passed, 0 failed`。**N 是执行期实测�
 
 **若任何一条 `FAIL`，以探针输出为准修正页面或说明文字**，并在 spec 回写时注明「（执行期修正）」。若 `Drawing: AffectsRender` 走了 SKIPPED 分支，把「headless 后端不调用 `Render`」这一事实写进 spec 回写。
 
-- [ ] **Step 17: 清理探针并提交**
+- [x] **Step 17: 清理探针并提交**
 
 ```bash
 rm -rf /c/Temp/graphicscheck
@@ -4574,7 +4574,7 @@ EOF
 
 33. **三个探针写法的坑。** ①`meter.Theme` 在主题来自祖先资源时读回 `null`，但 `meter.Template` 非空，断言要落在 `Template` 上；②`RaiseEvent(new RoutedEventArgs(Button.ClickEvent))` 会运行 `Click="..."` 挂的处理器，**不会**运行 `Button.OnClick`，所以 `Button.Flyout` 不会因此打开，要直接 `flyout.ShowAt(button)`；③`PopupFlyoutBase.Popup` 不是公开成员，探针经反射读取（`GetProperty("Popup", Instance | Public | NonPublic)`），读到后 `Popup.Child` 才是 `FlyoutPresenter`。
 
-- [ ] **Step 1: 组合式控件 LabeledSlider**
+- [x] **Step 1: 组合式控件 LabeledSlider**
 
 演示的第一种自定义控件：用 `UserControl` 把现成控件拼起来，`x:Name` 直接暴露成属性（不是 `StyledProperty`）。
 
@@ -4637,7 +4637,7 @@ namespace Avalonia.CustomControlsDemo.Controls
 
 `Value` 的 `defaultBindingMode: BindingMode.TwoWay` 是这里唯一的非显然之处：不加它，宿主写 `Value="{Binding …}"` 只有单向，用户拖滑块不会写回。实测内外双向都通（拖内层到 35 → 外层 `Value` 为 35；外层设 12 → 内层 `Slider.Value` 为 12）。
 
-- [ ] **Step 2: 模板化控件 Meter 与它的 ControlTheme**
+- [x] **Step 2: 模板化控件 Meter 与它的 ControlTheme**
 
 第二种：`TemplatedControl`——外观完全由 `ControlTheme` 提供，逻辑只认模板部件与伪类。
 
@@ -4778,7 +4778,7 @@ namespace Avalonia.CustomControlsDemo.Controls
 
 实测依据：`[TemplatePart]` / `[PseudoClasses]` 特性可编译；控件挂进窗口后 `Template` 非空、`e.NameScope.Find<Border>("PART_Fill")` 拿得到部件；`Value=100` 之后 `Classes` 出现 `:full` 且 `PART_Fill` 的背景读回 `#ff4ae87b`（模板里的 `^:full` 样式生效）；`PART_Fill.RenderTransform` 读回 `{M11:0.4 …}` 的缩放矩阵；`coerce` 把 250 夹到 100；把 `Theme` 换成 `TextMeter` 后重模板成功（`PART_Fill` 消失、出现 `FontSize=28` 的 `TextBlock`），之后再改 `Value` 不抛异常。
 
-- [ ] **Step 3: 自绘控件 RingGauge**
+- [x] **Step 3: 自绘控件 RingGauge**
 
 第三种：重写 `Render` 完全自己画，用 `AffectsRender` 让属性变化触发重绘。
 
@@ -4847,7 +4847,7 @@ namespace Avalonia.CustomControlsDemo.Controls
 
 实测依据：`AffectsRender<RingGauge>(ValueProperty)` + 重写 `Render`，挂进窗口后 `Render` 被调用（计数 1），把 `Value` 改成 60 并跑两轮渲染节拍后计数变 2。**headless 后端确实会渲染**（规则 31），所以这是真断言。
 
-- [ ] **Step 4: 三个页面——UserControlPage、TemplatedControlPage、CustomDrawnPage**
+- [x] **Step 4: 三个页面——UserControlPage、TemplatedControlPage、CustomDrawnPage**
 
 `Views/Pages/UserControlPage.axaml`：
 
@@ -4970,7 +4970,7 @@ namespace Avalonia.CustomControlsDemo.Views.Pages
 
 > `DocPath` 的值已对照 docs.avaloniaui.net 导航核实（`controls/primitives/usercontrol` 与 `custom-controls/*` 均存在）。
 
-- [ ] **Step 5: PropertiesAndEventsPage（路标页）与 ControlTreesPage**
+- [x] **Step 5: PropertiesAndEventsPage（路标页）与 ControlTreesPage**
 
 `PropertiesAndEventsPage` 不重复演示：定义属性在 #7（PropertySystemDemo），自定义路由事件在 #8（EventsDemo）。本页只做导航说明，并展示 `Meter.Value` 这个**真实使用了**两者的例子。
 
@@ -5136,7 +5136,7 @@ namespace Avalonia.CustomControlsDemo.Views.Pages
 
 实测依据：`OnlyVisualHost.Child.DataContext == null` 且 `Text == ''`；`VisualAndLogicalHost.Child.DataContext == "ctx"` 且 `Text == 'ctx'`。差别只有 `LogicalChildren.Add(Child)` 这一行。
 
-- [ ] **Step 6: 自定义面板 RadialPanel**
+- [x] **Step 6: 自定义面板 RadialPanel**
 
 `Controls/RadialPanel.cs`：
 
@@ -5277,7 +5277,7 @@ namespace Avalonia.CustomControlsDemo.Views.Pages
 
 实测依据（4 个 20×20 子元素、`Radius=50`、窗口 600×600）：第 0 个子元素 `Bounds.TopLeft = 290,240`，第 1 个 `340,290`；`StartAngle=90` 后第 0 个移到 `340,290`；`Radius` 改成 80 后面板仍是 `600×600`（它被窗口拉伸，`MeasureOverride` 的返回值只是 desired size）。
 
-- [ ] **Step 7: 自定义 Flyout SwatchFlyout**
+- [x] **Step 7: 自定义 Flyout SwatchFlyout**
 
 `Controls/SwatchFlyout.cs`：
 
@@ -5378,7 +5378,7 @@ namespace Avalonia.CustomControlsDemo.Views.Pages
 实测依据：`flyout.ShowAt(button)` 后 `IsOpen == True`；经反射取 `PopupFlyoutBase.Popup`，`Child` 是 `FlyoutPresenter`、`Parent` 是 `Button`；点第三个色块触发 `ColorPicked` 值为 `#ffe8d54a`，随后 `IsOpen == False`。`ColorPicked` 的参数类型 `Color` 是**值类型**，事件处理方法签名必须是 `(object?, Color)`，与 `EventHandler<Color>` 一致。
 
 
-- [ ] **Step 8: 挂 7 个 Tab**
+- [x] **Step 8: 挂 7 个 Tab**
 
 修改 `Avalonia.CustomControlsDemo/Views/MainWindow.axaml`，在 `<Window>` 上加 `xmlns:pages="using:Avalonia.CustomControlsDemo.Views.Pages"`，`TabControl` 改为（竖排，Task 1 已设 `TabStripPlacement="Left"`）：
 
@@ -5408,7 +5408,7 @@ namespace Avalonia.CustomControlsDemo.Views.Pages
     </TabControl>
 ```
 
-- [ ] **Step 9: 构建**
+- [x] **Step 9: 构建**
 
 Run: `dotnet build Avalonia.CustomControlsDemo 2>&1 | grep -E "个错误|error"`
 Expected: `0 个错误`。
@@ -5416,7 +5416,7 @@ Expected: `0 个错误`。
 Run: `dotnet build hello-avalonia.slnx 2>&1 | grep -E "warning" | grep -E "CustomControlsDemo" | grep -v MSB3884`
 Expected: 无输出。
 
-- [ ] **Step 10: 用 headless 探针断言页面行为**
+- [x] **Step 10: 用 headless 探针断言页面行为**
 
 创建 `C:\Temp\customcheck\customcheck.csproj`（与 Task 2 的 `eventscheck.csproj` 相同，只把 `ProjectReference` 改成 `Avalonia.CustomControlsDemo\Avalonia.CustomControlsDemo.csproj`）。
 
@@ -5709,7 +5709,7 @@ Expected: 全部 PASS，末行 `N passed, 0 failed`。
 - `a yellow swatch exists` 失败：`SwatchFlyout.Palette` 里的 `#E8D54A` 被改过，或 Presenter 在 `ShowAt` 之后还没生成（多 `Tick(1)` 一次）。
 - 任何 `no log warnings` 失败：先看 detail 里的完整文本，绑定路径错误会在这里露出来，不要放宽断言。
 
-- [ ] **Step 11: 清理探针并提交**
+- [x] **Step 11: 清理探针并提交**
 
 ```bash
 rm -rf /c/Temp/customcheck
@@ -5735,7 +5735,7 @@ Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>"
 - Consumes: Task 2–5 四个探针最后一行的 `N passed, 0 failed` 计数；执行过程中遇到并修正的 plan 错误
 - Produces: 无。这是本组最后一个任务。
 
-- [ ] **Step 1: README 表格插四行**
+- [x] **Step 1: README 表格插四行**
 
 在 `README.md` 的 `Avalonia.PropertySystemDemo` 行与 `Avalonia.MusicStore` 行之间，按官方分类顺序插入：
 
@@ -5751,12 +5751,12 @@ Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>"
 Run: `grep -c "Demo\](Avalonia" README.md`
 Expected: 比插入前多 4。
 
-- [ ] **Step 2: 构建整个解决方案**
+- [x] **Step 2: 构建整个解决方案**
 
 Run: `dotnet build hello-avalonia.slnx 2>&1 | grep -E "个错误|个警告"`
 Expected: `0 个错误`；警告数与 Task 1 之前相比只多出 MSB3884 类（若有）。
 
-- [ ] **Step 3: 把实测结论写回规约**
+- [x] **Step 3: 把实测结论写回规约**
 
 在规约 `### 样式绑定层实测结论（2026-10-07）` 小节之后、`## 交付顺序与验证标准` 之前，新增 `### 交互图形层实测结论（2026-10-07）`。内容按下列条目写，**数字取 Task 2–5 各探针的实际末行**，不要照抄 plan 里的预估：
 
@@ -5770,7 +5770,7 @@ Expected: `0 个错误`；警告数与 Task 1 之前相比只多出 MSB3884 类�
 
 > 尖括号里的四处是**执行时必须替换成数字**的位置，不是留给读者的占位；提交前 `grep -n "<Task" docs/superpowers/specs/2026-09-21-avalonia-docs-category-demos-design.md` 应无输出。
 
-- [ ] **Step 4: 提交**
+- [x] **Step 4: 提交**
 
 ```bash
 git add README.md docs/superpowers/specs/2026-09-21-avalonia-docs-category-demos-design.md

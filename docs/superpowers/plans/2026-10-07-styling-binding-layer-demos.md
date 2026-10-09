@@ -262,7 +262,7 @@ HtmlRenderer 依赖拖进来。字体文件 1 份复制的代价远小于这个�
 注意项目名：新项目是 `Avalonia.DataTemplatesDemo`（复数，与官方分类名 Data Templates 一致），
 旧项目是 `Avalonia.DataTemplateDemo`（单数）。两者在 Task 5 之前会共存，**不要把文件写进旧目录**。
 
-- [ ] **Step 1: 用脚本批量生成三份骨架的目录与二进制文件**
+- [x] **Step 1: 用脚本批量生成三份骨架的目录与二进制文件**
 
 在仓库根目录执行：
 
@@ -277,7 +277,7 @@ grep -l "Avalonia.LayoutDemo" Avalonia.StylingDemo/app.manifest Avalonia.DataBin
 
 Expected: 最后一行输出 `manifest names rewritten`。
 
-- [ ] **Step 2: 创建三个 .csproj**
+- [x] **Step 2: 创建三个 .csproj**
 
 三份内容逐字相同（文件里没有项目名）。`Avalonia.StylingDemo/Avalonia.StylingDemo.csproj`：
 
@@ -317,7 +317,7 @@ StylingDemo 的 `Styles/*.axaml` 也要被编译成 avares 资源。Avalonia SDK
 `*.axaml` 当作 `AvaloniaXaml` 编译，不需要额外 `ItemGroup`；`Assets\**` 那一行只管非 XAML
 资源（图标、字体）。
 
-- [ ] **Step 3: 创建三个 Program.cs**
+- [x] **Step 3: 创建三个 Program.cs**
 
 `Avalonia.StylingDemo/Program.cs`：
 
@@ -349,7 +349,7 @@ DataBindingDemo 的日志级别**不要**改成 `Verbose`：调试页（Task 3�
 只收 `LogArea.Binding` 的 sink，把错误显示在界面上；全局 Verbose 会让 Output 窗口被布局
 日志淹没，反而看不到绑定错误。
 
-- [ ] **Step 4: 创建三个 App.axaml 与 App.axaml.cs**
+- [x] **Step 4: 创建三个 App.axaml 与 App.axaml.cs**
 
 `Avalonia.StylingDemo/App.axaml`：
 
@@ -399,7 +399,7 @@ namespace Avalonia.StylingDemo
 
 另两个项目把 `x:Class`、`namespace`、`using` 里的 `Avalonia.StylingDemo` 换成对应项目名。
 
-- [ ] **Step 5: 创建三个 MainWindow**
+- [x] **Step 5: 创建三个 MainWindow**
 
 `Avalonia.StylingDemo/Views/MainWindow.axaml`：
 
@@ -453,7 +453,7 @@ DataBindingDemo 有 12 个 Tab，900 宽放不下一行标题。它的 `TabContr
 这是唯一一处偏离样板的地方。横排 12 个 Tab 会出现横向滚动，spec 明确把这当作要避免的
 体验问题（「功能点粒度」一节）。
 
-- [ ] **Step 6: 注册到解决方案**
+- [x] **Step 6: 注册到解决方案**
 
 修改 `hello-avalonia.slnx`，按字母序插入三行（旧 `Avalonia.DataTemplateDemo` 暂时保留，
 Task 5 再删）：
@@ -475,7 +475,7 @@ Task 5 再删）：
 </Solution>
 ```
 
-- [ ] **Step 7: 构建验证**
+- [x] **Step 7: 构建验证**
 
 Run: `dotnet build hello-avalonia.slnx 2>&1 | grep -E "个错误"`
 Expected: `0 个错误`。
@@ -491,7 +491,7 @@ dotnet build hello-avalonia.slnx 2>&1 | grep -E "warning" | grep -E "StylingDemo
 
 Expected: 无输出。后续每个任务的「构建」步骤都用这条命令。
 
-- [ ] **Step 8: 提交**
+- [x] **Step 8: 提交**
 
 ```bash
 git add Avalonia.StylingDemo/ Avalonia.DataBindingDemo/ Avalonia.DataTemplatesDemo/ hello-avalonia.slnx
@@ -528,7 +528,7 @@ EOF
 本项目所有页面都是**无状态**的（交互状态全在控件上，或用 `#元素名` 绑定互相驱动），
 因此没有 ViewModel 目录。这与 spec 「ViewModels/ 与 Pages 一一对应（无状态页可省略）」一致。
 
-- [ ] **Step 1: 复制字体并迁移按钮样式**
+- [x] **Step 1: 复制字体并迁移按钮样式**
 
 ```bash
 mkdir -p Avalonia.StylingDemo/Assets/Fonts Avalonia.StylingDemo/Styles Avalonia.StylingDemo/Controls
@@ -562,7 +562,7 @@ cp Avalonia.HtmlRendererDemo/Assets/iconfont.ttf Avalonia.StylingDemo/Assets/Fon
 
 类名改为小写 `call` / `icon`，与仓库其余样式类（`caption`、`stage`、`hint`）的命名一致。
 
-- [ ] **Step 2: 创建资源字典 Palette.axaml**
+- [x] **Step 2: 创建资源字典 Palette.axaml**
 
 `Avalonia.StylingDemo/Styles/Palette.axaml`：
 
@@ -578,7 +578,7 @@ cp Avalonia.HtmlRendererDemo/Assets/iconfont.ttf Avalonia.StylingDemo/Assets/Fon
 </ResourceDictionary>
 ```
 
-- [ ] **Step 3: 创建自定义伪类控件 ToggleChip**
+- [x] **Step 3: 创建自定义伪类控件 ToggleChip**
 
 `Avalonia.StylingDemo/Controls/ToggleChip.cs`：
 
@@ -658,7 +658,7 @@ namespace Avalonia.StylingDemo.Controls
 
 这与 `Avalonia.PropertySystemDemo/App.axaml` 引入 `GaugeControl` 主题的写法一致。
 
-- [ ] **Step 4: 创建 SelectorsPage**
+- [x] **Step 4: 创建 SelectorsPage**
 
 `Avalonia.StylingDemo/Views/Pages/SelectorsPage.axaml`：
 
@@ -838,7 +838,7 @@ namespace Avalonia.StylingDemo.Views.Pages
 后续每个无状态页面的 `.axaml.cs` 都是这个形状，只换类名——下文不再重复列出，
 **但每个都必须创建**，否则 `x:Class` 找不到 partial 类会构建失败。
 
-- [ ] **Step 5: 创建 StyleClassesPage**
+- [x] **Step 5: 创建 StyleClassesPage**
 
 `Avalonia.StylingDemo/Views/Pages/StyleClassesPage.axaml`：
 
@@ -951,7 +951,7 @@ namespace Avalonia.StylingDemo.Views.Pages
 }
 ```
 
-- [ ] **Step 6: 创建 PseudoClassesPage**
+- [x] **Step 6: 创建 PseudoClassesPage**
 
 `Avalonia.StylingDemo/Views/Pages/PseudoClassesPage.axaml`：
 
@@ -1021,7 +1021,7 @@ namespace Avalonia.StylingDemo.Views.Pages
 
 `PseudoClassesPage.axaml.cs`：无状态页标准形状（见 Step 4）。
 
-- [ ] **Step 7: 创建 ControlThemesPage**
+- [x] **Step 7: 创建 ControlThemesPage**
 
 旧 `DataTemplateDemo` 里的 `ButtonStyle` ControlTheme 迁移到本页的第 1 节，`x:Key` 改为
 `YellowButtonTheme`（旧名叫 Style 却是 ControlTheme，正是本页要澄清的混淆）。
@@ -1116,7 +1116,7 @@ namespace Avalonia.StylingDemo.Views.Pages
 迁移时去掉了旧版模板里 `Border.Styles` 中 `Border:pointerover` 那条规则：它把悬停样式写在
 模板内部的 Border 上，与 `^:pointerover` 写法表达的是同一件事，留两份会让读者以为二者有别。
 
-- [ ] **Step 8: 创建 ThemesPage**
+- [x] **Step 8: 创建 ThemesPage**
 
 `Avalonia.StylingDemo/Views/Pages/ThemesPage.axaml`：
 
@@ -1254,7 +1254,7 @@ namespace Avalonia.StylingDemo.Views.Pages
 }
 ```
 
-- [ ] **Step 9: 创建 ContainerQueriesPage（指路页）**
+- [x] **Step 9: 创建 ContainerQueriesPage（指路页）**
 
 按 spec「分类之间的去重规则」，容器查询已在 `Avalonia.LayoutDemo` 完整实现，这里只做
 指路。`Avalonia.StylingDemo/Views/Pages/ContainerQueriesPage.axaml`：
@@ -1290,7 +1290,7 @@ namespace Avalonia.StylingDemo.Views.Pages
 
 `ContainerQueriesPage.axaml.cs`：无状态页标准形状。
 
-- [ ] **Step 10: 创建 FontsPage**
+- [x] **Step 10: 创建 FontsPage**
 
 `Avalonia.StylingDemo/Views/Pages/FontsPage.axaml`：
 
@@ -1360,7 +1360,7 @@ namespace Avalonia.StylingDemo.Views.Pages
 `LetterSpacing` 与 `LineHeight` 都是 `double`，直接绑 `Slider.Value` 不需要转换器——与
 硬性规则 1 的 `Thickness` 情形不同，这里没有结构体。
 
-- [ ] **Step 11: 创建 SharingStylesPage**
+- [x] **Step 11: 创建 SharingStylesPage**
 
 `Avalonia.StylingDemo/Views/Pages/SharingStylesPage.axaml`：
 
@@ -1428,7 +1428,7 @@ namespace Avalonia.StylingDemo.Views.Pages
 
 `SharingStylesPage.axaml.cs`：无状态页标准形状。
 
-- [ ] **Step 12: 创建 PrecedencePage（指路页）**
+- [x] **Step 12: 创建 PrecedencePage（指路页）**
 
 `Avalonia.StylingDemo/Views/Pages/PrecedencePage.axaml`：
 
@@ -1463,7 +1463,7 @@ namespace Avalonia.StylingDemo.Views.Pages
 
 `PrecedencePage.axaml.cs`：无状态页标准形状。
 
-- [ ] **Step 13: 在 MainWindow 挂 9 个 Tab**
+- [x] **Step 13: 在 MainWindow 挂 9 个 Tab**
 
 把 `Avalonia.StylingDemo/Views/MainWindow.axaml` 的 `<TabControl>` 一段替换为（根元素加
 `xmlns:pages`）：
@@ -1516,14 +1516,14 @@ namespace Avalonia.StylingDemo.Views.Pages
 </Window>
 ```
 
-- [ ] **Step 14: 构建**
+- [x] **Step 14: 构建**
 
 Run: `dotnet build Avalonia.StylingDemo/Avalonia.StylingDemo.csproj 2>&1 | grep -E "个错误|error"`
 Expected: `0 个错误`，无 `error` 行。
 
 再跑 Task 1 Step 7 的警告检查命令，Expected: 无输出。
 
-- [ ] **Step 15: 用 headless 探针断言页面行为**
+- [x] **Step 15: 用 headless 探针断言页面行为**
 
 **不要用目视核对代替这一步**（理由见 foundation plan Task 2 Step 12）。在**仓库外**建探针。
 创建 `C:\Temp\stylecheck\stylecheck.csproj`：
@@ -1765,7 +1765,7 @@ Expected: 28 行全部 `PASS`（执行期实测条数；初稿误写为 19），
 任何一行 `FAIL` 都要先修好再提交，**不要**把 FAIL 解释成"探针写得不对"就跳过。若确认是探针
 本身的问题（例如控件名拼错），修探针后重跑。
 
-- [ ] **Step 16: 清理探针并提交**
+- [x] **Step 16: 清理探针并提交**
 
 ```bash
 rm -rf /c/Temp/stylecheck
@@ -1813,7 +1813,7 @@ EOF
 本任务比 Task 2 多一类静默失败：**编译绑定写错属性名会在构建期报错，`ReflectionBinding` 写错却只记一条
 warning**。只有 `DebuggingPage` 故意写错绑定；其他页面若在探针里出现 binding warning，就是 bug。
 
-- [ ] **Step 1: 创建模型**
+- [x] **Step 1: 创建模型**
 
 `Avalonia.DataBindingDemo/Models/Contact.cs`：
 
@@ -1873,7 +1873,7 @@ namespace Avalonia.DataBindingDemo.Models
 }
 ```
 
-- [ ] **Step 2: 创建两个自定义转换器**
+- [x] **Step 2: 创建两个自定义转换器**
 
 `Avalonia.DataBindingDemo/Converters/RgbToBrushConverter.cs`：
 
@@ -1940,7 +1940,7 @@ namespace Avalonia.DataBindingDemo.Converters
 }
 ```
 
-- [ ] **Step 3: 创建 SyntaxPage 与 SyntaxViewModel**
+- [x] **Step 3: 创建 SyntaxPage 与 SyntaxViewModel**
 
 `Avalonia.DataBindingDemo/ViewModels/SyntaxViewModel.cs`：
 
@@ -2050,7 +2050,7 @@ namespace Avalonia.DataBindingDemo.Views.Pages
 
 `Grid` 的 `RowSpacing` / `ColumnSpacing` 是 Avalonia 11.1 起才有的属性，12.1.2 可用。
 
-- [ ] **Step 4: 创建 CompiledBindingsPage（无状态）**
+- [x] **Step 4: 创建 CompiledBindingsPage（无状态）**
 
 `Avalonia.DataBindingDemo/Views/Pages/CompiledBindingsPage.axaml`：
 
@@ -2132,7 +2132,7 @@ namespace Avalonia.DataBindingDemo.Views.Pages
 }
 ```
 
-- [ ] **Step 5: 创建 CollectionsPage 与 CollectionsViewModel**
+- [x] **Step 5: 创建 CollectionsPage 与 CollectionsViewModel**
 
 `Avalonia.DataBindingDemo/ViewModels/CollectionsViewModel.cs`：
 
@@ -2257,7 +2257,7 @@ namespace Avalonia.DataBindingDemo.Views.Pages
 `Contact.Samples()[..3]` 用的是数组的范围运算符，C# 8 起可用，返回新数组——两个集合
 各拿一份互不共享的 `Contact` 对象。
 
-- [ ] **Step 6: 创建 MasterDetailPage 与 MasterDetailViewModel**
+- [x] **Step 6: 创建 MasterDetailPage 与 MasterDetailViewModel**
 
 `Avalonia.DataBindingDemo/ViewModels/MasterDetailViewModel.cs`：
 
@@ -2358,7 +2358,7 @@ namespace Avalonia.DataBindingDemo.Views.Pages
 详情面板的 `IsVisible` 绑 `$self.DataContext` 而不是 `Selected`：面板上的 `x:DataType` 已经换成
 `Contact`，在它身上写 `{Binding Selected}` 会在构建期报"Contact 没有 Selected 属性"。
 
-- [ ] **Step 7: 创建 MultiBindingPage（无状态）**
+- [x] **Step 7: 创建 MultiBindingPage（无状态）**
 
 `Avalonia.DataBindingDemo/Views/Pages/MultiBindingPage.axaml`：
 
@@ -2437,7 +2437,7 @@ namespace Avalonia.DataBindingDemo.Views.Pages
 
 `MultiBindingPage.axaml.cs`：无状态页标准形状。
 
-- [ ] **Step 8: 创建 CommandsPage 与 CommandsViewModel**
+- [x] **Step 8: 创建 CommandsPage 与 CommandsViewModel**
 
 `Avalonia.DataBindingDemo/ViewModels/CommandsViewModel.cs`：
 
@@ -2556,7 +2556,7 @@ namespace Avalonia.DataBindingDemo.Views.Pages
 }
 ```
 
-- [ ] **Step 9: 创建 ConvertersPage（无状态）**
+- [x] **Step 9: 创建 ConvertersPage（无状态）**
 
 `Avalonia.DataBindingDemo/Views/Pages/ConvertersPage.axaml`：
 
@@ -2634,7 +2634,7 @@ namespace Avalonia.DataBindingDemo.Converters
 }
 ```
 
-- [ ] **Step 10: 创建 ValidationPage 与 ValidationViewModel**
+- [x] **Step 10: 创建 ValidationPage 与 ValidationViewModel**
 
 `Avalonia.DataBindingDemo/ViewModels/ValidationViewModel.cs`：
 
@@ -2759,7 +2759,7 @@ namespace Avalonia.DataBindingDemo.Views.Pages
 }
 ```
 
-- [ ] **Step 11: 创建 CollectionViewsPage 与 CollectionViewsViewModel**
+- [x] **Step 11: 创建 CollectionViewsPage 与 CollectionViewsViewModel**
 
 Avalonia 没有 WPF 的 `CollectionViewSource` / `ICollectionView`。官方 `collection-views` 一页给出的
 做法就是：**排序、筛选、分组都在 ViewModel 里做，界面只绑结果集合**。分组用"把组头和成员
@@ -2903,7 +2903,7 @@ namespace Avalonia.DataBindingDemo.Views.Pages
 组头也能被选中——这是拍平写法的已知代价。演示里保留它，hint 不展开；需要不可选的组头时，
 用 `ItemsControl` 代替 `ListBox` 即可。
 
-- [ ] **Step 12: 创建 AsyncPage 与 AsyncViewModel**
+- [x] **Step 12: 创建 AsyncPage 与 AsyncViewModel**
 
 `Avalonia.DataBindingDemo/ViewModels/AsyncViewModel.cs`：
 
@@ -3034,7 +3034,7 @@ namespace Avalonia.DataBindingDemo.Views.Pages
 }
 ```
 
-- [ ] **Step 13: 创建 BindingLogSink、DebuggingPage 与 DebuggingViewModel**
+- [x] **Step 13: 创建 BindingLogSink、DebuggingPage 与 DebuggingViewModel**
 
 调试页要把绑定错误**显示在界面上**，而不是让用户去翻 Output 窗口。做法是装一个只截
 `LogArea.Binding` 的 sink，并把其余日志转交给原来的 sink（`Program.cs` 里 `LogToTrace` 装的那个），
@@ -3222,7 +3222,7 @@ code-behind 里直接赋 `ItemsSource` 比给 ViewModel 塞一个全局对象更
 求值一次。这不产生警告（`DataContext` 为 null 时 Avalonia 不报错），因此不影响"日志只来自本页
 故意写错的两处"这一判断。
 
-- [ ] **Step 14: 创建 MarkupExtensionsPage（指路页）**
+- [x] **Step 14: 创建 MarkupExtensionsPage（指路页）**
 
 `Avalonia.DataBindingDemo/Views/Pages/MarkupExtensionsPage.axaml`：
 
@@ -3255,7 +3255,7 @@ code-behind 里直接赋 `ItemsSource` 比给 ViewModel 塞一个全局对象更
 
 `MarkupExtensionsPage.axaml.cs`：无状态页标准形状。
 
-- [ ] **Step 15: 在 MainWindow 挂 12 个 Tab**
+- [x] **Step 15: 在 MainWindow 挂 12 个 Tab**
 
 `Avalonia.DataBindingDemo/Views/MainWindow.axaml`：
 
@@ -3316,7 +3316,7 @@ code-behind 里直接赋 `ItemsSource` 比给 ViewModel 塞一个全局对象更
 </Window>
 ```
 
-- [ ] **Step 16: 构建**
+- [x] **Step 16: 构建**
 
 Run: `dotnet build Avalonia.DataBindingDemo/Avalonia.DataBindingDemo.csproj 2>&1 | grep -E "个错误|error"`
 Expected: `0 个错误`，无 `error` 行。再跑 Task 1 Step 7 的警告检查命令，Expected: 无输出。
@@ -3324,7 +3324,7 @@ Expected: `0 个错误`，无 `error` 行。再跑 Task 1 Step 7 的警告检查
 若出现 `AVLN` 开头的错误，说明某处 `{Binding}` 的路径在 `x:DataType` 上找不到——这正是编译绑定
 的价值所在，按报错的行号修正路径，**不要**改成 `ReflectionBinding` 绕过。
 
-- [ ] **Step 17: 用 headless 探针断言页面行为**
+- [x] **Step 17: 用 headless 探针断言页面行为**
 
 创建 `C:\Temp\bindcheck\bindcheck.csproj`：
 
@@ -3643,7 +3643,7 @@ Expected: 50 行全部 `PASS`（执行期实测条数；初稿误写为 38），
 任何一行 `FAIL` 都要先修好再提交。若某一行是因为页面里的 `Name` 拼错导致 `Find` 抛异常，修页面
 （页面与探针中的名字以本 plan 为准）。
 
-- [ ] **Step 18: 清理探针并提交**
+- [x] **Step 18: 清理探针并提交**
 
 ```bash
 rm -rf /c/Temp/bindcheck
@@ -3698,7 +3698,7 @@ EOF
 `ContentControl.Content = new Circle()` 且无匹配模板时显示 **`XProbe.Circle`**（即 `ToString()`，
 默认是类型全名）；`Button.Content` 同样如此；字符串直接显示。
 
-- [ ] **Step 1: 创建模型（含迁移的 Person）**
+- [x] **Step 1: 创建模型（含迁移的 Person）**
 
 `Avalonia.DataTemplatesDemo/Models/Person.cs`——迁移自旧项目，改动三处：命名空间；属性加
 `required` 修掉旧项目的 4 条 CS8618 警告；`Id` 从 `string` 改为 `int`，因为模板里把它当序号
@@ -3781,7 +3781,7 @@ namespace Avalonia.DataTemplatesDemo.Models
 }
 ```
 
-- [ ] **Step 2: 迁移 PersonDataTemplateSelector**
+- [x] **Step 2: 迁移 PersonDataTemplateSelector**
 
 `Avalonia.DataTemplatesDemo/DataTemplates/PersonDataTemplateSelector.cs`——迁移自旧项目，修正
 两处：两个模板属性改为可空（修 CS8618），以及 `Build` 末尾多余的 `;` 和"非 Person 返回空
@@ -3817,7 +3817,7 @@ namespace Avalonia.DataTemplatesDemo.DataTemplates
 }
 ```
 
-- [ ] **Step 3: 创建 ControlContentPage**
+- [x] **Step 3: 创建 ControlContentPage**
 
 `Avalonia.DataTemplatesDemo/Views/Pages/ControlContentPage.axaml`：
 
@@ -3889,7 +3889,7 @@ namespace Avalonia.DataTemplatesDemo.Views.Pages
 }
 ```
 
-- [ ] **Step 4: 创建 ContentTemplatesPage**
+- [x] **Step 4: 创建 ContentTemplatesPage**
 
 `Avalonia.DataTemplatesDemo/Views/Pages/ContentTemplatesPage.axaml`：
 
@@ -3965,7 +3965,7 @@ namespace Avalonia.DataTemplatesDemo.Views.Pages
 }
 ```
 
-- [ ] **Step 5: 创建 TemplateCollectionPage**
+- [x] **Step 5: 创建 TemplateCollectionPage**
 
 `Avalonia.DataTemplatesDemo/Views/Pages/TemplateCollectionPage.axaml`：
 
@@ -4049,7 +4049,7 @@ namespace Avalonia.DataTemplatesDemo.Views.Pages
 }
 ```
 
-- [ ] **Step 6: 创建 SelectorPage（迁移旧 DataTemplateDemo 的主体）**
+- [x] **Step 6: 创建 SelectorPage（迁移旧 DataTemplateDemo 的主体）**
 
 旧项目 `MainWindow.axaml` 第 1 节（男红女黄的横排 ListBox）原样迁移，只把模板选择器从
 `Window.DataTemplates` 挪到 `ListBox.DataTemplates`——作用域缩小到用它的那个控件。
@@ -4150,7 +4150,7 @@ namespace Avalonia.DataTemplatesDemo.Views.Pages
 旧项目的 `MainWindowViewModel` 只为承载这两条 `People` 而存在；迁移后数据直接在 code-behind
 赋值，ViewModel 不迁。
 
-- [ ] **Step 7: 创建 CodeTemplatesPage**
+- [x] **Step 7: 创建 CodeTemplatesPage**
 
 `Avalonia.DataTemplatesDemo/Views/Pages/CodeTemplatesPage.axaml`：
 
@@ -4251,7 +4251,7 @@ namespace Avalonia.DataTemplatesDemo.Views.Pages
 }
 ```
 
-- [ ] **Step 8: 创建 ReusePage**
+- [x] **Step 8: 创建 ReusePage**
 
 `Avalonia.DataTemplatesDemo/Views/Pages/ReusePage.axaml`：
 
@@ -4335,7 +4335,7 @@ namespace Avalonia.DataTemplatesDemo.Views.Pages
 }
 ```
 
-- [ ] **Step 9: 创建 ViewLocator 与两组被定位的 View/ViewModel**
+- [x] **Step 9: 创建 ViewLocator 与两组被定位的 View/ViewModel**
 
 `Avalonia.DataTemplatesDemo/ViewLocator.cs`：
 
@@ -4467,7 +4467,7 @@ namespace Avalonia.DataTemplatesDemo.Views.Located
 被定位的 View **不**设 `DataContext`：`ContentControl` 用模板建出 View 后，会把 Content（即那个
 ViewModel）自动设为 View 的 `DataContext`。
 
-- [ ] **Step 10: 创建 ViewLocatorPage 与 ViewLocatorViewModel**
+- [x] **Step 10: 创建 ViewLocatorPage 与 ViewLocatorViewModel**
 
 `Avalonia.DataTemplatesDemo/ViewModels/ViewLocatorViewModel.cs`：
 
@@ -4571,7 +4571,7 @@ namespace Avalonia.DataTemplatesDemo.Views.Pages
 `ViewLocatorViewModel` 自己也以 `ViewModel` 结尾，但它是页面的 `DataContext`，从不作为 `Content`
 交给模板系统，所以不会被 `ViewLocator` 误认。
 
-- [ ] **Step 11: 创建 PanelsAndTreesPage**
+- [x] **Step 11: 创建 PanelsAndTreesPage**
 
 `Avalonia.DataTemplatesDemo/Views/Pages/PanelsAndTreesPage.axaml`：
 
@@ -4657,7 +4657,7 @@ namespace Avalonia.DataTemplatesDemo.Views.Pages
 }
 ```
 
-- [ ] **Step 12: 创建 VersusControlTemplatePage**
+- [x] **Step 12: 创建 VersusControlTemplatePage**
 
 `Avalonia.DataTemplatesDemo/Views/Pages/VersusControlTemplatePage.axaml`：
 
@@ -4755,7 +4755,7 @@ namespace Avalonia.DataTemplatesDemo.Views.Pages
 }
 ```
 
-- [ ] **Step 13: 在 MainWindow 挂 9 个 Tab**
+- [x] **Step 13: 在 MainWindow 挂 9 个 Tab**
 
 `Avalonia.DataTemplatesDemo/Views/MainWindow.axaml`：
 
@@ -4807,13 +4807,13 @@ namespace Avalonia.DataTemplatesDemo.Views.Pages
 </Window>
 ```
 
-- [ ] **Step 14: 构建**
+- [x] **Step 14: 构建**
 
 Run: `dotnet build Avalonia.DataTemplatesDemo/Avalonia.DataTemplatesDemo.csproj 2>&1 | grep -E "个错误|error"`
 Expected: `0 个错误`，无 `error` 行。再跑 Task 1 Step 7 的警告检查命令，Expected: 无输出——
 尤其确认旧项目带过来的 CS8618 已经被 `required` / 可空属性修掉。
 
-- [ ] **Step 15: 用 headless 探针断言页面行为**
+- [x] **Step 15: 用 headless 探针断言页面行为**
 
 创建 `C:\Temp\tplcheck\tplcheck.csproj`：
 
@@ -5032,7 +5032,7 @@ Run: `dotnet run --project C:\Temp\tplcheck\tplcheck.csproj`
 
 Expected: 31 行全部 `PASS`（执行期实测条数；初稿误写为 22），且 `warning-or-worse log entries: 0`。
 
-- [ ] **Step 16: 清理探针并提交**
+- [x] **Step 16: 清理探针并提交**
 
 ```bash
 rm -rf /c/Temp/tplcheck
@@ -5073,7 +5073,7 @@ EOF
 - Consumes: Task 2 与 Task 4 已完成迁移
 - Produces: 无代码产物
 
-- [ ] **Step 1: 核对迁移完整性，再删除旧项目**
+- [x] **Step 1: 核对迁移完整性，再删除旧项目**
 
 旧项目的每一块内容都必须在新项目里有去处。逐条核对：
 
@@ -5126,7 +5126,7 @@ git status --short
 </Solution>
 ```
 
-- [ ] **Step 2: 更新 README 项目表格，按官方分类顺序重排**
+- [x] **Step 2: 更新 README 项目表格，按官方分类顺序重排**
 
 spec 的收尾要求是「`README.md` 项目表格（按官方分类顺序重排）」，不是只增删行。当前表格
 的顺序是历史堆积的结果（MusicStore / WebViewDemo / HtmlRendererDemo / DataTemplateDemo /
@@ -5164,7 +5164,7 @@ Expected: 两个文件都是 `0`（新项目名 `DataTemplatesDemo` 在 `Templat
 Run: `grep -n "^| \[" README.md`
 Expected: 输出顺序与上表一致，共 11 行。
 
-- [ ] **Step 3: 回写实测结论到 spec**
+- [x] **Step 3: 回写实测结论到 spec**
 
 在 spec 的「基础层实测结论（2026-09-22）」小节之后，新增一节。**把 Task 2–4 探针的实际输出
 与这里的说法逐条对照**；若执行中有任何一条与下文不符，以探针输出为准改写，并在该条末尾注明
@@ -5201,7 +5201,7 @@ Expected: 输出顺序与上表一致，共 11 行。
   `LogToTrace` 的输出不受影响。绑定调试页用这个把错误显示在界面上。
 ```
 
-- [ ] **Step 4: 全量构建与最终验证**
+- [x] **Step 4: 全量构建与最终验证**
 
 Run: `dotnet build hello-avalonia.slnx 2>&1 | grep -E "个错误"`
 Expected: `0 个错误`。
@@ -5236,7 +5236,7 @@ timeout 60 dotnet run --project Avalonia.DataTemplatesDemo
 `Avalonia Styling Demo`、`Avalonia Data Binding Demo`、`Avalonia Data Templates Demo`）。
 若标题对不上，说明 Task 1 的文件没照 brief 写，回去修 Task 1 而不是改这里的期望值。
 
-- [ ] **Step 5: 提交**
+- [x] **Step 5: 提交**
 
 ```bash
 git add -A Avalonia.DataTemplateDemo README.md hello-avalonia.slnx docs/

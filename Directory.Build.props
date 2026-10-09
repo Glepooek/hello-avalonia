@@ -8,7 +8,6 @@
         <OutputPath>bin\Debug\</OutputPath>
         <DebugSymbols>true</DebugSymbols>
         <Optimize>false</Optimize>
-        <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
     </PropertyGroup>
     <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
         <OutputPath>bin\Release\</OutputPath>

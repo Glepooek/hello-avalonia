@@ -73,7 +73,7 @@
 交互逻辑，`TemplatedControl` + `ControlTheme` 是 Avalonia 对这类"可换肤的纯展示控件"的
 标准做法，也让它自身成为 CustomControls 分类的一个真实用例。
 
-- [ ] **Step 1: 创建 DemoHeader 控件类**
+- [x] **Step 1: 创建 DemoHeader 控件类**
 
 创建 `Avalonia.Shared/Controls/DemoHeader.cs`：
 
@@ -111,7 +111,7 @@ namespace Avalonia.Shared.Controls
 }
 ```
 
-- [ ] **Step 2: 创建 DemoHeader 的 ControlTheme**
+- [x] **Step 2: 创建 DemoHeader 的 ControlTheme**
 
 创建 `Avalonia.Shared/Controls/DemoHeader.axaml`：
 
@@ -146,7 +146,7 @@ namespace Avalonia.Shared.Controls
 </ResourceDictionary>
 ```
 
-- [ ] **Step 3: 创建共享样式汇总入口**
+- [x] **Step 3: 创建共享样式汇总入口**
 
 创建 `Avalonia.Shared/Themes/SharedStyles.axaml`：
 
@@ -164,7 +164,7 @@ namespace Avalonia.Shared.Controls
 </Styles>
 ```
 
-- [ ] **Step 4: 让 Avalonia.Shared 支持编译 XAML**
+- [x] **Step 4: 让 Avalonia.Shared 支持编译 XAML**
 
 `Avalonia.Shared` 目前是纯 C# 类库，没有引用 XAML 编译所需的包。修改
 `Avalonia.Shared/Avalonia.Shared.csproj` 为：
@@ -190,14 +190,14 @@ namespace Avalonia.Shared.Controls
 注意：`.axaml` 文件不需要显式的 `<AvaloniaXaml Include>` 条目，Avalonia 的 MSBuild
 targets 会自动包含项目目录下的 `**/*.axaml`。
 
-- [ ] **Step 5: 构建验证**
+- [x] **Step 5: 构建验证**
 
 Run: `dotnet build Avalonia.Shared/Avalonia.Shared.csproj`
 Expected: 构建成功，无错误无警告。
 
 若报 `AVLN:0004` 之类的 XAML 错误，说明资源键名或命名空间有误，按错误信息定位到具体行修正。
 
-- [ ] **Step 6: 提交**
+- [x] **Step 6: 提交**
 
 ```bash
 git add Avalonia.Shared/
@@ -231,7 +231,7 @@ EOF
 - Produces: 可运行的空壳窗口。`MainWindow.axaml` 内有一个 `TabControl`，Task 3–5 各自
   往里加一个 `TabItem`。命名空间 `Avalonia.LayoutDemo.Views.Pages` 为页面预留。
 
-- [ ] **Step 1: 创建项目文件**
+- [x] **Step 1: 创建项目文件**
 
 创建 `Avalonia.LayoutDemo/Avalonia.LayoutDemo.csproj`：
 
@@ -265,7 +265,7 @@ EOF
 </Project>
 ```
 
-- [ ] **Step 2: 复制图标与 manifest**
+- [x] **Step 2: 复制图标与 manifest**
 
 ```bash
 mkdir -p Avalonia.LayoutDemo/Assets
@@ -283,7 +283,7 @@ cp Avalonia.DataTemplateDemo/app.manifest Avalonia.LayoutDemo/
 （现有项目的 manifest 都还留着 MusicStore 的名字，那是拆分时的遗留；新项目不沿袭这个错误，
 但也不回头去改现有项目——那超出本次范围。）
 
-- [ ] **Step 3: 创建 Program.cs**
+- [x] **Step 3: 创建 Program.cs**
 
 创建 `Avalonia.LayoutDemo/Program.cs`：
 
@@ -309,7 +309,7 @@ namespace Avalonia.LayoutDemo
 }
 ```
 
-- [ ] **Step 4: 创建 App.axaml 与 App.axaml.cs**
+- [x] **Step 4: 创建 App.axaml 与 App.axaml.cs**
 
 创建 `Avalonia.LayoutDemo/App.axaml`：
 
@@ -357,7 +357,7 @@ namespace Avalonia.LayoutDemo
 }
 ```
 
-- [ ] **Step 5: 创建 MainWindow 外壳**
+- [x] **Step 5: 创建 MainWindow 外壳**
 
 创建 `Avalonia.LayoutDemo/Views/MainWindow.axaml`：
 
@@ -399,7 +399,7 @@ namespace Avalonia.LayoutDemo.Views
 }
 ```
 
-- [ ] **Step 6: 注册到解决方案**
+- [x] **Step 6: 注册到解决方案**
 
 修改 `hello-avalonia.slnx`，在项目列表中按字母序插入一行（`Avalonia.HtmlRendererDemo`
 之后、`Avalonia.MusicStore` 之前）：
@@ -408,7 +408,7 @@ namespace Avalonia.LayoutDemo.Views
   <Project Path="Avalonia.LayoutDemo/Avalonia.LayoutDemo.csproj" />
 ```
 
-- [ ] **Step 7: 构建并运行验证**
+- [x] **Step 7: 构建并运行验证**
 
 Run: `dotnet build hello-avalonia.slnx`
 Expected: 构建成功，无错误。
@@ -417,7 +417,7 @@ Run: `dotnet run --project Avalonia.LayoutDemo`
 Expected: 弹出 900×640 的深色窗口，标题 "Avalonia Layout Demo"，内容区是空的
 TabControl。确认后关闭窗口。
 
-- [ ] **Step 8: 提交**
+- [x] **Step 8: 提交**
 
 ```bash
 git add Avalonia.LayoutDemo/ hello-avalonia.slnx
@@ -446,7 +446,7 @@ EOF
 **对照设计**：8 个面板各放一个小卡片，每张卡片里塞**完全相同的 5 个色块**，让读者一眼看出
 同样内容在不同面板下的排布差异——这比 8 段互不相干的示例更能说明"该选哪个面板"。
 
-- [ ] **Step 1: 创建 PanelsPage.axaml**
+- [x] **Step 1: 创建 PanelsPage.axaml**
 
 创建 `Avalonia.LayoutDemo/Views/Pages/PanelsPage.axaml`：
 
@@ -614,7 +614,7 @@ DockPanel 的填充区、UniformGrid 的等分格）需要让色块随格子伸�
 控件实例上覆盖样式设的固定值——这是 Avalonia 中"取消已设置尺寸"的写法，直接写
 `Width="Auto"` 在 `double` 类型属性上不合法。
 
-- [ ] **Step 2: 创建 PanelsPage.axaml.cs**
+- [x] **Step 2: 创建 PanelsPage.axaml.cs**
 
 创建 `Avalonia.LayoutDemo/Views/Pages/PanelsPage.axaml.cs`：
 
@@ -633,7 +633,7 @@ namespace Avalonia.LayoutDemo.Views.Pages
 }
 ```
 
-- [ ] **Step 3: 挂到 MainWindow 的 TabControl**
+- [x] **Step 3: 挂到 MainWindow 的 TabControl**
 
 修改 `Avalonia.LayoutDemo/Views/MainWindow.axaml`——在根 `Window` 元素上补一个命名空间
 声明：
@@ -652,7 +652,7 @@ namespace Avalonia.LayoutDemo.Views.Pages
     </TabControl>
 ```
 
-- [ ] **Step 4: 构建并运行验证**
+- [x] **Step 4: 构建并运行验证**
 
 Run: `dotnet build hello-avalonia.slnx`
 Expected: 构建成功。
@@ -671,7 +671,7 @@ Expected: 窗口显示"布局面板"标签页，内有 8 张卡片。逐一核�
 
 拉伸窗口宽度，确认 Canvas 卡片内色块位置不变、其余卡片跟随调整。确认后关闭窗口。
 
-- [ ] **Step 5: 提交**
+- [x] **Step 5: 提交**
 
 ```bash
 git add Avalonia.LayoutDemo/
@@ -705,7 +705,7 @@ EOF
 这三点用可交互的滑块比静态截图更有说服力，所以本页用 `Slider` + `{Binding #name.Value}`
 的元素到元素绑定（不需要 ViewModel）。
 
-- [ ] **Step 1: 创建 PositioningPage.axaml**
+- [x] **Step 1: 创建 PositioningPage.axaml**
 
 创建 `Avalonia.LayoutDemo/Views/Pages/PositioningPage.axaml`：
 
@@ -803,7 +803,7 @@ EOF
 </UserControl>
 ```
 
-- [ ] **Step 2: 创建 PositioningPage.axaml.cs**
+- [x] **Step 2: 创建 PositioningPage.axaml.cs**
 
 创建 `Avalonia.LayoutDemo/Views/Pages/PositioningPage.axaml.cs`：
 
@@ -822,7 +822,7 @@ namespace Avalonia.LayoutDemo.Views.Pages
 }
 ```
 
-- [ ] **Step 3: 挂到 TabControl**
+- [x] **Step 3: 挂到 TabControl**
 
 修改 `Avalonia.LayoutDemo/Views/MainWindow.axaml`，在"布局面板"TabItem 之后加：
 
@@ -832,7 +832,7 @@ namespace Avalonia.LayoutDemo.Views.Pages
         </TabItem>
 ```
 
-- [ ] **Step 4: 构建并运行验证**
+- [x] **Step 4: 构建并运行验证**
 
 Run: `dotnet build hello-avalonia.slnx`
 Expected: 构建成功。
@@ -852,7 +852,7 @@ Expected: 切到"定位与间距"标签页，核对：
 `{Binding #MarginSlider.Value, Mode=OneWay}`；仍报错则在 `UserControl` 上加
 `x:CompileBindings="False"` 并在注释中说明原因。
 
-- [ ] **Step 5: 提交**
+- [x] **Step 5: 提交**
 
 ```bash
 git add Avalonia.LayoutDemo/
@@ -887,7 +887,7 @@ EOF
 **已知风险**：容器查询（`ContainerQuery`）是 Avalonia 12 的较新特性，spec 风险条目 2 记录
 了这一点。若 Step 3 构建失败，按该步骤内的回退说明处理。
 
-- [ ] **Step 1: 创建断点 ViewModel**
+- [x] **Step 1: 创建断点 ViewModel**
 
 创建 `Avalonia.LayoutDemo/ViewModels/ResponsiveViewModel.cs`：
 
@@ -927,7 +927,7 @@ namespace Avalonia.LayoutDemo.ViewModels
 注意 `ViewModelBase` 继承自 `CommunityToolkit.Mvvm` 的 `ObservableObject`，所以
 `[ObservableProperty]` 的源生成器可以正常工作；类必须声明为 `partial`。
 
-- [ ] **Step 2: 创建 ResponsivePage.axaml.cs**
+- [x] **Step 2: 创建 ResponsivePage.axaml.cs**
 
 先写 code-behind，因为 XAML 里要绑定它建立的 DataContext。创建
 `Avalonia.LayoutDemo/Views/Pages/ResponsivePage.axaml.cs`：
@@ -955,7 +955,7 @@ namespace Avalonia.LayoutDemo.Views.Pages
 }
 ```
 
-- [ ] **Step 3: 创建 ResponsivePage.axaml**
+- [x] **Step 3: 创建 ResponsivePage.axaml**
 
 创建 `Avalonia.LayoutDemo/Views/Pages/ResponsivePage.axaml`：
 
@@ -1069,7 +1069,7 @@ namespace Avalonia.LayoutDemo.Views.Pages
 3. 在 spec 的"待验证的技术风险"第 2 条下追加一行实测结论
 4. 向用户报告这一偏差，不要静默降级
 
-- [ ] **Step 4: 挂到 TabControl**
+- [x] **Step 4: 挂到 TabControl**
 
 修改 `Avalonia.LayoutDemo/Views/MainWindow.axaml`，在"定位与间距"TabItem 之后加：
 
@@ -1079,7 +1079,7 @@ namespace Avalonia.LayoutDemo.Views.Pages
         </TabItem>
 ```
 
-- [ ] **Step 5: 构建并运行验证**
+- [x] **Step 5: 构建并运行验证**
 
 Run: `dotnet build hello-avalonia.slnx`
 Expected: 构建成功。若容器查询报错，按 Step 3 的回退方案处理后重新构建。
@@ -1093,7 +1093,7 @@ Expected: 切到"响应式布局"标签页，把窗口从最窄拖到最宽，�
 
 确认后关闭窗口。
 
-- [ ] **Step 6: 提交**
+- [x] **Step 6: 提交**
 
 ```bash
 git add Avalonia.LayoutDemo/
@@ -1120,7 +1120,7 @@ EOF
 - Consumes: Task 2–5 完成的 `Avalonia.LayoutDemo`
 - Produces: 无代码产物。本任务把样板落成的实际结构回写到文档，供后续 4 个 plan 引用。
 
-- [ ] **Step 1: 更新 README 项目表格**
+- [x] **Step 1: 更新 README 项目表格**
 
 修改 `README.md`，在项目表格中 `Avalonia.DataTemplateDemo` 一行之后插入：
 
@@ -1134,7 +1134,7 @@ EOF
 | [Avalonia.Shared](Avalonia.Shared) | 共享类库：演示页说明条控件、窗口 Helper、Win32 互操作、消息载体、ViewModel 基类 |
 ```
 
-- [ ] **Step 2: 更新 README 约定小节**
+- [x] **Step 2: 更新 README 约定小节**
 
 修改 `README.md` 的"约定"小节，把语言约定一条扩展为界面/注释分离的表述：
 
@@ -1142,7 +1142,7 @@ EOF
 - 新增代码与 XAML 注释用英文，界面文字（Tab 标题、说明条、按钮文案）用中文；从 hello-dotnet 迁移来的既有中文注释保持原样
 ```
 
-- [ ] **Step 3: 回写实测结论到 spec**
+- [x] **Step 3: 回写实测结论到 spec**
 
 在 spec 的"待验证的技术风险"小节末尾追加一段，如实记录本次样板中验证到的结果：
 
@@ -1156,7 +1156,7 @@ EOF
 
 把尖括号占位替换为 Task 5 的实际结果。
 
-- [ ] **Step 4: 全量构建与运行验证**
+- [x] **Step 4: 全量构建与运行验证**
 
 Run: `dotnet build hello-avalonia.slnx`
 Expected: 全部 6 个项目构建成功，无错误。
@@ -1167,7 +1167,7 @@ Expected: 三个标签页都能切换且内容正常。
 Run: `git status`
 Expected: 工作区干净（除本任务待提交的文档改动外无遗留文件）。
 
-- [ ] **Step 5: 提交**
+- [x] **Step 5: 提交**
 
 ```bash
 git add README.md docs/
@@ -1179,7 +1179,7 @@ EOF
 )"
 ```
 
-- [ ] **Step 6: 交回用户 review**
+- [x] **Step 6: 交回用户 review**
 
 样板已完成。向用户报告：
 - 三个标签页各演示了什么
