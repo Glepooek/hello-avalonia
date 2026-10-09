@@ -32,5 +32,8 @@
         <TabItem Header="XAML 编译">
             <pages:CompilationPage />
         </TabItem>
+        <TabItem Header="平台相关 XAML">
+            <pages:PlatformSpecificPage />
+        </TabItem>
     </TabControl>
 </Window>

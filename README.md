@@ -7,7 +7,7 @@ Avalonia UI 学习示例集合。每个项目演示一个独立主题，可单�
 | 项目 | 演示内容 |
 |---|---|
 | [Avalonia.FundamentalsDemo](Avalonia.FundamentalsDemo) | 纯代码 UI、code-behind 与 MVVM 对照、TopLevel、视觉树与逻辑树、应用生命周期 |
-| [Avalonia.XamlDemo](Avalonia.XamlDemo) | 命名空间、x: 指令、标记扩展、类型转换器、泛型、XAML 编译 |
+| [Avalonia.XamlDemo](Avalonia.XamlDemo) | 命名空间、x: 指令、标记扩展、类型转换器、泛型、XAML 编译、平台相关 XAML（OnPlatform / OnFormFactor） |
 | [Avalonia.LayoutDemo](Avalonia.LayoutDemo) | 8 种布局面板对照、对齐与 Margin/Padding、四种响应式手段 |
 | [Avalonia.StylingDemo](Avalonia.StylingDemo) | 选择器语法、样式类、伪类、ControlTheme、主题变体、嵌入字体、样式共享 |
 | [Avalonia.DataBindingDemo](Avalonia.DataBindingDemo) | 绑定语法与模式、编译绑定、集合与主从、多值绑定、命令、转换器、校验、集合视图、异步绑定、绑定调试 |

@@ -31,7 +31,7 @@ Avalonia 官方文档（<https://docs.avaloniaui.net/docs/welcome>）的侧边�
 
 ## 分类取舍
 
-官方侧边栏共 22 个顶层分类。筛选标准是"能否做成可交互的运行时演示"：
+官方侧边栏共 22 个顶层分类（2026-10-09 复查时为 23 个，多出的 Platform Integration 见下）。筛选标准是"能否做成可交互的运行时演示"：
 
 **纳入（14 个）**：Fundamentals、XAML Reference、Layout、Styling、Data Binding、
 Data Templates、Property System、Events、Input & Interaction、Graphics and Animation、
@@ -41,6 +41,12 @@ Custom controls、Services、App Development、Testing
 与 IDE 配置）、Deployment（打包发布流程）、Migration（WPF 对照速查）、Breaking changes
 （版本变更列表）、Samples & Tutorials（已由 `Avalonia.MusicStore` 承担）、
 How-To Guides（其内容分散在上述分类中，不单独成项目）
+
+**Platform Integration（2026-10-09 补记，不单独成项目）**：官方 9 个子页，其中 Windows、macOS、
+Desktop Linux、Embedded Linux、Android、iOS、WebAssembly 7 页是各平台的配置指南，在当前 Windows
+桌面环境下无法作为运行时演示；`Platform-specific .NET` 以编译期条件编译与项目结构为主。只有
+`Platform-specific XAML`（`OnPlatform` / `OnFormFactor`）是纯运行时行为，作为第 7 个 Tab 并入
+项目 #2，与已有的「标记扩展」同属 XAML 主题。
 
 ## 统一项目骨架
 
@@ -88,7 +94,7 @@ Layout 官方只有 3 个子页，就是 3 个 Tab，不为凑数拆分。
 | # | 项目 | Tab 分组（功能点） |
 |---|---|---|
 | 1 | `Avalonia.FundamentalsDemo` | Code-only UI / Code-behind / MVVM 模式 / TopLevel / UI 组合 / 视觉树与逻辑树 / 应用生命周期 / Assets 资源 |
-| 2 | `Avalonia.XamlDemo` | XAML 命名空间 / x: 指令 / 标记扩展 / 类型转换器 / XAML 泛型 / 编译型 XAML |
+| 2 | `Avalonia.XamlDemo` | XAML 命名空间 / x: 指令 / 标记扩展 / 类型转换器 / XAML 泛型 / 编译型 XAML / 平台相关 XAML（OnPlatform、OnFormFactor） |
 | 3 | `Avalonia.LayoutDemo` | 布局面板对照（Grid/DockPanel/StackPanel/WrapPanel/UniformGrid/RelativePanel/Canvas/Panel）/ 定位对齐与 Margin-Padding / 响应式布局 |
 | 4 | `Avalonia.StylingDemo` | Style 与选择器语法 / 样式类 / 伪类 / ControlTheme / 主题与 ThemeVariant / 容器查询 / 自定义字体与排版 / 样式共享 / 属性值优先级 |
 | 5 | `Avalonia.DataBindingDemo` | 绑定语法与 DataContext / 编译绑定 / 集合绑定 / 主从绑定 / MultiBinding / 命令与 CanExecute / 值转换器 / 数据校验 / 排序筛选分组 / 绑定调试 |
@@ -365,6 +371,16 @@ ReactiveUI、Prism 等会让读者分不清"这是 Avalonia 的能力"还是"这
 - **探针断言实际条数**：#12 为 36 条、#13 为 44 条，全部通过；#15 自身 24 个测试全部通过。
 - **执行时更正的错误**：`DataValidationPage` 的路标把目标 Tab 写成「数据校验」，实际叫「校验」；
   探针里资源色值的比较串改用颜色名（`Red`/`Blue`/`Green`）而非十六进制。
+
+### Platform Integration 补记（2026-10-09）
+
+- 来源：复查 README 顺序时发现官方侧边栏在 App Development 与 Testing 之间多了 Platform Integration。
+- 处理：`PlatformSpecificPage` 并入 #2（6 个 Tab 变 7 个），不新建项目。页面覆盖内联写法、
+  `x:TypeArguments`、嵌套扩展、XML 元素语法、`OnFormFactor`，以及官方强调的「这些扩展都不是动态的」。
+- **验证局限：该页只经过 `dotnet build`（0 错误），没有跑 headless 探针读回属性值。** 探针被跳过，
+  这违背了上文「后续项目一律用可读回属性值的探针」的约定。页面里有 `x:TypeArguments=Thickness` 与
+  嵌套 `StaticResource` 两处，正是此前出现过静默失败的写法类型，因此它的运行时取值尚未被证实。
+- `OnPlatform` 的 `Browser` 键、`OnFormFactor` 的 `TV` 名称在官方页面上未见，页面没有使用。
 
 ## 交付顺序与验证标准
 

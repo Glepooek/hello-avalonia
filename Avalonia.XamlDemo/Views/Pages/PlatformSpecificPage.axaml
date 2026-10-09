@@ -1,0 +1,77 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             mc:Ignorable="d"
+             d:DesignWidth="860"
+             d:DesignHeight="560"
+             x:Class="Avalonia.XamlDemo.Views.Pages.PlatformSpecificPage">
+
+    <UserControl.Resources>
+        <SolidColorBrush x:Key="DefaultBrush">Gray</SolidColorBrush>
+        <SolidColorBrush x:Key="WindowsBrush">DodgerBlue</SolidColorBrush>
+    </UserControl.Resources>
+
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="平台相关 XAML：OnPlatform 与 OnFormFactor"
+                               DocPath="platform-specific-guides/xaml" />
+
+            <TextBlock Classes="caption" Text="1. OnPlatform：按操作系统取值" />
+            <Border Classes="stage" Padding="10">
+                <StackPanel Spacing="6">
+                    <!--  Default is the fallback; the other keys are platform names.  -->
+                    <TextBlock Name="InlineText"
+                               Text="{OnPlatform Default='未知平台', Windows='当前是 Windows', macOS='当前是 macOS', Linux='当前是 Linux'}" />
+                    <!--  A non-string target needs x:TypeArguments so the branches convert to the right type.  -->
+                    <Border Name="TypedBorder"
+                            Padding="{OnPlatform '0', Windows='16', x:TypeArguments=Thickness}"
+                            Background="{StaticResource DefaultBrush}">
+                        <TextBlock Foreground="White" Text="x:TypeArguments=Thickness：Windows 下 Padding 为 16，其它平台为 0" />
+                    </Border>
+                    <!--  Branches can themselves be other markup extensions.  -->
+                    <Border Name="NestedBorder"
+                            Padding="8"
+                            Background="{OnPlatform Default={StaticResource DefaultBrush}, Windows={StaticResource WindowsBrush}}">
+                        <TextBlock Foreground="White" Text="嵌套 StaticResource：Windows 下是蓝色，其它平台是灰色" />
+                    </Border>
+                </StackPanel>
+            </Border>
+
+            <TextBlock Classes="caption" Text="2. XML 元素语法：分支是整段控件时用它" />
+            <Border Classes="stage" Padding="10">
+                <StackPanel Spacing="6">
+                    <ContentControl Name="ElementHost">
+                        <OnPlatform>
+                            <OnPlatform.Default>
+                                <TextBlock Text="Default 分支：一个 TextBlock" />
+                            </OnPlatform.Default>
+                            <OnPlatform.Windows>
+                                <Button Content="Windows 分支：一个 Button" />
+                            </OnPlatform.Windows>
+                        </OnPlatform>
+                    </ContentControl>
+                    <TextBlock Classes="hint"
+                               Text="内联写法只适合简单值。分支本身是控件时，用 OnPlatform.Windows 这类属性元素，每个分支是一棵完整的子树。" />
+                </StackPanel>
+            </Border>
+
+            <TextBlock Classes="caption" Text="3. OnFormFactor：按设备类别取值" />
+            <Border Classes="stage" Padding="10">
+                <StackPanel Spacing="6">
+                    <TextBlock Name="FormFactorText"
+                               Text="{OnFormFactor '默认值', Mobile='当前是移动设备', Desktop='当前是桌面设备'}" />
+                    <TextBlock Classes="hint"
+                               Text="Windows 桌面程序恒走 Desktop 分支。它回答的是「这是什么形态的设备」，OnPlatform 回答的是「这是什么操作系统」，两者不能互相代替：平板和手机同属 Android，但形态不同。" />
+                </StackPanel>
+            </Border>
+
+            <TextBlock Classes="caption" Text="4. 它们都是静态的" />
+            <Border Classes="stage" Padding="10">
+                <TextBlock Classes="hint"
+                           Text="官方原话：这些标记扩展都不是动态的，值设定之后不会再变。它们在 XAML 加载时按当前平台求值一次，之后不会像 DynamicResource 那样重新求值。需要运行中切换的内容，请用绑定或样式类。" />
+            </Border>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>
