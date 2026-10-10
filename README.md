@@ -29,8 +29,12 @@ Avalonia UI 学习示例集合。每个项目演示一个独立主题，可单�
 ## 环境
 
 - .NET 10.0 SDK
+- WebView2 Runtime (在 Windows 上运行 WebViewDemo 需要)
 - Avalonia 12.1.2
-- Windows 上运行 WebViewDemo 需要 WebView2 Runtime
+- Avalonia.HtmlRenderer
+- Avalonia.Controls.WebView
+- Xaml.Behaviors.Avalonia
+- CommunityToolkit.Mvvm
 
 ## 构建与运行
 
