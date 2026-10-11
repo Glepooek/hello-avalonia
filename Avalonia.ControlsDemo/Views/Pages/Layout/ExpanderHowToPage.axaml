@@ -1,0 +1,67 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             xmlns:vm="using:Avalonia.ControlsDemo.ViewModels"
+             x:Class="Avalonia.ControlsDemo.Views.Pages.ExpanderHowToPage"
+             x:DataType="vm:ExpanderHowToViewModel">
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="Expander 实战"
+                               DocPath="docs/how-to/expander-how-to" />
+
+            <TextBlock Classes="caption" Text="1. 手风琴：一次只开一节" />
+            <Border Classes="stage" Padding="12">
+                <StackPanel Spacing="6">
+                    <Expander Name="Section1" Width="340" Header="常规"
+                              IsExpanded="{Binding IsGeneralOpen, Mode=TwoWay}">
+                        <TextBlock Margin="8" TextWrapping="Wrap" Text="常规设置的内容。" />
+                    </Expander>
+                    <Expander Name="Section2" Width="340" Header="高级"
+                              IsExpanded="{Binding IsAdvancedOpen, Mode=TwoWay}">
+                        <TextBlock Margin="8" TextWrapping="Wrap" Text="高级设置的内容。" />
+                    </Expander>
+                    <Expander Name="Section3" Width="340" Header="关于"
+                              IsExpanded="{Binding IsAboutOpen, Mode=TwoWay}">
+                        <TextBlock Margin="8" TextWrapping="Wrap" Text="版本、许可等信息。" />
+                    </Expander>
+                    <TextBlock Name="OpenLabel" Classes="hint" Text="{Binding OpenSection, StringFormat='OpenSection = {0}（-1 表示全收起）'}" />
+                </StackPanel>
+            </Border>
+            <TextBlock Classes="hint" Text="三节都绑到同一个 ViewModel 的 IsExpanded：打开某一节就把 OpenSection 换成它的序号，其余 IsExpanded 自然变 false。" />
+
+            <TextBlock Classes="caption" Text="2. 自定义头部与 ContentTransition" />
+            <Border Classes="stage" Padding="12">
+                <Expander Name="Card" Width="340">
+                    <Expander.Header>
+                        <StackPanel Orientation="Horizontal" Spacing="6">
+                            <TextBlock Text="⚙" />
+                            <TextBlock FontWeight="SemiBold" Text="外观设置" />
+                            <Border Background="Orange" CornerRadius="8" Padding="6,0" VerticalAlignment="Center">
+                                <TextBlock FontSize="11" Text="新" />
+                            </Border>
+                        </StackPanel>
+                    </Expander.Header>
+                    <Expander.ContentTransition>
+                        <CrossFade Duration="0:0:0.3" />
+                    </Expander.ContentTransition>
+                    <TextBlock Margin="8" Text="Header 是任意对象，可以塞面板；ContentTransition 换成 CrossFade 后展开是淡入而不是滑出。" />
+                </Expander>
+            </Border>
+
+            <TextBlock Classes="caption" Text="3. ExpandDirection 与 :disabled" />
+            <Border Classes="stage" Padding="12">
+                <StackPanel Spacing="8">
+                    <StackPanel Orientation="Horizontal" Spacing="12">
+                        <TextBlock VerticalAlignment="Center" Text="ExpandDirection" />
+                        <ComboBox Name="DirectionBox" Width="140" />
+                        <CheckBox Name="DisabledCheck" Content="IsEnabled=False" />
+                    </StackPanel>
+                    <Expander Name="DirectionDemo" Header="方向" Width="300" HorizontalAlignment="Left">
+                        <TextBlock Margin="8" Text="展开的内容" />
+                    </Expander>
+                </StackPanel>
+            </Border>
+            <TextBlock Classes="hint" Text="选 Up 时要留出向上生长的空间，否则会溢出面板；IsEnabled=False 时整块变灰，鼠标点不动头部。" />
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

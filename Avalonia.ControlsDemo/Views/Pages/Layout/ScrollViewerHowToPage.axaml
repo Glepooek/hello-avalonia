@@ -1,0 +1,103 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             x:Class="Avalonia.ControlsDemo.Views.Pages.ScrollViewerHowToPage">
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="ScrollViewer 实战"
+                               DocPath="docs/how-to/scrollviewer-how-to" />
+
+            <TextBlock Classes="caption" Text="1. 滚到底自动加载更多：ScrollChanged + Offset / Extent / Viewport" />
+            <Border Classes="stage" Padding="12">
+                <StackPanel Spacing="8">
+                    <ScrollViewer Name="FeedScroller" Width="320" Height="120" HorizontalAlignment="Left"
+                                  BorderBrush="Gray" BorderThickness="1">
+                        <StackPanel Name="FeedList" Margin="8" Spacing="2" />
+                    </ScrollViewer>
+                    <StackPanel Orientation="Horizontal" Spacing="12">
+                        <Button Name="LoadButton" Content="ScrollToEnd（触发加载）" />
+                        <TextBlock Name="FeedCount" VerticalAlignment="Center" />
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+            <TextBlock Classes="hint" Text="判断触底：Offset.Y + Viewport.Height ≥ Extent.Height。Extent 为 0（还没布局）时同样满足这个式子，所以要先确认内容已经比视口高。示例最多加载 60 项。" />
+
+            <TextBlock Classes="caption" Text="2. 滚到指定元素：BringIntoView()" />
+            <Border Classes="stage" Padding="12">
+                <StackPanel Spacing="8">
+                    <ScrollViewer Name="JumpScroller" Width="320" Height="100" HorizontalAlignment="Left"
+                                  BorderBrush="Gray" BorderThickness="1">
+                        <StackPanel Margin="8" Spacing="2">
+                            <TextBlock Text="第 1 行" />
+                            <TextBlock Text="第 2 行" />
+                            <TextBlock Text="第 3 行" />
+                            <TextBlock Text="第 4 行" />
+                            <TextBlock Text="第 5 行" />
+                            <TextBlock Text="第 6 行" />
+                            <TextBlock Text="第 7 行" />
+                            <TextBlock Text="第 8 行" />
+                            <Border Name="JumpTarget" Background="Orange" Padding="6,2">
+                                <TextBlock Text="★ 目标行" />
+                            </Border>
+                            <TextBlock Text="第 10 行" />
+                            <TextBlock Text="第 11 行" />
+                            <TextBlock Text="第 12 行" />
+                        </StackPanel>
+                    </ScrollViewer>
+                    <Button Name="JumpButton" Content="BringIntoView 到目标行" />
+                </StackPanel>
+            </Border>
+
+            <TextBlock Classes="caption" Text="3. 吸顶表头：把表头放在 ScrollViewer 之外" />
+            <Border Classes="stage" Padding="12">
+                <Grid Name="StickyGrid" Width="320" RowDefinitions="Auto,100" HorizontalAlignment="Left">
+                    <Border Name="StickyHeader" Grid.Row="0" Background="SteelBlue" Padding="8,4">
+                        <TextBlock Text="表头永远可见" />
+                    </Border>
+                    <ScrollViewer Name="StickyScroller" Grid.Row="1" BorderBrush="Gray" BorderThickness="1">
+                        <StackPanel Margin="8" Spacing="2">
+                            <TextBlock Text="内容 1" />
+                            <TextBlock Text="内容 2" />
+                            <TextBlock Text="内容 3" />
+                            <TextBlock Text="内容 4" />
+                            <TextBlock Text="内容 5" />
+                            <TextBlock Text="内容 6" />
+                            <TextBlock Text="内容 7" />
+                            <TextBlock Text="内容 8" />
+                            <TextBlock Text="内容 9" />
+                            <TextBlock Text="内容 10" />
+                        </StackPanel>
+                    </ScrollViewer>
+                </Grid>
+            </Border>
+            <TextBlock Classes="hint" Text="最省事的吸顶做法就是版面上分成两行：表头在第一行，ScrollViewer 在第二行。表头需要跟着横向滚动时再考虑把它放进内容里。" />
+
+            <TextBlock Classes="caption" Text="4. 嵌套滚动：IsScrollChainingEnabled" />
+            <Border Classes="stage" Padding="12">
+                <StackPanel Spacing="8">
+                    <CheckBox Name="ChainCheck" Content="内层 IsScrollChainingEnabled（滚到头后把滚动交给外层）" IsChecked="True" />
+                    <ScrollViewer Name="ChainOuter" Width="320" Height="110" HorizontalAlignment="Left"
+                                  BorderBrush="Gray" BorderThickness="1">
+                        <StackPanel Spacing="4" Margin="8">
+                            <TextBlock Text="外层内容 1" />
+                            <ScrollViewer Name="ChainInner" Height="50" BorderBrush="Orange" BorderThickness="1">
+                                <StackPanel>
+                                    <TextBlock Text="内层 1" />
+                                    <TextBlock Text="内层 2" />
+                                    <TextBlock Text="内层 3" />
+                                    <TextBlock Text="内层 4" />
+                                    <TextBlock Text="内层 5" />
+                                </StackPanel>
+                            </ScrollViewer>
+                            <TextBlock Text="外层内容 2" />
+                            <TextBlock Text="外层内容 3" />
+                            <TextBlock Text="外层内容 4" />
+                            <TextBlock Text="外层内容 5" />
+                        </StackPanel>
+                    </ScrollViewer>
+                </StackPanel>
+            </Border>
+            <TextBlock Classes="hint" Text="用滚轮在橙色内层上滚：勾选时内层到头后继续滚会带动外层；取消勾选，内层到头就停。" />
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>
