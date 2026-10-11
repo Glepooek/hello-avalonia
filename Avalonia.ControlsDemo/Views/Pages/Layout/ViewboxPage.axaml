@@ -1,0 +1,30 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             x:Class="Avalonia.ControlsDemo.Views.Pages.ViewboxPage">
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="Viewbox：把子元素缩放到可用空间"
+                               DocPath="controls/layout/containers/viewbox" />
+
+            <TextBlock Classes="caption" Text="Stretch 与 StretchDirection" />
+            <Border Classes="stage" Padding="12">
+                <StackPanel Spacing="8">
+                    <StackPanel Orientation="Horizontal" Spacing="12">
+                        <TextBlock VerticalAlignment="Center" Text="Stretch" />
+                        <ComboBox Name="StretchBox" Width="140" />
+                        <TextBlock Name="ScaleText" VerticalAlignment="Center" />
+                    </StackPanel>
+                    <Border BorderBrush="Gray" BorderThickness="1" Width="320" Height="140" HorizontalAlignment="Left">
+                        <Viewbox Name="Box">
+                            <Border Name="Inner" Width="100" Height="50" Background="SteelBlue">
+                                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="100 × 50" />
+                            </Border>
+                        </Viewbox>
+                    </Border>
+                </StackPanel>
+            </Border>
+            <TextBlock Classes="hint" Text="子元素的 Bounds 永远是 100×50，缩放发生在渲染变换里，所以倍数要靠它在容器里的右边缘位置算出来。" />
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

@@ -1,0 +1,47 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             x:Class="Avalonia.ControlsDemo.Views.Pages.LayoutTransformControlPage">
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="LayoutTransformControl：参与布局的变换"
+                               DocPath="controls/layout/layouttransformcontrol" />
+
+            <TextBlock Classes="caption" Text="同样旋转：LayoutTransform 占据旋转后的空间，RenderTransform 只改画法" />
+            <Border Classes="stage" Padding="12">
+                <StackPanel Spacing="8">
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <TextBlock Width="60" VerticalAlignment="Center" Text="角度" />
+                        <Slider Name="AngleSlider" Width="240" Minimum="0" Maximum="90" Value="90" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Spacing="40">
+                        <StackPanel Spacing="4">
+                            <TextBlock Classes="hint" Text="LayoutTransformControl" />
+                            <Border BorderBrush="Gray" BorderThickness="1" HorizontalAlignment="Left">
+                                <LayoutTransformControl Name="LayoutHost">
+                                    <Border Width="100" Height="40" Background="SeaGreen">
+                                        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="布局变换" />
+                                    </Border>
+                                </LayoutTransformControl>
+                            </Border>
+                            <TextBlock Name="LayoutSize" />
+                        </StackPanel>
+                        <StackPanel Spacing="4">
+                            <TextBlock Classes="hint" Text="RenderTransform" />
+                            <Border BorderBrush="Gray" BorderThickness="1" HorizontalAlignment="Left">
+                                <Decorator Name="RenderHost">
+                                    <Border Name="RenderChild" Width="100" Height="40" Background="Chocolate">
+                                        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="渲染变换" />
+                                    </Border>
+                                </Decorator>
+                            </Border>
+                            <TextBlock Name="RenderSize" />
+                        </StackPanel>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+            <TextBlock Classes="hint" Text="灰色框是宿主占的空间：左边随旋转变高变窄，右边始终是 100×40。竖排标签、旋转的表头用 LayoutTransformControl。" />
+            <TextBlock Classes="hint" Text="更深入的演示：Avalonia.GraphicsDemo →「变换」（Render 与 Layout 的对照）" />
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

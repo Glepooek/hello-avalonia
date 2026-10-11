@@ -1,0 +1,36 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             x:Class="Avalonia.ControlsDemo.Views.Pages.GroupBoxPage">
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="GroupBox：带标题的分组框"
+                               DocPath="controls/layout/containers/groupbox" />
+
+            <TextBlock Classes="caption" Text="Header 与 Content" />
+            <Border Classes="stage" Padding="12">
+                <GroupBox Name="Box" Header="登录方式" Width="280">
+                    <StackPanel Spacing="4">
+                        <RadioButton GroupName="Login" Content="账号密码" IsChecked="True" />
+                        <RadioButton GroupName="Login" Content="手机验证码" />
+                        <RadioButton GroupName="Login" Content="扫码" />
+                    </StackPanel>
+                </GroupBox>
+            </Border>
+            <TextBlock Classes="hint" Text="GroupBox 没有自己的属性，只是 HeaderedContentControl：Header 可以是任意对象，Content 只能放一个子元素。" />
+
+            <TextBlock Classes="caption" Text="Header 放自定义内容" />
+            <Border Classes="stage" Padding="12">
+                <GroupBox Width="280">
+                    <GroupBox.Header>
+                        <StackPanel Orientation="Horizontal" Spacing="6">
+                            <TextBlock Text="⚙" />
+                            <TextBlock FontWeight="SemiBold" Text="高级设置" />
+                        </StackPanel>
+                    </GroupBox.Header>
+                    <CheckBox Content="启用实验功能" />
+                </GroupBox>
+            </Border>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

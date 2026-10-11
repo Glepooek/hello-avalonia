@@ -1,0 +1,44 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             x:Class="Avalonia.ControlsDemo.Views.Pages.BorderPage">
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="Border：给单个子元素加边框与背景"
+                               DocPath="controls/layout/containers/border" />
+
+            <TextBlock Classes="caption" Text="1. BorderThickness、CornerRadius 与 Padding" />
+            <Border Classes="stage" Padding="12">
+                <StackPanel Spacing="8">
+                    <Border Name="Target" Width="260" Height="70" BorderBrush="Orange" Padding="12"
+                            Background="#33FFA500">
+                        <TextBlock VerticalAlignment="Center" Text="我被 Border 包着" />
+                    </Border>
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <TextBlock Width="110" VerticalAlignment="Center" Text="BorderThickness" />
+                        <Slider Name="ThicknessSlider" Width="200" Minimum="0" Maximum="12" Value="2" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <TextBlock Width="110" VerticalAlignment="Center" Text="CornerRadius" />
+                        <Slider Name="RadiusSlider" Width="200" Minimum="0" Maximum="35" Value="8" />
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+            <TextBlock Classes="hint" Text="Border 只能有一个子元素；多个元素先放进一个面板再交给它。" />
+
+            <TextBlock Classes="caption" Text="2. 四边不同粗细、四角不同圆角" />
+            <Border Classes="stage" Padding="12">
+                <Border Width="260" Height="60" BorderBrush="SteelBlue" BorderThickness="1,4,1,0"
+                        CornerRadius="20,0,20,0" Background="#334682B4" />
+            </Border>
+
+            <TextBlock Classes="caption" Text="3. BoxShadow：阴影" />
+            <Border Classes="stage" Padding="24">
+                <Border Width="200" Height="60" CornerRadius="8" Background="#2D2D30"
+                        BoxShadow="0 4 16 0 #80000000" />
+            </Border>
+            <TextBlock Classes="hint" Text="阴影格式：水平偏移 垂直偏移 模糊半径 扩展半径 颜色，多个阴影用逗号分隔。" />
+            <TextBlock Classes="hint" Text="更深入的演示：Avalonia.LayoutDemo →「定位与间距」" />
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

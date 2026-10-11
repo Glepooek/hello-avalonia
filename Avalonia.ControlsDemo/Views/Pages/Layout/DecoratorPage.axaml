@@ -1,0 +1,29 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             x:Class="Avalonia.ControlsDemo.Views.Pages.DecoratorPage">
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="Decorator：只包一个子元素的基类"
+                               DocPath="controls/layout/decorator" />
+
+            <TextBlock Classes="caption" Text="Padding 让 Decorator 比子元素大一圈，但它自己什么都不画" />
+            <Border Classes="stage" Padding="12">
+                <StackPanel Spacing="8">
+                    <!--  The outer Border only outlines the box the Decorator occupies; Decorator itself draws nothing.  -->
+                    <Border BorderBrush="Gray" BorderThickness="1" HorizontalAlignment="Left">
+                        <Decorator Name="PaddedDecorator">
+                            <Border Width="120" Height="40" Background="SteelBlue" />
+                        </Decorator>
+                    </Border>
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <TextBlock Width="60" VerticalAlignment="Center" Text="Padding" />
+                        <Slider Name="PaddingSlider" Width="200" Minimum="0" Maximum="40" Value="10" />
+                        <TextBlock Name="SizeText" VerticalAlignment="Center" />
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+            <TextBlock Classes="hint" Text="Border、Viewbox、LayoutTransformControl 都派生自 Decorator；自己写「只包一个子元素」的控件时从它继承最省事。" />
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>
