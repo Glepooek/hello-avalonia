@@ -1,0 +1,24 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             x:Class="Avalonia.StarterTutorialDemo.Views.Pages.CustomizingWindowPage">
+
+    <StackPanel Margin="12" Spacing="12">
+        <shared:DemoHeader Title="自定义窗口：Title、Width/Height、CanResize、WindowStartupLocation"
+                           DocPath="docs/get-started/starter-tutorial/customizing-the-avalonia-window" />
+
+        <TextBlock TextWrapping="Wrap"
+                   Text="这些都是 Window 元素上的属性。点击按钮会弹出一个按教程设置过的小窗口（Title、固定尺寸、不可缩放、居中显示）。" />
+
+        <Border BorderBrush="#40FFFFFF" BorderThickness="1" CornerRadius="4" Padding="12">
+            <TextBlock FontFamily="Consolas" TextWrapping="Wrap">
+&lt;Window Title="GetStartedApp"
+        Width="250" Height="180"
+        CanResize="False"
+        WindowStartupLocation="CenterScreen"&gt;
+            </TextBlock>
+        </Border>
+
+        <Button Name="OpenWindowButton" Click="OpenWindowButton_OnClick">打开自定义窗口</Button>
+    </StackPanel>
+</UserControl>

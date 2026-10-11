@@ -1,0 +1,16 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             x:Class="Avalonia.StarterTutorialDemo.Views.Pages.EventsPage">
+
+    <StackPanel Margin="12" Spacing="12">
+        <shared:DemoHeader Title="事件与响应：Click 事件 + code-behind 处理器"
+                           DocPath="docs/get-started/starter-tutorial/establishing-events-and-responses" />
+
+        <TextBlock TextWrapping="Wrap"
+                   Text="XAML 里用 Click=&quot;Button_OnClick&quot; 指定处理器名称，同名方法写在 .axaml.cs 里。教程在处理器中调用 Debug.WriteLine 输出；这里额外把点击次数显示在界面上。" />
+
+        <Button HorizontalAlignment="Center" Click="Button_OnClick">Calculate</Button>
+        <TextBlock Name="ClickInfo" HorizontalAlignment="Center" Text="尚未点击" />
+    </StackPanel>
+</UserControl>

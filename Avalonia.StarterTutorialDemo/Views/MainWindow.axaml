@@ -1,0 +1,37 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:pages="using:Avalonia.StarterTutorialDemo.Views.Pages"
+        mc:Ignorable="d"
+        d:DesignWidth="900"
+        d:DesignHeight="640"
+        x:Class="Avalonia.StarterTutorialDemo.Views.MainWindow"
+        Icon="/Assets/avalonia-logo.ico"
+        Title="Avalonia Starter Tutorial Demo"
+        Width="900"
+        Height="640"
+        WindowStartupLocation="CenterScreen">
+
+    <!--  One tab per step of the official starter tutorial.  -->
+    <TabControl Margin="12">
+        <TabItem Header="1 添加控件">
+            <pages:AddingControlPage />
+        </TabItem>
+        <TabItem Header="2 添加布局">
+            <pages:AddingLayoutPage />
+        </TabItem>
+        <TabItem Header="3 自定义窗口">
+            <pages:CustomizingWindowPage />
+        </TabItem>
+        <TabItem Header="4 事件与响应">
+            <pages:EventsPage />
+        </TabItem>
+        <TabItem Header="5 数据转换">
+            <pages:ConvertingDataPage />
+        </TabItem>
+        <TabItem Header="6 练习">
+            <pages:ExercisesPage />
+        </TabItem>
+    </TabControl>
+</Window>
