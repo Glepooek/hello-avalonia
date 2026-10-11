@@ -1,4 +1,5 @@
 using Avalonia.Controls.ApplicationLifetimes;
+using Avalonia.ControlsDemo.Views;
 using Avalonia.Markup.Xaml;
 
 namespace Avalonia.ControlsDemo
@@ -12,9 +13,9 @@ namespace Avalonia.ControlsDemo
 
         public override void OnFrameworkInitializationCompleted()
         {
-            if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime)
+            if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
             {
-                // MainWindow is wired in Task 3, once the navigation shell exists.
+                desktop.MainWindow = new MainWindow();
             }
 
             base.OnFrameworkInitializationCompleted();

@@ -1,0 +1,49 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:nav="using:Avalonia.ControlsDemo.Navigation"
+        xmlns:vm="using:Avalonia.ControlsDemo.ViewModels"
+        mc:Ignorable="d"
+        d:DesignWidth="1100"
+        d:DesignHeight="700"
+        x:Class="Avalonia.ControlsDemo.Views.MainWindow"
+        x:DataType="vm:MainViewModel"
+        Icon="/Assets/avalonia-logo.ico"
+        Title="Avalonia Controls Demo"
+        Width="1100"
+        Height="700"
+        WindowStartupLocation="CenterScreen">
+
+    <!--  Left: the official Controls sidebar, category by category. Right: the selected page.  -->
+    <SplitView DisplayMode="Inline"
+               IsPaneOpen="True"
+               OpenPaneLength="260">
+        <SplitView.Pane>
+            <TreeView Name="NavTree"
+                      ItemsSource="{Binding Nodes}"
+                      SelectedItem="{Binding SelectedNode, Mode=TwoWay}">
+                <TreeView.Styles>
+                    <!--  Expansion lives on the node so the view model can open the first category.  -->
+                    <Style Selector="TreeViewItem" x:DataType="nav:NavNode">
+                        <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}" />
+                    </Style>
+                </TreeView.Styles>
+                <TreeView.DataTemplates>
+                    <TreeDataTemplate DataType="nav:NavNode" ItemsSource="{Binding Children}">
+                        <TextBlock Text="{Binding DisplayTitle}" />
+                    </TreeDataTemplate>
+                </TreeView.DataTemplates>
+            </TreeView>
+        </SplitView.Pane>
+
+        <Grid>
+            <ContentControl Name="PageHost" Content="{Binding CurrentPage}" />
+            <TextBlock Classes="hint"
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Center"
+                       IsVisible="{Binding CurrentPage, Converter={x:Static ObjectConverters.IsNull}}"
+                       Text="请在左侧选择一个控件" />
+        </Grid>
+    </SplitView>
+</Window>
