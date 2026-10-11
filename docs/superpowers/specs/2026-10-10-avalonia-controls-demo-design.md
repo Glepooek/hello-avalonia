@@ -292,6 +292,13 @@ Menus 5 + Navigation 8 + Primitives 5 + System 1 + Web 4 = **84 页**，
 - **风险 1（新页面类型）**：NavigationPage、ContentPage、DrawerPage、TabbedPage、CarouselPage、CommandBar 六个控件在桌面 headless 下全部能实例化、`Bounds` 非零、有可视后代（回归探针 6/6 通过）；无需降级，第 06 份全部做可运行页。成员清单见第 00 份计划 Task 7 Step 2。
 - **Buttons 样板中确认的写法**：无。8 个页面的探针共 65 条断言（含壳）一次通过，零警告日志。
 
+### 批 1 实测结论（2026-10-11）
+
+- **控件的静默行为**：`NumericUpDown` 与 `Slider` 的代码赋值既不夹取也不吸附（`ClipValueToMinMax` 与 `IsSnapToTickEnabled` 只管用户操作与微调）；`Calendar` 把黑名单日期赋给 `SelectedDate` 会抛 `ArgumentOutOfRangeException`，且抛出后 `SelectedDate` 保留被拒绝的值而 `SelectedDates` 为空；`AutoCompleteBox` 要靠键入才展开下拉，给 `Text` 赋值不会；`TextBox` 给 `Text` 赋值不进撤销栈。
+- **API 与官方 How-to 的出入**：官方 TextBox 指南里的 `TextChanging` + `e.Cancel` 在 12.1.2 不存在，`TextChangingEventArgs` 没有成员；改成在处理器里重写 `Text`。
+- **绑定**：`ComboBox.SelectedValueBinding` / `DisplayMemberBinding` 的项类型若是页面内的私有类型，编译绑定报 `AVLN2100`，要写 `{ReflectionBinding …}`，或把项类型公开并写 `x:DataType`。
+- **探针断言实际条数**：本批累计 245 条（含第 00 份），全部通过且零警告日志。
+
 ## 验证标准
 
 1. `dotnet build hello-avalonia.slnx` 通过，且无新增警告
