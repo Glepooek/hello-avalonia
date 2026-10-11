@@ -1,0 +1,26 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             x:Class="Avalonia.ControlsDemo.Views.Pages.ColorPickerPage">
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="ColorPicker：带弹出面板的取色按钮"
+                               DocPath="controls/input/selectors/colorpicker" />
+
+            <TextBlock Classes="caption" Text="1. 点击色块弹出面板，ColorChanged 事件报告新颜色" />
+            <Border Classes="stage" Padding="12">
+                <StackPanel Orientation="Horizontal" Spacing="16">
+                    <ColorPicker Name="Picker" Color="#FF3B82F6" />
+                    <Border Name="Swatch" Width="80" Height="40" CornerRadius="4" />
+                    <TextBlock Name="ColorText" VerticalAlignment="Center" />
+                </StackPanel>
+            </Border>
+
+            <TextBlock Classes="caption" Text="2. IsAlphaEnabled：是否允许透明度" />
+            <Border Classes="stage" Padding="12">
+                <CheckBox Name="AlphaCheck" Content="IsAlphaEnabled" IsChecked="True" />
+            </Border>
+            <TextBlock Classes="hint" Text="ColorPicker 继承自 ColorView，面板里的内容就是一个 ColorView；需要常驻显示时直接用 ColorView（见下一页）。" />
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

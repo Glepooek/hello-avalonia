@@ -1,0 +1,25 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             x:Class="Avalonia.ControlsDemo.Views.Pages.ColorViewPage">
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="ColorView：常驻显示的取色面板"
+                               DocPath="controls/input/selectors/colorview" />
+
+            <TextBlock Classes="caption" Text="ColorSpectrumShape、ColorModel 与读数" />
+            <Border Classes="stage" Padding="12">
+                <StackPanel Orientation="Horizontal" Spacing="24">
+                    <ColorView Name="View" Color="#FF10B981" />
+                    <StackPanel Spacing="8" VerticalAlignment="Top">
+                        <ComboBox Name="ShapeBox" Width="140" />
+                        <ComboBox Name="ModelBox" Width="140" />
+                        <Border Name="Swatch" Width="140" Height="40" CornerRadius="4" />
+                        <TextBlock Name="ColorText" />
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+            <TextBlock Classes="hint" Text="ColorView 与 ColorPicker 共用同一套属性：Color、HsvColor、IsAlphaVisible、ColorSpectrumShape、ColorModel、Palette 等。" />
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

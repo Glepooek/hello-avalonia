@@ -1,0 +1,44 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             x:Class="Avalonia.ControlsDemo.Views.Pages.ComboBoxPage">
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="ComboBox：下拉选择框"
+                               DocPath="controls/input/selectors/combobox" />
+
+            <TextBlock Classes="caption" Text="1. 静态项、PlaceholderText、SelectedItem" />
+            <Border Classes="stage" Padding="12">
+                <StackPanel Orientation="Horizontal" Spacing="12">
+                    <ComboBox Name="Basic" Width="180" PlaceholderText="请选择水果">
+                        <ComboBoxItem Content="苹果" />
+                        <ComboBoxItem Content="香蕉" />
+                        <ComboBoxItem Content="樱桃" />
+                    </ComboBox>
+                    <TextBlock Name="BasicResult" VerticalAlignment="Center" Text="尚未选择" />
+                </StackPanel>
+            </Border>
+
+            <TextBlock Classes="caption" Text="2. IsEditable：允许输入自己的文字" />
+            <Border Classes="stage" Padding="12">
+                <StackPanel Orientation="Horizontal" Spacing="12">
+                    <ComboBox Name="Editable" Width="180" IsEditable="True" PlaceholderText="选择或输入">
+                        <ComboBoxItem Content="北京" />
+                        <ComboBoxItem Content="上海" />
+                        <ComboBoxItem Content="深圳" />
+                    </ComboBox>
+                    <TextBlock Name="EditableResult" VerticalAlignment="Center" Text="Text = (空)" />
+                </StackPanel>
+            </Border>
+
+            <TextBlock Classes="caption" Text="3. SelectedValueBinding：选中的是对象，取到的是它的某个属性" />
+            <Border Classes="stage" Padding="12">
+                <StackPanel Orientation="Horizontal" Spacing="12">
+                    <ComboBox Name="ByValue" Width="180" SelectedValueBinding="{ReflectionBinding Code}" DisplayMemberBinding="{ReflectionBinding Name}" />
+                    <TextBlock Name="ValueResult" VerticalAlignment="Center" Text="SelectedValue = (空)" />
+                </StackPanel>
+            </Border>
+            <TextBlock Classes="hint" Text="IsTextSearchEnabled 让你在下拉列表聚焦时敲字母跳到匹配项；MaxDropDownHeight 限制下拉的高度。" />
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>
