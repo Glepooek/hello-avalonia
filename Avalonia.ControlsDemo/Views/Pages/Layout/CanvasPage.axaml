@@ -1,0 +1,33 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             x:Class="Avalonia.ControlsDemo.Views.Pages.CanvasPage">
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="Canvas：按坐标绝对定位"
+                               DocPath="controls/layout/panels/canvas" />
+
+            <TextBlock Classes="caption" Text="Canvas.Left / Canvas.Top 与 ZIndex" />
+            <Border Classes="stage" Padding="12">
+                <StackPanel Spacing="8">
+                    <Canvas Width="320" Height="140" HorizontalAlignment="Left" Background="#22808080">
+                        <Border Canvas.Left="20" Canvas.Top="20" Width="80" Height="60" Background="SteelBlue" />
+                        <Border Canvas.Left="60" Canvas.Top="40" Width="80" Height="60" Background="Orange" Opacity="0.85" />
+                        <Border Name="Dot" Canvas.Left="200" Canvas.Top="30" Width="40" Height="40"
+                                CornerRadius="20" Background="SeaGreen" />
+                    </Canvas>
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <TextBlock Width="40" VerticalAlignment="Center" Text="Left" />
+                        <Slider Name="LeftSlider" Width="220" Minimum="0" Maximum="280" Value="200" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <TextBlock Width="40" VerticalAlignment="Center" Text="Top" />
+                        <Slider Name="TopSlider" Width="220" Minimum="0" Maximum="100" Value="30" />
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+            <TextBlock Classes="hint" Text="Canvas 不做任何自动排布：子元素的位置完全由附加属性决定，后声明的盖在先声明的上面。Canvas.Left 与 Canvas.Top 默认是 NaN。" />
+            <TextBlock Classes="hint" Text="更深入的演示：Avalonia.LayoutDemo →「布局面板」" />
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

@@ -1,0 +1,30 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             x:Class="Avalonia.ControlsDemo.Views.Pages.StackPanelPage">
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="StackPanel：单行或单列排布"
+                               DocPath="controls/layout/panels/stackpanel" />
+
+            <TextBlock Classes="caption" Text="Orientation 与 Spacing" />
+            <Border Classes="stage" Padding="12">
+                <StackPanel Spacing="8">
+                    <StackPanel Orientation="Horizontal" Spacing="12">
+                        <TextBlock VerticalAlignment="Center" Text="Orientation" />
+                        <ComboBox Name="OrientationBox" Width="130" />
+                        <TextBlock VerticalAlignment="Center" Text="Spacing" />
+                        <Slider Name="SpacingSlider" Width="160" Minimum="0" Maximum="30" Value="6" />
+                    </StackPanel>
+                    <StackPanel Name="Stack" Spacing="6">
+                        <Border Width="60" Height="30" Background="#E8564A" />
+                        <Border Width="60" Height="30" Background="#E8974A" />
+                        <Border Width="60" Height="30" Background="#E8D24A" />
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+            <TextBlock Classes="hint" Text="StackPanel 在排布方向上给子元素无限空间，所以把它放进 ScrollViewer 里内容不会自己出滚动条；需要滚动时给外层固定高度。" />
+            <TextBlock Classes="hint" Text="更深入的演示：Avalonia.LayoutDemo →「布局面板」" />
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

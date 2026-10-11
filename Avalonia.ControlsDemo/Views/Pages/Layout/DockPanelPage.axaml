@@ -1,0 +1,27 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             x:Class="Avalonia.ControlsDemo.Views.Pages.DockPanelPage">
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="DockPanel：按边停靠"
+                               DocPath="controls/layout/panels/dockpanel" />
+
+            <TextBlock Classes="caption" Text="DockPanel.Dock 与 LastChildFill" />
+            <Border Classes="stage" Padding="12">
+                <StackPanel Spacing="8">
+                    <CheckBox Name="FillCheck" Content="LastChildFill" IsChecked="True" />
+                    <DockPanel Name="Dock" Width="320" Height="160" HorizontalAlignment="Left">
+                        <Border DockPanel.Dock="Top" Height="30" Background="#E8564A"><TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="Top" /></Border>
+                        <Border DockPanel.Dock="Bottom" Height="30" Background="#E8974A"><TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="Bottom" /></Border>
+                        <Border DockPanel.Dock="Left" Width="60" Background="#E8D24A"><TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="Left" /></Border>
+                        <Border DockPanel.Dock="Right" Width="60" Background="#6FE84A"><TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="Right" /></Border>
+                        <Border Name="LastChild" Background="#4A9BE8"><TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="最后一个" /></Border>
+                    </DockPanel>
+                </StackPanel>
+            </Border>
+            <TextBlock Classes="hint" Text="先声明的先占边；关掉 LastChildFill 后，最后一个元素也按自己的 Dock（默认 Left）停靠，不再填满剩余空间。" />
+            <TextBlock Classes="hint" Text="更深入的演示：Avalonia.LayoutDemo →「布局面板」" />
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

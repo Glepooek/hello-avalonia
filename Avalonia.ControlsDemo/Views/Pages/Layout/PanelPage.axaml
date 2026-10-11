@@ -1,0 +1,28 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             x:Class="Avalonia.ControlsDemo.Views.Pages.PanelPage">
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="Panel：所有面板的基类，子元素叠放在同一处"
+                               DocPath="controls/layout/panels/panel" />
+
+            <TextBlock Classes="caption" Text="不做任何排布：子元素都铺满面板，后声明的在上面" />
+            <Border Classes="stage" Padding="12">
+                <StackPanel Spacing="8">
+                    <Panel Name="Stack" Width="200" Height="100" HorizontalAlignment="Left" Background="#22808080">
+                        <Border Name="Under" Background="SteelBlue">
+                            <TextBlock HorizontalAlignment="Left" VerticalAlignment="Top" Margin="6" Text="下层" />
+                        </Border>
+                        <Border Name="Over" Margin="30" Background="Orange" Opacity="0.85">
+                            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="上层" />
+                        </Border>
+                    </Panel>
+                    <Button Name="SwapButton" Content="交换 ZIndex" HorizontalAlignment="Left" />
+                </StackPanel>
+            </Border>
+            <TextBlock Classes="hint" Text="需要叠放（比如在图片上盖一个角标）时，用 Panel 比 Grid 更轻；Panel.Background 让面板自己也可点击。" />
+            <TextBlock Classes="hint" Text="更深入的演示：Avalonia.LayoutDemo →「布局面板」" />
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>
