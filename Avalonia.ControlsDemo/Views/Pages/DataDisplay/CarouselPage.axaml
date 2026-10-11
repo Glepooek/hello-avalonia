@@ -1,0 +1,33 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             x:Class="Avalonia.ControlsDemo.Views.Pages.CarouselPage">
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="Carousel：一次只显示一项"
+                               DocPath="controls/data-display/collections/carousel" />
+
+            <TextBlock Classes="caption" Text="Next() / Previous()、PageTransition 与 IsSwipeEnabled" />
+            <Border Classes="stage" Padding="12">
+                <StackPanel Spacing="8">
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <Button Name="PreviousButton" Content="上一张" />
+                        <Button Name="NextButton" Content="下一张" />
+                        <TextBlock Name="IndexText" VerticalAlignment="Center" Text="第 1 / 3 张" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Spacing="12">
+                        <TextBlock VerticalAlignment="Center" Text="PageTransition" />
+                        <ComboBox Name="TransitionBox" Width="150" />
+                        <CheckBox Name="SwipeCheck" Content="IsSwipeEnabled（触摸滑动）" />
+                    </StackPanel>
+                    <Carousel Name="Slides" Width="320" Height="120" HorizontalAlignment="Left">
+                        <Border Background="#E8564A"><TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="第 1 张" /></Border>
+                        <Border Background="#E8974A"><TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="第 2 张" /></Border>
+                        <Border Background="#4A9BE8"><TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="第 3 张" /></Border>
+                    </Carousel>
+                </StackPanel>
+            </Border>
+            <TextBlock Classes="hint" Text="Carousel 是只有 Next() / Previous() 的 SelectingItemsControl，没有内置的指示器，需要圆点时配 PipsPager（见 Layout）。实测：到最后一张后 Next() 不会回到第一张。" />
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

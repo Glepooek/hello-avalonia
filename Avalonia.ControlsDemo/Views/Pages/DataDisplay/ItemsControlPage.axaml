@@ -1,0 +1,37 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             x:Class="Avalonia.ControlsDemo.Views.Pages.ItemsControlPage">
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="ItemsControl：最基础的集合展示"
+                               DocPath="controls/data-display/collections/itemscontrol" />
+
+            <TextBlock Classes="caption" Text="ItemsSource、ItemTemplate 与 ItemsPanel" />
+            <Border Classes="stage" Padding="12">
+                <StackPanel Spacing="8">
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <Button Name="AddButton" Content="添加一项" />
+                        <Button Name="RemoveButton" Content="删除最后一项" />
+                        <TextBlock VerticalAlignment="Center" Text="ItemsPanel" />
+                        <ComboBox Name="PanelBox" Width="130" />
+                        <TextBlock Name="CountText" VerticalAlignment="Center" />
+                    </StackPanel>
+                    <Border BorderBrush="Gray" BorderThickness="1" Width="320" Height="130" HorizontalAlignment="Left" Padding="6">
+                        <ItemsControl Name="Items">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate x:DataType="x:String">
+                                    <Border Margin="2" Padding="8,2" CornerRadius="4" Background="#334682B4">
+                                        <TextBlock Text="{Binding}" />
+                                    </Border>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </Border>
+                </StackPanel>
+            </Border>
+            <TextBlock Classes="hint" Text="ItemsControl 没有选择、没有键盘导航，也默认不虚拟化（ItemsPanel 默认是 StackPanel），所以适合项数不多、只展示不点选的场景。需要选择用 ListBox。" />
+            <TextBlock Classes="hint" Text="更深入的演示：Avalonia.DataBindingDemo →「集合」" />
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

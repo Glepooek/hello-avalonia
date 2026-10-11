@@ -1,0 +1,29 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             x:Class="Avalonia.ControlsDemo.Views.Pages.ListBoxPage">
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="ListBox：可选择的列表"
+                               DocPath="controls/data-display/collections/listbox" />
+
+            <TextBlock Classes="caption" Text="SelectionMode、SelectedItems 与 ScrollIntoView" />
+            <Border Classes="stage" Padding="12">
+                <StackPanel Spacing="8">
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <TextBlock VerticalAlignment="Center" Text="SelectionMode" />
+                        <ComboBox Name="ModeBox" Width="140" />
+                        <Button Name="SelectAllButton" Content="SelectAll()" />
+                        <Button Name="ClearButton" Content="UnselectAll()" />
+                        <Button Name="JumpButton" Content="ScrollIntoView 末项" />
+                    </StackPanel>
+                    <TextBlock Name="SelectionText" Text="已选 0 项" />
+                    <!--  A ListBox scrolls by itself; inside this page it needs a fixed Height.  -->
+                    <ListBox Name="List" Width="240" Height="140" HorizontalAlignment="Left" />
+                </StackPanel>
+            </Border>
+            <TextBlock Classes="hint" Text="Single 只留 1 项；Multiple 点哪项选哪项；Toggle 再点取消；AlwaysSelected 至少保留 1 项。实测：Multiple 下 SelectAll() 选中全部，切回 Single 后只剩 1 项。" />
+            <TextBlock Classes="hint" Text="更深入的演示：Avalonia.DataBindingDemo →「集合视图」" />
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>
