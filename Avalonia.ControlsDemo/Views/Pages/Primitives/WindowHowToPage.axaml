@@ -1,0 +1,48 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             x:Class="Avalonia.ControlsDemo.Views.Pages.WindowHowToPage">
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="实战：多窗口、位置记忆与关闭前确认"
+                               DocPath="docs/how-to/window-how-to" />
+
+            <TextBlock Classes="caption" Text="多窗口：独立窗口与子窗口" />
+            <Border Classes="stage" Padding="12">
+                <StackPanel Spacing="8">
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <Button Name="FreeButton" Content="新建独立窗口 Show()" />
+                        <Button Name="OwnedButton" Content="新建子窗口 Show(owner)" />
+                        <Button Name="CloseAllButton" Content="全部关闭" />
+                    </StackPanel>
+                    <TextBlock Name="WindowsText" TextWrapping="Wrap" />
+                </StackPanel>
+            </Border>
+            <TextBlock Classes="hint" Text="Show() 打开的是独立窗口，没有所有者，各自活着；Show(owner) 打开的是子窗口，登记在所有者的 OwnedWindows 里，所有者最小化时它跟着收起，所有者关闭时它被带着关掉。页面自己记着开过哪些窗口，离开本页时统一关掉。" />
+
+            <TextBlock Classes="caption" Text="位置与大小：记下、移动、恢复" />
+            <Border Classes="stage" Padding="12">
+                <StackPanel Spacing="8">
+                    <WrapPanel>
+                        <Button Name="PlaceOpenButton" Margin="0,0,8,8" Content="打开示例窗口" />
+                        <Button Name="MoveButton" Margin="0,0,8,8" Content="移到 (200, 120)，改成 420×260" />
+                        <Button Name="SaveButton" Margin="0,0,8,8" Content="记下位置与大小" />
+                        <Button Name="RestoreButton" Margin="0,0,8,8" Content="恢复记下的" />
+                        <Button Name="PlaceCloseButton" Margin="0,0,8,8" Content="关闭示例窗口" />
+                    </WrapPanel>
+                    <TextBlock Name="PlaceText" TextWrapping="Wrap" />
+                </StackPanel>
+            </Border>
+            <TextBlock Classes="hint" Text="Position 是屏幕上的像素坐标（PixelPoint），改它就是移动窗口；Width / Height 是设备无关单位下的客户区大小。先拖动或缩放示例窗口，再点「记下」，再点「移到…」，最后「恢复」就能回到记下的样子。这里只记在内存里；真正存到文件、下次启动再读回的写法，见 System 分类的「实战：数据持久化」。" />
+
+            <TextBlock Classes="caption" Text="关闭前确认：有未保存的更改时拦下，问清楚再关" />
+            <Border Classes="stage" Padding="12">
+                <StackPanel Spacing="8">
+                    <Button Name="EditorButton" HorizontalAlignment="Left" Content="打开可编辑的窗口" />
+                    <TextBlock Name="ConfirmText" TextWrapping="Wrap" />
+                </StackPanel>
+            </Border>
+            <TextBlock Classes="hint" Text="可编辑窗口里改了文字就有「未保存」标记，点「保存」清掉标记。有标记时点标题栏的 ✕：Closing 处理器先同步 e.Cancel = true 拦下，再 await 一个确认对话框；用户选「确定」才置位 confirmed 并重新 Close()。没有标记时直接关，不打扰。注意 Cancel 必须在处理器返回之前同步设置，不能 await 之后再设。" />
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

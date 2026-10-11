@@ -65,7 +65,7 @@ Avalonia.ControlsDemo/
                     CustomFontSignpostPage / MvvmSignpostPage / CodedUiSignpostPage
                     DragAndDropSignpostPage / ClipboardSignpostPage / DebuggingSignpostPage
 README.md                                        改：项目表一行 + 新增「控件目录对照表」
-docs/superpowers/specs/…-design.md               改：回填「批 6 实测结论」
+docs/superpowers/specs/…-design.md               改：回填「批 7 实测结论」
 CLAUDE.md                                        改：「进行中的工作」收尾
 ```
 
@@ -1533,10 +1533,10 @@ Expected: 0 个错误，且相比构建前没有新增警告。
 
 - [ ] **Step 6: 回填 spec 与 CLAUDE.md**
 
-在 spec 末尾"批 5 实测结论"之后、"验证标准"之前追加下面这一节：
+在 spec 末尾"批 6 实测结论"之后、"验证标准"之前追加下面这一节：
 
 ```markdown
-### 批 6 实测结论（2026-10-11）
+### 批 7 实测结论（2026-10-11）
 
 - **路标页不需要任何新包**：20 个路标页只是 `DemoHeader` 加一个共用的 `SignpostView`，付费控件页只写说明与官方链接，不引用任何商业授权包。
 - **`TopLevel.Launcher` 在 headless 里是 `NoopLauncher`**：`LaunchUriAsync` 同步完成并返回 `False`，**不会真的启动浏览器**，所以"在浏览器中打开"按钮可以在探针里放心点。

@@ -340,6 +340,20 @@ Menus 5 + Navigation 8 + Primitives 5 + System 1 + Web 4 = **84 页**，
 - **官方 How-to 与 12.1.2 的出入**：无。TabControl 指南的"样式"一节、Navigation 指南的"侧栏导航"与"ViewLocator"两节不重复实现，分别指向 `StylingDemo` 与本项目的 `MainWindow`。
 - **探针断言实际条数**：本批累计 698 条（含第 00–04 份），全部通过且零警告日志。
 
+### 批 6 实测结论（2026-10-11）
+
+- **headless 画不出窗口装饰**：`WindowDecorations` 取 `None / BorderOnly / Full` 三档、`ExtendClientAreaToDecorationsHint` 开关，`IsExtendedIntoWindowDecorations` 都恒为 `False`，`WindowDecorationMargin` 恒为 0；`WindowDrawnDecorations` 没有任何公开属性能拿到它，只能经主题与 `Window.WindowDecorationsTheme` 触达。页面演示属性读回与 `ElementRole`，外观要人工目视。
+- **`Window` 的关闭行为**：代码里调 `Close()` 的 `CloseReason` 也是 `WindowClosing`，拦截只应拦这一种，放过 `OwnerWindowClosing`，否则示例窗口会拖住主窗口；`Closed` 触发时窗口仍在所有者的 `OwnedWindows` 里，读数要数 `IsVisible` 的。`async void` 的 `Closing` 处理器必须在第一个 `await` 前同步设 `e.Cancel = true`。
+- **`ShowDialog<T>` 的结果**：`Close(true)` 得 `true`，无参 `Close()`（含点 ✕）得 `null`，不是 `false`；headless 里所有者的 `IsEnabled` 仍是 `True`，不能断言"所有者被挡住"。
+- **`TrayIcon`**：`NativeMenuExporter` 在 headless 里为 `null`，页面如实显示；`TrayIcon.Clicked` 在 headless 里触发不了，菜单项点击走 `Command.Execute`，且 `Command.Execute` 不会改 `IsChecked`（勾选是平台导出层的事）。图标挂在 `Application` 上，页面离开时必须摘掉并还原之前的 `TrayIcons`。
+- **`StorageProvider`**：非空，但 `CanOpen`、`CanSave`、`CanPickFolder` 在 headless 里全是 `False`，文件按钮按能力启用。
+- **`ScrollBar`**：`LineDown` 等方法触发 `Scroll`，直接给 `Value` 赋值不触发。
+- **`ThemeVariantScope`**：`ActualThemeVariantChanged` 触发时 `RequestedThemeVariant` 可能还没写进去，读数要在设值之后再刷新一次。
+- **JSON 持久化**：`System.Text.Json` 默认把中文转成 `\uXXXX`，设置文件要用 `JavaScriptEncoder.UnsafeRelaxedJsonEscaping` 才可读；自动保存会覆盖刚写坏的文件，探针里"写坏再读"的顺序要先改值、后写坏。
+- **范围缺口**：官方 Window 指南的"透明窗口"与"窗口图标"、Dialogs 指南的"文件对话框"实际弹出、数据持久化指南的"书签存储"，本份不做（原因见第 06 份计划开头）。
+- **官方 How-to 与 12.1.2 的出入**：无。
+- **探针断言实际条数**：本批累计 873 条（含第 00–05 份），全部通过且零警告日志。
+
 ## 验证标准
 
 1. `dotnet build hello-avalonia.slnx` 通过，且无新增警告

@@ -1,0 +1,55 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             x:Class="Avalonia.ControlsDemo.Views.Pages.ThemeVariantScopePage">
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="ThemeVariantScope：给一块区域指定主题变体"
+                               DocPath="controls/primitives/themevariantscope" />
+
+            <TextBlock Classes="caption" Text="并排的 Light 与 Dark 作用域" />
+            <Border Classes="stage" Padding="12">
+                <StackPanel Orientation="Horizontal" Spacing="12">
+                    <ThemeVariantScope Name="LightScope" RequestedThemeVariant="Light">
+                        <Border Name="LightBorder" Width="200" Padding="12" CornerRadius="6"
+                                Background="{DynamicResource SystemControlBackgroundAltHighBrush}">
+                            <StackPanel Spacing="8">
+                                <TextBlock Text="Light 作用域" />
+                                <Button Content="按钮" />
+                                <CheckBox Content="复选框" />
+                            </StackPanel>
+                        </Border>
+                    </ThemeVariantScope>
+                    <ThemeVariantScope Name="DarkScope" RequestedThemeVariant="Dark">
+                        <Border Name="DarkBorder" Width="200" Padding="12" CornerRadius="6"
+                                Background="{DynamicResource SystemControlBackgroundAltHighBrush}">
+                            <StackPanel Spacing="8">
+                                <TextBlock Text="Dark 作用域" />
+                                <Button Content="按钮" />
+                                <CheckBox Content="复选框" />
+                            </StackPanel>
+                        </Border>
+                    </ThemeVariantScope>
+                </StackPanel>
+            </Border>
+            <TextBlock Classes="hint" Text="ThemeVariantScope 是一个 Decorator：RequestedThemeVariant 只影响它的子树，窗口其余部分不变。两块里的控件与背景写法完全相同，颜色不同是因为 DynamicResource 在各自的作用域里解析出了不同变体的值。" />
+
+            <TextBlock Classes="caption" Text="RequestedThemeVariant 与 ActualThemeVariant" />
+            <Border Classes="stage" Padding="12">
+                <StackPanel Spacing="8">
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <TextBlock VerticalAlignment="Center" Text="RequestedThemeVariant" />
+                        <ComboBox Name="VariantBox" Width="120" />
+                    </StackPanel>
+                    <TextBlock Name="VariantText" />
+                    <ThemeVariantScope Name="LiveScope">
+                        <Border Padding="12" CornerRadius="6" Background="{DynamicResource SystemControlBackgroundAltHighBrush}">
+                            <TextBlock Text="由下拉驱动的作用域" />
+                        </Border>
+                    </ThemeVariantScope>
+                </StackPanel>
+            </Border>
+            <TextBlock Classes="hint" Text="选 Default 表示不指定，作用域跟随外层（这里是整个窗口当前的变体）；选 Light 或 Dark 则强制该变体。ActualThemeVariant 是最终生效的值，所以 Default 时它读到的是外层的变体，而不是 Default。更深入的演示：Avalonia.StylingDemo →「主题变体」" />
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

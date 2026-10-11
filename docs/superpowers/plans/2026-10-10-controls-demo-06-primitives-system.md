@@ -2945,10 +2945,10 @@ Expected: 0 个错误，且相比构建前没有新增警告（`Avalonia.Control
 
 - [ ] **Step 6: 回填 spec 与 CLAUDE.md**
 
-在 spec 末尾"批 4 实测结论"之后、"验证标准"之前追加下面这一节（`验证标准` 一节的上方）：
+在 spec 末尾"批 5 实测结论"之后、"验证标准"之前追加下面这一节（`验证标准` 一节的上方；若第 05 份还没回填，先按它的 Step 6 补上）：
 
 ```markdown
-### 批 5 实测结论（2026-10-11）
+### 批 6 实测结论（2026-10-11）
 
 - **headless 画不出窗口装饰**：`WindowDecorations` 取 `None / BorderOnly / Full` 三档、`ExtendClientAreaToDecorationsHint` 开关，`IsExtendedIntoWindowDecorations` 都恒为 `False`，`WindowDecorationMargin` 恒为 0；`WindowDrawnDecorations` 没有任何公开属性能拿到它，只能经主题与 `Window.WindowDecorationsTheme` 触达。页面演示属性读回与 `ElementRole`，外观要人工目视。
 - **`Window` 的关闭行为**：代码里调 `Close()` 的 `CloseReason` 也是 `WindowClosing`，拦截只应拦这一种，放过 `OwnerWindowClosing`，否则示例窗口会拖住主窗口；`Closed` 触发时窗口仍在所有者的 `OwnedWindows` 里，读数要数 `IsVisible` 的。`async void` 的 `Closing` 处理器必须在第一个 `await` 前同步设 `e.Cancel = true`。

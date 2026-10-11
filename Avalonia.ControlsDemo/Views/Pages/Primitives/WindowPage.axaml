@@ -1,0 +1,47 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             x:Class="Avalonia.ControlsDemo.Views.Pages.WindowPage">
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="Window：顶层窗口"
+                               DocPath="controls/primitives/window" />
+
+            <TextBlock Classes="caption" Text="打开、关闭，以及在 Closing 里拦截关闭" />
+            <Border Classes="stage" Padding="12">
+                <StackPanel Spacing="8">
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <Button Name="OpenButton" Content="打开示例窗口" />
+                        <Button Name="CloseButton" Content="关闭示例窗口" />
+                        <CheckBox Name="BlockCheck" Content="拦截关闭（Closing 里 e.Cancel = true）" />
+                    </StackPanel>
+                    <TextBlock Name="OwnerText" />
+                    <TextBlock Name="StateText" TextWrapping="Wrap" />
+                </StackPanel>
+            </Border>
+            <TextBlock Classes="hint" Text="示例窗口用 Show(owner) 打开，所以它是当前窗口的子窗口：所有者的 OwnedWindows 随之增减，所有者关闭时它也会被带着关掉。勾上「拦截关闭」后，点示例窗口的关闭按钮或页面上的「关闭示例窗口」都会触发 Closing 却关不掉；离开本页时页面会强制关掉它。Window.Closing 的参数带 CloseReason，所有者关闭与系统关机不会被拦。" />
+
+            <TextBlock Classes="caption" Text="实时改窗口属性（要先打开示例窗口）" />
+            <Border Classes="stage" Padding="12">
+                <StackPanel Spacing="8">
+                    <WrapPanel>
+                        <CheckBox Name="ResizeCheck" Margin="0,0,12,0" Content="CanResize" />
+                        <CheckBox Name="MinimizeCheck" Margin="0,0,12,0" Content="CanMinimize" />
+                        <CheckBox Name="MaximizeCheck" Margin="0,0,12,0" Content="CanMaximize" />
+                        <CheckBox Name="TopmostCheck" Margin="0,0,12,0" Content="Topmost" />
+                        <CheckBox Name="TaskbarCheck" Content="ShowInTaskbar" />
+                    </WrapPanel>
+                    <WrapPanel>
+                        <TextBlock VerticalAlignment="Center" Margin="0,0,4,0" Text="WindowState" />
+                        <ComboBox Name="StateBox" Width="120" Margin="0,0,12,0" />
+                        <TextBlock VerticalAlignment="Center" Margin="0,0,4,0" Text="SizeToContent" />
+                        <ComboBox Name="SizeBox" Width="150" Margin="0,0,12,0" />
+                        <TextBlock VerticalAlignment="Center" Margin="0,0,4,0" Text="WindowStartupLocation（下次打开生效）" />
+                        <ComboBox Name="LocationBox" Width="140" />
+                    </WrapPanel>
+                </StackPanel>
+            </Border>
+            <TextBlock Classes="hint" Text="CanResize 关掉后边框不能拖；CanMinimize / CanMaximize 关掉后对应的标题栏按钮变灰；Topmost 让窗口盖在其他窗口之上；ShowInTaskbar 关掉后任务栏不再有它的图标。WindowState 的值会跟着用户在标题栏上的操作同步回下拉框。SizeToContent 选 WidthAndHeight 后窗口收缩到刚好包住内容。要弹出模态对话框并取回结果，见「实战：对话框」。" />
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

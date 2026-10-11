@@ -1,0 +1,31 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             xmlns:local="using:Avalonia.ControlsDemo.Views.Pages"
+             x:Class="Avalonia.ControlsDemo.Views.Pages.UserControlPage">
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="UserControl：把一块 XAML 封装成组件"
+                               DocPath="controls/primitives/usercontrol" />
+
+            <TextBlock Classes="caption" Text="自定义的 SwatchView：Title 与 Fill 是它的两个属性" />
+            <Border Classes="stage" Padding="12">
+                <StackPanel Spacing="8">
+                    <StackPanel Orientation="Horizontal" Spacing="12">
+                        <local:SwatchView Title="红" Fill="Crimson" />
+                        <local:SwatchView Title="绿" Fill="SeaGreen" />
+                        <local:SwatchView Title="蓝" Fill="SteelBlue" />
+                        <local:SwatchView Name="Live" Title="可改的一块" Fill="Gray" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <TextBlock VerticalAlignment="Center" Text="给最右一块换色" />
+                        <ComboBox Name="ColorBox" Width="120" />
+                        <TextBox Name="TitleBox" Width="140" PlaceholderText="改它的 Title" />
+                    </StackPanel>
+                    <TextBlock Name="StateText" />
+                </StackPanel>
+            </Border>
+            <TextBlock Classes="hint" Text="UserControl 就是一个带 .axaml 与 code-behind 的类：XAML 描述内部结构，StyledProperty 暴露可配置的部分，使用方像用普通控件一样写属性。它没有自己的模板，内部元素直接成为它的 Content。本项目所有演示页都是 UserControl，SwatchView 则展示了「可复用的小组件」这一半用法。" />
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

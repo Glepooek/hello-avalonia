@@ -1,0 +1,11 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="using:Avalonia.ControlsDemo.Views.Pages"
+             x:Class="Avalonia.ControlsDemo.Views.Pages.SwatchView">
+    <StackPanel Width="96" Spacing="4">
+        <Border Height="56" CornerRadius="6"
+                Background="{Binding Fill, RelativeSource={RelativeSource AncestorType=local:SwatchView}}" />
+        <TextBlock HorizontalAlignment="Center"
+                   Text="{Binding Title, RelativeSource={RelativeSource AncestorType=local:SwatchView}}" />
+    </StackPanel>
+</UserControl>

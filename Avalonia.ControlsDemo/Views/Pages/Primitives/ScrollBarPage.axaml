@@ -1,0 +1,40 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             x:Class="Avalonia.ControlsDemo.Views.Pages.ScrollBarPage">
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="ScrollBar：独立的滚动条"
+                               DocPath="controls/primitives/scrollbar" />
+
+            <TextBlock Classes="caption" Text="方法触发 Scroll，直接赋值 Value 不触发" />
+            <Border Classes="stage" Padding="12">
+                <StackPanel Orientation="Horizontal" Spacing="24">
+                    <ScrollBar Name="Bar" Height="220" Maximum="100" ViewportSize="20" />
+                    <StackPanel Spacing="8">
+                        <WrapPanel>
+                            <Button Name="LineUpButton" Margin="0,0,8,8" Content="LineUp" />
+                            <Button Name="LineDownButton" Margin="0,0,8,8" Content="LineDown" />
+                            <Button Name="PageUpButton" Margin="0,0,8,8" Content="PageUp" />
+                            <Button Name="PageDownButton" Margin="0,0,8,8" Content="PageDown" />
+                            <Button Name="HomeButton" Margin="0,0,8,8" Content="ScrollToHome" />
+                            <Button Name="EndButton" Margin="0,0,8,8" Content="ScrollToEnd" />
+                        </WrapPanel>
+                        <StackPanel Orientation="Horizontal" Spacing="8">
+                            <TextBlock VerticalAlignment="Center" Text="直接写 Value" />
+                            <Slider Name="ValueSlider" Width="200" Minimum="0" Maximum="100" />
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" Spacing="8">
+                            <TextBlock VerticalAlignment="Center" Text="Visibility" />
+                            <ComboBox Name="VisibilityBox" Width="120" />
+                            <CheckBox Name="AutoHideCheck" Content="AllowAutoHide" />
+                        </StackPanel>
+                        <TextBlock Name="ValueText" />
+                        <TextBlock Name="ScrollText" />
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+            <TextBlock Classes="hint" Text="SmallChange 默认 1、LargeChange 默认 10：LineDown 一次加 1，PageDown 一次加 10；ScrollToEnd 与 ScrollToHome 跳到两端。这些方法都会触发 Scroll 事件（带 ScrollEventType 与 NewValue），拖动滑块直接写 Value 则只改值、不触发 Scroll。Visibility 的 Disabled / Hidden 会让滚动条不可用或隐藏，Auto 在内容放得下时隐藏。AllowAutoHide 默认开，只在鼠标靠近时展开成完整滚动条。" />
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

@@ -1,0 +1,53 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             xmlns:vm="using:Avalonia.ControlsDemo.ViewModels"
+             x:DataType="vm:DataPersistenceHowToViewModel"
+             x:Class="Avalonia.ControlsDemo.Views.Pages.DataPersistenceHowToPage">
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="实战：数据持久化（把设置存成 JSON）"
+                               DocPath="docs/how-to/data-persistence-how-to" />
+
+            <TextBlock Classes="caption" Text="设置：改一下就自动写进 settings.json" />
+            <Border Classes="stage" Padding="12">
+                <StackPanel Spacing="8">
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <TextBlock VerticalAlignment="Center" Text="用户名" />
+                        <TextBox Width="180" Text="{Binding Username}" />
+                        <TextBlock VerticalAlignment="Center" Text="字号" />
+                        <Slider Width="160" Minimum="10" Maximum="28" Value="{Binding FontSize}" />
+                        <CheckBox Content="启用通知" IsChecked="{Binding NotifyEnabled}" />
+                    </StackPanel>
+                    <TextBlock FontSize="{Binding FontSize}" Text="{Binding Username, StringFormat='预览：你好，{0}'}" />
+                    <WrapPanel>
+                        <Button Margin="0,0,8,8" Content="重新读取" Command="{Binding ReloadCommand}" />
+                        <Button Margin="0,0,8,8" Content="恢复默认" Command="{Binding ResetCommand}" />
+                        <Button Margin="0,0,8,8" Content="删除文件" Command="{Binding DeleteFileCommand}" />
+                        <Button Margin="0,0,8,8" Content="写坏文件" Command="{Binding CorruptFileCommand}" />
+                    </WrapPanel>
+                    <TextBlock Text="{Binding StatusText}" />
+                    <TextBlock TextWrapping="Wrap" Text="{Binding SettingsPath, StringFormat='文件：{0}'}" />
+                    <Border BorderBrush="Gray" BorderThickness="1" Padding="8">
+                        <SelectableTextBlock FontFamily="Consolas, Menlo, monospace" Text="{Binding FileText}" />
+                    </Border>
+                </StackPanel>
+            </Border>
+            <TextBlock Classes="hint" Text="设置是一个普通的 AppSettings 对象，SettingsStore 用 System.Text.Json 把它读写成 settings.json，放在 Environment.SpecialFolder.ApplicationData 下的应用子目录里（Windows 的 %AppData%，macOS 与 Linux 各有对应位置）。三个设置项在 ViewModel 里靠 OnXxxChanged 钩子自动存盘，下面框里是文件的真实内容。写文件时先写 .tmp 再替换，崩溃也不会留下半个文件；读文件时若 JSON 坏了就回退默认值，试试「写坏文件」再「重新读取」。页面一打开只读不写，所以没改过设置之前磁盘上不会多出文件。真实应用的文本框可以给自动保存加个防抖，这里为了看得见每次都写。" />
+
+            <TextBlock Classes="caption" Text="最近文件：最新的在最上面，最多 10 条，存进 recent.json" />
+            <Border Classes="stage" Padding="12">
+                <StackPanel Spacing="8">
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <Button Content="假装打开一个文件" Command="{Binding AddRecentCommand}" />
+                        <Button Content="清空" Command="{Binding ClearRecentCommand}" />
+                        <TextBlock VerticalAlignment="Center" Text="{Binding RecentItems.Count, StringFormat='共 {0} 条，上限 10'}" />
+                    </StackPanel>
+                    <ListBox MaxHeight="160" ItemsSource="{Binding RecentItems}" />
+                    <TextBlock TextWrapping="Wrap" Text="{Binding RecentPath, StringFormat='文件：{0}'}" />
+                </StackPanel>
+            </Border>
+            <TextBlock Classes="hint" Text="最近文件放在 LocalApplicationData（%LocalAppData%）而不是 ApplicationData：它是机器相关的路径，不该跟着账号漫游到别的电脑。重复打开同一个路径只会把它顶到最上面，不会出现两条；超过 10 条时最旧的被挤掉。这里点一次「假装打开」只是往列表里加一个路径，并没有真的创建文档。官方指南里针对 iOS、Android、WebAssembly 沙盒的「书签存储」桌面端用不上，这里不做。" />
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

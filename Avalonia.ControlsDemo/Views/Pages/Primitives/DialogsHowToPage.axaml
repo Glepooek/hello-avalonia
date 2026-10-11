@@ -1,0 +1,54 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             xmlns:vm="using:Avalonia.ControlsDemo.ViewModels"
+             x:DataType="vm:DialogsHowToViewModel"
+             x:Class="Avalonia.ControlsDemo.Views.Pages.DialogsHowToPage">
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="实战：对话框与它们的返回值"
+                               DocPath="docs/how-to/dialogs-how-to" />
+
+            <TextBlock Classes="caption" Text="确认对话框：ShowDialog&lt;bool?&gt;" />
+            <Border Classes="stage" Padding="12">
+                <StackPanel Spacing="8">
+                    <Button HorizontalAlignment="Left" Content="删除…" Command="{Binding AskConfirmCommand}" />
+                    <TextBlock Text="{Binding ConfirmResult}" />
+                </StackPanel>
+            </Border>
+            <TextBlock Classes="hint" Text="对话框是一个普通 Window：用 ShowDialog&lt;T&gt;(owner) 弹出并 await 结果，里面的按钮调 Close(result) 回传。确定得 true，取消得 false，直接点标题栏的 ✕ 得 null——所以结果类型要写成 bool? 并分清这三种。真实桌面上，对话框打开期间所有者不能操作。" />
+
+            <TextBlock Classes="caption" Text="输入对话框，以及「必须回答才能关」" />
+            <Border Classes="stage" Padding="12">
+                <StackPanel Spacing="8">
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <Button Content="起名字…" Command="{Binding AskNameCommand}" />
+                        <Button Content="必答的问题…" Command="{Binding AskRequiredNameCommand}" />
+                    </StackPanel>
+                    <TextBlock Text="{Binding NameResult}" />
+                </StackPanel>
+            </Border>
+            <TextBlock Classes="hint" Text="「必答的问题」把取消按钮禁掉，并在对话框的 Closing 里拦住用户点 ✕（只拦 CloseReason 为 WindowClosing 的情况，且用一个 answered 标志放行代码里调用的 Close(result)）。确定按钮在输入框为空时也是灰的。" />
+
+            <TextBlock Classes="caption" Text="复杂的返回值：ShowDialog&lt;Color?&gt;" />
+            <Border Classes="stage" Padding="12">
+                <StackPanel Orientation="Horizontal" Spacing="12">
+                    <Button Content="选颜色…" Command="{Binding PickColorCommand}" />
+                    <Border Width="80" Height="32" CornerRadius="4" Background="{Binding PickedBrush}" />
+                    <TextBlock VerticalAlignment="Center" Text="{Binding ColorResult}" />
+                </StackPanel>
+            </Border>
+            <TextBlock Classes="hint" Text="返回值可以是任何类型，Close(color) 把它装箱传回来，ShowDialog&lt;Color?&gt; 再取出。这里的 ViewModel 只认 IDialogService，不知道 Window 的存在：页面在构造时把「用 TopLevel 找所有者再弹窗」的实现传给它，所以 ViewModel 不用开窗口就能测。预览色块绑的是 IBrush 而不是 Color 结构体，因为绑到结构体属性失败时没有任何提示。" />
+
+            <TextBlock Classes="caption" Text="文件对话框：先问 StorageProvider 能做什么" />
+            <Border Classes="stage" Padding="12">
+                <StackPanel Spacing="8">
+                    <TextBlock Name="StorageText" />
+                    <Button Name="OpenFileButton" HorizontalAlignment="Left" Content="打开文件…" />
+                    <TextBlock Name="FileText" Text="（还没选过）" />
+                </StackPanel>
+            </Border>
+            <TextBlock Classes="hint" Text="文件与文件夹选择器来自 TopLevel.StorageProvider，不是 Window。并不是每个平台都支持，所以先看 CanOpen / CanSave / CanPickFolder，不支持时把按钮灰掉。这一块要在真实窗口里手动点一下试。" />
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

@@ -1,0 +1,25 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             x:Class="Avalonia.ControlsDemo.Views.Pages.TrayIconPage">
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="TrayIcon：系统托盘图标"
+                               DocPath="controls/navigation/trayicon" />
+
+            <TextBlock Classes="caption" Text="进入本页时挂上托盘图标，离开时摘掉" />
+            <Border Classes="stage" Padding="12">
+                <StackPanel Spacing="8">
+                    <StackPanel Orientation="Horizontal" Spacing="12">
+                        <CheckBox Name="VisibleCheck" Content="IsVisible" />
+                        <TextBlock VerticalAlignment="Center" Text="ToolTipText" />
+                        <TextBox Name="TipBox" Width="220" />
+                    </StackPanel>
+                    <TextBlock Name="StateText" TextWrapping="Wrap" />
+                    <TextBlock Name="MenuText" TextWrapping="Wrap" />
+                </StackPanel>
+            </Border>
+            <TextBlock Classes="hint" Text="看任务栏右下角的托盘区：图标挂上后，右键能弹出「显示 / 开机提示 / 退出」三项原生菜单，左键点图标会触发 Clicked。「开机提示」是带勾选的菜单项（ToggleType = CheckBox），「退出」在这里只做计数，不会真的退出演示程序。IsVisible 改成 False 后图标从托盘消失但对象仍在。TrayIcon 依赖平台实现：NativeMenuExporter 为空说明当前平台没有原生托盘（比如 headless 测试环境），这时图标与菜单只是对象，不会真的出现。" />
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

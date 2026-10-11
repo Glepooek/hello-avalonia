@@ -1,0 +1,35 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             x:Class="Avalonia.ControlsDemo.Views.Pages.WindowDrawnDecorationsPage">
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="WindowDrawnDecorations：由 Avalonia 绘制的窗口装饰"
+                               DocPath="controls/primitives/windowdrawndecorations" />
+
+            <TextBlock Classes="caption" Text="WindowDecorations 与 ExtendClientAreaToDecorationsHint" />
+            <Border Classes="stage" Padding="12">
+                <StackPanel Spacing="8">
+                    <WrapPanel>
+                        <TextBlock VerticalAlignment="Center" Margin="0,0,4,0" Text="WindowDecorations" />
+                        <ComboBox Name="DecorationsBox" Width="120" Margin="0,0,12,0" />
+                        <CheckBox Name="ExtendCheck" Margin="0,0,12,0" Content="ExtendClientAreaToDecorationsHint" />
+                        <Button Name="OpenSystemButton" Margin="0,0,8,0" Content="打开示例窗口" />
+                        <Button Name="CloseButton" Content="关闭示例窗口" />
+                    </WrapPanel>
+                    <TextBlock Name="StateText" TextWrapping="Wrap" />
+                </StackPanel>
+            </Border>
+            <TextBlock Classes="hint" Text="WindowDecorations 有三档：Full（标题栏、边框、阴影都要）、BorderOnly（只要边框与阴影）、None（什么都不要）。打开 ExtendClientAreaToDecorationsHint 后客户区延伸到标题栏下面，内容要用 WindowDecorationMargin 给标题栏让位。这些装饰由 Avalonia 自己绘制，外观来自主题里 TargetType 为 WindowDrawnDecorations 的 ControlTheme，可以通过 Window.WindowDecorationsTheme 换成自己的。" />
+
+            <TextBlock Classes="caption" Text="自绘标题栏：用 ElementRole 告诉窗口哪个元素是标题栏与按钮" />
+            <Border Classes="stage" Padding="12">
+                <StackPanel Spacing="8">
+                    <Button Name="OpenCustomButton" HorizontalAlignment="Left" Content="打开自绘标题栏窗口" />
+                    <TextBlock Name="RolesText" TextWrapping="Wrap" />
+                </StackPanel>
+            </Border>
+            <TextBlock Classes="hint" Text="示例窗口把 WindowDecorations 设成 None，再用 WindowDecorationProperties.SetElementRole 给自己画的元素标角色：TitleBar 让用户能拖它移动窗口，MinimizeButton / MaximizeButton / CloseButton 让对应的按钮拥有系统按钮的行为。WindowDecorationsElementRole 还有 ResizeN、ResizeSE 等八个方向，可以给自绘的边缘加上拖动改变大小。主题里 WindowDrawnDecorations 的可调项有 TitleBarHeight、FrameThickness、ShadowThickness，模板里的按钮部件叫 PART_CloseButton、PART_MinimizeButton、PART_MaximizeButton、PART_FullScreenButton，并带 :normal、:maximized、:minimized、:fullscreen、:has-shadow、:has-border、:has-titlebar 这些伪类。" />
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>
