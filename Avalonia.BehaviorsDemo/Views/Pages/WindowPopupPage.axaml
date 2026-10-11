@@ -1,0 +1,120 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             mc:Ignorable="d"
+             d:DesignWidth="860"
+             d:DesignHeight="900"
+             x:Class="Avalonia.BehaviorsDemo.Views.Pages.WindowPopupPage">
+
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="窗口、弹出与通知：ShowFlyoutAction、ShowPopupAction、ShowToolTipAction、通知、CloseWindowAction"
+                               DocPath="Avalonia.Xaml.Interactions.Custom.ShowFlyoutAction" />
+
+            <TextBlock Classes="caption" Text="1. 按钮触发，弹出的却是另一个控件上的 Flyout" />
+            <StackPanel Orientation="Horizontal" Spacing="12">
+                <Button Name="FlyoutOpener" Content="打开 Flyout">
+                    <Interaction.Behaviors>
+                        <EventTriggerBehavior EventName="Click">
+                            <ShowFlyoutAction TargetControl="{Binding #FlyoutAnchor}" />
+                        </EventTriggerBehavior>
+                    </Interaction.Behaviors>
+                </Button>
+                <Border Name="FlyoutAnchor" Classes="stage" Padding="12,8">
+                    <FlyoutBase.AttachedFlyout>
+                        <Flyout>
+                            <TextBlock Text="我是挂在右边这个方块上的 Flyout" />
+                        </Flyout>
+                    </FlyoutBase.AttachedFlyout>
+                    <TextBlock Text="Flyout 的锚点" />
+                </Border>
+            </StackPanel>
+            <TextBlock Classes="hint"
+                       Text="不写 TargetControl 时，用的是触发控件自己身上挂的 Flyout；写了就可以让任何控件去打开任何控件上的 Flyout。" />
+
+            <TextBlock Classes="caption" Text="2. ShowPopupAction：打开页面里的 Popup" />
+            <StackPanel Orientation="Horizontal" Spacing="12">
+                <Button Name="PopupOpener" Content="打开 Popup">
+                    <Interaction.Behaviors>
+                        <EventTriggerBehavior EventName="Click">
+                            <ShowPopupAction Popup="{Binding #DemoPopup}" />
+                        </EventTriggerBehavior>
+                    </Interaction.Behaviors>
+                </Button>
+                <Popup Name="DemoPopup" PlacementTarget="{Binding #PopupOpener}" Placement="Bottom" IsLightDismissEnabled="True">
+                    <Border Background="#303040" BorderBrush="#808090" BorderThickness="1" Padding="12">
+                        <TextBlock Text="点 Popup 之外的任何地方就会关闭它" />
+                    </Border>
+                </Popup>
+            </StackPanel>
+
+            <TextBlock Classes="caption" Text="3. ShowToolTipAction：不用悬停，直接弹出另一个控件的 ToolTip" />
+            <StackPanel Orientation="Horizontal" Spacing="12">
+                <Button Name="TipOpener" Content="显示 ToolTip">
+                    <Interaction.Behaviors>
+                        <EventTriggerBehavior EventName="Click">
+                            <ShowToolTipAction TargetControl="{Binding #TipTarget}" />
+                        </EventTriggerBehavior>
+                    </Interaction.Behaviors>
+                </Button>
+                <Border Name="TipTarget" Classes="stage" Padding="12,8" ToolTip.Tip="我是被远程唤出的 ToolTip">
+                    <TextBlock Text="ToolTip 的宿主" />
+                </Border>
+            </StackPanel>
+
+            <TextBlock Classes="caption" Text="4. NotificationManagerBehavior 与四种通知 Action" />
+            <Border Classes="stage" Padding="12">
+                <Interaction.Behaviors>
+                    <!-- Name it so the actions can bind to its NotificationManager. -->
+                    <NotificationManagerBehavior x:Name="NM" />
+                </Interaction.Behaviors>
+                <WrapPanel>
+                    <Button Name="SuccessButton" Content="成功" Margin="0,0,8,0">
+                        <Interaction.Behaviors>
+                            <EventTriggerBehavior EventName="Click">
+                                <ShowSuccessNotificationAction NotificationManager="{Binding #NM.NotificationManager}" Title="成功" Message="保存完成" />
+                            </EventTriggerBehavior>
+                        </Interaction.Behaviors>
+                    </Button>
+                    <Button Name="InfoButton" Content="信息" Margin="0,0,8,0">
+                        <Interaction.Behaviors>
+                            <EventTriggerBehavior EventName="Click">
+                                <ShowInformationNotificationAction NotificationManager="{Binding #NM.NotificationManager}" Title="信息" Message="有一条新消息" />
+                            </EventTriggerBehavior>
+                        </Interaction.Behaviors>
+                    </Button>
+                    <Button Name="WarningButton" Content="警告" Margin="0,0,8,0">
+                        <Interaction.Behaviors>
+                            <EventTriggerBehavior EventName="Click">
+                                <ShowWarningNotificationAction NotificationManager="{Binding #NM.NotificationManager}" Title="警告" Message="磁盘空间不足" />
+                            </EventTriggerBehavior>
+                        </Interaction.Behaviors>
+                    </Button>
+                    <Button Name="ErrorButton" Content="错误" Margin="0,0,8,0">
+                        <Interaction.Behaviors>
+                            <EventTriggerBehavior EventName="Click">
+                                <ShowErrorNotificationAction NotificationManager="{Binding #NM.NotificationManager}" Title="错误" Message="连接失败" />
+                            </EventTriggerBehavior>
+                        </Interaction.Behaviors>
+                    </Button>
+                    <Button Name="UnboundButton" Content="没绑定 NotificationManager 的成功通知">
+                        <Interaction.Behaviors>
+                            <EventTriggerBehavior EventName="Click">
+                                <ShowSuccessNotificationAction Title="不会出现" Message="没有绑定 NotificationManager" />
+                            </EventTriggerBehavior>
+                        </Interaction.Behaviors>
+                    </Button>
+                </WrapPanel>
+            </Border>
+            <TextBlock Classes="hint"
+                       Text="通知卡片出现在窗口右上角。NotificationManagerBehavior 在宿主控件挂载时创建窗口级的通知管理器；每个 Action 的 NotificationManager 必须显式绑到它（行为要有 x:Name）。最后一个按钮故意不绑：什么都不会出现，也没有任何报错。" />
+
+            <TextBlock Classes="caption" Text="5. CloseWindowAction：关闭按钮所在的窗口" />
+            <Button Name="OpenChildButton" Content="打开子窗口" HorizontalAlignment="Left" Click="OnOpenChild" />
+            <TextBlock Classes="hint"
+                       Text="子窗口里的「关闭我」按钮没有任何 code-behind。CloseWindowAction 不写 TargetWindow 时关闭所在窗口，所以它只能放在子窗口里，放在主窗口里就会把整个程序关掉。" />
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

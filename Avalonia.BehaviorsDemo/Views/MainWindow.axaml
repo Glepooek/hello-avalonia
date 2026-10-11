@@ -29,5 +29,20 @@
         <TabItem Header="表单验证">
             <pages:ValidationPage />
         </TabItem>
+        <TabItem Header="集合">
+            <pages:CollectionPage />
+        </TabItem>
+        <TabItem Header="窗口弹出通知">
+            <pages:WindowPopupPage />
+        </TabItem>
+        <TabItem Header="拖拽">
+            <pages:DragPage />
+        </TabItem>
+        <TabItem Header="响应式">
+            <pages:ResponsivePage />
+        </TabItem>
+        <TabItem Header="动画">
+            <pages:AnimationPage />
+        </TabItem>
     </TabControl>
 </Window>

@@ -1,0 +1,83 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             xmlns:vm="using:Avalonia.BehaviorsDemo.ViewModels"
+             mc:Ignorable="d"
+             d:DesignWidth="860"
+             d:DesignHeight="640"
+             x:Class="Avalonia.BehaviorsDemo.Views.Pages.ResponsivePage"
+             x:DataType="vm:ResponsiveViewModel">
+
+    <UserControl.Styles>
+        <!-- The behaviors only toggle style classes; these selectors turn each class into something visible. -->
+        <!-- The labels must not set Text locally, or a local value would suppress these setters. -->
+        <Style Selector="Border.narrow">
+            <Setter Property="Background" Value="DarkOrange" />
+        </Style>
+        <Style Selector="Border.narrow > TextBlock.label">
+            <Setter Property="Text" Value="窄：宽度小于 300" />
+        </Style>
+        <Style Selector="Border.wide">
+            <Setter Property="Background" Value="SteelBlue" />
+        </Style>
+        <Style Selector="Border.wide > TextBlock.label">
+            <Setter Property="Text" Value="宽：宽度不小于 300" />
+        </Style>
+        <Style Selector="Border.tall">
+            <Setter Property="Background" Value="MediumPurple" />
+        </Style>
+        <Style Selector="Border.tall > TextBlock.label">
+            <Setter Property="Text" Value="高：宽高比小于 1" />
+        </Style>
+        <Style Selector="Border.flat">
+            <Setter Property="Background" Value="SeaGreen" />
+        </Style>
+        <Style Selector="Border.flat > TextBlock.label">
+            <Setter Property="Text" Value="扁：宽高比不小于 1" />
+        </Style>
+    </UserControl.Styles>
+
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="响应式：AdaptiveBehavior 与 AspectRatioBehavior"
+                               DocPath="Avalonia.Xaml.Interactions.Responsive.AdaptiveBehavior" />
+
+            <TextBlock Classes="caption" Text="拖动滑块改变下面两个盒子的宽度" />
+            <StackPanel Orientation="Horizontal" Spacing="12">
+                <Slider Width="320" Minimum="60" Maximum="600" Value="{Binding PanelWidth}" />
+                <TextBlock VerticalAlignment="Center" Text="{Binding PanelWidth, StringFormat={}宽度 {0:0}}" />
+            </StackPanel>
+
+            <TextBlock Classes="caption" Text="1. AdaptiveBehavior：按宽度加减样式类" />
+            <Border Name="AdaptiveBox" Width="{Binding PanelWidth}" Height="60" HorizontalAlignment="Left" CornerRadius="4">
+                <Interaction.Behaviors>
+                    <AdaptiveBehavior>
+                        <AdaptiveBehavior.Setters>
+                            <AdaptiveClassSetter MinWidth="0" MaxWidth="300" ClassName="narrow" />
+                            <AdaptiveClassSetter MinWidth="300" ClassName="wide" />
+                        </AdaptiveBehavior.Setters>
+                    </AdaptiveBehavior>
+                </Interaction.Behaviors>
+                <TextBlock Name="AdaptiveLabel" Classes="label" HorizontalAlignment="Center" VerticalAlignment="Center" />
+            </Border>
+            <TextBlock Classes="hint"
+                       Text="每个 AdaptiveClassSetter 描述一个宽度（或高度）区间和一个类名；盒子的尺寸落进哪个区间，行为就给它加上哪个类，离开区间就摘掉。颜色与文字都由样式表按类名决定，行为本身不碰它们。" />
+
+            <TextBlock Classes="caption" Text="2. AspectRatioBehavior：按宽高比加减样式类（高度固定 100）" />
+            <Border Name="RatioBox" Width="{Binding PanelWidth}" Height="100" HorizontalAlignment="Left" CornerRadius="4">
+                <Interaction.Behaviors>
+                    <AspectRatioBehavior>
+                        <AspectRatioBehavior.Setters>
+                            <AspectRatioClassSetter MaxRatio="1" ClassName="tall" />
+                            <AspectRatioClassSetter MinRatio="1" ClassName="flat" />
+                        </AspectRatioBehavior.Setters>
+                    </AspectRatioBehavior>
+                </Interaction.Behaviors>
+                <TextBlock Name="RatioLabel" Classes="label" HorizontalAlignment="Center" VerticalAlignment="Center" />
+            </Border>
+            <TextBlock Classes="hint" Text="宽度小于 100 时宽高比小于 1，盒子变紫色；否则是绿色。" />
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

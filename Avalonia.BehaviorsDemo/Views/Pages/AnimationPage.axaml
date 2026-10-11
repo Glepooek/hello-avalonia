@@ -1,0 +1,95 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             mc:Ignorable="d"
+             d:DesignWidth="860"
+             d:DesignHeight="900"
+             x:Class="Avalonia.BehaviorsDemo.Views.Pages.AnimationPage">
+
+    <UserControl.Styles>
+        <!-- An Animation cannot be written inline inside a behavior or action (AVLN2200), -->
+        <!-- so it lives in a style's resources and the behaviors reference it with DynamicResource. -->
+        <Style Selector="Border.anim">
+            <Style.Resources>
+                <Animation x:Key="Dim" Duration="0:0:0.2" FillMode="Forward">
+                    <KeyFrame Cue="0%">
+                        <Setter Property="Opacity" Value="1" />
+                    </KeyFrame>
+                    <KeyFrame Cue="100%">
+                        <Setter Property="Opacity" Value="0.4" />
+                    </KeyFrame>
+                </Animation>
+            </Style.Resources>
+        </Style>
+    </UserControl.Styles>
+
+    <ScrollViewer Name="PageScroller">
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="动画：FadeInBehavior、PlayAnimationBehavior、BeginAnimationAction、内置动画与倾斜视差"
+                               DocPath="Avalonia.Xaml.Interactions.Custom.FadeInBehavior" />
+
+            <TextBlock Classes="caption" Text="1. FadeInBehavior：控件挂载时淡入（切换标签页再回来可以重新看到）" />
+            <Border Name="FadeBox" Classes="stage" Width="240" Height="60" HorizontalAlignment="Left" Background="SteelBlue">
+                <Interaction.Behaviors>
+                    <FadeInBehavior InitialDelay="0:0:0.1" Duration="0:0:0.4" />
+                </Interaction.Behaviors>
+                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="我在挂载时淡入" />
+            </Border>
+            <TextBlock Classes="hint" Text="只在控件挂到可视树的那一刻播放一次，不是每次属性变化都播。" />
+
+            <TextBlock Classes="caption" Text="2. PlayAnimationBehavior：挂载时播放一个资源里定义好的 Animation" />
+            <Border Name="PlayBox" Classes="stage anim" Width="240" Height="60" HorizontalAlignment="Left" Background="DarkOrange">
+                <Interaction.Behaviors>
+                    <PlayAnimationBehavior Animation="{DynamicResource Dim}" />
+                </Interaction.Behaviors>
+                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="挂载后变暗并停在 0.4" />
+            </Border>
+
+            <TextBlock Classes="caption" Text="3. BeginAnimationAction：事件触发，让另一个控件播放同一个 Animation" />
+            <StackPanel Orientation="Horizontal" Spacing="12">
+                <Button Name="BeginButton" Content="让右边的方块变暗">
+                    <Interaction.Behaviors>
+                        <EventTriggerBehavior EventName="Click">
+                            <BeginAnimationAction Animation="{DynamicResource Dim}" TargetControl="{Binding #BeginTarget}" />
+                        </EventTriggerBehavior>
+                    </Interaction.Behaviors>
+                </Button>
+                <Border Name="BeginTarget" Classes="stage anim" Width="160" Height="60" Background="SeaGreen">
+                    <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="目标方块" />
+                </Border>
+            </StackPanel>
+            <TextBlock Classes="hint"
+                       Text="Animation 必须放进样式的 Style.Resources 再用 DynamicResource 引用；直接写在行为或 Action 里面会编译失败。动画结束后 FillMode=Forward 让不透明度停在末值，刷新页面才会还原。" />
+
+            <TextBlock Classes="caption" Text="4. 内置动画库：AttentionAnimations.SetShakeX 等一行调用" />
+            <StackPanel Orientation="Horizontal" Spacing="12">
+                <Button Name="ShakeButton" Content="摇一摇" Click="OnShake" />
+                <Border Name="ShakeBox" Classes="stage" Width="160" Height="60" Background="MediumPurple">
+                    <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="我会左右晃动" />
+                </Border>
+            </StackPanel>
+            <TextBlock Classes="hint"
+                       Text="EntranceAnimations、AttentionAnimations、ExitAnimations 三组都是 SetXxx(控件, 毫秒) 的形态，没有对应的 XAML 行为，所以这里用按钮的 Click 事件在 code-behind 里调用。" />
+
+            <TextBlock Classes="caption" Text="5. TiltEffectBehavior 与 ParallaxBehavior（需目视）" />
+            <StackPanel Orientation="Horizontal" Spacing="12">
+                <Border Name="TiltBox" Classes="stage" Width="200" Height="100" Background="#304060">
+                    <Interaction.Behaviors>
+                        <TiltEffectBehavior TiltStrength="12" />
+                    </Interaction.Behaviors>
+                    <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="鼠标在上面移动，看它倾斜" />
+                </Border>
+                <Border Name="ParallaxBox" Classes="stage" Width="200" Height="100" Background="#403060">
+                    <Interaction.Behaviors>
+                        <ParallaxBehavior SourceScrollViewer="{Binding #PageScroller}" ParallaxRatio="0.3" />
+                    </Interaction.Behaviors>
+                    <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="滚动页面，看它错位跟随" />
+                </Border>
+            </StackPanel>
+            <TextBlock Classes="hint"
+                       Text="这两个效果靠指针位置和滚动偏移驱动，自动化测试只能验证行为已挂上，真实效果请手动试。视差需要页面能滚动：把窗口调矮一些。" />
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

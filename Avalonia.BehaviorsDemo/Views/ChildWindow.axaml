@@ -1,0 +1,21 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        x:Class="Avalonia.BehaviorsDemo.Views.ChildWindow"
+        Icon="/Assets/avalonia-logo.ico"
+        Title="子窗口"
+        Width="320"
+        Height="160"
+        WindowStartupLocation="CenterOwner">
+
+    <StackPanel Margin="16" Spacing="12" VerticalAlignment="Center">
+        <TextBlock TextWrapping="Wrap" Text="这个按钮上没有任何 code-behind：关闭窗口完全由 CloseWindowAction 完成。" />
+        <Button Name="CloseChildButton" Content="关闭我" HorizontalAlignment="Center">
+            <Interaction.Behaviors>
+                <EventTriggerBehavior EventName="Click">
+                    <!-- No TargetWindow: it closes the window that hosts the button. -->
+                    <CloseWindowAction />
+                </EventTriggerBehavior>
+            </Interaction.Behaviors>
+        </Button>
+    </StackPanel>
+</Window>

@@ -1,0 +1,86 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             xmlns:vm="using:Avalonia.BehaviorsDemo.ViewModels"
+             mc:Ignorable="d"
+             d:DesignWidth="860"
+             d:DesignHeight="1000"
+             x:Class="Avalonia.BehaviorsDemo.Views.Pages.DragPage"
+             x:DataType="vm:DragViewModel">
+
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="拖拽：CanvasDragBehavior、MouseDragElementBehavior、ListReorderDragBehavior，以及文字与文件的投放"
+                               DocPath="Avalonia.Xaml.Interactions.Draggable.CanvasDragBehavior" />
+
+            <TextBlock Classes="caption" Text="1. CanvasDragBehavior：在 Canvas 里拖动，改的是 Canvas.Left 与 Canvas.Top" />
+            <Border Classes="stage" Width="360" Height="120" HorizontalAlignment="Left" ClipToBounds="True">
+                <Canvas>
+                    <Border Name="CanvasChip" Canvas.Left="10" Canvas.Top="10" Width="40" Height="40"
+                            Background="DarkOrange" CornerRadius="4">
+                        <Interaction.Behaviors>
+                            <CanvasDragBehavior />
+                        </Interaction.Behaviors>
+                    </Border>
+                </Canvas>
+            </Border>
+
+            <TextBlock Classes="caption" Text="2. MouseDragElementBehavior：拖动靠 RenderTransform，不改布局属性" />
+            <Border Classes="stage" Width="360" Height="120" HorizontalAlignment="Left" ClipToBounds="True">
+                <Canvas>
+                    <Border Name="MouseChip" Canvas.Left="10" Canvas.Top="10" Width="40" Height="40"
+                            Background="SteelBlue" CornerRadius="4">
+                        <Interaction.Behaviors>
+                            <MouseDragElementBehavior />
+                        </Interaction.Behaviors>
+                    </Border>
+                </Canvas>
+            </Border>
+            <TextBlock Classes="hint"
+                       Text="两者看起来都是「能拖」，区别在内部：第一个把新位置写回 Canvas.Left / Canvas.Top，第二个给元素加一个 TranslateTransform，Canvas.Left 始终是 10。第二种不要求父容器是 Canvas。" />
+
+            <TextBlock Classes="caption" Text="3. ListReorderDragBehavior：拖动列表项重新排序" />
+            <StackPanel Orientation="Horizontal" Spacing="12">
+                <ListBox Name="OrderList" Width="200" ItemsSource="{Binding Order}">
+                    <ListBox.Styles>
+                        <Style Selector="ListBoxItem">
+                            <Setter Property="(Interaction.Behaviors)">
+                                <BehaviorCollectionTemplate>
+                                    <BehaviorCollection>
+                                        <ListReorderDragBehavior Orientation="Vertical" />
+                                    </BehaviorCollection>
+                                </BehaviorCollectionTemplate>
+                            </Setter>
+                        </Style>
+                    </ListBox.Styles>
+                </ListBox>
+                <TextBlock VerticalAlignment="Top" Text="{Binding OrderText, StringFormat={}当前顺序：{0}}" />
+            </StackPanel>
+            <TextBlock Classes="hint"
+                       Text="行为必须通过 ListBoxItem 的样式（BehaviorCollectionTemplate）挂到每一项上；直接写进 DataTemplate 里面拖不动。它改的是 ItemsSource 本身，所以要绑 ObservableCollection。" />
+
+            <TextBlock Classes="caption" Text="4. TextDropBehavior 与 FilesDropBehavior：接收从别处拖进来的内容（需目视）" />
+            <StackPanel Orientation="Horizontal" Spacing="12">
+                <Border Name="TextDropZone" Classes="stage" Width="240" Height="80" DragDrop.AllowDrop="True" Background="#20FFFFFF">
+                    <Interaction.Behaviors>
+                        <TextDropBehavior Command="{Binding TextDroppedCommand}" />
+                    </Interaction.Behaviors>
+                    <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="把选中的文字拖到这里" />
+                </Border>
+                <Border Name="FilesDropZone" Classes="stage" Width="240" Height="80" DragDrop.AllowDrop="True" Background="#20FFFFFF">
+                    <Interaction.Behaviors>
+                        <FilesDropBehavior Command="{Binding FilesDroppedCommand}" />
+                    </Interaction.Behaviors>
+                    <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="把文件拖到这里" />
+                </Border>
+            </StackPanel>
+            <Border Classes="stage" Padding="8" Height="110" Margin="0,8,0,0">
+                <ListBox ItemsSource="{Binding DropLog.Entries}" />
+            </Border>
+            <TextBlock Classes="hint"
+                       Text="这两个投放行为只演示读到了什么：下面的记录里写着命令收到的参数类型。真实的拖放需要操作系统的拖放循环，自动化测试只能验证行为已经挂上，所以这一块要手动试：从记事本拖一段文字、从资源管理器拖一个文件进来。" />
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

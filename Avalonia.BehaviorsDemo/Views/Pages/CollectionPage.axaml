@@ -1,0 +1,87 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             xmlns:vm="using:Avalonia.BehaviorsDemo.ViewModels"
+             mc:Ignorable="d"
+             d:DesignWidth="860"
+             d:DesignHeight="1200"
+             x:Class="Avalonia.BehaviorsDemo.Views.Pages.CollectionPage"
+             x:DataType="vm:CollectionViewModel">
+
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="集合与 ItemsControl：增、删、清空、滚动、全选"
+                               DocPath="Avalonia.Xaml.Interactions.Custom.AddItemToItemsControlAction" />
+
+            <TextBlock Classes="caption" Text="1. AddItemToItemsControlAction 与 ClearItemsControlAction" />
+            <StackPanel Orientation="Horizontal" Spacing="12">
+                <ListBox Name="FruitList" Width="200" Height="120" ItemsSource="{Binding Fruits}" />
+                <StackPanel Spacing="8">
+                    <Button Name="AddFruitButton" Content="添加「葡萄」">
+                        <Interaction.Behaviors>
+                            <EventTriggerBehavior EventName="Click">
+                                <AddItemToItemsControlAction ItemsControl="{Binding #FruitList}" Item="葡萄" />
+                            </EventTriggerBehavior>
+                        </Interaction.Behaviors>
+                    </Button>
+                    <Button Name="ClearFruitsButton" Content="清空">
+                        <Interaction.Behaviors>
+                            <EventTriggerBehavior EventName="Click">
+                                <ClearItemsControlAction ItemsControl="{Binding #FruitList}" />
+                            </EventTriggerBehavior>
+                        </Interaction.Behaviors>
+                    </Button>
+                </StackPanel>
+            </StackPanel>
+            <TextBlock Classes="hint"
+                       Text="这两个 Action 改的是 ItemsSource 绑定的集合（这里是 ObservableCollection），所以列表必须绑 ItemsSource。如果列表只是在 XAML 里手写了几个子项，点按钮什么都不会发生，也不会有任何报错。" />
+
+            <TextBlock Classes="caption" Text="2. RemoveItemInItemsControlAction：放在列表项模板里，删掉自己这一项" />
+            <StackPanel Orientation="Horizontal" Spacing="12">
+                <ListBox Name="TodoList" Width="260" Height="130" ItemsSource="{Binding Todos}">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate x:DataType="x:String">
+                            <Grid ColumnDefinitions="*,Auto">
+                                <TextBlock VerticalAlignment="Center" Text="{Binding}" />
+                                <Button Grid.Column="1" Content="删除">
+                                    <Interaction.Behaviors>
+                                        <EventTriggerBehavior EventName="Click">
+                                            <RemoveItemInItemsControlAction />
+                                        </EventTriggerBehavior>
+                                    </Interaction.Behaviors>
+                                </Button>
+                            </Grid>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+                <Button VerticalAlignment="Top" Content="恢复三项" Command="{Binding ResetTodosCommand}" />
+            </StackPanel>
+            <TextBlock Classes="hint"
+                       Text="RemoveItemInItemsControlAction 没有任何属性：它把所在列表项的 DataContext 从所属 ItemsControl 的 ItemsSource 里移除，所以必须放在 ItemTemplate 里面。" />
+
+            <TextBlock Classes="caption" Text="3. ScrollToItemBehavior：推一个元素进去，列表就滚到它" />
+            <StackPanel Orientation="Horizontal" Spacing="12">
+                <ListBox Name="BigList" Width="200" Height="120" ItemsSource="{Binding Numbers}">
+                    <Interaction.Behaviors>
+                        <ScrollToItemBehavior Item="{Binding ScrollRequests}" />
+                    </Interaction.Behaviors>
+                </ListBox>
+                <Button Name="ScrollButton" VerticalAlignment="Top" Content="滚到第 150 项"
+                        Command="{Binding ScrollToCommand}" CommandParameter="150" />
+            </StackPanel>
+            <TextBlock Classes="hint"
+                       Text="Item 属性的类型是 IObservable，行为订阅它，每收到一个元素就滚动到该元素。ViewModel 里的 ScrollRequest 是一个只有 Publish 方法的最小实现，项目没有引入 System.Reactive。" />
+
+            <TextBlock Classes="caption" Text="4. ListBoxSelectAllBehavior：Ctrl+A 全选" />
+            <ListBox Name="MultiList" Width="200" Height="130" HorizontalAlignment="Left"
+                     SelectionMode="Multiple" ItemsSource="{Binding Colors}">
+                <Interaction.Behaviors>
+                    <ListBoxSelectAllBehavior />
+                </Interaction.Behaviors>
+            </ListBox>
+            <TextBlock Classes="hint" Text="先点一下列表让它获得焦点，再按 Ctrl+A。列表的 SelectionMode 要是 Multiple。" />
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>
