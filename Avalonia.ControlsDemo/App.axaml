@@ -9,5 +9,7 @@
         <StyleInclude Source="avares://Avalonia.Shared/Themes/SharedStyles.axaml" />
         <!--  ColorPicker and ColorView draw nothing without this; there is no error and no log.  -->
         <StyleInclude Source="avares://Avalonia.Controls.ColorPicker/Themes/Fluent/Fluent.xaml" />
+        <!--  DataGrid draws nothing without this; there is no error and no log.  -->
+        <StyleInclude Source="avares://Avalonia.Controls.DataGrid/Themes/Fluent.xaml" />
     </Application.Styles>
 </Application>
