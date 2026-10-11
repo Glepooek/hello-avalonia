@@ -1,0 +1,17 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             xmlns:local="using:Avalonia.ControlsDemo.Views.Pages"
+             x:Class="Avalonia.ControlsDemo.Views.Pages.CustomFontSignpostPage">
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="使用自定义字体"
+                               DocPath="docs/how-to/custom-font-how-to" />
+            <TextBlock Classes="caption" Text="路标：完整演示在 Avalonia.StylingDemo" />
+            <local:SignpostView DocPath="docs/how-to/custom-font-how-to"
+                                Summary="把字体文件作为资源嵌入，再用 FontFamily 的 avares 路径引用它，或用一个 FontFamily 的默认值给整棵树换字体。字体资源可以只在需要的地方声明，也可以放 Application 资源里全局生效。"
+                                Target="Avalonia.StylingDemo →「字体」"
+                                RunLine="dotnet run --project Avalonia.StylingDemo" />
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

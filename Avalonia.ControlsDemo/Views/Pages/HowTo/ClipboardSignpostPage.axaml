@@ -1,0 +1,17 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             xmlns:local="using:Avalonia.ControlsDemo.Views.Pages"
+             x:Class="Avalonia.ControlsDemo.Views.Pages.ClipboardSignpostPage">
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="剪贴板"
+                               DocPath="docs/how-to/clipboard-how-to" />
+            <TextBlock Classes="caption" Text="路标：完整演示在 Avalonia.ServicesDemo" />
+            <local:SignpostView DocPath="docs/how-to/clipboard-how-to"
+                                Summary="从 TopLevel.Clipboard 读写数据：SetTextAsync / GetTextAsync 处理纯文本，需要富格式时用 DataObject 装多个格式一起放进剪贴板，粘出的一端挑它认识的格式。"
+                                Target="Avalonia.ServicesDemo →「剪贴板」"
+                                RunLine="dotnet run --project Avalonia.ServicesDemo" />
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

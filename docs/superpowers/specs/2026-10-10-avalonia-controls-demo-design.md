@@ -354,6 +354,31 @@ Menus 5 + Navigation 8 + Primitives 5 + System 1 + Web 4 = **84 页**，
 - **官方 How-to 与 12.1.2 的出入**：无。
 - **探针断言实际条数**：本批累计 873 条（含第 00–05 份），全部通过且零警告日志。
 
+### 批 7 实测结论（2026-10-11）
+
+- **路标页不需要任何新包**：20 个路标页只是 `DemoHeader` 加一个共用的 `SignpostView`，付费控件页只写说明与官方链接，不引用任何商业授权包。
+- **`TopLevel.Launcher` 在 headless 里是 `NoopLauncher`**：`LaunchUriAsync` 同步完成并返回 `False`，**不会真的启动浏览器**，所以"在浏览器中打开"按钮可以在探针里放心点。
+- **三处 `DocPath` 必须逐字一致**：`SignpostView.DocPath`、同页 `DemoHeader.DocPath`、`PageCatalog` 登记的 `DocPath`。探针逐页断言，避免以后改名后路标悬空。
+- **路标里的"指向"都指向真实存在的 Tab**：执行时用 grep 逐个核对了对应项目 `MainWindow.axaml` 里的 `Header="…"`（12 个 Tab 全部存在，`Avalonia.WebViewDemo` 的 3 个按钮文案也一致）；**探针里没有这条断言**，以后改名需要重新核对，见下表。
+- **付费控件的官方位置都在 `controls/...` 下**：Charts 在 `controls/data-display/charts`、PdfViewer 在 `controls/data-display/pdfviewer`、TreeDataGrid 在 `controls/data-display/structured-data/treedatagrid`、Markdown 在 `controls/data-display/text-display/markdown`、RichTextEditor 在 `controls/input/text-input/richtexteditor`、VirtualKeyboard 在 `controls/input/text-input/virtualkeyboard`、MediaPlayer 在 `controls/media/mediaplayer`；`DocPath` 保留官方原路径，只在导航树上统一收进"付费控件"分类。**这就是前几批记录的"范围缺口"的落点。**
+- **授权标签**：Charts 只标 Pro；其余六组同时标 Pro 与 Enterprise。
+- **属性值里的 `<` 会让 XAML 编译失败（AVLN1001）**：`Summary` 里写泛型 `FlatTreeDataGridSource<T>` 要换成全角 `〈T〉`。
+- **整套目录**：80 个可运行控件页 + 19 个实战页 + 20 个路标页 = 119 页。
+- **官方 How-to 与 12.1.2 的出入**：无。
+- **探针断言实际条数**：本批累计 1014 条（含第 00–06 份），全部通过且零警告日志。
+
+| 路标 | 项目 | Tab（`Header`） |
+|---|---|---|
+| 响应式布局 | `Avalonia.LayoutDemo` | 响应式布局 |
+| 给控件写样式 | `Avalonia.StylingDemo` | 选择器、样式类、ControlTheme |
+| 切换主题 | `Avalonia.StylingDemo` | 主题变体 |
+| 使用自定义字体 | `Avalonia.StylingDemo` | 字体 |
+| 用 MVVM 组织代码 | `Avalonia.FundamentalsDemo` | MVVM |
+| 用纯代码搭界面 | `Avalonia.FundamentalsDemo` | 纯代码 UI |
+| 拖放 | `Avalonia.InputDemo` | 拖放 |
+| 剪贴板 | `Avalonia.ServicesDemo` | 剪贴板 |
+| 调试应用 | `Avalonia.AppDevelopmentDemo` | 日志、未处理异常 |
+
 ## 验证标准
 
 1. `dotnet build hello-avalonia.slnx` 通过，且无新增警告

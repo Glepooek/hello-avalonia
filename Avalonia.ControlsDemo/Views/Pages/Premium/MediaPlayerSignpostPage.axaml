@@ -1,0 +1,18 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             xmlns:local="using:Avalonia.ControlsDemo.Views.Pages"
+             x:Class="Avalonia.ControlsDemo.Views.Pages.MediaPlayerSignpostPage">
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="MediaPlayer：音频与视频播放"
+                               DocPath="controls/media/mediaplayer" />
+            <TextBlock Classes="caption" Text="路标：本仓库暂时没有这一项的演示" />
+            <local:SignpostView DocPath="controls/media/mediaplayer"
+                                License="Avalonia Pro 或更高（官方同时标 Pro 与 Enterprise）"
+                                SubPages="官方子页 4 页：控件总览、媒体源（UriSource 与 StreamSource）、播放控制与命令、错误处理"
+                                Summary="播放音频与视频的控件 MediaPlayerControl，内部包着一个 MediaPlayer。播放相关有 Source（UriSource 或 StreamSource）、LoadedBehavior（AutoPlay 或 Manual）、Position、Duration、SkipTime；状态有 IsBuffering、BufferProgress、IsPaused、IsMediaActive、HasVideo、IsSeekable；音量有 Volume 与 IsMuted。播放控制既可直接调也要以命令绑定：PlayPauseCommand、StopCommand、MuteCommand、SkipForwardCommand、SkipBackwardCommand。出错时触发 ErrorOccurred，把 args.Handled 设为 true 可以拦下异常。"
+                                Target="暂无可运行演示：这一组需要 Avalonia Pro 或更高授权，项目文件里要写 AvaloniaUILicenseKey，并在 App.axaml 里引用 MediaFluentTheme。注意它要在加载之后再设 Source（不是构造函数里）。" />
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

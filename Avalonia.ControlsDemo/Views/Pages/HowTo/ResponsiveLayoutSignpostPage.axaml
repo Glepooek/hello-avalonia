@@ -1,0 +1,17 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             xmlns:local="using:Avalonia.ControlsDemo.Views.Pages"
+             x:Class="Avalonia.ControlsDemo.Views.Pages.ResponsiveLayoutSignpostPage">
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="响应式布局"
+                               DocPath="docs/how-to/responsive-layout-how-to" />
+            <TextBlock Classes="caption" Text="路标：完整演示在 Avalonia.LayoutDemo" />
+            <local:SignpostView DocPath="docs/how-to/responsive-layout-how-to"
+                                Summary="让界面随窗口大小改变排布。常用手段是 AdaptiveGrid、WrapPanel 与相对尺寸，以及用属性样式按控件实际宽度切换布局。这里不重复实现，指向已有演示。"
+                                Target="Avalonia.LayoutDemo →「响应式布局」"
+                                RunLine="dotnet run --project Avalonia.LayoutDemo" />
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

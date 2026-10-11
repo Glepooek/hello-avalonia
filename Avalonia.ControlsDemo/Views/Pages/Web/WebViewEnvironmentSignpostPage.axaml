@@ -1,0 +1,16 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             xmlns:local="using:Avalonia.ControlsDemo.Views.Pages"
+             x:Class="Avalonia.ControlsDemo.Views.Pages.WebViewEnvironmentSignpostPage">
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="WebView 环境配置：在引擎启动前定制它"
+                               DocPath="controls/web/webview-environment" />
+            <TextBlock Classes="caption" Text="路标：本仓库暂时没有这一项的演示" />
+            <local:SignpostView DocPath="controls/web/webview-environment"
+                                Summary="在浏览器引擎创建之前，用 EnvironmentRequested 事件定制它：先设各平台共享的 EnableDevTools，再按当前平台设专属选项。Windows 的 WebView2 有 UserDataFolder、ProfileName、BrowserExecutableFolder、AdditionalBrowserArguments、Language、IsInPrivateModeEnabled；macOS 与 iOS 的 WKWebView 有 NonPersistentDataStore、DataStoreIdentifier；Linux 的 WPE WebKit 与 WebKitGTK 各有自己的数据目录、渲染模式等选项。"
+                                Target="暂无可运行演示：Avalonia.WebViewDemo 没有订阅 EnvironmentRequested。选项依赖具体平台的浏览器引擎，请直接看官方文档里每个平台的代码示例。" />
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

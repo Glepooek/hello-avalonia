@@ -1,0 +1,18 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             xmlns:local="using:Avalonia.ControlsDemo.Views.Pages"
+             x:Class="Avalonia.ControlsDemo.Views.Pages.TreeDataGridSignpostPage">
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="TreeDataGrid：树与表格合一"
+                               DocPath="controls/data-display/structured-data/treedatagrid" />
+            <TextBlock Classes="caption" Text="路标：本仓库暂时没有这一项的演示" />
+            <local:SignpostView DocPath="controls/data-display/structured-data/treedatagrid"
+                                License="Avalonia Pro 或更高（官方同时标 Pro 与 Enterprise）"
+                                SubPages="官方子页 7 页：控件总览、列类型、选择模式、展开与折叠、排序、过滤、v12 破坏性变更"
+                                Summary="同时具备 TreeView 的层级与 DataGrid 的列：数据源分两种，扁平用 FlatTreeDataGridSource〈T〉（二维表格），层级用 HierarchicalTreeDataGridSource〈T〉（可展开的树加列）。列有 TreeDataGridTextColumn 与 TreeDataGridHierarchicalExpanderColumn（用 ChildrenBinding 找子项），也可用 WithTextColumn、WithHierarchicalExpanderTextColumn 在代码里搭。SelectionMode 默认 Row，可选 Cell 或 Row,Multiple；CanUserSortColumns 默认开，CanUserResizeColumns 默认关。"
+                                Target="暂无可运行演示：这一组需要 Avalonia Pro 或更高授权，项目文件里要写 AvaloniaUILicenseKey。注意它是独立的付费控件，与免费主包里的 TableView 不是一回事。" />
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

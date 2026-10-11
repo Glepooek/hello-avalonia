@@ -1520,7 +1520,7 @@ Expected: 0 个错误，且相比构建前没有新增警告。
 | Feedback | 5 | 4 个控件页 + 1 个实战页 |
 | Media | 4 | 3 个控件页 + 1 个实战页 |
 | Menus | 6 | 5 个控件页 + 1 个实战页 |
-| Navigation | 8 | 8 个控件页 |
+| Navigation | 10 | 8 个控件页 + 2 个实战页 |
 | Primitives | 7 | 5 个控件页 + 2 个实战页 |
 | System | 2 | 1 个控件页 + 1 个实战页 |
 | Web | 4 | 4 个路标页（指向 `Avalonia.WebViewDemo`） |
@@ -1541,7 +1541,7 @@ Expected: 0 个错误，且相比构建前没有新增警告。
 - **路标页不需要任何新包**：20 个路标页只是 `DemoHeader` 加一个共用的 `SignpostView`，付费控件页只写说明与官方链接，不引用任何商业授权包。
 - **`TopLevel.Launcher` 在 headless 里是 `NoopLauncher`**：`LaunchUriAsync` 同步完成并返回 `False`，**不会真的启动浏览器**，所以"在浏览器中打开"按钮可以在探针里放心点。
 - **三处 `DocPath` 必须逐字一致**：`SignpostView.DocPath`、同页 `DemoHeader.DocPath`、`PageCatalog` 登记的 `DocPath`。探针逐页断言，避免以后改名后路标悬空。
-- **路标里每条"指向"都指向真实存在的 Tab**：探针直接读对应项目 `MainWindow.axaml` 里的 `Header="…"` 核对（见下）。
+- **路标里的"指向"都指向真实存在的 Tab**：执行时用 grep 逐个核对了对应项目 `MainWindow.axaml` 里的 `Header="…"`；探针里没有这条断言，以后改名需要重新核对（见下）。
 - **付费控件的官方位置都在 `controls/...` 下**：Charts 在 `controls/data-display/charts`、PdfViewer 在 `controls/data-display/pdfviewer`、TreeDataGrid 在 `controls/data-display/structured-data/treedatagrid`、Markdown 在 `controls/data-display/text-display/markdown`、RichTextEditor 在 `controls/input/text-input/richtexteditor`、VirtualKeyboard 在 `controls/input/text-input/virtualkeyboard`、MediaPlayer 在 `controls/media/mediaplayer`；`DocPath` 保留官方原路径，只在导航树上统一收进"付费控件"分类。**这就是前几批记录的"范围缺口"的落点。**
 - **授权标签**：Charts 只标 Pro；其余六组同时标 Pro 与 Enterprise。
 - **整套目录**：80 个可运行控件页 + 19 个实战页 + 20 个路标页 = 119 页。

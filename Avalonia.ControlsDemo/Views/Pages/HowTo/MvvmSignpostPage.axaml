@@ -1,0 +1,17 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             xmlns:local="using:Avalonia.ControlsDemo.Views.Pages"
+             x:Class="Avalonia.ControlsDemo.Views.Pages.MvvmSignpostPage">
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="用 MVVM 组织代码"
+                               DocPath="docs/how-to/mvvm-how-to" />
+            <TextBlock Classes="caption" Text="路标：完整演示在 Avalonia.FundamentalsDemo" />
+            <local:SignpostView DocPath="docs/how-to/mvvm-how-to"
+                                Summary="把界面拆成 View 与 ViewModel，中间用绑定连接：ViewModel 暴露可观察属性与命令，View 只负责呈现。本项目自己也全部用 CommunityToolkit.Mvvm 的 [ObservableProperty] 与 [RelayCommand] 写。"
+                                Target="Avalonia.FundamentalsDemo →「MVVM」"
+                                RunLine="dotnet run --project Avalonia.FundamentalsDemo" />
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

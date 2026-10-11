@@ -1,0 +1,17 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             xmlns:local="using:Avalonia.ControlsDemo.Views.Pages"
+             x:Class="Avalonia.ControlsDemo.Views.Pages.DebuggingSignpostPage">
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="调试应用"
+                               DocPath="docs/how-to/debugging-how-to" />
+            <TextBlock Classes="caption" Text="路标：完整演示在 Avalonia.AppDevelopmentDemo" />
+            <local:SignpostView DocPath="docs/how-to/debugging-how-to"
+                                Summary="统一接住日志与未处理异常：用日志抽象（Logger）把诊断信息写出去，在 App 上接 DispatcherUnhandledException 与 UnhandledException，把崩溃信息记下来再决定是吞掉还是退出，而不是让它静默消失。"
+                                Target="Avalonia.AppDevelopmentDemo →「日志」「未处理异常」"
+                                RunLine="dotnet run --project Avalonia.AppDevelopmentDemo" />
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

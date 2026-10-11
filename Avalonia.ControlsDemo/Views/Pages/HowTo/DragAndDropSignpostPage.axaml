@@ -1,0 +1,17 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             xmlns:local="using:Avalonia.ControlsDemo.Views.Pages"
+             x:Class="Avalonia.ControlsDemo.Views.Pages.DragAndDropSignpostPage">
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="拖放"
+                               DocPath="docs/how-to/drag-and-drop-how-to" />
+            <TextBlock Classes="caption" Text="路标：完整演示在 Avalonia.InputDemo" />
+            <local:SignpostView DocPath="docs/how-to/drag-and-drop-how-to"
+                                Summary="从拖动的源头调 DragDrop.DoDragDrop 起手，落到目标的 DragOver 与 Drop 事件里处理数据；同一个应用内拖放用自定义数据格式最省事，跨应用则要挂靠系统的剪贴板格式。"
+                                Target="Avalonia.InputDemo →「拖放」"
+                                RunLine="dotnet run --project Avalonia.InputDemo" />
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

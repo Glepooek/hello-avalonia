@@ -1,0 +1,17 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             xmlns:local="using:Avalonia.ControlsDemo.Views.Pages"
+             x:Class="Avalonia.ControlsDemo.Views.Pages.NativeWebDialogSignpostPage">
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="NativeWebDialog：独立的原生浏览器窗口"
+                               DocPath="controls/web/nativewebdialog" />
+            <TextBlock Classes="caption" Text="路标：完整演示在 Avalonia.WebViewDemo" />
+            <local:SignpostView DocPath="controls/web/nativewebdialog"
+                                Summary="一个单独的原生浏览器窗口，适合在布局之外显示网页，或者嵌入式的 NativeWebView 用不了的地方。支持 Windows、macOS 与 Linux（Linux 上所有者窗口的行为随窗口管理器而异），不支持 iOS、Android 与浏览器。常用成员有 Title、CanUserResize、Source、Show、Close、Navigate、InvokeScript，以及 Closing、NavigationStarted、WebMessageReceived 等事件。"
+                                Target="Avalonia.WebViewDemo →「2. NativeWebDialog (standalone native window)」按钮（独立的原生窗口）"
+                                RunLine="dotnet run --project Avalonia.WebViewDemo" />
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

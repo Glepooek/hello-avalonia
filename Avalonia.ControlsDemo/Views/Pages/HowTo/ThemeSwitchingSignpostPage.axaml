@@ -1,0 +1,17 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             xmlns:local="using:Avalonia.ControlsDemo.Views.Pages"
+             x:Class="Avalonia.ControlsDemo.Views.Pages.ThemeSwitchingSignpostPage">
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="切换主题"
+                               DocPath="docs/how-to/theme-switching-how-to" />
+            <TextBlock Classes="caption" Text="路标：完整演示在 Avalonia.StylingDemo" />
+            <local:SignpostView DocPath="docs/how-to/theme-switching-how-to"
+                                Summary="在 Light 与 Dark 之间切换，或在局部区域强制某个变体（本项目 Primitives 分类的 ThemeVariantScope 页演示了局部作用域的用法）。切换时用 DynamicResource 引用主题资源的控件会立即重取颜色，所以写资源时要选对 Static 与 Dynamic。"
+                                Target="Avalonia.StylingDemo →「主题变体」"
+                                RunLine="dotnet run --project Avalonia.StylingDemo" />
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

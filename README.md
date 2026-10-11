@@ -16,7 +16,7 @@ Avalonia UI 学习示例集合。每个项目演示一个独立主题，可单�
 | [Avalonia.EventsDemo](Avalonia.EventsDemo) | 生命周期事件、输入事件、路由事件的隧道/冒泡/直接、Handled 与 handledEventsToo、自定义路由事件 |
 | [Avalonia.InputDemo](Avalonia.InputDemo) | 指针、焦点与导航、手势、键盘与 HotKey、事件/命令/手势三种交互写法、拖放、文本输入过滤 |
 | [Avalonia.GraphicsDemo](Avalonia.GraphicsDemo) | 画刷与渐变、变换、形状与几何、自定义绘制、特效、裁剪与命中、图标、渲染选项、关键帧动画、控件过渡、页面过渡、缓动函数、合成动画 |
-| [Avalonia.ControlsDemo](Avalonia.ControlsDemo) | 按官方 Controls 目录组织的控件演示（10 个分类，侧边导航）；Pro / Enterprise 控件只有路标页 |
+| [Avalonia.ControlsDemo](Avalonia.ControlsDemo) | 按官方 Controls 目录组织的控件演示（80 个可运行控件页 + 19 个实战页 + 20 个路标页，侧边导航） |
 | [Avalonia.CustomControlsDemo](Avalonia.CustomControlsDemo) | UserControl、TemplatedControl 与 ControlTheme、自绘控件、控件树、自定义 Panel、自定义 Flyout |
 | [Avalonia.ServicesDemo](Avalonia.ServicesDemo) | 剪贴板、文件对话框、StorageProvider、Launcher、平台设置，以及 InputPane / InsetsManager / IActivatableLifetime 的可用性检测 |
 | [Avalonia.AppDevelopmentDemo](Avalonia.AppDevelopmentDemo) | 依赖注入、本地化、日志、未处理异常、资源查找、线程模型、窗口管理、无障碍 |
@@ -26,6 +26,26 @@ Avalonia UI 学习示例集合。每个项目演示一个独立主题，可单�
 | [Avalonia.WebViewDemo](Avalonia.WebViewDemo) | NativeWebView 嵌入控件、NativeWebDialog 原生窗口、JS ↔ C# 双向调用 |
 | [Avalonia.HtmlRendererDemo](Avalonia.HtmlRendererDemo) | HtmlPanel 富文本渲染、IconFont 与 PathIcon 图标 |
 | [Avalonia.Shared](Avalonia.Shared) | 共享类库：演示页说明条控件、窗口 Helper、Win32 互操作、消息载体、ViewModel 基类 |
+
+### 控件目录对照表（Avalonia.ControlsDemo）
+
+| 分类 | 页面数 | 说明 |
+|---|---|---|
+| Input | 26 | 22 个控件页 + 4 个实战页 |
+| Layout | 23 | 20 个控件页 + 3 个实战页 |
+| Data display | 16 | 12 个控件页 + 4 个实战页 |
+| Feedback | 5 | 4 个控件页 + 1 个实战页 |
+| Media | 4 | 3 个控件页 + 1 个实战页 |
+| Menus | 6 | 5 个控件页 + 1 个实战页 |
+| Navigation | 10 | 8 个控件页 + 2 个实战页 |
+| Primitives | 7 | 5 个控件页 + 2 个实战页 |
+| System | 2 | 1 个控件页 + 1 个实战页 |
+| Web | 4 | 4 个路标页（指向 `Avalonia.WebViewDemo`） |
+| 付费控件 | 7 | 7 个路标页（Pro / Enterprise，只在浏览器里打开官方文档） |
+| How-to 路标 | 9 | 9 个路标页（指向本仓库其他演示项目） |
+| **合计** | **119** | 80 个可运行控件页 + 19 个实战页 + 20 个路标页 |
+
+导航树里，实战页标题带「实战：」前缀，路标页带「↗」前缀；路标页只说明用途与指向，不重复实现演示。
 
 ## 环境
 

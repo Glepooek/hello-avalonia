@@ -1,0 +1,18 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             xmlns:local="using:Avalonia.ControlsDemo.Views.Pages"
+             x:Class="Avalonia.ControlsDemo.Views.Pages.RichTextEditorSignpostPage">
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="RichTextEditor：所见即所得的富文本编辑"
+                               DocPath="controls/input/text-input/richtexteditor" />
+            <TextBlock Classes="caption" Text="路标：本仓库暂时没有这一项的演示" />
+            <local:SignpostView DocPath="controls/input/text-input/richtexteditor"
+                                License="Avalonia Pro 或更高（官方同时标 Pro 与 Enterprise）"
+                                SubPages="官方子页 11 页：控件总览、文档查看器、工具条与选择浮出、分页、页眉页脚、脚注、PDF 导出、Markdown 序列化、扩展模式、性能调优、线程安全"
+                                Summary="一个基于 FlowDocument 的富文本编辑器与查看器。编辑器属性有 Document、IsReadOnly、AcceptsReturn、ViewMode（Continuous 或 PageLayout）、Toolbar 与 ShowToolbar、PageSize / PageMargins / PageGap，方法有 Load / LoadAsync、Save / SaveAsync，事件是 ContentChanged。文档内容由块（Paragraph、List、Table、Section）与内联（RichRun、RichBold、RichImage、RichHyperlink）组成。格式方面 RTF、DOCX、XAML、Markdown、纯文本可读可写，HTML 只读，PDF 只写。"
+                                Target="暂无可运行演示：这一组需要 Avalonia Pro 或更高授权，项目文件里要写 AvaloniaUILicenseKey。官方子页里有工具条、分页、页眉页脚与 PDF 导出的写法。" />
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

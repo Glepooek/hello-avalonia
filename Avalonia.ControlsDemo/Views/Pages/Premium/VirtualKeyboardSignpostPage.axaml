@@ -1,0 +1,18 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             xmlns:local="using:Avalonia.ControlsDemo.Views.Pages"
+             x:Class="Avalonia.ControlsDemo.Views.Pages.VirtualKeyboardSignpostPage">
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="VirtualKeyboard：屏幕软键盘"
+                               DocPath="controls/input/text-input/virtualkeyboard" />
+            <TextBlock Classes="caption" Text="路标：本仓库暂时没有这一项的演示" />
+            <local:SignpostView DocPath="controls/input/text-input/virtualkeyboard"
+                                License="Avalonia Pro 或更高（官方同时标 Pro 与 Enterprise）"
+                                SubPages="官方子页 3 页：控件总览、VirtualKeyboard 控件参考、VirtualKeyboardScope 容器"
+                                Summary="为触摸设备提供屏幕软键盘，有三个类型：VirtualKeyboardScope 是容器，随其中的文本输入控件获得或失去焦点自动显示与隐藏（推荐用法）；VirtualKeyboard 是可以手动放进布局的键盘控件，用 Target 指向接收输入的元素；VirtualKeyboardInputMethod 代表一种输入法或键盘布局，本身不是可视控件。InputMethods 可以同时启用多个布局（如“en-US:kbd:standard, de:kbd:standard, ja:ime:kana”）。附着的 TextInputOptions.ContentType 与 ReturnKeyType 可以按文本框调整输入行为。"
+                                Target="暂无可运行演示：这一组需要 Avalonia Pro 或更高授权，项目文件里要写 AvaloniaUILicenseKey，并引用 Avalonia.Controls.VirtualKeyboard 包（还要在 App.axaml 里带 Fluent 主题）。" />
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

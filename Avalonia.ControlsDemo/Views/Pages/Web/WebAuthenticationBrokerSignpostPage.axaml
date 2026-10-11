@@ -1,0 +1,16 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             xmlns:local="using:Avalonia.ControlsDemo.Views.Pages"
+             x:Class="Avalonia.ControlsDemo.Views.Pages.WebAuthenticationBrokerSignpostPage">
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="WebAuthenticationBroker：网页登录流程"
+                               DocPath="controls/web/webauthenticationbroker" />
+            <TextBlock Classes="caption" Text="路标：本仓库暂时没有这一项的演示" />
+            <local:SignpostView DocPath="controls/web/webauthenticationbroker"
+                                Summary="处理 OAuth 一类基于网页的登录流程：调用 AuthenticateAsync(topLevel, options) 打开起始地址，等服务端重定向到回调地址后把结果交还给代码，适合接入 Google、Microsoft 账号或 Facebook Login 之类的授权。WebAuthenticatorOptions 里除了 RequestUri 与 RedirectUri，还有 Mode 可选 Auto、System、NativeWebDialog 与 Browser，不同模式覆盖的平台不同。"
+                                Target="暂无可运行演示：Avalonia.WebViewDemo 只涵盖 NativeWebView、NativeWebDialog 与 JS 互调。真正跑通它需要一个 OAuth 服务端的应用注册，不适合做成离线可跑的演示，请直接看官方文档。" />
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

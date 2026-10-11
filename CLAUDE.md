@@ -42,9 +42,9 @@ dotnet test Avalonia.TestingDemo.Tests --filter "FullyQualifiedName~ViewModelTes
 - 绑定到结构体属性失败时**静默**，构建与冒烟测试都检不出，需要运行时断言。
 - 带 `{0}` 开头的 `StringFormat` 要加 `{}` 前缀转义。
 
-## 进行中的工作：ControlsDemo
+## ControlsDemo（已完成，待目视验证与合并）
 
-`docs/superpowers/specs/2026-10-10-avalonia-controls-demo-design.md` 与 `docs/superpowers/plans/2026-10-10-controls-demo-0*.md` 描述了一个按官方 Controls 分类整理的单项目 `Avalonia.ControlsDemo`（SplitView + TreeView 导航）。项目已建立并在 slnx 里（分支 `feat/controls-demo`），第 00–06 份计划已执行并提交：Input、Layout、Data display、Feedback、Media、Menus、Navigation、Primitives、System 已落地（80 个可运行控件页 + 19 个实战页），Web、Premium 与 How-to 路标分类的 `PageCatalog.*.cs` 仍是空的。剩余计划 07（Web / 付费控件 / How-to 路标与收尾）已写完并验证，尚未抽取执行；执行后目录为 119 页（80 控件页 + 19 实战页 + 20 路标页）。计划里的代码块用 `#### \`路径\`` 标题标注目标文件，可整块抽取。
+`docs/superpowers/specs/2026-10-10-avalonia-controls-demo-design.md` 与 `docs/superpowers/plans/2026-10-10-controls-demo-0*.md` 描述了一个按官方 Controls 分类整理的单项目 `Avalonia.ControlsDemo`（SplitView + TreeView 导航）。第 00–07 份计划已全部执行并提交（分支 `feat/controls-demo`），目录共 119 页：80 个可运行控件页 + 19 个实战页 + 20 个路标页（Web、付费控件、How-to 路标）。计划里的代码块用 `#### \`路径\`` 标题标注目标文件，可整块抽取。
 
 - 验证靠仓库外的 headless 探针（`C:\Temp\probe-controls`，不入库）；每批实测结论回填到 spec 的"批 N 实测结论"小节。
 - `DataGrid`、`ColorPicker` 是独立包，必须在 `App.axaml` 里 `StyleInclude` 才会渲染，否则静默空白。

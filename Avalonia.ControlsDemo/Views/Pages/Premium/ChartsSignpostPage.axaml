@@ -1,0 +1,18 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             xmlns:local="using:Avalonia.ControlsDemo.Views.Pages"
+             x:Class="Avalonia.ControlsDemo.Views.Pages.ChartsSignpostPage">
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="Charts：数据可视化"
+                               DocPath="controls/data-display/charts" />
+            <TextBlock Classes="caption" Text="路标：本仓库暂时没有这一项的演示" />
+            <local:SignpostView DocPath="controls/data-display/charts"
+                                License="Avalonia Pro（官方只标 Pro，不含 Enterprise）"
+                                SubPages="官方子页约 128 页，覆盖成百种图表：笛卡尔系的柱状、折线、面积、散点、堆叠，圆环系的饼图、环形、半环，财务系的 K 线、OHLC、Renko，以及桑基图、树状图、甘特图、雷达图、热力图、词云等"
+                                Summary="付费的数据可视化组件。所有图表都继承 ChartBase，数据系列继承 ChartSeries：系列有 Title、ItemsSource、ValuePath、Fill、Stroke，笛卡尔系列另有 CategoryPath 与 EmptyPointMode。宿主有 CartesianChart、SankeyChart、FinancialChart 与 FlowChart，共享图例、提示、十字准线、数据标签、趋势线与导出（PNG / JPEG）。动画用 IsAnimationEnabled、AnimationDuration 与 Easing 控制，自定义系列走 RenderSeries(in SeriesRenderContext)。"
+                                Target="暂无可运行演示：这一组需要 Avalonia Pro 授权，项目文件里要写 AvaloniaUILicenseKey 并引用 Avalonia.Controls.Charts 包。本仓库演示的是免费控件，请直接看官方文档。" />
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

@@ -1,0 +1,17 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             xmlns:local="using:Avalonia.ControlsDemo.Views.Pages"
+             x:Class="Avalonia.ControlsDemo.Views.Pages.StylingControlsSignpostPage">
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="给控件写样式"
+                               DocPath="docs/how-to/styling-controls-how-to" />
+            <TextBlock Classes="caption" Text="路标：完整演示在 Avalonia.StylingDemo" />
+            <local:SignpostView DocPath="docs/how-to/styling-controls-how-to"
+                                Summary="用样式选择器给控件设定外观，用样式类给同类控件分组，用 ControlTheme 替换整个控件模板。这三件事互相配合：选择器决定“命中谁”，样式类决定“哪一组”，ControlTheme 决定“长什么样”。"
+                                Target="Avalonia.StylingDemo →「选择器」「样式类」「ControlTheme」"
+                                RunLine="dotnet run --project Avalonia.StylingDemo" />
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

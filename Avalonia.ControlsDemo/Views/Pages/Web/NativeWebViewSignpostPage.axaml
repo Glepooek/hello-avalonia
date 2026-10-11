@@ -1,0 +1,17 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             xmlns:local="using:Avalonia.ControlsDemo.Views.Pages"
+             x:Class="Avalonia.ControlsDemo.Views.Pages.NativeWebViewSignpostPage">
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="NativeWebView：嵌入布局的原生浏览器"
+                               DocPath="controls/web/nativewebview" />
+            <TextBlock Classes="caption" Text="路标：完整演示在 Avalonia.WebViewDemo" />
+            <local:SignpostView DocPath="controls/web/nativewebview"
+                                Summary="把各平台自带的浏览器引擎包成一个能放进布局的控件：Windows 用 WebView2，macOS 与 iOS 用 WKWebView，Linux 用 WPE WebKit（WebKitGTK 备用），Android 也支持，浏览器（WebAssembly）尚未实现。有 Source、Navigate、GoBack 与导航事件，WebMessageReceived 加 InvokeScript 让 JS 与 C# 双向通信，EnvironmentRequested 可以在引擎启动前定制环境。"
+                                Target="Avalonia.WebViewDemo →「1. NativeWebView (embedded in a Window)」按钮（嵌入窗口），连同「3. Call JS from C# (open #1 first)」按钮（JS 与 C# 互调）"
+                                RunLine="dotnet run --project Avalonia.WebViewDemo" />
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

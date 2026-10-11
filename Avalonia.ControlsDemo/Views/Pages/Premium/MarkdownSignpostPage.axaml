@@ -1,0 +1,18 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             xmlns:local="using:Avalonia.ControlsDemo.Views.Pages"
+             x:Class="Avalonia.ControlsDemo.Views.Pages.MarkdownSignpostPage">
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="Markdown：渲染 Markdown 文本"
+                               DocPath="controls/data-display/text-display/markdown" />
+            <TextBlock Classes="caption" Text="路标：本仓库暂时没有这一项的演示" />
+            <local:SignpostView DocPath="controls/data-display/text-display/markdown"
+                                License="Avalonia Pro 或更高（官方同时标 Pro 与 Enterprise）"
+                                SubPages="官方子页 4 页：控件总览、Markdown 样式、CodeHighlighter 代码高亮、ImageLoader 图片加载"
+                                Summary="把一段 Markdown 源码渲染成带样式的富文本，主要属性只有 Text，另有 SelectionBrush、CaretBrush、只读的 SelectedText 与 CanCopy，以及流式输出时保持视口在底部的 AutoScrollToEnd。选中的文字可以像普通文本控件一样复制。样式、代码高亮与图片加载各自可替换，对应官方文档里的三个子页。"
+                                Target="暂无可运行演示：这一组需要 Avalonia Pro 或更高授权，项目文件里要写 AvaloniaUILicenseKey 并引用对应的 Markdown 包。官方子页里有样式、代码高亮与图片加载的写法。" />
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

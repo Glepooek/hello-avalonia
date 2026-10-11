@@ -1,0 +1,17 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             xmlns:local="using:Avalonia.ControlsDemo.Views.Pages"
+             x:Class="Avalonia.ControlsDemo.Views.Pages.CodedUiSignpostPage">
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="用纯代码搭界面"
+                               DocPath="docs/how-to/coded-ui-how-to" />
+            <TextBlock Classes="caption" Text="路标：完整演示在 Avalonia.FundamentalsDemo" />
+            <local:SignpostView DocPath="docs/how-to/coded-ui-how-to"
+                                Summary="不用 XAML，直接在 C# 里 new 出控件树、设属性、挂事件、填 Children。适合动态生成的内容，或者把界面代码当普通代码来调试、重构与单元测试。"
+                                Target="Avalonia.FundamentalsDemo →「纯代码 UI」"
+                                RunLine="dotnet run --project Avalonia.FundamentalsDemo" />
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>
