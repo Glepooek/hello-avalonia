@@ -1,5 +1,6 @@
 <Solution>
   <Project Path="Avalonia.AppDevelopmentDemo/Avalonia.AppDevelopmentDemo.csproj" />
+  <Project Path="Avalonia.BehaviorsDemo/Avalonia.BehaviorsDemo.csproj" />
   <Project Path="Avalonia.ControlsDemo/Avalonia.ControlsDemo.csproj" />
   <Project Path="Avalonia.CustomControlsDemo/Avalonia.CustomControlsDemo.csproj" />
   <Project Path="Avalonia.DataBindingDemo/Avalonia.DataBindingDemo.csproj" />

@@ -1,0 +1,33 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:pages="using:Avalonia.BehaviorsDemo.Views.Pages"
+        mc:Ignorable="d"
+        d:DesignWidth="1000"
+        d:DesignHeight="720"
+        x:Class="Avalonia.BehaviorsDemo.Views.MainWindow"
+        Icon="/Assets/avalonia-logo.ico"
+        Title="Avalonia Behaviors Demo"
+        Width="1000"
+        Height="720"
+        WindowStartupLocation="CenterScreen">
+
+    <TabControl Name="MainTabs" Margin="12" TabStripPlacement="Left">
+        <TabItem Header="机制">
+            <pages:MechanismPage />
+        </TabItem>
+        <TabItem Header="事件转命令">
+            <pages:EventToCommandPage />
+        </TabItem>
+        <TabItem Header="数据驱动">
+            <pages:DataTriggerPage />
+        </TabItem>
+        <TabItem Header="焦点键盘指针">
+            <pages:FocusKeyboardPage />
+        </TabItem>
+        <TabItem Header="表单验证">
+            <pages:ValidationPage />
+        </TabItem>
+    </TabControl>
+</Window>

@@ -1,0 +1,109 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             xmlns:vm="using:Avalonia.BehaviorsDemo.ViewModels"
+             mc:Ignorable="d"
+             d:DesignWidth="860"
+             d:DesignHeight="1000"
+             x:Class="Avalonia.BehaviorsDemo.Views.Pages.DataTriggerPage"
+             x:DataType="vm:DataTriggerViewModel">
+
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="数据驱动与条件：DataTriggerBehavior、MultiDataTriggerBehavior、ConditionalBehavior、TimerTrigger、TaskCompletedTrigger"
+                               DocPath="Avalonia.Xaml.Interactions.Core.DataTriggerBehavior" />
+
+            <TextBlock Classes="caption" Text="1. DataTriggerBehavior + RevertOnFalse：绑定值满足条件时改属性，不满足时自动还原" />
+            <StackPanel Orientation="Horizontal" Spacing="12">
+                <CheckBox Content="在线" IsChecked="{Binding IsOnline}" />
+                <TextBlock Name="StatusText" VerticalAlignment="Center" Text="离线">
+                    <Interaction.Behaviors>
+                        <DataTriggerBehavior Binding="{Binding IsOnline}" ComparisonCondition="Equal" Value="True" RevertOnFalse="True">
+                            <ChangePropertyAction PropertyName="Text" Value="在线" />
+                            <ChangePropertyAction PropertyName="Foreground" Value="LimeGreen" />
+                        </DataTriggerBehavior>
+                    </Interaction.Behaviors>
+                </TextBlock>
+            </StackPanel>
+            <TextBlock Classes="hint"
+                       Text="XAML 里写的 Text 是「离线」。条件成立时被改成「在线」，条件不成立时 RevertOnFalse 把它改回写在 XAML 里的原值，不需要再写一个反向的触发器。" />
+
+            <TextBlock Classes="caption" Text="2. ComparisonCondition：数值比较（GreaterThanOrEqual 等六种）" />
+            <StackPanel Orientation="Horizontal" Spacing="12">
+                <Slider Width="240" Minimum="0" Maximum="100" Value="{Binding Score}" />
+                <TextBlock VerticalAlignment="Center" Text="{Binding Score, StringFormat={}{0:0} 分}" />
+                <TextBlock Name="GradeText" VerticalAlignment="Center" Text="不及格">
+                    <Interaction.Behaviors>
+                        <DataTriggerBehavior Binding="{Binding Score}" ComparisonCondition="GreaterThanOrEqual" Value="60" RevertOnFalse="True">
+                            <ChangePropertyAction PropertyName="Text" Value="及格" />
+                        </DataTriggerBehavior>
+                    </Interaction.Behaviors>
+                </TextBlock>
+            </StackPanel>
+            <TextBlock Classes="hint"
+                       Text="Value 在 XAML 里是字符串「60」，库会按绑定值的类型（double）转换后再比较。" />
+
+            <TextBlock Classes="caption" Text="3. MultiDataTriggerBehavior：多个条件同时成立才触发" />
+            <StackPanel Orientation="Horizontal" Spacing="12">
+                <CheckBox Content="已阅读条款" IsChecked="{Binding Agreed}" />
+                <TextBlock VerticalAlignment="Center" Text="并且上面的分数 ≥ 60，才能提交：" />
+                <TextBlock Name="PassText" VerticalAlignment="Center" Text="条件未满足">
+                    <Interaction.Behaviors>
+                        <MultiDataTriggerBehavior RevertOnFalse="True">
+                            <MultiDataTriggerBehavior.Conditions>
+                                <Condition Binding="{Binding Agreed}" ComparisonCondition="Equal" Value="True" />
+                                <Condition Binding="{Binding Score}" ComparisonCondition="GreaterThanOrEqual" Value="60" />
+                            </MultiDataTriggerBehavior.Conditions>
+                            <ChangePropertyAction PropertyName="Text" Value="可以提交" />
+                        </MultiDataTriggerBehavior>
+                    </Interaction.Behaviors>
+                </TextBlock>
+            </StackPanel>
+
+            <TextBlock Classes="caption" Text="4. ConditionalBehavior：if / else 两组 Action" />
+            <StackPanel Orientation="Horizontal" Spacing="12">
+                <CheckBox Content="Flag" IsChecked="{Binding Flag}" />
+                <TextBlock Name="FlagText" VerticalAlignment="Center" Text="（初始值不触发）">
+                    <Interaction.Behaviors>
+                        <ConditionalBehavior Condition="{Binding Flag}">
+                            <ChangePropertyAction PropertyName="Text" Value="Flag 变成了 True" />
+                            <ConditionalBehavior.ElseActions>
+                                <ChangePropertyAction PropertyName="Text" Value="Flag 变成了 False" />
+                            </ConditionalBehavior.ElseActions>
+                        </ConditionalBehavior>
+                    </Interaction.Behaviors>
+                </TextBlock>
+            </StackPanel>
+            <TextBlock Classes="hint"
+                       Text="和 DataTriggerBehavior 不同：ConditionalBehavior 只在条件值发生变化时才执行，页面刚打开时的初始值不会触发，所以初始文字要自己写在 XAML 里。" />
+
+            <TextBlock Classes="caption" Text="5. TimerTrigger：挂载后每隔一段时间触发，走完 TotalTicks 次就停" />
+            <StackPanel Orientation="Horizontal" Spacing="12">
+                <Border Width="24" Height="24" Background="DodgerBlue" CornerRadius="12">
+                    <Interaction.Behaviors>
+                        <TimerTrigger MillisecondsPerTick="300" TotalTicks="5">
+                            <InvokeCommandAction Command="{Binding TickCommand}" />
+                        </TimerTrigger>
+                    </Interaction.Behaviors>
+                </Border>
+                <TextBlock VerticalAlignment="Center" Text="{Binding TimerTicks, StringFormat={}页面打开后已走 {0} / 5 格}" />
+            </StackPanel>
+
+            <TextBlock Classes="caption" Text="6. TaskCompletedTrigger：绑定的 Task 完成时触发；换一个新 Task 又会再触发" />
+            <StackPanel Orientation="Horizontal" Spacing="12">
+                <Button Name="StartWorkButton" Content="开始任务（0.6 秒）" Command="{Binding StartWorkCommand}" />
+                <Border Width="24" Height="24" Background="Orange" CornerRadius="12">
+                    <Interaction.Behaviors>
+                        <TaskCompletedTrigger Task="{Binding Work}">
+                            <InvokeCommandAction Command="{Binding WorkDoneCommand}" />
+                        </TaskCompletedTrigger>
+                    </Interaction.Behaviors>
+                </Border>
+                <TextBlock VerticalAlignment="Center" Text="{Binding WorkStatus}" />
+                <TextBlock VerticalAlignment="Center" Text="{Binding DoneCount, StringFormat={}完成 {0} 次}" />
+            </StackPanel>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

@@ -1,0 +1,55 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             xmlns:vm="using:Avalonia.BehaviorsDemo.ViewModels"
+             mc:Ignorable="d"
+             d:DesignWidth="860"
+             d:DesignHeight="640"
+             x:Class="Avalonia.BehaviorsDemo.Views.Pages.ValidationPage"
+             x:DataType="vm:ValidationViewModel">
+
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="表单验证：TextBoxValidationBehavior 与一组 ValidationRule"
+                               DocPath="Avalonia.Xaml.Interactions.Custom.TextBoxValidationBehavior" />
+
+            <TextBlock Classes="caption" Text="1. 用户名：必填 + 至少 3 个字符 + 只能含字母数字下划线" />
+            <TextBox Name="UsernameBox" Width="320" HorizontalAlignment="Left" Watermark="请输入用户名">
+                <Interaction.Behaviors>
+                    <TextBoxValidationBehavior IsValid="{Binding UsernameValid, Mode=OneWayToSource}"
+                                               Error="{Binding UsernameError, Mode=OneWayToSource}">
+                        <TextBoxValidationBehavior.Rules>
+                            <RequiredTextValidationRule ErrorMessage="用户名不能为空" />
+                            <MinLengthValidationRule Length="3" ErrorMessage="至少 3 个字符" />
+                            <RegexValidationRule Pattern="^[A-Za-z0-9_]*$" ErrorMessage="只能包含字母、数字、下划线" />
+                        </TextBoxValidationBehavior.Rules>
+                    </TextBoxValidationBehavior>
+                </Interaction.Behaviors>
+            </TextBox>
+            <TextBlock Foreground="OrangeRed" Text="{Binding UsernameError}" />
+
+            <TextBlock Classes="caption" Text="2. 邮箱：必填 + 正则" />
+            <TextBox Name="EmailBox" Width="320" HorizontalAlignment="Left" Watermark="name@example.com">
+                <Interaction.Behaviors>
+                    <TextBoxValidationBehavior IsValid="{Binding EmailValid, Mode=OneWayToSource}"
+                                               Error="{Binding EmailError, Mode=OneWayToSource}">
+                        <TextBoxValidationBehavior.Rules>
+                            <RequiredTextValidationRule ErrorMessage="邮箱不能为空" />
+                            <RegexValidationRule Pattern="^[^@\s]+@[^@\s]+\.[^@\s]+$" ErrorMessage="邮箱格式不对" />
+                        </TextBoxValidationBehavior.Rules>
+                    </TextBoxValidationBehavior>
+                </Interaction.Behaviors>
+            </TextBox>
+            <TextBlock Foreground="OrangeRed" Text="{Binding EmailError}" />
+
+            <StackPanel Orientation="Horizontal" Spacing="12" Margin="0,16,0,0">
+                <Button Name="SubmitButton" Content="提交" Command="{Binding SubmitCommand}" />
+                <TextBlock VerticalAlignment="Center" Text="{Binding SubmitResult}" />
+            </StackPanel>
+            <TextBlock Classes="hint"
+                       Text="行为只负责判断：IsValid 与 Error 通过 OneWayToSource 绑定写进 ViewModel，「提交」按钮是否可用由 ViewModel 决定。多条规则同时不满足时，Error 把各条消息用换行拼在一起。页面一打开就已经校验过一次，所以空输入框一开始就是无效状态。" />
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

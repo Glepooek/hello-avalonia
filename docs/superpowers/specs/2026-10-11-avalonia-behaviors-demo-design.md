@@ -104,3 +104,14 @@
 ## 待确认
 
 无阻塞项。若审阅时对页面增删、沙箱方案、或拆分方式有意见，修改后再进入计划编写。
+
+## 批 1 实测结论（计划 01 执行后）
+
+- **计时器类行为在 headless 里需要跑主循环**：`DebounceAction`、`TimerTrigger` 内部都是 `DispatcherTimer`，`Dispatcher.UIThread.RunJobs()` 不会让它们走一格，必须用 `Dispatcher.UIThread.MainLoop(token)` 切片。探针的 `WaitUntil` / `RunLoop` 据此实现；此前 spike 里"Sleep 之后再泵就能读到结果"的印象是错的。
+- **`Button.Command` 不会被手工 `RaiseEvent(Click)` 触发**：命令在 `OnClick` 里执行，探针对绑了 `Command` 的按钮直接调用 `vm.XxxCommand.Execute`，并另外断言 `button.Command == vm.XxxCommand`。
+- **`DelayAction` 单独放着不会让后面的 Action 等**，只有放进 `AsyncActionGroup Mode="Sequence"` 才排队（页面 2 并排演示）。
+- **`KeyTrigger` 默认 Direct 路由收不到 `TextBox` 里的 Enter**，要写 `EventRoutingStrategy="Tunnel"`；`PointerPressedTrigger` 默认 `Tunnel, Bubble` 会触发两次，写 `Bubble` 才是一次（页面 4 并排演示）。
+- **`ConditionalBehavior` 不对初始值触发**，`DataTriggerBehavior` 与 `MultiDataTriggerBehavior` 会在挂载时按当前值执行一次。
+- **`TextBoxValidationBehavior` 在挂载时就校验一次**，多条规则失败时 `Error` 用换行拼接，`IsValid` / `Error` 可用 `OneWayToSource` 写进 ViewModel。
+- 全部 8 个子包的类型都在默认 XAML 命名空间里，5 个页面没有加任何 `xmlns` 前缀，也没有遇到与 Avalonia 自带类型的同名歧义。
+- 探针累计 74 条断言全部通过，0 条警告日志（金丝雀已确认日志汇有效）。

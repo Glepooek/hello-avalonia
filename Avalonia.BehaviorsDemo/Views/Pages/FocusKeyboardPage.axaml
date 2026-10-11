@@ -1,0 +1,133 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             xmlns:vm="using:Avalonia.BehaviorsDemo.ViewModels"
+             mc:Ignorable="d"
+             d:DesignWidth="860"
+             d:DesignHeight="1300"
+             x:Class="Avalonia.BehaviorsDemo.Views.Pages.FocusKeyboardPage"
+             x:DataType="vm:FocusKeyboardViewModel">
+
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="焦点、键盘与指针：FocusBehavior、KeyTrigger、KeyGestureTrigger、FocusTrapBehavior、PointerPressedTrigger"
+                               DocPath="Avalonia.Xaml.Interactions.Custom.FocusBehavior" />
+
+            <TextBlock Classes="caption" Text="1. AutoFocusBehavior 与 SelectAllOnFocusBehavior" />
+            <StackPanel Spacing="6">
+                <TextBox Name="AutoBox" Text="页面一打开，这个输入框就自动获得焦点">
+                    <Interaction.Behaviors>
+                        <AutoFocusBehavior />
+                    </Interaction.Behaviors>
+                </TextBox>
+                <TextBox Name="SelectBox" Text="点进来或 Tab 进来，整段文字立刻被选中">
+                    <Interaction.Behaviors>
+                        <SelectAllOnFocusBehavior />
+                    </Interaction.Behaviors>
+                </TextBox>
+            </StackPanel>
+
+            <TextBlock Classes="caption" Text="2. FocusBehavior：用绑定的布尔值控制焦点，而且是双向的" />
+            <StackPanel Orientation="Horizontal" Spacing="12">
+                <CheckBox Content="让右边的输入框获得焦点" IsChecked="{Binding WantFocus}" />
+                <TextBox Name="FocusTarget" Width="260" Text="被控制的输入框">
+                    <Interaction.Behaviors>
+                        <FocusBehavior IsFocused="{Binding WantFocus, Mode=TwoWay}" />
+                    </Interaction.Behaviors>
+                </TextBox>
+            </StackPanel>
+            <TextBlock Classes="hint"
+                       Text="勾选复选框，焦点跳到输入框；再点别的地方，焦点离开时复选框会自己取消勾选——因为绑定是双向的。" />
+
+            <TextBlock Classes="caption" Text="3. KeyTrigger 的路由陷阱：同一个 Enter，两种写法" />
+            <StackPanel Spacing="6">
+                <TextBox Name="NoRouteBox" Text="没写 EventRoutingStrategy：按 Enter 没反应">
+                    <Interaction.Behaviors>
+                        <KeyTrigger Key="Enter">
+                            <InvokeCommandAction Command="{Binding EnterDirectCommand}" />
+                        </KeyTrigger>
+                    </Interaction.Behaviors>
+                </TextBox>
+                <TextBox Name="TunnelBox" Text="EventRoutingStrategy=Tunnel：按 Enter 有反应">
+                    <Interaction.Behaviors>
+                        <KeyTrigger Key="Enter" EventRoutingStrategy="Tunnel">
+                            <InvokeCommandAction Command="{Binding EnterTunnelCommand}" />
+                        </KeyTrigger>
+                    </Interaction.Behaviors>
+                </TextBox>
+                <StackPanel Orientation="Horizontal" Spacing="16">
+                    <TextBlock Text="{Binding EnterDirectCount, StringFormat={}默认路由收到 Enter：{0} 次}" />
+                    <TextBlock Text="{Binding EnterTunnelCount, StringFormat={}Tunnel 路由收到 Enter：{0} 次}" />
+                </StackPanel>
+            </StackPanel>
+            <TextBlock Classes="hint"
+                       Text="KeyTrigger 默认是 Direct 路由，只有事件直接发给该控件才算。TextBox 自己会把 Enter 标记为已处理，所以第一个输入框永远收不到；改成 Tunnel 后，触发器在 TextBox 之前就看到了按键。" />
+
+            <TextBlock Classes="caption" Text="4. KeyGestureTrigger 与 ExecuteCommandOnKeyDownBehavior" />
+            <TextBox Name="GestureBox" Text="在这里按 Ctrl+S 或 F5">
+                <Interaction.Behaviors>
+                    <KeyGestureTrigger Gesture="Ctrl+S" EventRoutingStrategy="Tunnel">
+                        <InvokeCommandAction Command="{Binding SaveCommand}" />
+                    </KeyGestureTrigger>
+                    <ExecuteCommandOnKeyDownBehavior Key="F5" Command="{Binding F5Command}" />
+                </Interaction.Behaviors>
+            </TextBox>
+            <StackPanel Orientation="Horizontal" Spacing="16" Margin="0,6,0,0">
+                <TextBlock Text="{Binding SaveCount, StringFormat={}Ctrl+S：{0} 次}" />
+                <TextBlock Text="{Binding F5Count, StringFormat={}F5：{0} 次}" />
+            </StackPanel>
+
+            <TextBlock Classes="caption" Text="5. LoseFocusOnEnterBehavior 与 FocusTrapBehavior" />
+            <TextBox Name="LoseBox" Text="在这里按 Enter，焦点会离开">
+                <Interaction.Behaviors>
+                    <LoseFocusOnEnterBehavior />
+                </Interaction.Behaviors>
+            </TextBox>
+            <Border Classes="stage" Padding="8" Margin="0,8,0,0">
+                <StackPanel Spacing="6">
+                    <Interaction.Behaviors>
+                        <FocusTrapBehavior IsActive="True" />
+                    </Interaction.Behaviors>
+                    <TextBlock Classes="hint" Text="焦点陷阱：点进下面任一输入框，再按 Tab，焦点只会在这两个框之间循环，出不去。" />
+                    <TextBox Name="Trap1" Text="陷阱里的输入框 1" />
+                    <TextBox Name="Trap2" Text="陷阱里的输入框 2" />
+                </StackPanel>
+            </Border>
+
+            <TextBlock Classes="caption" Text="6. 指针触发器：默认路由会触发两次" />
+            <StackPanel Orientation="Horizontal" Spacing="12">
+                <Border Name="PressDefaultBorder" Classes="stage" Width="200" Height="60" Background="#30FFFFFF">
+                    <Interaction.Behaviors>
+                        <PointerPressedTrigger>
+                            <InvokeCommandAction Command="{Binding PressDefaultCommand}" />
+                        </PointerPressedTrigger>
+                    </Interaction.Behaviors>
+                    <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="按下（默认路由）" />
+                </Border>
+                <Border Name="PressBubbleBorder" Classes="stage" Width="200" Height="60" Background="#30FFFFFF">
+                    <Interaction.Behaviors>
+                        <PointerPressedTrigger EventRoutingStrategy="Bubble">
+                            <InvokeCommandAction Command="{Binding PressBubbleCommand}" />
+                        </PointerPressedTrigger>
+                    </Interaction.Behaviors>
+                    <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="按下（Bubble）" />
+                </Border>
+                <Border Name="TapBorder" Classes="stage" Width="200" Height="60" Background="#30FFFFFF">
+                    <Interaction.Behaviors>
+                        <ExecuteCommandOnTappedBehavior Command="{Binding TapCommand}" />
+                    </Interaction.Behaviors>
+                    <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="点击（Tapped）" />
+                </Border>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Spacing="16" Margin="0,6,0,0">
+                <TextBlock Text="{Binding PressDefaultCount, StringFormat={}默认路由：{0} 次}" />
+                <TextBlock Text="{Binding PressBubbleCount, StringFormat={}Bubble：{0} 次}" />
+                <TextBlock Text="{Binding TapCount, StringFormat={}Tapped：{0} 次}" />
+            </StackPanel>
+            <TextBlock Classes="hint"
+                       Text="基于 RoutedEventTriggerBase 的触发器默认同时监听 Tunnel 和 Bubble 两个阶段，一次按下就被数了两次；明确写 Bubble 就只数一次。需要「只一次」时务必写明路由。" />
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

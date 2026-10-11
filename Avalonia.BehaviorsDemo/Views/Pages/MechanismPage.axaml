@@ -1,0 +1,51 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             xmlns:vm="using:Avalonia.BehaviorsDemo.ViewModels"
+             mc:Ignorable="d"
+             d:DesignWidth="860"
+             d:DesignHeight="640"
+             x:Class="Avalonia.BehaviorsDemo.Views.Pages.MechanismPage"
+             x:DataType="vm:MechanismViewModel">
+
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="机制：Behavior 挂在控件上，Trigger 监听，Action 执行"
+                               DocPath="Avalonia.Xaml.Interactivity.Interaction" />
+
+            <TextBlock Classes="caption" Text="1. 一个按钮上挂一个 EventTriggerBehavior，里面串着四个 Action" />
+            <Border Classes="stage" Padding="12">
+                <StackPanel Spacing="8">
+                    <Button Name="RunButton" Content="点我：触发 Click">
+                        <Interaction.Behaviors>
+                            <!-- Trigger: listens to Click. IsEnabled is bound, so a checkbox can switch the whole behavior off. -->
+                            <EventTriggerBehavior EventName="Click" IsEnabled="{Binding BehaviorEnabled}">
+                                <InvokeCommandAction Command="{Binding StepCommand}" CommandParameter="① Trigger 收到 Click" />
+                                <!-- Action that edits another control: TargetObject points at it by element name. -->
+                                <ChangePropertyAction TargetObject="{Binding #Readout}" PropertyName="Text" Value="② ChangePropertyAction 改写了这行文字" />
+                                <InvokeCommandAction Command="{Binding StepCommand}" CommandParameter="③ 第二个 InvokeCommandAction 紧跟着执行" />
+                                <InvokeCommandAction Command="{Binding FinishCommand}" />
+                            </EventTriggerBehavior>
+                        </Interaction.Behaviors>
+                    </Button>
+                    <CheckBox Content="行为已启用（绑定到 EventTriggerBehavior.IsEnabled）" IsChecked="{Binding BehaviorEnabled}" />
+                    <TextBlock Name="Readout" Text="（尚未触发）" />
+                    <TextBlock Name="CodeReadout" Classes="hint" Text="" />
+                </StackPanel>
+            </Border>
+            <TextBlock Classes="hint"
+                       Text="三件套：Behavior 是挂在控件上的对象（附加属性 Interaction.Behaviors）；Trigger 是特殊的 Behavior，等某件事发生；Action 是 Trigger 里的一串步骤，按顺序执行。关掉复选框再点按钮，什么都不会发生。" />
+
+            <TextBlock Classes="caption" Text="2. 触发记录" />
+            <Border Classes="stage" Padding="8" Height="180">
+                <ListBox ItemsSource="{Binding Log.Entries}" />
+            </Border>
+            <StackPanel Orientation="Horizontal" Spacing="8" Margin="0,6,0,0">
+                <Button Content="清空记录" Command="{Binding ClearLogCommand}" />
+                <TextBlock VerticalAlignment="Center" Text="{Binding Runs, StringFormat={}触发次数：{0}}" />
+            </StackPanel>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

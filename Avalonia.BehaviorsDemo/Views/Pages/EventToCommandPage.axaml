@@ -1,0 +1,155 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             xmlns:vm="using:Avalonia.BehaviorsDemo.ViewModels"
+             mc:Ignorable="d"
+             d:DesignWidth="860"
+             d:DesignHeight="1200"
+             x:Class="Avalonia.BehaviorsDemo.Views.Pages.EventToCommandPage"
+             x:DataType="vm:EventToCommandViewModel">
+
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="事件转命令：EventTriggerBehavior + InvokeCommandAction，以及防抖、节流、延时"
+                               DocPath="Avalonia.Xaml.Interactions.Core.EventTriggerBehavior" />
+
+            <TextBlock Classes="caption" Text="1. CommandParameter：同一个命令，三个按钮传不同的数" />
+            <StackPanel Orientation="Horizontal" Spacing="8">
+                <Button Name="AddOneButton" Content="+1">
+                    <Interaction.Behaviors>
+                        <EventTriggerBehavior EventName="Click">
+                            <InvokeCommandAction Command="{Binding AddCommand}" CommandParameter="1" />
+                        </EventTriggerBehavior>
+                    </Interaction.Behaviors>
+                </Button>
+                <Button Name="AddTenButton" Content="+10">
+                    <Interaction.Behaviors>
+                        <EventTriggerBehavior EventName="Click">
+                            <InvokeCommandAction Command="{Binding AddCommand}" CommandParameter="10" />
+                        </EventTriggerBehavior>
+                    </Interaction.Behaviors>
+                </Button>
+                <Button Name="AddHundredButton" Content="+100">
+                    <Interaction.Behaviors>
+                        <EventTriggerBehavior EventName="Click">
+                            <InvokeCommandAction Command="{Binding AddCommand}" CommandParameter="100" />
+                        </EventTriggerBehavior>
+                    </Interaction.Behaviors>
+                </Button>
+                <TextBlock VerticalAlignment="Center" Text="{Binding Total, StringFormat={}合计：{0}}" />
+            </StackPanel>
+            <TextBlock Classes="hint"
+                       Text="Button 自带 Command 属性，但 Border、TextBlock 这类没有。EventTriggerBehavior 让任何控件的任何事件都能转成命令。" />
+
+            <TextBlock Classes="caption" Text="2. PassEventArgsToCommand：把真实的事件参数交给命令" />
+            <Border Name="PressBorder" Classes="stage" Padding="12" Background="#30FFFFFF">
+                <Interaction.Behaviors>
+                    <EventTriggerBehavior EventName="PointerPressed">
+                        <InvokeCommandAction Command="{Binding InspectCommand}" PassEventArgsToCommand="True" />
+                    </EventTriggerBehavior>
+                </Interaction.Behaviors>
+                <TextBlock Text="{Binding LastArgs, StringFormat={}在这块区域按下鼠标。命令收到的参数类型：{0}}" />
+            </Border>
+
+            <TextBlock Classes="caption" Text="3. CallMethodAction：直接调用对象上的方法" />
+            <StackPanel Orientation="Horizontal" Spacing="8">
+                <Button Name="HelloButton" Content="调用 Hello()">
+                    <Interaction.Behaviors>
+                        <EventTriggerBehavior EventName="Click">
+                            <CallMethodAction TargetObject="{Binding}" MethodName="Hello" />
+                        </EventTriggerBehavior>
+                    </Interaction.Behaviors>
+                </Button>
+                <TextBlock VerticalAlignment="Center" Text="{Binding HelloCount, StringFormat={}Hello 被调用了 {0} 次}" />
+            </StackPanel>
+            <TextBlock Classes="hint" Text="方法必须是 public 且无参数；不需要写 ICommand。" />
+
+            <TextBlock Classes="caption" Text="4. SourceObject：触发器挂在 A 上，监听的却是 B 的事件" />
+            <StackPanel Orientation="Horizontal" Spacing="8">
+                <Button Name="SourceButton" Content="我是被监听的按钮" />
+                <TextBlock Name="ListenerBlock" VerticalAlignment="Center"
+                           Text="{Binding SourceHits, StringFormat={}旁边这行文字听到了按钮的 Click：{0} 次}">
+                    <Interaction.Behaviors>
+                        <EventTriggerBehavior EventName="Click" SourceObject="{Binding #SourceButton}">
+                            <InvokeCommandAction Command="{Binding SourceHitCommand}" />
+                        </EventTriggerBehavior>
+                    </Interaction.Behaviors>
+                </TextBlock>
+            </StackPanel>
+
+            <TextBlock Classes="caption" Text="5. ThrottleAction：第一次立刻执行，间隔内的后续点击被忽略" />
+            <StackPanel Orientation="Horizontal" Spacing="8">
+                <Button Name="ThrottleButton" Content="连点我（间隔 0.8 秒）">
+                    <Interaction.Behaviors>
+                        <EventTriggerBehavior EventName="Click">
+                            <InvokeCommandAction Command="{Binding ThrottleAttemptCommand}" />
+                        </EventTriggerBehavior>
+                        <EventTriggerBehavior EventName="Click">
+                            <ThrottleAction Interval="0:0:0.8">
+                                <InvokeCommandAction Command="{Binding ThrottleRunCommand}" />
+                            </ThrottleAction>
+                        </EventTriggerBehavior>
+                    </Interaction.Behaviors>
+                </Button>
+                <TextBlock VerticalAlignment="Center"
+                           Text="{Binding ThrottleAttempts, StringFormat={}点击 {0} 次}" />
+                <TextBlock VerticalAlignment="Center"
+                           Text="{Binding ThrottleRuns, StringFormat={}实际执行 {0} 次}" />
+            </StackPanel>
+
+            <TextBlock Classes="caption" Text="6. DebounceAction：每点一次就重新计时，安静下来之后才执行一次" />
+            <StackPanel Orientation="Horizontal" Spacing="8">
+                <Button Name="DebounceButton" Content="连点我（安静 0.5 秒后执行）">
+                    <Interaction.Behaviors>
+                        <EventTriggerBehavior EventName="Click">
+                            <InvokeCommandAction Command="{Binding DebounceAttemptCommand}" />
+                        </EventTriggerBehavior>
+                        <EventTriggerBehavior EventName="Click">
+                            <DebounceAction Delay="0:0:0.5">
+                                <InvokeCommandAction Command="{Binding DebounceRunCommand}" />
+                            </DebounceAction>
+                        </EventTriggerBehavior>
+                    </Interaction.Behaviors>
+                </Button>
+                <TextBlock VerticalAlignment="Center"
+                           Text="{Binding DebounceAttempts, StringFormat={}点击 {0} 次}" />
+                <TextBlock VerticalAlignment="Center"
+                           Text="{Binding DebounceRuns, StringFormat={}实际执行 {0} 次}" />
+            </StackPanel>
+            <TextBlock Classes="hint"
+                       Text="节流用于「按住不放也只响应一次」，防抖用于「输入停下来再去搜索」。两者都把子 Action 包在里面。" />
+
+            <TextBlock Classes="caption" Text="7. DelayAction 的陷阱：单独放着不会让后面的 Action 等" />
+            <StackPanel Orientation="Horizontal" Spacing="8">
+                <Button Name="BareDelayButton" Content="A：DelayAction 单独放">
+                    <Interaction.Behaviors>
+                        <EventTriggerBehavior EventName="Click">
+                            <InvokeCommandAction Command="{Binding MarkCommand}" CommandParameter="A 前" />
+                            <DelayAction Duration="0:0:0.8" />
+                            <InvokeCommandAction Command="{Binding MarkCommand}" CommandParameter="A 后（没有等）" />
+                        </EventTriggerBehavior>
+                    </Interaction.Behaviors>
+                </Button>
+                <Button Name="GroupDelayButton" Content="B：放进 AsyncActionGroup Sequence">
+                    <Interaction.Behaviors>
+                        <EventTriggerBehavior EventName="Click">
+                            <InvokeCommandAction Command="{Binding MarkCommand}" CommandParameter="B 前" />
+                            <AsyncActionGroup Mode="Sequence">
+                                <DelayAction Duration="0:0:0.8" />
+                                <InvokeCommandAction Command="{Binding MarkCommand}" CommandParameter="B 后（等了 0.8 秒）" />
+                            </AsyncActionGroup>
+                        </EventTriggerBehavior>
+                    </Interaction.Behaviors>
+                </Button>
+                <Button Content="清空" Command="{Binding ClearLogCommand}" />
+            </StackPanel>
+            <Border Classes="stage" Padding="8" Height="130" Margin="0,6,0,0">
+                <ListBox ItemsSource="{Binding Log.Entries}" />
+            </Border>
+            <TextBlock Classes="hint"
+                       Text="看每行前面的时间戳：A 的两行几乎同一毫秒，B 的两行相差约 0.8 秒。DelayAction 只有在 AsyncActionGroup 里才真的让后续步骤排队等待。" />
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>
