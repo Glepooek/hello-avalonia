@@ -1,0 +1,38 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             x:Class="Avalonia.ControlsDemo.Views.Pages.DrawingImagePage">
+    <UserControl.Resources>
+        <DrawingImage x:Key="BadgeImage">
+            <DrawingGroup>
+                <GeometryDrawing Brush="#FF3366CC" Geometry="M0,0 L100,0 L100,100 L0,100 Z" />
+                <GeometryDrawing Brush="White" Geometry="M50,12 L61,38 L90,40 L68,58 L75,86 L50,71 L25,86 L32,58 L10,40 L39,38 Z" />
+            </DrawingGroup>
+        </DrawingImage>
+    </UserControl.Resources>
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="DrawingImage：矢量绘制当图片用"
+                               DocPath="controls/media/drawingimage" />
+
+            <TextBlock Classes="caption" Text="1. XAML 里描述的矢量图，任意大小都清晰" />
+            <Border Classes="stage" Padding="12">
+                <StackPanel Orientation="Horizontal" Spacing="16">
+                    <Image Name="Badge" Source="{StaticResource BadgeImage}" Width="24" Height="24" />
+                    <Image Source="{StaticResource BadgeImage}" Width="64" Height="64" />
+                    <Image Source="{StaticResource BadgeImage}" Width="128" Height="128" />
+                </StackPanel>
+            </Border>
+            <TextBlock Classes="hint" Text="DrawingImage 是 IImage，所以能放进任何要 Source 的地方（Image、MenuItem.Icon、按钮内容）。它按矢量重绘，放大不糊，和位图的插值无关。" />
+
+            <TextBlock Classes="caption" Text="2. 代码里构建并改色：GeometryDrawing.Brush 变了，图跟着重绘" />
+            <Border Classes="stage" Padding="12">
+                <StackPanel Orientation="Horizontal" Spacing="16">
+                    <Image Name="Built" Width="64" Height="64" />
+                    <Button Name="RecolorButton" Content="换个颜色" VerticalAlignment="Center" />
+                    <TextBlock Name="ColorText" VerticalAlignment="Center" />
+                </StackPanel>
+            </Border>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

@@ -1,0 +1,37 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             x:Class="Avalonia.ControlsDemo.Views.Pages.SeparatorPage">
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="Separator：菜单里的分隔线"
+                               DocPath="controls/menus/separator" />
+
+            <TextBlock Classes="caption" Text="在 Menu 和 ContextMenu 里分组" />
+            <Border Classes="stage" Padding="12">
+                <StackPanel Spacing="8">
+                    <Menu HorizontalAlignment="Left">
+                        <MenuItem Header="编辑">
+                            <MenuItem Header="撤销" />
+                            <MenuItem Header="重做" />
+                            <Separator />
+                            <MenuItem Header="剪切" />
+                            <MenuItem Header="复制" />
+                            <MenuItem Header="粘贴" />
+                        </MenuItem>
+                    </Menu>
+                </StackPanel>
+            </Border>
+
+            <TextBlock Classes="caption" Text="也可以单独放在普通布局里当一条线" />
+            <Border Classes="stage" Padding="12">
+                <StackPanel Width="240" HorizontalAlignment="Left" Spacing="6">
+                    <TextBlock Text="上面" />
+                    <Separator Name="Standalone" />
+                    <TextBlock Text="下面" />
+                </StackPanel>
+            </Border>
+            <TextBlock Classes="hint" Text="Separator 是个没有内容的控件，Fluent 主题给它画一条 1 像素的横线，用在 Menu、ContextMenu 和 MenuFlyout 里，也能放进别的面板。NativeMenu 里对应的是 NativeMenuItemSeparator，两者不是同一个类型。" />
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

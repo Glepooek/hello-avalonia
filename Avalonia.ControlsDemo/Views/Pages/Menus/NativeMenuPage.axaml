@@ -1,0 +1,21 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             x:Class="Avalonia.ControlsDemo.Views.Pages.NativeMenuPage">
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="NativeMenu：系统原生菜单栏"
+                               DocPath="controls/menus/nativemenu" />
+
+            <TextBlock Classes="caption" Text="把 NativeMenu 挂到当前窗口，看平台是否真的导出" />
+            <Border Classes="stage" Padding="12">
+                <StackPanel Spacing="8">
+                    <CheckBox Name="AttachCheck" Content="挂到当前窗口（NativeMenu.SetMenu）" />
+                    <TextBlock Name="ExportText" />
+                    <TextBlock Name="ItemText" />
+                </StackPanel>
+            </Border>
+            <TextBlock Classes="hint" Text="NativeMenu 只在有「全局菜单栏」的平台上被导出：macOS 的屏幕顶部菜单、部分 Linux 桌面。Windows 上挂了也不显示，所以在 Windows 与其它平台都要保留窗口内的 Menu，两者可以并存。取消勾选页面会把菜单从窗口摘掉，不留痕迹。" />
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

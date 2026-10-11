@@ -1,0 +1,39 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             x:Class="Avalonia.ControlsDemo.Views.Pages.ToolTipPage">
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="ToolTip：悬停提示"
+                               DocPath="controls/feedback/tooltip" />
+
+            <TextBlock Classes="caption" Text="ToolTip.Tip、ShowDelay、Placement 与代码打开" />
+            <Border Classes="stage" Padding="12">
+                <StackPanel Spacing="8">
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <TextBlock Width="90" VerticalAlignment="Center" Text="ShowDelay(ms)" />
+                        <Slider Name="DelaySlider" Width="200" Minimum="0" Maximum="2000" Value="400" />
+                        <TextBlock Name="DelayText" VerticalAlignment="Center" Text="400" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Spacing="12">
+                        <TextBlock VerticalAlignment="Center" Text="Placement" />
+                        <ComboBox Name="PlacementBox" Width="140" />
+                        <Button Name="OpenButton" Content="代码打开 / 关闭" />
+                    </StackPanel>
+                    <Button Name="Target" Content="把鼠标停在这里" ToolTip.Tip="我是简单的文字提示" />
+                    <Button Content="富内容提示">
+                        <ToolTip.Tip>
+                            <StackPanel>
+                                <TextBlock FontWeight="Bold" Text="带结构的提示" />
+                                <TextBlock Text="Tip 可以放任意控件。" />
+                            </StackPanel>
+                        </ToolTip.Tip>
+                    </Button>
+                    <Button Content="被禁用的按钮也能提示" IsEnabled="False" ToolTip.Tip="ShowOnDisabled 让禁用控件也显示提示" ToolTip.ShowOnDisabled="True" />
+                    <TextBlock Name="StateText" Text="IsOpen = False" />
+                </StackPanel>
+            </Border>
+            <TextBlock Classes="hint" Text="ToolTip 是附加属性，写在任意控件上；ShowDelay 是悬停多久才出现。禁用控件默认不显示提示，需要 ShowOnDisabled。键盘焦点到达控件时提示不会自动出现，重要信息不要只放在 ToolTip 里。" />
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

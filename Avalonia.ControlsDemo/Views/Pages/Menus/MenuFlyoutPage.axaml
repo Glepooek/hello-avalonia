@@ -1,0 +1,34 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             x:Class="Avalonia.ControlsDemo.Views.Pages.MenuFlyoutPage">
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="MenuFlyout：点按钮弹出的菜单"
+                               DocPath="controls/menus/menuflyout" />
+
+            <TextBlock Classes="caption" Text="Button.Flyout、Placement 与 ShowAt" />
+            <Border Classes="stage" Padding="12">
+                <StackPanel Spacing="8">
+                    <StackPanel Orientation="Horizontal" Spacing="12">
+                        <TextBlock VerticalAlignment="Center" Text="Placement" />
+                        <ComboBox Name="PlacementBox" Width="170" />
+                        <Button Name="ShowButton" Content="用代码 ShowAt" />
+                    </StackPanel>
+                    <Button Name="Trigger" Content="点我弹出菜单 ▾" HorizontalAlignment="Left">
+                        <Button.Flyout>
+                            <MenuFlyout>
+                                <MenuItem Header="重命名" />
+                                <MenuItem Header="复制链接" />
+                                <Separator />
+                                <MenuItem Header="删除" />
+                            </MenuFlyout>
+                        </Button.Flyout>
+                    </Button>
+                    <TextBlock Name="LogText" Text="Opened 0 次，Closed 0 次" />
+                </StackPanel>
+            </Border>
+            <TextBlock Classes="hint" Text="MenuFlyout 的内容就是 MenuItem 列表，和 ContextMenu 一样，但它挂在 Button.Flyout 上，左键点击弹出，位置用 Placement 控制。需要弹出任意内容（表单、说明）用普通 Flyout；需要右键触发用 ContextMenu。" />
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

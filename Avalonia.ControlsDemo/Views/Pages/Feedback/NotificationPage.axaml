@@ -1,0 +1,40 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             x:Class="Avalonia.ControlsDemo.Views.Pages.NotificationPage">
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="Notification：窗口内的消息通知"
+                               DocPath="controls/feedback/notification" />
+
+            <TextBlock Classes="caption" Text="WindowNotificationManager：位置、同时显示条数与停留时间" />
+            <Border Classes="stage" Padding="12">
+                <StackPanel Spacing="8">
+                    <StackPanel Orientation="Horizontal" Spacing="12">
+                        <TextBlock VerticalAlignment="Center" Text="类型" />
+                        <ComboBox Name="TypeBox" Width="130" />
+                        <TextBlock VerticalAlignment="Center" Text="Position" />
+                        <ComboBox Name="PositionBox" Width="140" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <TextBlock Width="110" VerticalAlignment="Center" Text="MaxItems" />
+                        <Slider Name="MaxItemsSlider" Width="160" Minimum="1" Maximum="5" Value="3" />
+                        <TextBlock Name="MaxItemsText" VerticalAlignment="Center" Text="3" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <TextBlock Width="110" VerticalAlignment="Center" Text="停留（秒）" />
+                        <Slider Name="SecondsSlider" Width="160" Minimum="1" Maximum="10" Value="4" />
+                        <TextBlock Name="SecondsText" VerticalAlignment="Center" Text="4" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <Button Name="ShowButton" Content="发送一条通知" />
+                        <Button Name="ClickableButton" Content="发送可点击的通知" />
+                        <Button Name="CloseAllButton" Content="全部关闭" />
+                    </StackPanel>
+                    <TextBlock Name="SentText" Text="已发送 0 条，点击 0 次" />
+                </StackPanel>
+            </Border>
+            <TextBlock Classes="hint" Text="通知画在窗口的装饰层上，不占布局。MaxItems 满了以后，最老的一条被挤掉。Avalonia 本身只提供这个窗口内的管理器；系统级通知（Windows 通知中心等）需要平台代码，见实战页。" />
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

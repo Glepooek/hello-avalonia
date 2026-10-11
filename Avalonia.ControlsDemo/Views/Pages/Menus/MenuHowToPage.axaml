@@ -1,0 +1,84 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             xmlns:vm="using:Avalonia.ControlsDemo.ViewModels"
+             x:Class="Avalonia.ControlsDemo.Views.Pages.MenuHowToPage"
+             x:DataType="vm:MenuHowToViewModel">
+    <UserControl.Resources>
+        <StreamGeometry x:Key="SaveGeometry">M17,3 H5 C3.9,3 3,3.9 3,5 V19 C3,20.1 3.9,21 5,21 H19 C20.1,21 21,20.1 21,19 V7 L17,3 Z M12,19 C10.3,19 9,17.7 9,16 C9,14.3 10.3,13 12,13 C13.7,13 15,14.3 15,16 C15,17.7 13.7,19 12,19 Z M15,9 H5 V5 H15 Z</StreamGeometry>
+    </UserControl.Resources>
+    <UserControl.KeyBindings>
+        <!--  InputGesture on a MenuItem is only a label; this binding is what makes Ctrl+S actually fire.  -->
+        <KeyBinding Gesture="Ctrl+S" Command="{Binding SaveCommand}" />
+    </UserControl.KeyBindings>
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="Menu 实战"
+                               DocPath="docs/how-to/menu-how-to" />
+
+            <TextBlock Classes="caption" Text="1. 命令 + 快捷键 + 图标 + 勾选项" />
+            <Border Classes="stage" Padding="12">
+                <StackPanel Spacing="8">
+                    <Menu HorizontalAlignment="Left">
+                        <MenuItem Header="_文件">
+                            <MenuItem Header="_保存" Command="{Binding SaveCommand}" InputGesture="Ctrl+S">
+                                <MenuItem.Icon>
+                                    <PathIcon Data="{StaticResource SaveGeometry}" />
+                                </MenuItem.Icon>
+                            </MenuItem>
+                        </MenuItem>
+                        <MenuItem Header="_格式">
+                            <MenuItem Header="_粗体" ToggleType="CheckBox" IsChecked="{Binding IsBold, Mode=TwoWay}" />
+                        </MenuItem>
+                    </Menu>
+                    <TextBlock Name="HotKeyText" Text="{Binding LastAction, StringFormat='最近操作：{0}'}" />
+                    <TextBlock Text="{Binding IsBold, StringFormat='粗体 = {0}'}" />
+                </StackPanel>
+            </Border>
+            <TextBlock Classes="hint" Text="菜单项和快捷键绑到同一个命令，保证两条路径行为一致；点中菜单项或在页面上按 Ctrl+S 都会更新「最近操作」。勾选项的 IsChecked 用 TwoWay 绑定到模型。" />
+
+            <TextBlock Classes="caption" Text="2. 动态菜单：最近的文件来自集合，空了显示一条灰色占位" />
+            <Border Classes="stage" Padding="12">
+                <StackPanel Spacing="8">
+                    <Menu HorizontalAlignment="Left">
+                        <MenuItem Name="RecentMenu" Header="最近的文件" ItemsSource="{Binding RecentMenuItems}">
+                            <MenuItem.DataTemplates>
+                                <DataTemplate DataType="vm:RecentFile">
+                                    <TextBlock Text="{Binding Name}" />
+                                </DataTemplate>
+                                <DataTemplate DataType="vm:EmptyRecent">
+                                    <TextBlock Foreground="Gray" Text="（没有最近的文件）" />
+                                </DataTemplate>
+                            </MenuItem.DataTemplates>
+                            <MenuItem.Styles>
+                                <!--  "MenuItem MenuItem" skips the root item itself, which would otherwise get the command with the whole view model as parameter.  -->
+                                <Style Selector="MenuItem MenuItem" x:DataType="vm:RecentEntry">
+                                    <Setter Property="Command" Value="{Binding $parent[UserControl].((vm:MenuHowToViewModel)DataContext).OpenRecentCommand}" />
+                                    <Setter Property="CommandParameter" Value="{Binding}" />
+                                </Style>
+                            </MenuItem.Styles>
+                        </MenuItem>
+                    </Menu>
+                    <Button Content="清空最近的文件" Command="{Binding ClearRecentCommand}" HorizontalAlignment="Left" />
+                </StackPanel>
+            </Border>
+            <TextBlock Classes="hint" Text="ItemsSource 指向模型里的集合，菜单项用数据模板生成；统一的命令和参数用样式设置到每一个生成的 MenuItem 上。空集合时让属性改返回一个占位对象，由另一个数据模板画成灰色一行，就不用写任何显隐代码。" />
+
+            <TextBlock Classes="caption" Text="3. 右键菜单取到「点中的那一项」" />
+            <Border Classes="stage" Padding="12">
+                <StackPanel Spacing="8">
+                    <ListBox Name="Items" ItemsSource="{Binding Items}" Width="240" Height="120" HorizontalAlignment="Left">
+                        <ListBox.ContextMenu>
+                            <ContextMenu>
+                                <MenuItem Header="删除"
+                                          Command="{Binding DeleteCommand}"
+                                          CommandParameter="{Binding $parent[ListBox].SelectedItem}" />
+                            </ContextMenu>
+                        </ListBox.ContextMenu>
+                    </ListBox>
+                </StackPanel>
+            </Border>
+            <TextBlock Classes="hint" Text="右键之前先左键选中一项；菜单项的 CommandParameter 用 $parent[ListBox].SelectedItem 取当前选中项。DeleteCommand 带 CanExecute：没选中或只剩一项时菜单项自动变灰。" />
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

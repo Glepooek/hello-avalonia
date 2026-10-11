@@ -1,0 +1,39 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             x:Class="Avalonia.ControlsDemo.Views.Pages.MenuPage">
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="Menu：窗口里的菜单栏"
+                               DocPath="controls/menus/menu" />
+
+            <TextBlock Classes="caption" Text="子菜单、InputGesture、勾选项与单选组" />
+            <Border Classes="stage" Padding="12">
+                <StackPanel Spacing="8">
+                    <Menu HorizontalAlignment="Left">
+                        <MenuItem Header="_文件">
+                            <MenuItem Name="NewItem" Header="_新建" InputGesture="Ctrl+N" />
+                            <MenuItem Header="_打开…" InputGesture="Ctrl+O" />
+                            <Separator />
+                            <MenuItem Header="最近的文件">
+                                <MenuItem Header="报告.docx" />
+                                <MenuItem Header="预算.xlsx" />
+                            </MenuItem>
+                            <MenuItem Header="不可用项" IsEnabled="False" />
+                        </MenuItem>
+                        <MenuItem Header="_格式">
+                            <MenuItem Name="BoldItem" Header="_粗体" ToggleType="CheckBox" InputGesture="Ctrl+B" />
+                            <Separator />
+                            <MenuItem Name="LeftItem" Header="左对齐" ToggleType="Radio" GroupName="align" IsChecked="True" />
+                            <MenuItem Name="CenterItem" Header="居中" ToggleType="Radio" GroupName="align" />
+                            <MenuItem Name="RightItem" Header="右对齐" ToggleType="Radio" GroupName="align" />
+                        </MenuItem>
+                    </Menu>
+                    <TextBlock Name="LastText" Text="最近点击：（无）" />
+                    <TextBlock Name="StateText" />
+                </StackPanel>
+            </Border>
+            <TextBlock Classes="hint" Text="Header 里 _ 后面的字母是访问键（Alt+字母）。InputGesture 只是菜单右侧显示的提示文字，并不会自己注册快捷键；真正响应 Ctrl+B 要靠窗口的 KeyBindings 或 HotKey（见「实战：Menu」）。ToggleType=Radio 的几项靠同一个 GroupName 互斥。" />
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

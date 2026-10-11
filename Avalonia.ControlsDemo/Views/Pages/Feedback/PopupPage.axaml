@@ -1,0 +1,32 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             x:Class="Avalonia.ControlsDemo.Views.Pages.PopupPage">
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="Popup：浮在内容上的小窗口"
+                               DocPath="controls/feedback/popup" />
+
+            <TextBlock Classes="caption" Text="PlacementTarget、Placement 与 IsLightDismissEnabled" />
+            <Border Classes="stage" Padding="12">
+                <StackPanel Spacing="8">
+                    <StackPanel Orientation="Horizontal" Spacing="12">
+                        <TextBlock VerticalAlignment="Center" Text="Placement" />
+                        <ComboBox Name="PlacementBox" Width="170" />
+                        <CheckBox Name="LightDismissCheck" Content="IsLightDismissEnabled（点外面关闭）" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Spacing="12">
+                        <Button Name="ToggleButton" Content="打开 / 关闭 Popup" />
+                        <TextBlock Name="StateText" VerticalAlignment="Center" Text="IsOpen = False，打开 0 次" />
+                    </StackPanel>
+                    <Popup Name="Pop" PlacementTarget="{Binding #ToggleButton}" Placement="Bottom">
+                        <Border Padding="12" CornerRadius="6" BorderThickness="1" BorderBrush="Gray" Background="#FF2F4F6F">
+                            <TextBlock Foreground="White" Text="我是 Popup 里的内容" />
+                        </Border>
+                    </Popup>
+                </StackPanel>
+            </Border>
+            <TextBlock Classes="hint" Text="Popup 本身不画任何外观，Child 画成什么样全由你决定。默认不会点外面自动关闭，要这个行为就勾上 IsLightDismissEnabled。需要现成样式的浮层（带阴影、随焦点关闭）用 Flyout，见 Primitives。" />
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

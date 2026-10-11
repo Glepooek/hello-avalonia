@@ -1,0 +1,39 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             x:Class="Avalonia.ControlsDemo.Views.Pages.ProgressBarPage">
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="ProgressBar：进度条"
+                               DocPath="controls/feedback/progressbar" />
+
+            <TextBlock Classes="caption" Text="Value、IsIndeterminate、ShowProgressText 与方向" />
+            <Border Classes="stage" Padding="12">
+                <StackPanel Spacing="8">
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <TextBlock Width="90" VerticalAlignment="Center" Text="Value" />
+                        <Slider Name="ValueSlider" Width="200" Minimum="0" Maximum="100" Value="40" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Spacing="12">
+                        <CheckBox Name="IndeterminateCheck" Content="IsIndeterminate" />
+                        <CheckBox Name="TextCheck" Content="ShowProgressText" />
+                        <CheckBox Name="VerticalCheck" Content="Vertical" />
+                    </StackPanel>
+                    <TextBlock Name="PercentText" />
+                    <Border Width="320" Height="120" HorizontalAlignment="Left" BorderBrush="Gray" BorderThickness="1" Padding="8">
+                        <ProgressBar Name="Bar" Minimum="0" Maximum="100" HorizontalAlignment="Left" VerticalAlignment="Top" Width="280" />
+                    </Border>
+                </StackPanel>
+            </Border>
+            <TextBlock Classes="hint" Text="IsIndeterminate 为 True 时忽略 Value，只播放循环动画。Percentage 是 (Value - Minimum) / (Maximum - Minimum) 算出的只读百分比，不受 Maximum 取值影响。竖向要同时改 Orientation 和宽高。" />
+
+            <TextBlock Classes="caption" Text="自定义范围：Minimum=-50、Maximum=50" />
+            <Border Classes="stage" Padding="12">
+                <StackPanel Spacing="4">
+                    <ProgressBar Name="RangeBar" Minimum="-50" Maximum="50" Value="0" Width="280" HorizontalAlignment="Left" />
+                    <TextBlock Name="RangeText" />
+                </StackPanel>
+            </Border>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

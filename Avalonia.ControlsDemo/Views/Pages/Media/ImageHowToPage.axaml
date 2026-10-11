@@ -1,0 +1,54 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             xmlns:vm="using:Avalonia.ControlsDemo.ViewModels"
+             x:Class="Avalonia.ControlsDemo.Views.Pages.ImageHowToPage"
+             x:DataType="vm:ImageHowToViewModel">
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="Image 实战"
+                               DocPath="docs/how-to/image-how-to" />
+
+            <TextBlock Classes="caption" Text="1. 圆形头像：Border 裁圆，Image 用 UniformToFill 填满" />
+            <Border Classes="stage" Padding="12">
+                <Border Width="80" Height="80" CornerRadius="40" ClipToBounds="True" HorizontalAlignment="Left">
+                    <Image Name="Avatar" Stretch="UniformToFill" />
+                </Border>
+            </Border>
+            <TextBlock Classes="hint" Text="圆角是 Border 的，裁剪也是 Border 的（ClipToBounds）；Image 自己没有圆角属性。图不是正方形时 UniformToFill 保证不留空白，代价是边缘被裁掉。" />
+
+            <TextBlock Classes="caption" Text="2. 从资源加载，没图时显示占位" />
+            <Border Classes="stage" Padding="12">
+                <StackPanel Spacing="8">
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <Button Name="LoadButton" Content="加载资源图" Command="{Binding LoadCommand}" />
+                        <Button Name="ClearButton" Content="清除" Command="{Binding ClearCommand}" />
+                    </StackPanel>
+                    <Panel Width="120" Height="80" HorizontalAlignment="Left">
+                        <Border Background="#22808080" CornerRadius="4" IsVisible="{Binding Photo, Converter={x:Static ObjectConverters.IsNull}}">
+                            <TextBlock Name="PlaceholderText" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="Gray" Text="暂无图片" />
+                        </Border>
+                        <Image Name="PhotoImage" Source="{Binding Photo}" />
+                    </Panel>
+                    <TextBlock Name="SourceText" Text="{Binding Source}" TextWrapping="Wrap" Width="360" HorizontalAlignment="Left" />
+                </StackPanel>
+            </Border>
+            <TextBlock Classes="hint" Text="Source 绑定到 Bitmap 属性；占位用 ObjectConverters.IsNull 控制显隐，不需要任何代码。Bitmap.DecodeToWidth 只解码到目标宽度，大图列表里能明显省内存。从文件或网络加载把流交给 new Bitmap(stream) 即可，流读完后可以立刻释放。" />
+
+            <TextBlock Classes="caption" Text="3. 截图：RenderTargetBitmap.Render 把控件画成位图" />
+            <Border Classes="stage" Padding="12">
+                <StackPanel Spacing="8">
+                    <Border Name="Capture" Width="160" Height="60" HorizontalAlignment="Left" CornerRadius="6" Background="SteelBlue">
+                        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White" Text="被截图的区域" />
+                    </Border>
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <Button Name="ShotButton" Content="截图" />
+                        <TextBlock Name="ShotText" VerticalAlignment="Center" Text="尚未截图" />
+                    </StackPanel>
+                    <Image Name="ShotImage" Width="160" Height="60" HorizontalAlignment="Left" />
+                </StackPanel>
+            </Border>
+            <TextBlock Classes="hint" Text="被截的控件必须已经布局过（在可见窗口里），否则尺寸是 0；RenderTargetBitmap 要先 new 出指定像素尺寸，再 Render(control)，得到的位图可以直接当 Image.Source，也可以 Save 成 PNG。" />
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

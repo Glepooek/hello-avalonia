@@ -1,0 +1,82 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             xmlns:vm="using:Avalonia.ControlsDemo.ViewModels"
+             x:Class="Avalonia.ControlsDemo.Views.Pages.NotificationsHowToPage"
+             x:DataType="vm:NotificationsHowToViewModel">
+    <UserControl.Styles>
+        <!--  The colour comes from a style on a class the template sets, so no local Background is involved (rule 1).  -->
+        <Style Selector="Border.toast">
+            <Setter Property="Background" Value="#CC404040" />
+        </Style>
+        <Style Selector="Border.toast.success">
+            <Setter Property="Background" Value="#CC2E7D32" />
+        </Style>
+        <Style Selector="Border.toast.error">
+            <Setter Property="Background" Value="#CCC62828" />
+        </Style>
+    </UserControl.Styles>
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="Notifications 实战"
+                               DocPath="docs/how-to/notifications-how-to" />
+
+            <TextBlock Classes="caption" Text="1. 自己搭的浮层通知：可着色、可手动关闭、可常驻" />
+            <Border Classes="stage" Padding="12">
+                <StackPanel Spacing="8">
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <Button Name="InfoButton" Content="信息（3 秒）" />
+                        <Button Name="SuccessButton" Content="成功（3 秒）" />
+                        <Button Name="StickyButton" Content="错误（常驻）" />
+                    </StackPanel>
+                    <!--  The overlay is the last child of a Panel, so it draws over the content without taking layout space.  -->
+                    <Panel Width="360" Height="170" HorizontalAlignment="Left">
+                        <Border Background="#11808080" />
+                        <TextBlock HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="8" Foreground="Gray" Text="页面内容区" />
+                        <ItemsControl Name="ToastList" ItemsSource="{Binding Toasts}" HorizontalAlignment="Right" VerticalAlignment="Top" Width="240" Margin="8">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate x:DataType="vm:ToastItem">
+                                    <Border Classes="toast" Classes.success="{Binding IsSuccess}" Classes.error="{Binding IsError}"
+                                            Margin="0,0,0,4" Padding="10,6" CornerRadius="4">
+                                        <Grid ColumnDefinitions="*,Auto">
+                                            <TextBlock VerticalAlignment="Center" Foreground="White" TextWrapping="Wrap" Text="{Binding Message}" />
+                                            <Button Grid.Column="1" Padding="6,0" Content="✕"
+                                                    Command="{Binding $parent[ItemsControl].((vm:NotificationsHowToViewModel)DataContext).DismissCommand}"
+                                                    CommandParameter="{Binding}" />
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </Panel>
+                </StackPanel>
+            </Border>
+            <TextBlock Classes="hint" Text="服务层只管往 Toasts 里加项、到时间移除；界面层用 ItemsControl 画。Classes.success=&quot;{Binding IsSuccess}&quot; 把布尔属性变成样式类，颜色全在样式里。常驻的通知必须有关闭按钮，否则用户没法把它去掉。" />
+
+            <TextBlock Classes="caption" Text="2. 状态栏：后一条消息不会被前一条的计时器清掉" />
+            <Border Classes="stage" Padding="12">
+                <StackPanel Spacing="8">
+                    <Button Name="StatusButton" Content="保存（多点几次试试）" Command="{Binding ShowStatusCommand}" />
+                    <Border BorderBrush="Gray" BorderThickness="0,1,0,0" Width="360" HorizontalAlignment="Left" Padding="8,4">
+                        <TextBlock Name="StatusText" Text="{Binding StatusMessage}" />
+                    </Border>
+                </StackPanel>
+            </Border>
+            <TextBlock Classes="hint" Text="每次发消息先取消上一次的等待（CancellationTokenSource），否则连点两次，第一次的 2.5 秒到点会把第二次的消息提前清掉。" />
+
+            <TextBlock Classes="caption" Text="3. 可关闭的横幅" />
+            <Border Classes="stage" Padding="12">
+                <StackPanel Spacing="8">
+                    <Button Name="BannerButton" Content="显示横幅" Command="{Binding ShowBannerNowCommand}" />
+                    <Border Name="Banner" IsVisible="{Binding ShowBanner}" Width="360" HorizontalAlignment="Left" Padding="10,6" CornerRadius="4" Background="#33FFA000">
+                        <Grid ColumnDefinitions="*,Auto">
+                            <TextBlock VerticalAlignment="Center" Text="新版本可用，重启后生效。" />
+                            <Button Grid.Column="1" Padding="6,0" Content="✕" Command="{Binding DismissBannerCommand}" />
+                        </Grid>
+                    </Border>
+                </StackPanel>
+            </Border>
+            <TextBlock Classes="hint" Text="横幅是常驻的页面内消息，位置固定，不会自己消失；浮层通知是临时的。两者别混用。系统托盘通知（TrayIcon）只在桌面平台可用，移动端与浏览器要靠页面内的这几种方式。" />
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

@@ -317,6 +317,18 @@ Menus 5 + Navigation 8 + Primitives 5 + System 1 + Web 4 = **84 页**，
 - **官方 How-to 与 12.1.2 的出入**：无。
 - **探针断言实际条数**：本批累计 484 条（含第 00–02 份），全部通过且零警告日志。
 
+### 批 4 实测结论（2026-10-11）
+
+- **`WindowNotificationManager` 的两个时间坑**：超过 `MaxItems` 时，被挤出的卡片先淡出再移除，探针只能数"非关闭中"的卡片；`CloseAll()` 对还在滑入的卡片（发出后约 0.5 秒内）无效，要等稳定后调用。管理器必须在 `AttachedToVisualTree` 里用 `TopLevel` 创建，离开页面时 `CloseAll()`。
+- **`ProgressBar.Percentage` 在布局前是 0**：读数要监听 `PercentageProperty`，不要在设 `Value` 后立即读。
+- **headless 的位图限制**：`WriteableBitmap` 能写像素，但 `Save` 得 0 字节、`new Bitmap(stream)` 得 1×1；示例图一律用代码生成，不依赖解码。`Bitmap.DecodeToWidth` 与 `RenderTargetBitmap` 的尺寸是对的。
+- **命令不走 `Click` 事件**：`RaiseEvent(Button.ClickEvent)` 只触发 `Click`，不执行 `Command`；菜单项的 `ClickEvent` 在子菜单没打开时到不了页面。探针对命令直接 `Execute`，对菜单项先 `IsSubMenuOpen = true`。
+- **菜单样式会命中根项**：给 `MenuItem` 写套命令的样式会命中根菜单项自己，要写 `MenuItem MenuItem`；绑定类型要用真实项与占位项的共同基类。
+- **`Button.Flyout` 里的元素不进命名范围**：写 `Name` 不生成字段，要从 `Trigger.Flyout` 取。`ContextMenu.Open()` 不触发 `Opening`（只有用户右键才触发）。
+- **范围缺口**：官方 `media/mediaplayer/**` 属付费，归 Premium 路标页。
+- **官方 How-to 与 12.1.2 的出入**：Notifications 指南称没有内置通知控件，但 `WindowNotificationManager` / `Notification` 存在；实战页演示自建的另一半。
+- **探针断言实际条数**：本批累计 591 条（含第 00–03 份），全部通过且零警告日志。
+
 ## 验证标准
 
 1. `dotnet build hello-avalonia.slnx` 通过，且无新增警告

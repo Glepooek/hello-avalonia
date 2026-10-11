@@ -1,0 +1,32 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             x:Class="Avalonia.ControlsDemo.Views.Pages.ImagePage">
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="Image：显示位图与矢量图"
+                               DocPath="controls/media/image" />
+
+            <TextBlock Classes="caption" Text="Stretch、StretchDirection 与位图插值" />
+            <Border Classes="stage" Padding="12">
+                <StackPanel Spacing="8">
+                    <StackPanel Orientation="Horizontal" Spacing="12">
+                        <TextBlock VerticalAlignment="Center" Text="Stretch" />
+                        <ComboBox Name="StretchBox" Width="140" />
+                        <TextBlock VerticalAlignment="Center" Text="StretchDirection" />
+                        <ComboBox Name="DirectionBox" Width="120" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Spacing="12">
+                        <TextBlock VerticalAlignment="Center" Text="BitmapInterpolationMode" />
+                        <ComboBox Name="InterpolationBox" Width="150" />
+                    </StackPanel>
+                    <Border BorderBrush="Gray" BorderThickness="1" Width="260" Height="140" HorizontalAlignment="Left">
+                        <Image Name="Pic" />
+                    </Border>
+                    <TextBlock Name="SizeText" />
+                </StackPanel>
+            </Border>
+            <TextBlock Classes="hint" Text="源图是 40×20 的小位图，外框 260×140。Uniform 等比放大到一边顶满；UniformToFill 等比放大到填满、多出部分被裁掉；Fill 拉伸变形；None 保持原大小。StretchDirection 限定只放大还是只缩小。小图放大时，插值模式决定是糊（HighQuality）还是马赛克（None）。" />
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>
