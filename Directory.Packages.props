@@ -8,6 +8,10 @@
         <PackageVersion Include="Avalonia.Desktop" Version="12.1.2" />
         <PackageVersion Include="Avalonia.Themes.Fluent" Version="12.1.2" />
         <PackageVersion Include="Avalonia.Fonts.Inter" Version="12.1.2" />
+        <!--NOTE: DataGrid, ColorPicker and ColorView ship as separate packages in v12 (they are not
+            in the main Avalonia assembly). They back the ControlsDemo Input and Data display pages.-->
+        <PackageVersion Include="Avalonia.Controls.DataGrid" Version="12.1.2" />
+        <PackageVersion Include="Avalonia.Controls.ColorPicker" Version="12.1.2" />
         <!--NOTE: Avalonia.Diagnostics has no 12.x release yet; DevTools are built into the main Avalonia package in v12.-->
         <PackageVersion Include="Avalonia.Diagnostics" Version="11.3.22" />
         <PackageVersion Include="Avalonia.Controls.WebView" Version="12.1.0" />
