@@ -7,6 +7,8 @@ namespace Avalonia.Shared.Messages
     public class MessageParam
     {
         public bool Reult { get; set; }
-        public object Data { get; set; }
+
+        // Nullable on purpose: the WebView demo sends a signal-only message that never sets Data.
+        public object? Data { get; set; }
     }
 }
