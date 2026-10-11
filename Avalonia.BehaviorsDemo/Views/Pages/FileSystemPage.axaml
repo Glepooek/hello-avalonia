@@ -1,0 +1,92 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             xmlns:vm="using:Avalonia.BehaviorsDemo.ViewModels"
+             mc:Ignorable="d"
+             d:DesignWidth="860"
+             d:DesignHeight="900"
+             x:Class="Avalonia.BehaviorsDemo.Views.Pages.FileSystemPage"
+             x:DataType="vm:FileSystemViewModel">
+
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="文件系统：CreateDirectoryAction、WriteTextToFileAction、DeleteFileAction、DeleteDirectoryAction、FileSystemWatcherTrigger"
+                               DocPath="Avalonia.Xaml.Interactions.FileSystem.WriteTextToFileAction" />
+
+            <TextBlock Classes="caption" Text="沙箱（所有操作只发生在这里）" />
+            <Border Classes="stage" Padding="8">
+                <StackPanel Spacing="4">
+                    <TextBlock Text="{Binding SandboxDir}" TextWrapping="Wrap" />
+                    <TextBlock Classes="hint" Text="位于系统临时目录。页面每次打开都会清空它，真实文件夹与文件不受影响。" />
+                </StackPanel>
+            </Border>
+
+            <TextBlock Classes="caption" Text="1. 一排按钮，每个按钮一个 Action；每个 Action 后面再跟一个刷新命令" />
+            <StackPanel Orientation="Horizontal" Spacing="8">
+                <Button Name="MkdirButton" Content="创建 notes 文件夹">
+                    <Interaction.Behaviors>
+                        <EventTriggerBehavior EventName="Click">
+                            <CreateDirectoryAction Path="{Binding SubDir}" />
+                            <InvokeCommandAction Command="{Binding RefreshCommand}" />
+                        </EventTriggerBehavior>
+                    </Interaction.Behaviors>
+                </Button>
+                <Button Name="WriteButton" Content="写入 hello.txt（覆盖）">
+                    <Interaction.Behaviors>
+                        <EventTriggerBehavior EventName="Click">
+                            <WriteTextToFileAction Path="{Binding FilePath}" Text="{Binding NoteText}" Append="False" />
+                            <InvokeCommandAction Command="{Binding RefreshCommand}" />
+                        </EventTriggerBehavior>
+                    </Interaction.Behaviors>
+                </Button>
+                <Button Name="AppendButton" Content="追加一行">
+                    <Interaction.Behaviors>
+                        <EventTriggerBehavior EventName="Click">
+                            <WriteTextToFileAction Path="{Binding FilePath}" Text="{Binding NoteText}" Append="True" />
+                            <InvokeCommandAction Command="{Binding RefreshCommand}" />
+                        </EventTriggerBehavior>
+                    </Interaction.Behaviors>
+                </Button>
+                <Button Name="DeleteFileButton" Content="删除 hello.txt">
+                    <Interaction.Behaviors>
+                        <EventTriggerBehavior EventName="Click">
+                            <DeleteFileAction Path="{Binding FilePath}" />
+                            <InvokeCommandAction Command="{Binding RefreshCommand}" />
+                        </EventTriggerBehavior>
+                    </Interaction.Behaviors>
+                </Button>
+                <Button Name="DeleteDirButton" Content="删除 notes 文件夹">
+                    <Interaction.Behaviors>
+                        <EventTriggerBehavior EventName="Click">
+                            <DeleteDirectoryAction Path="{Binding SubDir}" Recursive="True" />
+                            <InvokeCommandAction Command="{Binding RefreshCommand}" />
+                        </EventTriggerBehavior>
+                    </Interaction.Behaviors>
+                </Button>
+            </StackPanel>
+            <TextBox Margin="0,8,0,0" Width="320" HorizontalAlignment="Left" Text="{Binding NoteText}" Watermark="要写入的文字" />
+            <TextBlock Classes="hint"
+                       Text="路径与文字都是绑定出来的，所以改上面的输入框再点写入，文件内容就跟着变。写入前要先创建 notes 文件夹，否则写不进去。「追加」用的是同一个 Action，只是 Append 为 True。" />
+
+            <TextBlock Classes="caption" Text="2. 沙箱当前内容" />
+            <Border Classes="stage" Padding="8" MinHeight="70">
+                <TextBlock Text="{Binding Listing}" />
+            </Border>
+
+            <TextBlock Classes="caption" Text="3. FileSystemWatcherTrigger：监视沙箱里的 .txt 文件" />
+            <Border Name="WatchBox" Classes="stage" Padding="12">
+                <Interaction.Behaviors>
+                    <!-- The action's Command is assigned in code-behind, not bound: see the hint below. -->
+                    <FileSystemWatcherTrigger Path="{Binding SandboxDir}" Filter="*.txt" IncludeSubdirectories="True">
+                        <InvokeCommandAction />
+                    </FileSystemWatcherTrigger>
+                </Interaction.Behaviors>
+                <TextBlock Text="{Binding WatchHits, StringFormat={}监视器已触发 {0} 次}" />
+            </Border>
+            <TextBlock Classes="hint"
+                       Text="新建一个 .txt 会触发两次（创建与内容变化各一次），再追加内容又触发一次。你也可以在资源管理器里打开上面的沙箱路径手动改文件，这里同样会计数。监视的文件夹在行为挂载时必须已经存在，所以 ViewModel 在构造函数里先把沙箱建好。另外，这个触发器继承的是普通 Trigger，不会把 DataContext 传给里面的 Action，写成 {Binding} 的 Command 解析不出来（触发了但什么也不执行，也没有日志），所以这个 InvokeCommandAction 的 Command 在 code-behind 里直接赋值。事件本身来自线程池线程，命令里再回到 UI 线程。" />
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

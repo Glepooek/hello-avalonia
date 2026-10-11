@@ -44,5 +44,20 @@
         <TabItem Header="动画">
             <pages:AnimationPage />
         </TabItem>
+        <TabItem Header="文件系统">
+            <pages:FileSystemPage />
+        </TabItem>
+        <TabItem Header="网络">
+            <pages:NetworkPage />
+        </TabItem>
+        <TabItem Header="剪贴板">
+            <pages:ClipboardPage />
+        </TabItem>
+        <TabItem Header="截图">
+            <pages:ScreenshotPage />
+        </TabItem>
+        <TabItem Header="自定义">
+            <pages:CustomPage />
+        </TabItem>
     </TabControl>
 </Window>

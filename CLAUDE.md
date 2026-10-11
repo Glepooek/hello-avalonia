@@ -48,3 +48,11 @@ dotnet test Avalonia.TestingDemo.Tests --filter "FullyQualifiedName~ViewModelTes
 
 - 验证靠仓库外的 headless 探针（`C:\Temp\probe-controls`，不入库）；每批实测结论回填到 spec 的"批 N 实测结论"小节。
 - `DataGrid`、`ColorPicker` 是独立包，必须在 `App.axaml` 里 `StyleInclude` 才会渲染，否则静默空白。
+
+## BehaviorsDemo（Xaml.Behaviors.Avalonia）
+
+`docs/superpowers/specs/2026-10-11-avalonia-behaviors-demo-design.md` 与 `docs/superpowers/plans/2026-10-11-behaviors-demo-0*.md` 描述了单项目 `Avalonia.BehaviorsDemo`（左侧 TabControl 导航，共 15 页，按概念层次组织）。计划里的代码块用 `#### \`路径\`` 标题标注目标文件，可整块抽取；各页的"实测结论"回填在 spec 的「批 N 实测结论」小节。
+
+- 验证靠仓库外的 headless 探针（`C:\Temp\probe-bdemo`，不入库）。计时器类行为（`DebounceAction`、`TimerTrigger`）在 headless 里要跑 `Dispatcher.UIThread.MainLoop` 才会走。
+- 副作用动作都限制在安全范围：文件只动 `Path.GetTempPath()` 下的 `avalonia-behaviors-demo`，网络只连本进程的 127.0.0.1 回环服务，剪贴板与截图页有醒目提示。
+- 行为库的坑：继承普通 `Trigger`（如 `FileSystemWatcherTrigger`、`NetworkInformationTrigger`，以及自己写的 `Trigger<T>`）的触发器不会把 DataContext 传给里面的 Action，`InvokeCommandAction` 的 `{Binding}` 命令不执行且无日志，自写触发器应继承 `StyledElementTrigger<T>`；`Animation` 不能直接写在行为里（放进 `Style.Resources` 再 `DynamicResource` 引用）；`ListReorderDragBehavior` 必须经 `ListBoxItem` 样式挂载。

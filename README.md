@@ -17,7 +17,7 @@ Avalonia UI 学习示例集合。每个项目演示一个独立主题，可单�
 | [Avalonia.InputDemo](Avalonia.InputDemo) | 指针、焦点与导航、手势、键盘与 HotKey、事件/命令/手势三种交互写法、拖放、文本输入过滤 |
 | [Avalonia.GraphicsDemo](Avalonia.GraphicsDemo) | 画刷与渐变、变换、形状与几何、自定义绘制、特效、裁剪与命中、图标、渲染选项、关键帧动画、控件过渡、页面过渡、缓动函数、合成动画 |
 | [Avalonia.ControlsDemo](Avalonia.ControlsDemo) | 按官方 Controls 目录组织的控件演示（80 个可运行控件页 + 19 个实战页 + 20 个路标页，侧边导航） |
-| [Avalonia.BehaviorsDemo](Avalonia.BehaviorsDemo) | Xaml.Behaviors.Avalonia：Behavior / Trigger / Action 机制、事件转命令（防抖、节流、延时）、数据触发与条件、焦点键盘指针、表单验证、集合、窗口弹出通知、拖拽、响应式、动画（侧边导航，当前 10 页；副作用动作与自定义见后续批次） |
+| [Avalonia.BehaviorsDemo](Avalonia.BehaviorsDemo) | Xaml.Behaviors.Avalonia：Behavior / Trigger / Action 机制、事件转命令、数据触发、焦点键盘指针、表单验证、集合、窗口弹出通知、拖拽、响应式、动画，以及文件系统、网络、剪贴板、截图（均限制在沙箱内）和自定义 Behavior（侧边导航，共 15 页） |
 | [Avalonia.CustomControlsDemo](Avalonia.CustomControlsDemo) | UserControl、TemplatedControl 与 ControlTheme、自绘控件、控件树、自定义 Panel、自定义 Flyout |
 | [Avalonia.ServicesDemo](Avalonia.ServicesDemo) | 剪贴板、文件对话框、StorageProvider、Launcher、平台设置，以及 InputPane / InsetsManager / IActivatableLifetime 的可用性检测 |
 | [Avalonia.AppDevelopmentDemo](Avalonia.AppDevelopmentDemo) | 依赖注入、本地化、日志、未处理异常、资源查找、线程模型、窗口管理、无障碍 |

@@ -1,0 +1,69 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             xmlns:vm="using:Avalonia.BehaviorsDemo.ViewModels"
+             mc:Ignorable="d"
+             d:DesignWidth="860"
+             d:DesignHeight="700"
+             x:Class="Avalonia.BehaviorsDemo.Views.Pages.NetworkPage"
+             x:DataType="vm:NetworkViewModel">
+
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="网络：HttpRequestAction 与 NetworkInformationTrigger"
+                               DocPath="Avalonia.Xaml.Interactions.Network.HttpRequestAction" />
+
+            <TextBlock Classes="caption" Text="请求的目标（本进程自己起的回环服务，只监听 127.0.0.1）" />
+            <Border Classes="stage" Padding="8">
+                <TextBlock Text="{Binding PingUrl}" />
+            </Border>
+
+            <TextBlock Classes="caption" Text="1. HttpRequestAction：POST 一段文字，读回响应内容与状态码" />
+            <StackPanel Orientation="Horizontal" Spacing="12">
+                <Button Name="PostButton" Content="POST「ping」">
+                    <Interaction.Behaviors>
+                        <EventTriggerBehavior EventName="Click">
+                            <!-- Named so the response can be bound from the page. -->
+                            <HttpRequestAction x:Name="PostReq" Url="{Binding PingUrl}" Method="POST"
+                                               Content="ping" ContentType="text/plain" />
+                        </EventTriggerBehavior>
+                    </Interaction.Behaviors>
+                </Button>
+                <TextBlock Name="PostBody" VerticalAlignment="Center" Text="{Binding #PostReq.ResponseContent}" />
+                <TextBlock Name="PostStatus" VerticalAlignment="Center"
+                           Text="{Binding #PostReq.ResponseStatusCode, StringFormat={}状态码 {0}}" />
+            </StackPanel>
+
+            <TextBlock Classes="caption" Text="2. 同一个 Action，Method 换成 GET" />
+            <StackPanel Orientation="Horizontal" Spacing="12">
+                <Button Name="GetButton" Content="GET">
+                    <Interaction.Behaviors>
+                        <EventTriggerBehavior EventName="Click">
+                            <HttpRequestAction x:Name="GetReq" Url="{Binding PingUrl}" Method="GET" />
+                        </EventTriggerBehavior>
+                    </Interaction.Behaviors>
+                </Button>
+                <TextBlock Name="GetBody" VerticalAlignment="Center" Text="{Binding #GetReq.ResponseContent}" />
+                <TextBlock Name="GetStatus" VerticalAlignment="Center"
+                           Text="{Binding #GetReq.ResponseStatusCode, StringFormat={}状态码 {0}}" />
+            </StackPanel>
+            <TextBlock Classes="hint"
+                       Text="ResponseContent 与 ResponseStatusCode 是 Action 上的只读属性，请求完成后才有值，所以 Action 要起个 x:Name，页面用 {Binding #名字.属性} 读回。请求是异步的，点完按钮稍等一下才会出现。这里不访问任何外部网址。" />
+
+            <TextBlock Classes="caption" Text="3. NetworkInformationTrigger：网络可用性变化时触发（需手动制造变化）" />
+            <Border Name="NetBox" Classes="stage" Padding="12">
+                <Interaction.Behaviors>
+                    <!-- The action's Command is assigned in code-behind, not bound: see the hint below. -->
+                    <NetworkInformationTrigger>
+                        <InvokeCommandAction />
+                    </NetworkInformationTrigger>
+                </Interaction.Behaviors>
+                <TextBlock Text="{Binding NetworkEvents, StringFormat={}网络变化事件：{0} 次}" />
+            </Border>
+            <TextBlock Classes="hint"
+                       Text="这个触发器没有任何属性，只是挂上去，等系统报告网络变化。在自动化测试里无法制造这种变化，所以要手动试：关闭再打开 Wi-Fi 或飞行模式，上面的计数会增加。和文件监视器一样，它继承的是普通 Trigger，Action 拿不到 DataContext，所以 Command 在 code-behind 里直接赋值；事件来自系统线程，命令里再回到 UI 线程。" />
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

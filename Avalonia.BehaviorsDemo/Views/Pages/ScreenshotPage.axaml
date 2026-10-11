@@ -1,0 +1,59 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             xmlns:vm="using:Avalonia.BehaviorsDemo.ViewModels"
+             mc:Ignorable="d"
+             d:DesignWidth="860"
+             d:DesignHeight="640"
+             x:Class="Avalonia.BehaviorsDemo.Views.Pages.ScreenshotPage"
+             x:DataType="vm:ScreenshotViewModel">
+
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="截图与离屏渲染：RenderTargetBitmapBehavior、RenderRenderTargetBitmapAction、ScreenshotAction"
+                               DocPath="Avalonia.Xaml.Interactions.Custom.RenderTargetBitmapBehavior" />
+
+            <TextBlock Classes="caption" Text="1. RenderTargetBitmapBehavior：挂在 Image 上，由我们的渲染器画进一张离屏位图" />
+            <StackPanel Orientation="Horizontal" Spacing="12">
+                <Image Name="PreviewImage" Width="128" Height="128" Stretch="Uniform">
+                    <Interaction.Behaviors>
+                        <!-- Named so the action below can point at it. -->
+                        <RenderTargetBitmapBehavior x:Name="Rtb" PixelWidth="64" PixelHeight="64"
+                                                    Dpi="96,96" Renderer="{Binding Renderer}" />
+                    </Interaction.Behaviors>
+                </Image>
+                <Button Name="RerenderButton" VerticalAlignment="Top" Content="再画一次">
+                    <Interaction.Behaviors>
+                        <EventTriggerBehavior EventName="Click">
+                            <RenderRenderTargetBitmapAction Target="{Binding #Rtb}" />
+                        </EventTriggerBehavior>
+                    </Interaction.Behaviors>
+                </Button>
+                <TextBlock VerticalAlignment="Top" Text="{Binding Renderer.Calls, StringFormat={}渲染器已被调用 {0} 次}" />
+            </StackPanel>
+            <TextBlock Classes="hint"
+                       Text="行为给 Image.Source 换成一张 64 x 64 的位图，画什么由 Renderer（实现 IRenderTargetBitmapRenderer 的对象）决定。这里的渲染器每次换一种颜色，点「再画一次」预览就会变色。" />
+
+            <TextBlock Classes="caption" Text="2. ScreenshotAction：把一个控件截成图片（需目视）" />
+            <StackPanel Orientation="Horizontal" Spacing="12">
+                <Border Name="ShotTarget" Classes="stage" Width="200" Height="80" Background="#304060">
+                    <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="截我" />
+                </Border>
+                <Button Name="ShotButton" VerticalAlignment="Top" Content="截图">
+                    <Interaction.Behaviors>
+                        <EventTriggerBehavior EventName="Click">
+                            <ScreenshotAction TargetControl="{Binding #ShotTarget}" FileName="{Binding ShotPath}" />
+                        </EventTriggerBehavior>
+                    </Interaction.Behaviors>
+                </Button>
+            </StackPanel>
+            <TextBlock Classes="hint"
+                       Text="FileName 指向系统临时目录里的沙箱，不会写进你的文档。自动化测试里这个 Action 能执行但不会产出文件，也看不到对话框，所以真实效果要手动试：点截图，然后去上面的路径或弹出的保存对话框里确认图片。" />
+            <Border Classes="stage" Padding="8">
+                <TextBlock Text="{Binding ShotPath}" TextWrapping="Wrap" />
+            </Border>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

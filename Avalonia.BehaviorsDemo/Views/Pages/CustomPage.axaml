@@ -1,0 +1,48 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             xmlns:b="using:Avalonia.BehaviorsDemo.Behaviors"
+             xmlns:vm="using:Avalonia.BehaviorsDemo.ViewModels"
+             mc:Ignorable="d"
+             d:DesignWidth="860"
+             d:DesignHeight="640"
+             x:Class="Avalonia.BehaviorsDemo.Views.Pages.CustomPage"
+             x:DataType="vm:CustomViewModel">
+
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="自定义：自己写 Behavior、Trigger、Action"
+                               DocPath="Avalonia.Xaml.Interactivity.Behavior" />
+
+            <TextBlock Classes="caption" Text="1. 自定义 Behavior：UpperCaseBehavior，让 TextBox 永远是大写" />
+            <TextBox Name="UpperBox" Width="320" HorizontalAlignment="Left" Watermark="随便输入小写字母试试">
+                <Interaction.Behaviors>
+                    <b:UpperCaseBehavior />
+                </Interaction.Behaviors>
+            </TextBox>
+            <TextBlock Classes="hint"
+                       Text="整个类只有几十行：继承 Behavior&lt;TextBox&gt;，在 OnAttachedToVisualTree 里订阅事件，在 OnDetachedFromVisualTree 里取消订阅。粘贴、程序赋值也会被转成大写，因为它盯的是 TextChanged。" />
+
+            <TextBlock Classes="caption" Text="2. 自定义 Trigger 与 Action：按两下面板，才执行一次；执行的是现成的命令和我们自己写的 Action" />
+            <StackPanel Orientation="Horizontal" Spacing="12">
+                <Border Name="ClickPad" Classes="stage" Width="200" Height="80" Background="#304060">
+                    <Interaction.Behaviors>
+                        <b:ClickCountTrigger Count="2">
+                            <InvokeCommandAction Command="{Binding FireCommand}" />
+                            <b:AppendTextAction Target="{Binding #Output}" Suffix="★" />
+                        </b:ClickCountTrigger>
+                    </Interaction.Behaviors>
+                    <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="在这里按两下鼠标" />
+                </Border>
+                <StackPanel VerticalAlignment="Center" Spacing="4">
+                    <TextBlock Text="{Binding Fires, StringFormat={}触发了 {0} 次}" />
+                    <TextBlock Name="Output" Text="星星：" />
+                </StackPanel>
+            </StackPanel>
+            <TextBlock Classes="hint"
+                       Text="Trigger 只负责「什么时候」（要继承 StyledElementTrigger：继承普通 Trigger 的话，里面 InvokeCommandAction 的 {Binding} 命令解析不出来）：数够了就调用 Interaction.ExecuteActions，把自己的 Actions 交出去。Action 只负责「做什么」：重写 Execute。两者互不知道对方，所以 InvokeCommandAction 和自定义的 AppendTextAction 可以混着放在同一个触发器里。Count、Target、Suffix 都是 StyledProperty，所以能直接在 XAML 里写、也能绑定。触发器监听 PointerPressed 而不是 Tapped：连点时第二次 Tapped 会被 DoubleTapped 吞掉，永远数不够。" />
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

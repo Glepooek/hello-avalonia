@@ -1,0 +1,60 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             xmlns:vm="using:Avalonia.BehaviorsDemo.ViewModels"
+             mc:Ignorable="d"
+             d:DesignWidth="860"
+             d:DesignHeight="560"
+             x:Class="Avalonia.BehaviorsDemo.Views.Pages.ClipboardPage"
+             x:DataType="vm:ClipboardViewModel">
+
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="剪贴板：SetClipboardTextAction、GetClipboardTextAction、ClearClipboardAction"
+                               DocPath="Avalonia.Xaml.Interactions.Core.SetClipboardTextAction" />
+
+            <Border Classes="stage" Padding="8" Margin="0,0,0,8">
+                <TextBlock Foreground="OrangeRed" TextWrapping="Wrap"
+                           Text="注意：这一页会真的改写系统剪贴板，包括「清空」。点之前如果剪贴板里有重要内容，请先另存。" />
+            </Border>
+
+            <TextBlock Classes="caption" Text="1. 复制：把绑定的文字放进剪贴板" />
+            <StackPanel Orientation="Horizontal" Spacing="12">
+                <TextBox Width="320" Text="{Binding Input}" />
+                <Button Name="CopyButton" Content="复制">
+                    <Interaction.Behaviors>
+                        <EventTriggerBehavior EventName="Click">
+                            <SetClipboardTextAction Text="{Binding Input}" />
+                        </EventTriggerBehavior>
+                    </Interaction.Behaviors>
+                </Button>
+            </StackPanel>
+
+            <TextBlock Classes="caption" Text="2. 粘贴：读剪贴板，文字作为参数交给命令" />
+            <StackPanel Orientation="Horizontal" Spacing="12">
+                <Button Name="PasteButton" Content="读取剪贴板">
+                    <Interaction.Behaviors>
+                        <EventTriggerBehavior EventName="Click">
+                            <GetClipboardTextAction Command="{Binding PasteCommand}" />
+                        </EventTriggerBehavior>
+                    </Interaction.Behaviors>
+                </Button>
+                <TextBlock VerticalAlignment="Center" Text="{Binding Pasted, StringFormat={}读到：{0}}" />
+            </StackPanel>
+            <TextBlock Classes="hint"
+                       Text="先复制，再读取，上面就会显示同样的文字；也可以在别的程序里复制一段文字，回来点读取。读取是异步的，点完稍等一下。" />
+
+            <TextBlock Classes="caption" Text="3. 清空" />
+            <Button Name="ClearButton" Content="清空剪贴板">
+                <Interaction.Behaviors>
+                    <EventTriggerBehavior EventName="Click">
+                        <ClearClipboardAction />
+                    </EventTriggerBehavior>
+                </Interaction.Behaviors>
+            </Button>
+            <TextBlock Classes="hint" Text="清空之后再点「读取剪贴板」，读到的是空字符串。三个 Action 都不用写任何 code-behind，剪贴板对象由行为自己从所在窗口取得。" />
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>
