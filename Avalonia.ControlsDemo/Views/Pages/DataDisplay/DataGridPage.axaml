@@ -1,0 +1,41 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             xmlns:vm="using:Avalonia.ControlsDemo.ViewModels"
+             x:Class="Avalonia.ControlsDemo.Views.Pages.DataGridPage">
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="DataGrid：可排序、可编辑的表格"
+                               DocPath="controls/data-display/structured-data/datagrid" />
+
+            <TextBlock Classes="caption" Text="三种列、网格线、选择模式与编辑" />
+            <Border Classes="stage" Padding="12">
+                <StackPanel Spacing="8">
+                    <StackPanel Orientation="Horizontal" Spacing="12">
+                        <TextBlock VerticalAlignment="Center" Text="GridLines" />
+                        <ComboBox Name="LinesBox" Width="130" />
+                        <TextBlock VerticalAlignment="Center" Text="SelectionMode" />
+                        <ComboBox Name="SelectionBox" Width="110" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Spacing="12">
+                        <CheckBox Name="ReadOnlyCheck" Content="IsReadOnly" />
+                        <CheckBox Name="ReorderCheck" Content="CanUserReorderColumns" />
+                    </StackPanel>
+                    <!--  A DataGrid scrolls by itself; inside this page it needs a fixed Height.  -->
+                    <DataGrid Name="Grid" Width="520" Height="200" HorizontalAlignment="Left"
+                              AutoGenerateColumns="False" CanUserSortColumns="True" CanUserResizeColumns="True">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn x:DataType="vm:DemoProduct" Header="名称" Binding="{Binding Name}" Width="2*" />
+                            <DataGridTextColumn x:DataType="vm:DemoProduct" Header="分类" Binding="{Binding Category}" Width="*" />
+                            <DataGridTextColumn x:DataType="vm:DemoProduct" Header="价格" Binding="{Binding Price}" Width="80" />
+                            <DataGridCheckBoxColumn x:DataType="vm:DemoProduct" Header="有货" Binding="{Binding InStock}" />
+                        </DataGrid.Columns>
+                    </DataGrid>
+                    <TextBlock Name="SelectedText" Text="选中：（无）" />
+                </StackPanel>
+            </Border>
+            <TextBlock Classes="hint" Text="点列头排序；双击单元格编辑，Enter 提交、Esc 取消；拖列头边缘调宽。DataGrid 在独立包 Avalonia.Controls.DataGrid 里，必须配合 App.axaml 的 StyleInclude，否则整块空白。" />
+            <TextBlock Classes="hint" Text="分组、行详情、冻结列、按模板编辑见紧随其后的「实战：DataGrid」。" />
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

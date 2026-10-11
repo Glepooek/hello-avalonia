@@ -1,0 +1,33 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             xmlns:vm="using:Avalonia.ControlsDemo.ViewModels"
+             x:Class="Avalonia.ControlsDemo.Views.Pages.TableViewPage">
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="TableView：主包内的轻量表格"
+                               DocPath="controls/data-display/structured-data/tableview" />
+
+            <TextBlock Classes="caption" Text="Columns、SelectionMode 与 CanUserResizeColumns" />
+            <Border Classes="stage" Padding="12">
+                <StackPanel Spacing="8">
+                    <StackPanel Orientation="Horizontal" Spacing="12">
+                        <TextBlock VerticalAlignment="Center" Text="SelectionMode" />
+                        <ComboBox Name="ModeBox" Width="140" />
+                        <CheckBox Name="ResizeCheck" Content="CanUserResizeColumns" />
+                    </StackPanel>
+                    <!--  TableView derives from ListBox, so it also scrolls by itself and needs a fixed Height here.  -->
+                    <TableView Name="Table" Width="420" Height="170" HorizontalAlignment="Left">
+                        <TableView.Columns>
+                            <TableViewColumn x:DataType="vm:DemoProduct" Header="名称" Width="2*" Binding="{Binding Name}" />
+                            <TableViewColumn x:DataType="vm:DemoProduct" Header="分类" Width="*" Binding="{Binding Category}" />
+                            <TableViewColumn x:DataType="vm:DemoProduct" Header="价格" Width="80" Binding="{Binding Price}" />
+                        </TableView.Columns>
+                    </TableView>
+                    <TextBlock Name="SelectedText" Text="选中：（无）" />
+                </StackPanel>
+            </Border>
+            <TextBlock Classes="hint" Text="TableView 派生自 ListBox，在主包里，不需要 StyleInclude；列只有 TableViewColumn 一种（没有 TableViewTextColumn），单元格内容靠 Binding 或 CellTemplate。它没有排序、编辑和分组，需要这些时用 DataGrid。" />
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

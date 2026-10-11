@@ -1,0 +1,36 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             xmlns:vm="using:Avalonia.ControlsDemo.ViewModels"
+             x:Class="Avalonia.ControlsDemo.Views.Pages.TreeViewPage">
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="TreeView：层级数据"
+                               DocPath="controls/data-display/structured-data/treeview" />
+
+            <TextBlock Classes="caption" Text="TreeDataTemplate、ExpandSubTree / CollapseSubTree 与选择" />
+            <Border Classes="stage" Padding="12">
+                <StackPanel Spacing="8">
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <Button Name="ExpandAllButton" Content="展开全部" />
+                        <Button Name="CollapseAllButton" Content="折叠全部" />
+                        <TextBlock VerticalAlignment="Center" Text="SelectionMode" />
+                        <ComboBox Name="ModeBox" Width="140" />
+                    </StackPanel>
+                    <!--  A TreeView scrolls by itself; inside this page it needs a fixed Height.  -->
+                    <TreeView Name="Tree" Width="260" Height="170" HorizontalAlignment="Left">
+                        <TreeView.ItemTemplate>
+                            <TreeDataTemplate x:DataType="vm:DemoTreeNode" ItemsSource="{Binding Children}">
+                                <TextBlock Text="{Binding Label}" />
+                            </TreeDataTemplate>
+                        </TreeView.ItemTemplate>
+                    </TreeView>
+                    <TextBlock Name="SelectedText" Text="选中：（无）" />
+                </StackPanel>
+            </Border>
+            <TextBlock Classes="hint" Text="TreeDataTemplate 的 ItemsSource 指向「子节点」属性，TreeView 就会一层层向下生成。展开 / 折叠全部要对每个根调用 ExpandSubTree / CollapseSubTree，TreeView 本身没有「全部展开」属性。" />
+            <TextBlock Classes="hint" Text="按 DataType 选模板、懒加载与筛选见紧随其后的「实战：TreeView」。" />
+            <TextBlock Classes="hint" Text="更深入的演示：Avalonia.DataTemplatesDemo →「面板与树」；Avalonia.FundamentalsDemo → 树页" />
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>
