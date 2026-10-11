@@ -1,0 +1,32 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             mc:Ignorable="d"
+             d:DesignWidth="800"
+             d:DesignHeight="500"
+             x:Class="Avalonia.ControlsDemo.Views.Pages.SplitButtonPage">
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="SplitButton：主操作加下拉菜单"
+                               DocPath="controls/input/buttons/splitbutton" />
+
+            <TextBlock Classes="caption" Text="1. 主按钮触发 Click，箭头弹出 Flyout" />
+            <Border Classes="stage" Padding="12">
+                <StackPanel Orientation="Horizontal" Spacing="12">
+                    <SplitButton Name="SaveSplit" Content="保存" Click="OnSaveClick">
+                        <SplitButton.Flyout>
+                            <MenuFlyout>
+                                <MenuItem Header="另存为…" Click="OnSaveAsClick" />
+                                <MenuItem Header="保存全部" Click="OnSaveAllClick" />
+                            </MenuFlyout>
+                        </SplitButton.Flyout>
+                    </SplitButton>
+                    <TextBlock Name="SplitResult" VerticalAlignment="Center" Text="尚未操作" />
+                </StackPanel>
+            </Border>
+            <TextBlock Classes="hint" Text="主按钮代表最常用的操作，下拉里放同类的其它操作。" />
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

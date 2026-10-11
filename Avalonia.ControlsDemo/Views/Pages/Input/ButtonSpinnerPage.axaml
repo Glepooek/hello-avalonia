@@ -1,0 +1,51 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             mc:Ignorable="d"
+             d:DesignWidth="800"
+             d:DesignHeight="500"
+             x:Class="Avalonia.ControlsDemo.Views.Pages.ButtonSpinnerPage">
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="ButtonSpinner：给任意内容加上下微调按钮"
+                               DocPath="controls/input/buttons/buttonspinner" />
+
+            <TextBlock Classes="caption" Text="1. Spin 事件：控件只报告方向，数值由你维护" />
+            <Border Classes="stage" Padding="12">
+                <StackPanel Orientation="Horizontal" Spacing="12">
+                    <ButtonSpinner Name="CounterSpinner" Width="140" Spin="OnCounterSpin">
+                        <TextBlock Name="CounterText" HorizontalAlignment="Center" VerticalAlignment="Center" Text="0" />
+                    </ButtonSpinner>
+                    <TextBlock Name="SpinLog" VerticalAlignment="Center" Text="尚未微调" />
+                </StackPanel>
+            </Border>
+
+            <TextBlock Classes="caption" Text="2. ButtonSpinnerLocation：按钮在左侧还是右侧" />
+            <Border Classes="stage" Padding="12">
+                <StackPanel Orientation="Horizontal" Spacing="12">
+                    <ButtonSpinner Name="RightSpinner" ButtonSpinnerLocation="Right" Width="140">
+                        <TextBlock HorizontalAlignment="Center" Text="Right（默认）" />
+                    </ButtonSpinner>
+                    <ButtonSpinner Name="LeftSpinner" ButtonSpinnerLocation="Left" Width="140">
+                        <TextBlock HorizontalAlignment="Center" Text="Left" />
+                    </ButtonSpinner>
+                </StackPanel>
+            </Border>
+
+            <TextBlock Classes="caption" Text="3. AllowSpin 与 ShowButtonSpinner" />
+            <Border Classes="stage" Padding="12">
+                <StackPanel Orientation="Horizontal" Spacing="12">
+                    <ButtonSpinner Name="NoSpinSpinner" AllowSpin="False" Width="140">
+                        <TextBlock HorizontalAlignment="Center" Text="AllowSpin=False" />
+                    </ButtonSpinner>
+                    <ButtonSpinner Name="HiddenSpinner" ShowButtonSpinner="False" Width="140">
+                        <TextBlock HorizontalAlignment="Center" Text="按钮已隐藏" />
+                    </ButtonSpinner>
+                </StackPanel>
+            </Border>
+            <TextBlock Classes="hint" Text="带数值的微调框是 NumericUpDown，它内部就是 ButtonSpinner 加 TextBox。" />
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

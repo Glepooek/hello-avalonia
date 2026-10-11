@@ -1,0 +1,45 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             mc:Ignorable="d"
+             d:DesignWidth="800"
+             d:DesignHeight="500"
+             x:Class="Avalonia.ControlsDemo.Views.Pages.RadioButtonPage">
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="RadioButton：同组互斥的选项"
+                               DocPath="controls/input/buttons/radiobutton" />
+
+            <TextBlock Classes="caption" Text="1. GroupName：同名的按钮互斥" />
+            <Border Classes="stage" Padding="12">
+                <StackPanel Spacing="6">
+                    <!--  The result label comes first on purpose: XAML creates elements in order, and the
+                          IsChecked="True" below raises IsCheckedChanged while the page is still loading.
+                          A label declared after the buttons would not exist yet.  -->
+                    <TextBlock Name="SizeResult" Classes="hint" Text="当前选择：中" />
+                    <RadioButton Name="SizeSmall" GroupName="Size" Content="小" IsCheckedChanged="OnSizeChanged" />
+                    <RadioButton Name="SizeMedium" GroupName="Size" Content="中" IsChecked="True" IsCheckedChanged="OnSizeChanged" />
+                    <RadioButton Name="SizeLarge" GroupName="Size" Content="大" IsCheckedChanged="OnSizeChanged" />
+                </StackPanel>
+            </Border>
+
+            <TextBlock Classes="caption" Text="2. 不写 GroupName：同一个父容器里的按钮自动成组" />
+            <Border Classes="stage" Padding="12">
+                <StackPanel Orientation="Horizontal" Spacing="24">
+                    <StackPanel Name="GroupA" Spacing="6">
+                        <RadioButton Name="A1" Content="A1" IsChecked="True" />
+                        <RadioButton Name="A2" Content="A2" />
+                    </StackPanel>
+                    <StackPanel Name="GroupB" Spacing="6">
+                        <RadioButton Name="B1" Content="B1" IsChecked="True" />
+                        <RadioButton Name="B2" Content="B2" />
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+            <TextBlock Classes="hint" Text="两个 StackPanel 里各有一个被选中，互不影响。" />
+            <TextBlock Classes="hint" Text="更深入的演示：Avalonia.AppDevelopmentDemo →「本地化」（语言切换用到了 RadioButton）" />
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

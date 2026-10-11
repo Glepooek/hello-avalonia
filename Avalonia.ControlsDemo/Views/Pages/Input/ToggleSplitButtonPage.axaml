@@ -1,0 +1,33 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             mc:Ignorable="d"
+             d:DesignWidth="800"
+             d:DesignHeight="500"
+             x:Class="Avalonia.ControlsDemo.Views.Pages.ToggleSplitButtonPage">
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="ToggleSplitButton：带选中状态的 SplitButton"
+                               DocPath="controls/input/buttons/togglesplitbutton" />
+
+            <TextBlock Classes="caption" Text="主按钮切换 IsChecked，箭头弹出 Flyout" />
+            <Border Classes="stage" Padding="12">
+                <StackPanel Orientation="Horizontal" Spacing="12">
+                    <ToggleSplitButton Name="BoldSplit" Content="粗体">
+                        <ToggleSplitButton.Flyout>
+                            <MenuFlyout>
+                                <MenuItem Header="加粗并加下划线" />
+                                <MenuItem Header="清除格式" />
+                            </MenuFlyout>
+                        </ToggleSplitButton.Flyout>
+                    </ToggleSplitButton>
+                    <TextBlock VerticalAlignment="Center"
+                               Text="{Binding #BoldSplit.IsChecked, StringFormat='IsChecked = {0}'}" />
+                </StackPanel>
+            </Border>
+            <TextBlock Classes="hint" Text="适合格式工具栏：主按钮是开关，下拉里放它的扩展选项。" />
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>
