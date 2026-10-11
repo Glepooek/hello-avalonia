@@ -16,7 +16,7 @@
             <Border Classes="stage" Padding="12">
                 <HyperlinkButton Name="DocsLink"
                                  Content="Avalonia 官方文档"
-                                 NavigateUri="https://docs.avaloniaui.net" />
+                                 NavigateUri="https://docs.avaloniaui.net/docs/welcome" />
             </Border>
 
             <TextBlock Classes="caption" Text="2. 没有 NavigateUri：只当作外观是链接的普通按钮" />

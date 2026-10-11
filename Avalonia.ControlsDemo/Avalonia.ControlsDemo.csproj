@@ -18,6 +18,7 @@
         <PackageReference Include="Avalonia.Themes.Fluent" />
         <PackageReference Include="Avalonia.Fonts.Inter" />
         <PackageReference Include="CommunityToolkit.Mvvm" />
+        <PackageReference Include="Avalonia.Controls.ColorPicker" />
     </ItemGroup>
 
     <ItemGroup>
