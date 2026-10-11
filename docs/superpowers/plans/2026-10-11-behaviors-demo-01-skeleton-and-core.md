@@ -1713,7 +1713,7 @@ namespace Avalonia.BehaviorsDemo.ViewModels
                                DocPath="Avalonia.Xaml.Interactions.Custom.TextBoxValidationBehavior" />
 
             <TextBlock Classes="caption" Text="1. 用户名：必填 + 至少 3 个字符 + 只能含字母数字下划线" />
-            <TextBox Name="UsernameBox" Width="320" HorizontalAlignment="Left" Watermark="请输入用户名">
+            <TextBox Name="UsernameBox" Width="320" HorizontalAlignment="Left" PlaceholderText="请输入用户名">
                 <Interaction.Behaviors>
                     <TextBoxValidationBehavior IsValid="{Binding UsernameValid, Mode=OneWayToSource}"
                                                Error="{Binding UsernameError, Mode=OneWayToSource}">
@@ -1728,7 +1728,7 @@ namespace Avalonia.BehaviorsDemo.ViewModels
             <TextBlock Foreground="OrangeRed" Text="{Binding UsernameError}" />
 
             <TextBlock Classes="caption" Text="2. 邮箱：必填 + 正则" />
-            <TextBox Name="EmailBox" Width="320" HorizontalAlignment="Left" Watermark="name@example.com">
+            <TextBox Name="EmailBox" Width="320" HorizontalAlignment="Left" PlaceholderText="name@example.com">
                 <Interaction.Behaviors>
                     <TextBoxValidationBehavior IsValid="{Binding EmailValid, Mode=OneWayToSource}"
                                                Error="{Binding EmailError, Mode=OneWayToSource}">

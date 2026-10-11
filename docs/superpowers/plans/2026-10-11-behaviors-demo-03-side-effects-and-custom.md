@@ -296,7 +296,7 @@ namespace Avalonia.BehaviorsDemo.ViewModels
                     </Interaction.Behaviors>
                 </Button>
             </StackPanel>
-            <TextBox Margin="0,8,0,0" Width="320" HorizontalAlignment="Left" Text="{Binding NoteText}" Watermark="要写入的文字" />
+            <TextBox Margin="0,8,0,0" Width="320" HorizontalAlignment="Left" Text="{Binding NoteText}" PlaceholderText="要写入的文字" />
             <TextBlock Classes="hint"
                        Text="路径与文字都是绑定出来的，所以改上面的输入框再点写入，文件内容就跟着变。写入前要先创建 notes 文件夹，否则写不进去。「追加」用的是同一个 Action，只是 Append 为 True。" />
 
@@ -1381,7 +1381,7 @@ namespace Avalonia.BehaviorsDemo.ViewModels
                                DocPath="Avalonia.Xaml.Interactivity.Behavior" />
 
             <TextBlock Classes="caption" Text="1. 自定义 Behavior：UpperCaseBehavior，让 TextBox 永远是大写" />
-            <TextBox Name="UpperBox" Width="320" HorizontalAlignment="Left" Watermark="随便输入小写字母试试">
+            <TextBox Name="UpperBox" Width="320" HorizontalAlignment="Left" PlaceholderText="随便输入小写字母试试">
                 <Interaction.Behaviors>
                     <b:UpperCaseBehavior />
                 </Interaction.Behaviors>

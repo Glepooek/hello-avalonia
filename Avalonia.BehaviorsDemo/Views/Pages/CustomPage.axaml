@@ -17,7 +17,7 @@
                                DocPath="Avalonia.Xaml.Interactivity.Behavior" />
 
             <TextBlock Classes="caption" Text="1. 自定义 Behavior：UpperCaseBehavior，让 TextBox 永远是大写" />
-            <TextBox Name="UpperBox" Width="320" HorizontalAlignment="Left" Watermark="随便输入小写字母试试">
+            <TextBox Name="UpperBox" Width="320" HorizontalAlignment="Left" PlaceholderText="随便输入小写字母试试">
                 <Interaction.Behaviors>
                     <b:UpperCaseBehavior />
                 </Interaction.Behaviors>
