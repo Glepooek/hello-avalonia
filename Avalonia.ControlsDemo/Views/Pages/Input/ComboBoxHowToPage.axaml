@@ -1,0 +1,63 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             xmlns:vm="using:Avalonia.ControlsDemo.ViewModels"
+             x:Class="Avalonia.ControlsDemo.Views.Pages.ComboBoxHowToPage">
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="ComboBox 实战"
+                               DocPath="docs/how-to/combobox-how-to" />
+
+            <TextBlock Classes="caption" Text="1. ItemTemplate：每一项自定义外观" />
+            <Border Classes="stage" Padding="12">
+                <ComboBox Name="EmployeeBox" Width="260" PlaceholderText="选择员工">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate x:DataType="vm:Employee">
+                            <StackPanel Orientation="Horizontal" Spacing="8">
+                                <TextBlock FontWeight="SemiBold" Text="{Binding Name}" />
+                                <TextBlock Opacity="0.6" Text="{Binding Department}" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+            </Border>
+
+            <TextBlock Classes="caption" Text="2. 绑定枚举：用带显示文字的 record 包一层" />
+            <Border Classes="stage" Padding="12">
+                <StackPanel Orientation="Horizontal" Spacing="12">
+                    <ComboBox Name="PriorityBox" Width="140"
+                              SelectedValueBinding="{ReflectionBinding Value}"
+                              DisplayMemberBinding="{ReflectionBinding Display}" />
+                    <TextBlock Name="PriorityResult" VerticalAlignment="Center" Text="SelectedValue = (空)" />
+                </StackPanel>
+            </Border>
+            <TextBlock Classes="hint" Text="枚举成员没有地方放中文显示名，所以给每个枚举值配一个 PriorityOption(Value, Display)，用 SelectedValue 取回枚举。" />
+
+            <TextBlock Classes="caption" Text="3. 数据很多时：换成 AutoCompleteBox 边输入边搜" />
+            <Border Classes="stage" Padding="12">
+                <StackPanel Orientation="Horizontal" Spacing="12">
+                    <AutoCompleteBox Name="SearchEmployee" Width="260" MinimumPrefixLength="1"
+                                     FilterMode="Contains" PlaceholderText="输入姓名片段" />
+                    <TextBlock Name="SearchResult" VerticalAlignment="Center" Text="未选择" />
+                </StackPanel>
+            </Border>
+
+            <TextBlock Classes="caption" Text="4. 样式：放宽下拉面板、改占位符颜色" />
+            <Border Classes="stage" Padding="12">
+                <ComboBox Name="StyledBox" Width="120" PlaceholderText="窄框宽下拉">
+                    <ComboBox.Styles>
+                        <Style Selector="ComboBox /template/ Popup">
+                            <Setter Property="MinWidth" Value="260" />
+                        </Style>
+                        <Style Selector="ComboBox /template/ TextBlock#PlaceholderTextBlock">
+                            <Setter Property="Foreground" Value="Orange" />
+                        </Style>
+                    </ComboBox.Styles>
+                    <ComboBoxItem Content="这一项的文字很长很长很长很长" />
+                    <ComboBoxItem Content="短项" />
+                </ComboBox>
+            </Border>
+            <TextBlock Classes="hint" Text="Popup 的 MinWidth 与占位符前景都写在 ComboBox 自己的 Styles 里，不在元素上写本地值（规则 1）。" />
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

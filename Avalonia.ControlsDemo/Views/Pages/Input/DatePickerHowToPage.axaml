@@ -1,0 +1,27 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             xmlns:vm="using:Avalonia.ControlsDemo.ViewModels"
+             x:Class="Avalonia.ControlsDemo.Views.Pages.DatePickerHowToPage"
+             x:DataType="vm:DatePickerHowToViewModel">
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="DatePicker 实战"
+                               DocPath="docs/how-to/datepicker-how-to" />
+
+            <TextBlock Classes="caption" Text="日期加时间合成一个预约时间，并校验日期不早于今天" />
+            <Border Classes="stage" Padding="12">
+                <StackPanel Spacing="8">
+                    <StackPanel Orientation="Horizontal" Spacing="12">
+                        <DatePicker Name="DateBox" SelectedDate="{Binding Date, Mode=TwoWay}" />
+                        <TimePicker Name="TimeBox" ClockIdentifier="24HourClock" MinuteIncrement="15"
+                                    SelectedTime="{Binding Time, Mode=TwoWay}" />
+                    </StackPanel>
+                    <TextBlock Name="CombinedLabel" Text="{Binding Combined}" />
+                    <TextBlock Name="DateErrorLabel" Foreground="OrangeRed" Text="{Binding ErrorText}" />
+                </StackPanel>
+            </Border>
+            <TextBlock Classes="hint" Text="校验规则写在 ViewModel 的 [CustomValidation] 上，页面只绑定属性；出错文字来自 INotifyDataErrorInfo。" />
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

@@ -1,0 +1,51 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             x:Class="Avalonia.ControlsDemo.Views.Pages.SliderHowToPage">
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="Slider 实战"
+                               DocPath="docs/how-to/slider-how-to" />
+
+            <TextBlock Classes="caption" Text="1. 三个滑块合成一个 RGB 颜色" />
+            <Border Classes="stage" Padding="12">
+                <StackPanel Spacing="8">
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <TextBlock Width="20" VerticalAlignment="Center" Text="R" />
+                        <Slider Name="RedSlider" Width="260" Minimum="0" Maximum="255" Value="64" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <TextBlock Width="20" VerticalAlignment="Center" Text="G" />
+                        <Slider Name="GreenSlider" Width="260" Minimum="0" Maximum="255" Value="128" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <TextBlock Width="20" VerticalAlignment="Center" Text="B" />
+                        <Slider Name="BlueSlider" Width="260" Minimum="0" Maximum="255" Value="192" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Spacing="12">
+                        <Border Name="Preview" Width="120" Height="40" CornerRadius="4" />
+                        <TextBlock Name="HexText" VerticalAlignment="Center" />
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+
+            <TextBlock Classes="caption" Text="2. 只取整数：IsSnapToTickEnabled + TickFrequency=1" />
+            <Border Classes="stage" Padding="12">
+                <StackPanel Orientation="Horizontal" Spacing="12">
+                    <Slider Name="IntSlider" Width="260" Minimum="0" Maximum="10"
+                            TickFrequency="1" TickPlacement="BottomRight" IsSnapToTickEnabled="True" />
+                    <TextBlock Name="IntResult" VerticalAlignment="Center" Text="Value = 0" />
+                </StackPanel>
+            </Border>
+
+            <TextBlock Classes="caption" Text="3. IsEnabled 与 IsHitTestVisible 的区别" />
+            <Border Classes="stage" Padding="12">
+                <StackPanel Spacing="8">
+                    <Slider Name="DisabledSlider" Width="260" Minimum="0" Maximum="10" Value="5" IsEnabled="False" />
+                    <Slider Name="NoHitSlider" Width="260" Minimum="0" Maximum="10" Value="5" IsHitTestVisible="False" />
+                </StackPanel>
+            </Border>
+            <TextBlock Classes="hint" Text="IsEnabled=False 会变灰；IsHitTestVisible=False 外观不变，只是点不动。想「看起来正常但不能操作」用后者。" />
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>
