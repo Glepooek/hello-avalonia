@@ -299,6 +299,14 @@ Menus 5 + Navigation 8 + Primitives 5 + System 1 + Web 4 = **84 页**，
 - **绑定**：`ComboBox.SelectedValueBinding` / `DisplayMemberBinding` 的项类型若是页面内的私有类型，编译绑定报 `AVLN2100`，要写 `{ReflectionBinding …}`，或把项类型公开并写 `x:DataType`。
 - **探针断言实际条数**：本批累计 245 条（含第 00 份），全部通过且零警告日志。
 
+### 批 2 实测结论（2026-10-11）
+
+- **容器的静默行为**：`ScrollViewer` 新建时横向 `Disabled`、纵向 `Auto`，直接写越界 `Offset` 会被夹取到最大值；`Expander` 一次展开触发 3 次 `Expanding`（点击触发 2 次），只有 `Expanded` / `Collapsed` 可以计数，且 `IsEnabled=False` 挡不住代码写 `IsExpanded`；`RefreshContainer.IsMouseEnabled` 默认 `False`，鼠标拖不动，只有触摸能下拉；`Viewbox` 子元素的 `Bounds` 不反映缩放，倍数要用 `TransformToVisual` 算。
+- **布局读数的坑**：`Grid` 的 `ColumnDefinition.ActualWidth` 含 `ColumnSpacing`，子元素 `Bounds.Width` 才是真实内容宽；`RelativePanel` 中左右各有一条约束（`RightOf` 加 `AlignRightWithPanel`）时，定宽元素在两条约束之间居中而不是贴边；`SplitView` 关闭时的窄条是模板里的 `Panel#PART_PaneRoot`。
+- **`LayoutTransformControl` 与 `RenderTransform`**：同样旋转 90°，前者的宿主变成 40×100（参与布局），后者宿主仍是 100×40。
+- **官方 How-to 与 12.1.2 的出入**：无。
+- **探针断言实际条数**：本批累计 369 条（含第 00、01 份），全部通过且零警告日志。
+
 ## 验证标准
 
 1. `dotnet build hello-avalonia.slnx` 通过，且无新增警告
