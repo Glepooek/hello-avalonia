@@ -1,0 +1,25 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             x:Class="Avalonia.ControlsDemo.Views.Pages.ToggleSwitchPage">
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="ToggleSwitch：开关"
+                               DocPath="controls/input/selectors/toggleswitch" />
+
+            <TextBlock Classes="caption" Text="1. 默认外观与 IsChecked" />
+            <Border Classes="stage" Padding="12">
+                <StackPanel Orientation="Horizontal" Spacing="12">
+                    <ToggleSwitch Name="Plain" />
+                    <TextBlock Name="PlainResult" VerticalAlignment="Center" Text="关" />
+                </StackPanel>
+            </Border>
+
+            <TextBlock Classes="caption" Text="2. OnContent / OffContent 自定义文字" />
+            <Border Classes="stage" Padding="12">
+                <ToggleSwitch Name="Custom" OnContent="已开启" OffContent="已关闭" />
+            </Border>
+            <TextBlock Classes="hint" Text="ToggleSwitch 适合「立即生效」的设置；需要点提交才生效的选项用 CheckBox。" />
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

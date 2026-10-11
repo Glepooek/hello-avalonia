@@ -1,0 +1,42 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             x:Class="Avalonia.ControlsDemo.Views.Pages.NumericUpDownPage">
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="NumericUpDown：数值微调框"
+                               DocPath="controls/input/selectors/numericupdown" />
+
+            <TextBlock Classes="caption" Text="1. Minimum、Maximum、Increment" />
+            <Border Classes="stage" Padding="12">
+                <StackPanel Spacing="8">
+                    <StackPanel Orientation="Horizontal" Spacing="12">
+                        <NumericUpDown Name="Basic" Width="160" Minimum="0" Maximum="10" Increment="3" Value="9" />
+                        <TextBlock Name="BasicResult" VerticalAlignment="Center" Text="Value = 9" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Spacing="12">
+                        <CheckBox Name="ClipCheck" Content="ClipValueToMinMax" />
+                        <Button Name="WriteButton" Content="代码写入 99" />
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+            <TextBlock Classes="hint" Text="从 9 点向上微调得 10（遵守 Maximum），但代码直接写 99 会原样保留，勾选 ClipValueToMinMax 也一样。" />
+
+            <TextBlock Classes="caption" Text="2. FormatString：把数值显示成金额" />
+            <Border Classes="stage" Padding="12">
+                <NumericUpDown Name="Money" Width="200" FormatString="C2" Minimum="0" Increment="0.5" Value="12.5" />
+            </Border>
+
+            <TextBlock Classes="caption" Text="3. ShowButtonSpinner、ButtonSpinnerLocation、AllowSpin、IsReadOnly" />
+            <Border Classes="stage" Padding="12">
+                <StackPanel Orientation="Horizontal" Spacing="12">
+                    <NumericUpDown Width="140" ButtonSpinnerLocation="Left" Value="1" />
+                    <NumericUpDown Width="140" ShowButtonSpinner="False" Value="2" />
+                    <NumericUpDown Width="140" AllowSpin="False" Value="3" />
+                    <NumericUpDown Width="140" IsReadOnly="True" Value="4" />
+                </StackPanel>
+            </Border>
+            <TextBlock Classes="hint" Text="NumericUpDown 内部是 ButtonSpinner 加 TextBox；更深入的演示：本页的 ButtonSpinner 页。" />
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

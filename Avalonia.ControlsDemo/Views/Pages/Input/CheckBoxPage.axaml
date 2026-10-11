@@ -1,0 +1,40 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             x:Class="Avalonia.ControlsDemo.Views.Pages.CheckBoxPage">
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="CheckBox：复选框"
+                               DocPath="controls/input/selectors/checkbox" />
+
+            <TextBlock Classes="caption" Text="1. 双态" />
+            <Border Classes="stage" Padding="12">
+                <StackPanel Orientation="Horizontal" Spacing="12">
+                    <CheckBox Name="Single" Content="我同意" />
+                    <TextBlock VerticalAlignment="Center"
+                               Text="{Binding #Single.IsChecked, StringFormat='IsChecked = {0}'}" />
+                </StackPanel>
+            </Border>
+
+            <TextBlock Classes="caption" Text="2. 三态：父项汇总子项" />
+            <Border Classes="stage" Padding="12">
+                <StackPanel Spacing="4">
+                    <CheckBox Name="ParentBox" IsThreeState="True" Content="全选" />
+                    <CheckBox Name="ChildA" Margin="24,0,0,0" Content="选项 A" />
+                    <CheckBox Name="ChildB" Margin="24,0,0,0" Content="选项 B" />
+                    <CheckBox Name="ChildC" Margin="24,0,0,0" Content="选项 C" />
+                    <TextBlock Name="ThreeResult" Classes="hint" Text="父项：未选" />
+                </StackPanel>
+            </Border>
+            <TextBlock Classes="hint" Text="父项的 null 表示「部分选中」，由子项变化时在代码里汇总；CheckBox 自己不会替你做这件事。" />
+
+            <TextBlock Classes="caption" Text="3. 不可用" />
+            <Border Classes="stage" Padding="12">
+                <StackPanel Orientation="Horizontal" Spacing="12">
+                    <CheckBox IsEnabled="False" IsChecked="True" Content="已选且不可用" />
+                    <CheckBox IsEnabled="False" Content="未选且不可用" />
+                </StackPanel>
+            </Border>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>
