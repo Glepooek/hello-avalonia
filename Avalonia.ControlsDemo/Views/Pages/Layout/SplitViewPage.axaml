@@ -1,0 +1,38 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             x:Class="Avalonia.ControlsDemo.Views.Pages.SplitViewPage">
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="SplitView：窗格加内容"
+                               DocPath="controls/layout/containers/splitview" />
+
+            <TextBlock Classes="caption" Text="DisplayMode、PanePlacement 与 IsPaneOpen（本项目的主窗口就是一个 SplitView）" />
+            <Border Classes="stage" Padding="12">
+                <StackPanel Spacing="8">
+                    <StackPanel Orientation="Horizontal" Spacing="12">
+                        <Button Name="ToggleButton" Content="切换窗格" />
+                        <TextBlock VerticalAlignment="Center" Text="DisplayMode" />
+                        <ComboBox Name="ModeBox" Width="150" />
+                        <TextBlock VerticalAlignment="Center" Text="PanePlacement" />
+                        <ComboBox Name="PlacementBox" Width="100" />
+                    </StackPanel>
+                    <TextBlock Name="PaneText" Classes="hint" Text="窗格：关闭" />
+                    <SplitView Name="Split" Height="180" BorderBrush="Gray" BorderThickness="1"
+                               DisplayMode="CompactInline" CompactPaneLength="48" OpenPaneLength="180"
+                               PaneBackground="#33808080">
+                        <SplitView.Pane>
+                            <StackPanel Spacing="6" Margin="8">
+                                <TextBlock Text="☰ 导航" />
+                                <TextBlock Text="🏠 首页" />
+                                <TextBlock Text="⚙ 设置" />
+                            </StackPanel>
+                        </SplitView.Pane>
+                        <TextBlock Margin="12" Text="主内容区" />
+                    </SplitView>
+                </StackPanel>
+            </Border>
+            <TextBlock Classes="hint" Text="Inline 把内容挤开；Overlay 盖在内容上；Compact* 关闭时仍保留 CompactPaneLength 宽的窄条。" />
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

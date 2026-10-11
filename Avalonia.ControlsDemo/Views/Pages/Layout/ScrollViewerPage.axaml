@@ -1,0 +1,66 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             x:Class="Avalonia.ControlsDemo.Views.Pages.ScrollViewerPage">
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="ScrollViewer：滚动容器"
+                               DocPath="controls/layout/containers/scrollviewer" />
+
+            <TextBlock Classes="caption" Text="1. 滚动条可见性与编程滚动" />
+            <Border Classes="stage" Padding="12">
+                <StackPanel Spacing="8">
+                    <StackPanel Orientation="Horizontal" Spacing="12">
+                        <TextBlock VerticalAlignment="Center" Text="Horizontal" />
+                        <ComboBox Name="HBox" Width="110" />
+                        <TextBlock VerticalAlignment="Center" Text="Vertical" />
+                        <ComboBox Name="VBox" Width="110" />
+                    </StackPanel>
+                    <!--  The demo viewer needs a fixed Height, otherwise it grows to its content and never scrolls.  -->
+                    <ScrollViewer Name="Scroller" Width="320" Height="140" HorizontalAlignment="Left"
+                                  BorderBrush="Gray" BorderThickness="1">
+                        <Border Width="600" Height="500">
+                            <Border.Background>
+                                <LinearGradientBrush StartPoint="0%,0%" EndPoint="100%,100%">
+                                    <GradientStop Color="SteelBlue" Offset="0" />
+                                    <GradientStop Color="Orange" Offset="1" />
+                                </LinearGradientBrush>
+                            </Border.Background>
+                            <TextBlock Margin="8" Text="600 × 500 的内容" />
+                        </Border>
+                    </ScrollViewer>
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <Button Name="HomeButton" Content="ScrollToHome" />
+                        <Button Name="EndButton" Content="ScrollToEnd" />
+                        <Button Name="LineButton" Content="LineDown" />
+                    </StackPanel>
+                    <TextBlock Name="OffsetText" Text="Offset = 0, 0" />
+                </StackPanel>
+            </Border>
+            <TextBlock Classes="hint" Text="新建的 ScrollViewer 横向默认是 Disabled（宽内容被裁掉），纵向默认 Auto。直接写 Offset 越界时会被夹取到最大值。" />
+
+            <TextBlock Classes="caption" Text="2. 嵌套：内层不处理的方向交给外层" />
+            <Border Classes="stage" Padding="12">
+                <ScrollViewer Width="320" Height="100" HorizontalAlignment="Left" BorderBrush="Gray" BorderThickness="1">
+                    <StackPanel Spacing="4">
+                        <TextBlock Text="外层内容 1" />
+                        <ScrollViewer Height="50" IsScrollChainingEnabled="False" BorderBrush="Orange" BorderThickness="1">
+                            <StackPanel>
+                                <TextBlock Text="内层 1" />
+                                <TextBlock Text="内层 2" />
+                                <TextBlock Text="内层 3" />
+                                <TextBlock Text="内层 4" />
+                                <TextBlock Text="内层 5" />
+                            </StackPanel>
+                        </ScrollViewer>
+                        <TextBlock Text="外层内容 2" />
+                        <TextBlock Text="外层内容 3" />
+                        <TextBlock Text="外层内容 4" />
+                    </StackPanel>
+                </ScrollViewer>
+            </Border>
+            <TextBlock Classes="hint" Text="内层 IsScrollChainingEnabled=False：内层滚到头后不会带动外层。更多场景见紧随其后的「实战：ScrollViewer」。" />
+            <TextBlock Classes="hint" Text="更深入的演示：Avalonia.LayoutDemo →「布局面板」（本项目每个页面都靠 ScrollViewer 承载）" />
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>
