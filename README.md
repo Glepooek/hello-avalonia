@@ -23,6 +23,7 @@ Avalonia UI 学习示例集合。每个项目演示一个独立主题，可单�
 | [Avalonia.AppDevelopmentDemo](Avalonia.AppDevelopmentDemo) | 依赖注入、本地化、日志、未处理异常、资源查找、线程模型、窗口管理、无障碍 |
 | [Avalonia.TestingDemo](Avalonia.TestingDemo) | 被测应用：计数器、表单、列表三个易于断言的面板 |
 | [Avalonia.TestingDemo.Tests](Avalonia.TestingDemo.Tests) | xUnit v3 + Headless 测试：控件查找、模拟输入、ViewModel 单测、渲染像素断言（`dotnet test`） |
+| [Avalonia.StarterTutorialDemo](Avalonia.StarterTutorialDemo) | 官方入门教程：添加控件、Grid 布局、自定义窗口、Click 事件、摄氏转华氏（code-behind）及三个练习 |
 | [Avalonia.MusicStore](Avalonia.MusicStore) | 专辑搜索（iTunes API）、购买、本地缓存、RESX 多语言 |
 | [Avalonia.WebViewDemo](Avalonia.WebViewDemo) | NativeWebView 嵌入控件、NativeWebDialog 原生窗口、JS ↔ C# 双向调用 |
 | [Avalonia.HtmlRendererDemo](Avalonia.HtmlRendererDemo) | HtmlPanel 富文本渲染、IconFont 与 PathIcon 图标 |
