@@ -1,0 +1,28 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             x:Class="Avalonia.ControlsDemo.Views.Pages.MaskedTextBoxPage">
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="MaskedTextBox：按掩码限制输入格式"
+                               DocPath="controls/input/text-input/maskedtextbox" />
+
+            <TextBlock Classes="caption" Text="1. 电话号码：Mask 与 PromptChar" />
+            <Border Classes="stage" Padding="12">
+                <StackPanel Orientation="Horizontal" Spacing="12">
+                    <MaskedTextBox Name="Phone" Width="200" Mask="(000) 000-0000" PromptChar="_" />
+                    <TextBlock Name="PhoneResult" VerticalAlignment="Center" Text="未填完" />
+                </StackPanel>
+            </Border>
+
+            <TextBlock Classes="caption" Text="2. 日期与大写字母" />
+            <Border Classes="stage" Padding="12">
+                <StackPanel Orientation="Horizontal" Spacing="12">
+                    <MaskedTextBox Width="140" Mask="0000-00-00" PromptChar="_" />
+                    <MaskedTextBox Width="140" Mask="&gt;LLL-000" PromptChar="_" />
+                </StackPanel>
+            </Border>
+            <TextBlock Classes="hint" Text="掩码字符：0 = 必填数字，9 = 可选数字，L = 必填字母，? = 可选字母，> 之后转大写，其余原样显示。" />
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

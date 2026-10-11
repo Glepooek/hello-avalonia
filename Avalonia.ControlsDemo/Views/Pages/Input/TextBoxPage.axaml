@@ -1,0 +1,54 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             x:Class="Avalonia.ControlsDemo.Views.Pages.TextBoxPage">
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="TextBox：文本输入框"
+                               DocPath="controls/input/text-input/textbox" />
+
+            <TextBlock Classes="caption" Text="1. Text、PlaceholderText 与 TextChanged" />
+            <Border Classes="stage" Padding="12">
+                <StackPanel Orientation="Horizontal" Spacing="12">
+                    <TextBox Name="Basic" Width="220" PlaceholderText="请输入姓名" />
+                    <TextBlock Name="BasicResult" VerticalAlignment="Center" Text="长度 0" />
+                </StackPanel>
+            </Border>
+
+            <TextBlock Classes="caption" Text="2. PasswordChar 与 RevealPassword" />
+            <Border Classes="stage" Padding="12">
+                <StackPanel Orientation="Horizontal" Spacing="12">
+                    <TextBox Name="Password" Width="220" PasswordChar="●" Text="secret" />
+                    <CheckBox Name="RevealCheck" Content="显示密码" />
+                </StackPanel>
+            </Border>
+
+            <TextBlock Classes="caption" Text="3. 多行：AcceptsReturn、TextWrapping、MinLines / MaxLines" />
+            <Border Classes="stage" Padding="12">
+                <TextBox Name="Multi" Width="320" AcceptsReturn="True" TextWrapping="Wrap"
+                         MinLines="2" MaxLines="4"
+                         Text="第一行&#10;第二行" />
+            </Border>
+
+            <TextBlock Classes="caption" Text="4. MaxLength 与 IsReadOnly" />
+            <Border Classes="stage" Padding="12">
+                <StackPanel Orientation="Horizontal" Spacing="12">
+                    <TextBox Name="Limited" Width="160" MaxLength="5" PlaceholderText="最多 5 个字" />
+                    <TextBox Width="160" IsReadOnly="True" Text="只读，可选中复制" />
+                </StackPanel>
+            </Border>
+
+            <TextBlock Classes="caption" Text="5. 选区：SelectionStart、SelectionEnd、SelectedText" />
+            <Border Classes="stage" Padding="12">
+                <StackPanel Spacing="8">
+                    <TextBox Name="Selectable" Width="320" Text="Avalonia 的 TextBox 支持程序化选区" />
+                    <StackPanel Orientation="Horizontal" Spacing="12">
+                        <Button Name="SelectButton" Content="选中前 7 个字符" />
+                        <TextBlock Name="SelectionResult" VerticalAlignment="Center" Text="选区：无" />
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+            <TextBlock Classes="hint" Text="InnerLeftContent / InnerRightContent、撤销重做、校验等见紧随其后的「实战：TextBox」。" />
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

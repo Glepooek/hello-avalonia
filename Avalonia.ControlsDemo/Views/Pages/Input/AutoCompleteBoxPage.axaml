@@ -1,0 +1,26 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             x:Class="Avalonia.ControlsDemo.Views.Pages.AutoCompleteBoxPage">
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="AutoCompleteBox：边输入边提示"
+                               DocPath="controls/input/text-input/autocompletebox" />
+
+            <TextBlock Classes="caption" Text="FilterMode 与 MinimumPrefixLength" />
+            <Border Classes="stage" Padding="12">
+                <StackPanel Spacing="8">
+                    <StackPanel Orientation="Horizontal" Spacing="12">
+                        <AutoCompleteBox Name="Box" Width="220" MinimumPrefixLength="1" PlaceholderText="试试输入 rr 或 ap" />
+                        <TextBlock Name="BoxResult" VerticalAlignment="Center" Text="未选择" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Spacing="12">
+                        <TextBlock VerticalAlignment="Center" Text="FilterMode" />
+                        <ComboBox Name="ModeBox" Width="220" />
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+            <TextBlock Classes="hint" Text="候选词：Apple、Apricot、Banana、Blueberry、Cherry。StartsWith 下 rr 无匹配，Contains 下命中 Cherry。" />
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>
