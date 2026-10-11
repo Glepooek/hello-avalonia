@@ -62,10 +62,10 @@ Avalonia.ControlsDemo/
 ├── Assets/avalonia-logo.ico
 ├── Navigation/
 │   ├── PageEntry.cs            一个页面的元数据：标题、分类、官方路径、页面类型、种类
-│   ├── CategoryNode.cs         导航树的分类节点（含子 PageEntry）
+│   ├── NavNode.cs              导航树的一行：分类（有子节点）或页面（有 PageEntry）
 │   └── PageCatalog.cs          全部 PageEntry 的唯一登记处
 ├── ViewModels/
-│   ├── MainViewModel.cs        导航树、当前选中页、搜索关键字
+│   ├── MainViewModel.cs        导航树、选中节点、当前页
 │   └── <Page>ViewModel.cs      仅有状态的页面才建，与页面一一对应
 ├── Views/
 │   ├── MainWindow.axaml(.cs)   SplitView：左 TreeView，右 ContentControl
@@ -83,6 +83,7 @@ Avalonia.ControlsDemo/
 `PageEntry.PageType` 是页面的 `Type`，选中时由 `Activator.CreateInstance` 实例化后放进
 右侧 `ContentControl.Content`。不使用 `ViewLocator`，也不给每个页面注册 `DataTemplate`——
 80 个页面写 80 条模板是纯样板，而 `PageCatalog` 本身就是索引。
+`PageCatalog` 按分类拆成 12 个 partial 文件（`PageCatalog.Input.cs` 等），各份实现计划只改自己分类的文件。
 
 **为什么用 `PageCatalog` 单点登记**：新增一个控件页只需要两步（建页面文件、在
 `PageCatalog` 加一行）。导航树、页面总数断言、README 的控件清单都从这一处派生，
