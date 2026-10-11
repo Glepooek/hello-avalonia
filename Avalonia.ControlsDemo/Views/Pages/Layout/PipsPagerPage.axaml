@@ -1,0 +1,28 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             x:Class="Avalonia.ControlsDemo.Views.Pages.PipsPagerPage">
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="PipsPager：圆点分页指示器"
+                               DocPath="controls/layout/containers/pipspager" />
+
+            <TextBlock Classes="caption" Text="NumberOfPages、SelectedPageIndex、上一页 / 下一页按钮" />
+            <Border Classes="stage" Padding="12">
+                <StackPanel Spacing="8">
+                    <PipsPager Name="Pager" NumberOfPages="5" MaxVisiblePips="5" HorizontalAlignment="Left" />
+                    <TextBlock Name="PageText" Text="第 1 页" />
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <TextBlock Width="80" VerticalAlignment="Center" Text="NumberOfPages" />
+                        <Slider Name="PagesSlider" Width="200" Minimum="2" Maximum="12" Value="5" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Spacing="16">
+                        <CheckBox Name="PreviousCheck" Content="IsPreviousButtonVisible" />
+                        <CheckBox Name="NextCheck" Content="IsNextButtonVisible" />
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+            <TextBlock Classes="hint" Text="PipsPager 只显示「第几页」，不管页面内容；配合 Carousel 或自己的切换逻辑使用。上一页 / 下一页按钮默认隐藏。" />
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

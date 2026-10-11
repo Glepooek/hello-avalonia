@@ -1,0 +1,48 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             x:Class="Avalonia.ControlsDemo.Views.Pages.FlyoutPage">
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="Flyout：附着在控件上的浮出层"
+                               DocPath="controls/layout/containers/flyout" />
+
+            <TextBlock Classes="caption" Text="1. Button.Flyout：点击按钮时弹出" />
+            <Border Classes="stage" Padding="12">
+                <StackPanel Orientation="Horizontal" Spacing="12">
+                    <Button Name="OpenButton" Content="打开 Flyout">
+                        <Button.Flyout>
+                            <Flyout Placement="Bottom">
+                                <StackPanel Spacing="6" Width="200">
+                                    <TextBlock FontWeight="SemiBold" Text="确认删除？" />
+                                    <Button Name="ConfirmButton" Content="确认" HorizontalAlignment="Stretch" />
+                                </StackPanel>
+                            </Flyout>
+                        </Button.Flyout>
+                    </Button>
+                    <TextBlock Name="FlyoutResult" VerticalAlignment="Center" Text="尚未操作" />
+                </StackPanel>
+            </Border>
+
+            <TextBlock Classes="caption" Text="2. Placement：在目标的哪一侧出现" />
+            <Border Classes="stage" Padding="12">
+                <StackPanel Orientation="Horizontal" Spacing="12">
+                    <Button Content="上">
+                        <Button.Flyout><Flyout Placement="Top"><TextBlock Text="在上方" /></Flyout></Button.Flyout>
+                    </Button>
+                    <Button Content="右">
+                        <Button.Flyout><Flyout Placement="Right"><TextBlock Text="在右侧" /></Flyout></Button.Flyout>
+                    </Button>
+                    <Button Content="下">
+                        <Button.Flyout><Flyout Placement="Bottom"><TextBlock Text="在下方" /></Flyout></Button.Flyout>
+                    </Button>
+                    <Button Content="左">
+                        <Button.Flyout><Flyout Placement="Left"><TextBlock Text="在左侧" /></Flyout></Button.Flyout>
+                    </Button>
+                </StackPanel>
+            </Border>
+            <TextBlock Classes="hint" Text="Flyout 只能放一个子元素；需要菜单样式的用 MenuFlyout（见 Menus）。弹出层不在页面的可视树里，所以按钮只能靠 Button.Flyout 找到它。" />
+            <TextBlock Classes="hint" Text="更深入的演示：Avalonia.CustomControlsDemo →「自定义 Flyout」" />
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

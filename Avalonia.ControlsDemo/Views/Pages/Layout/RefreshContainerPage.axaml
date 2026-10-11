@@ -1,0 +1,29 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             x:Class="Avalonia.ControlsDemo.Views.Pages.RefreshContainerPage">
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="RefreshContainer：下拉刷新"
+                               DocPath="controls/layout/containers/refreshcontainer" />
+
+            <TextBlock Classes="caption" Text="RefreshRequested、RequestRefresh() 与 Deferral" />
+            <Border Classes="stage" Padding="12">
+                <StackPanel Spacing="8">
+                    <Border BorderBrush="Gray" BorderThickness="1" Width="320" Height="140" HorizontalAlignment="Left">
+                        <RefreshContainer Name="Container">
+                            <ScrollViewer>
+                                <TextBlock Name="Body" Margin="8" Text="内容：尚未刷新" />
+                            </ScrollViewer>
+                        </RefreshContainer>
+                    </Border>
+                    <StackPanel Orientation="Horizontal" Spacing="12">
+                        <Button Name="RefreshButton" Content="请求刷新" />
+                        <TextBlock Name="RefreshResult" VerticalAlignment="Center" Text="刷新 0 次" />
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+            <TextBlock Classes="hint" Text="手势下拉只对触摸有效：IsMouseEnabled 默认 False，鼠标拖不动。上面的按钮用 RequestRefresh() 走同一条路径。" />
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

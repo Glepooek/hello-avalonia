@@ -1,0 +1,39 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             x:Class="Avalonia.ControlsDemo.Views.Pages.ExpanderPage">
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="Expander：可折叠区域"
+                               DocPath="controls/layout/containers/expander" />
+
+            <TextBlock Classes="caption" Text="1. Header、IsExpanded 与 Expanded / Collapsed 事件" />
+            <Border Classes="stage" Padding="12">
+                <StackPanel Spacing="8">
+                    <Expander Name="Basic" Header="高级选项" Width="320">
+                        <StackPanel Spacing="4">
+                            <CheckBox Content="启用日志" />
+                            <CheckBox Content="启用遥测" />
+                        </StackPanel>
+                    </Expander>
+                    <StackPanel Orientation="Horizontal" Spacing="12">
+                        <CheckBox Name="EnabledCheck" Content="IsEnabled" IsChecked="True" />
+                        <TextBlock Name="BasicResult" VerticalAlignment="Center" Text="已展开 0 次，已折叠 0 次" />
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+            <TextBlock Classes="hint" Text="事件只数 Expanded / Collapsed：Expanding 与 Collapsing 在一次动作里会触发多次。IsEnabled=False 能挡住鼠标，挡不住代码写 IsExpanded。" />
+
+            <TextBlock Classes="caption" Text="2. ExpandDirection：向四个方向展开" />
+            <Border Classes="stage" Padding="12">
+                <StackPanel Spacing="8">
+                    <ComboBox Name="DirectionBox" Width="140" />
+                    <Expander Name="Sideways" Header="方向" HorizontalAlignment="Left" VerticalAlignment="Top">
+                        <TextBlock Margin="8" Text="展开的内容" />
+                    </Expander>
+                </StackPanel>
+            </Border>
+            <TextBlock Classes="hint" Text="选 Up 时要给 Expander 留出向上生长的空间（VerticalAlignment=Bottom）；这里固定在上方，Up 会向外溢出，仅作演示。" />
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>
