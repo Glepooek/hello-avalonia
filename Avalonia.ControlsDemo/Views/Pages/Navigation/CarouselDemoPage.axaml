@@ -1,0 +1,28 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             x:Class="Avalonia.ControlsDemo.Views.Pages.CarouselDemoPage">
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="CarouselPage：轮播式多页"
+                               DocPath="controls/navigation/carouselpage" />
+
+            <TextBlock Classes="caption" Text="Pages、SelectedIndex 与 PageTransition" />
+            <Border Classes="stage" Padding="12">
+                <StackPanel Spacing="8">
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <Button Name="PrevButton" Content="上一页" />
+                        <Button Name="NextButton" Content="下一页" />
+                        <TextBlock VerticalAlignment="Center" Text="PageTransition" />
+                        <ComboBox Name="TransitionBox" Width="140" />
+                    </StackPanel>
+                    <TextBlock Name="StateText" />
+                    <Border Height="220" BorderBrush="Gray" BorderThickness="1">
+                        <CarouselPage Name="Demo" />
+                    </Border>
+                </StackPanel>
+            </Border>
+            <TextBlock Classes="hint" Text="CarouselPage 一次只显示一页，没有标签条，换页靠代码或手势。PageTransition 默认是 null，即直接切换；选 PageSlide 或 CrossFade 后切页带动画（headless 里 PageSlide 不会报完成，真实窗口没有这个问题）。" />
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

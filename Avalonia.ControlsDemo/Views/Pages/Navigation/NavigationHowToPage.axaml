@@ -1,0 +1,56 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             xmlns:vm="using:Avalonia.ControlsDemo.ViewModels"
+             x:DataType="vm:NavigationHowToViewModel"
+             x:Class="Avalonia.ControlsDemo.Views.Pages.NavigationHowToPage">
+    <UserControl.DataTemplates>
+        <DataTemplate DataType="vm:HomeNavViewModel">
+            <Border Padding="16" Background="#2200AA66">
+                <TextBlock TextWrapping="Wrap" Text="{Binding Welcome}" />
+            </Border>
+        </DataTemplate>
+        <DataTemplate DataType="vm:SettingsNavViewModel">
+            <Border Padding="16" Background="#220066FF">
+                <StackPanel Spacing="8">
+                    <CheckBox Content="启用通知" IsChecked="{Binding NotifyEnabled}" />
+                    <Slider Width="200" Minimum="0" Maximum="100" Value="{Binding Volume}" />
+                </StackPanel>
+            </Border>
+        </DataTemplate>
+        <DataTemplate DataType="vm:AboutNavViewModel">
+            <Border Padding="16" Background="#22FF8800">
+                <TextBlock Text="{Binding Version}" />
+            </Border>
+        </DataTemplate>
+    </UserControl.DataTemplates>
+
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="实战：用 ContentControl 做视图切换与后退栈"
+                               DocPath="docs/how-to/navigation-how-to" />
+
+            <TextBlock Classes="caption" Text="视图切换 + 过渡 + 后退 / 前进栈" />
+            <Border Classes="stage" Padding="12">
+                <StackPanel Spacing="8">
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <Button Content="◀ 后退" Command="{Binding GoBackCommand}" />
+                        <Button Content="前进 ▶" Command="{Binding GoForwardCommand}" />
+                        <Button Content="首页" Command="{Binding GoHomeCommand}" />
+                        <Button Content="设置" Command="{Binding GoSettingsCommand}" />
+                        <Button Content="关于" Command="{Binding GoAboutCommand}" />
+                        <TextBlock VerticalAlignment="Center" Text="过渡" />
+                        <ComboBox Name="TransitionBox" Width="120" />
+                    </StackPanel>
+                    <TextBlock Text="{Binding HistoryText}" />
+                    <TextBlock Text="{Binding Current.Title, StringFormat='当前页：{0}'}" />
+                    <Border Height="130" BorderBrush="Gray" BorderThickness="1">
+                        <TransitioningContentControl Name="Host" Content="{Binding Current}" />
+                    </Border>
+                </StackPanel>
+            </Border>
+            <TextBlock Classes="hint" Text="每个页面是一个 ViewModel，页面里的 DataTemplate 按类型决定怎么画它。后退栈存的是 ViewModel 实例本身：在设置页拨动开关，再去关于页，后退回来开关还在。跳到当前所在的页不会入栈；有新的跳转时前进栈清空。" />
+            <TextBlock Classes="hint" Text="官方指南里的「侧栏导航」和「ViewLocator」两节，这个项目的主窗口就是实例：MainWindow 用 SplitView 放侧栏，右边的 ContentControl 显示当前页。" />
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

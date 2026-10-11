@@ -1,0 +1,29 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             x:Class="Avalonia.ControlsDemo.Views.Pages.TabbedDemoPage">
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="TabbedPage：标签式多页"
+                               DocPath="controls/navigation/tabbedpage" />
+
+            <TextBlock Classes="caption" Text="Pages、SelectedIndex 与 TabPlacement" />
+            <Border Classes="stage" Padding="12">
+                <StackPanel Spacing="8">
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <Button Name="PrevButton" Content="上一页" />
+                        <Button Name="NextButton" Content="下一页" />
+                        <TextBlock VerticalAlignment="Center" Text="TabPlacement" />
+                        <ComboBox Name="PlacementBox" Width="100" />
+                        <CheckBox Name="GestureCheck" Content="IsGestureEnabled" />
+                    </StackPanel>
+                    <TextBlock Name="StateText" />
+                    <Border Height="260" BorderBrush="Gray" BorderThickness="1">
+                        <TabbedPage Name="Demo" />
+                    </Border>
+                </StackPanel>
+            </Border>
+            <TextBlock Classes="hint" Text="TabbedPage 与 TabControl 的区别：它的每个标签都是一个完整的 Page（带自己的 Header 与命令栏），适合整页切换；TabControl 的标签只是普通内容。TabPlacement 默认是 Auto，由平台决定标签条放哪。IsGestureEnabled 默认关，打开后触摸滑动也能换页。" />
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

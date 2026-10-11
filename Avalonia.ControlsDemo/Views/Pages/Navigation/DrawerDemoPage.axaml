@@ -1,0 +1,48 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             x:Class="Avalonia.ControlsDemo.Views.Pages.DrawerDemoPage">
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="DrawerPage：抽屉式页面"
+                               DocPath="controls/navigation/drawerpage" />
+
+            <TextBlock Classes="caption" Text="IsOpen、DrawerBehavior、DrawerPlacement 与 DrawerLayoutBehavior" />
+            <Border Classes="stage" Padding="12">
+                <StackPanel Spacing="8">
+                    <WrapPanel>
+                        <CheckBox Name="OpenCheck" Margin="0,0,12,0" Content="IsOpen" />
+                        <TextBlock VerticalAlignment="Center" Margin="0,0,4,0" Text="DrawerBehavior" />
+                        <ComboBox Name="BehaviorBox" Width="110" Margin="0,0,12,0" />
+                        <TextBlock VerticalAlignment="Center" Margin="0,0,4,0" Text="DrawerPlacement" />
+                        <ComboBox Name="PlacementBox" Width="100" Margin="0,0,12,0" />
+                        <TextBlock VerticalAlignment="Center" Margin="0,0,4,0" Text="DrawerLayoutBehavior" />
+                        <ComboBox Name="LayoutBox" Width="150" />
+                    </WrapPanel>
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <TextBlock VerticalAlignment="Center" Text="DrawerLength" />
+                        <Slider Name="LengthSlider" Width="200" Minimum="120" Maximum="400" />
+                    </StackPanel>
+                    <TextBlock Name="StateText" />
+                    <TextBlock Name="EventText" />
+                    <Border Height="300" BorderBrush="Gray" BorderThickness="1">
+                        <DrawerPage Name="Demo">
+                            <DrawerPage.Drawer>
+                                <StackPanel Margin="12" Spacing="8">
+                                    <TextBlock FontWeight="Bold" Text="抽屉内容" />
+                                    <Button Name="InDrawerButton" Content="从抽屉里关闭" />
+                                </StackPanel>
+                            </DrawerPage.Drawer>
+                            <DrawerPage.Content>
+                                <ContentPage Header="主页面">
+                                    <TextBlock Margin="16" TextWrapping="Wrap" Text="主页面内容。勾上 IsOpen 看抽屉滑出来。" />
+                                </ContentPage>
+                            </DrawerPage.Content>
+                        </DrawerPage>
+                    </Border>
+                </StackPanel>
+            </Border>
+            <TextBlock Classes="hint" Text="DrawerBehavior 切到 Locked 时抽屉会被打开，DisplayMode 变成 Inline（与内容并排，不再盖在内容上）；页面每次改动后都重读 IsOpen 与 DisplayMode，复选框只是显示读回的值。DrawerLayoutBehavior 决定抽屉是盖在内容上（Overlay）还是把内容挤开（Split）。" />
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

@@ -1,0 +1,47 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             x:Class="Avalonia.ControlsDemo.Views.Pages.ContentDemoPage">
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="ContentPage：带命令栏插槽的单页"
+                               DocPath="controls/navigation/contentpage" />
+
+            <TextBlock Classes="caption" Text="Header、TopCommandBar、BottomCommandBar 与内容对齐" />
+            <Border Classes="stage" Padding="12">
+                <StackPanel Spacing="8">
+                    <StackPanel Orientation="Horizontal" Spacing="12">
+                        <TextBlock VerticalAlignment="Center" Text="HorizontalContentAlignment" />
+                        <ComboBox Name="HAlignBox" Width="120" />
+                        <TextBlock VerticalAlignment="Center" Text="VerticalContentAlignment" />
+                        <ComboBox Name="VAlignBox" Width="120" />
+                        <CheckBox Name="BottomCheck" Content="显示 BottomCommandBar" />
+                    </StackPanel>
+                    <Border Height="280" BorderBrush="Gray" BorderThickness="1">
+                        <ContentPage Name="Demo" Header="收件箱">
+                            <ContentPage.TopCommandBar>
+                                <CommandBar>
+                                    <CommandBar.PrimaryCommands>
+                                        <CommandBarButton Name="RefreshButton" Label="刷新" />
+                                    </CommandBar.PrimaryCommands>
+                                </CommandBar>
+                            </ContentPage.TopCommandBar>
+                            <ContentPage.BottomCommandBar>
+                                <CommandBar>
+                                    <CommandBar.PrimaryCommands>
+                                        <CommandBarButton Name="ReplyButton" Label="回复" />
+                                    </CommandBar.PrimaryCommands>
+                                </CommandBar>
+                            </ContentPage.BottomCommandBar>
+                            <Border Width="160" Height="60" Background="#3300AAFF">
+                                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="页面内容" />
+                            </Border>
+                        </ContentPage>
+                    </Border>
+                    <TextBlock Name="ClickText" Text="最近点击：（无）" />
+                </StackPanel>
+            </Border>
+            <TextBlock Classes="hint" Text="ContentPage 的 Content 默认拉伸填满；内容比页面小时，用两个 ContentAlignment 决定它停在哪。TopCommandBar 与 BottomCommandBar 是 object 类型的插槽，通常放 CommandBar，设成 null 就整条消失。" />
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

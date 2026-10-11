@@ -1,0 +1,34 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             x:Class="Avalonia.ControlsDemo.Views.Pages.NavigationDemoPage">
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="NavigationPage：带返回栈的页面导航"
+                               DocPath="controls/navigation/navigationpage" />
+
+            <TextBlock Classes="caption" Text="PushAsync、PopAsync、PopToRootAsync 与模态页" />
+            <Border Classes="stage" Padding="12">
+                <StackPanel Spacing="8">
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <Button Name="PushButton" Content="Push 新页" />
+                        <Button Name="PopButton" Content="Pop" />
+                        <Button Name="RootButton" Content="PopToRoot" />
+                        <Button Name="ModalButton" Content="PushModal" />
+                        <Button Name="CloseModalButton" Content="PopModal" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <TextBlock VerticalAlignment="Center" Text="过渡动画" />
+                        <ComboBox Name="TransitionBox" Width="140" />
+                    </StackPanel>
+                    <TextBlock Name="StateText" />
+                    <TextBlock Name="EventText" />
+                    <Border Height="260" BorderBrush="Gray" BorderThickness="1">
+                        <NavigationPage Name="Nav" />
+                    </Border>
+                </StackPanel>
+            </Border>
+            <TextBlock Classes="hint" Text="根页算进 StackDepth（所以起始是 1），此时 CanGoBack 为 False；Push 之后顶部出现返回按钮。在根页上 Pop 什么也不会发生。模态页另有一个栈（ModalStack），不计入 StackDepth，要用 PopModal 关掉。PageTransition 与 ModalTransition 的默认值由主题设成 PageSlide（窗口显示后才生效），下拉框选「无」可以关掉动画。" />
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

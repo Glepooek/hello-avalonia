@@ -329,6 +329,17 @@ Menus 5 + Navigation 8 + Primitives 5 + System 1 + Web 4 = **84 页**，
 - **官方 How-to 与 12.1.2 的出入**：Notifications 指南称没有内置通知控件，但 `WindowNotificationManager` / `Notification` 存在；实战页演示自建的另一半。
 - **探针断言实际条数**：本批累计 591 条（含第 00–03 份），全部通过且零警告日志。
 
+### 批 5 实测结论（2026-10-11）
+
+- **`NavigationPage` 的默认过渡是主题给的**：新建后 `PageTransition` / `ModalTransition` 读到 `null`，窗口显示后主题样式把两者都设成 `PageSlide`。headless 里带过渡的 `PushAsync` 一直等动画，只有把两者都设成 `null`，推页与模态页才能完成；页面要在 `Loaded` 时按真实值同步过渡下拉。根页算进 `StackDepth`；在根页上 `PopAsync` 返回 `null`；模态栈 `ModalStack` 不计入 `StackDepth`。
+- **`TabControl` 改 `TabStripPlacement` 会重置选中项**：换模板后 `SelectedIndex` 回到 0（`SelectedItem` 双向绑定也会被写回第一个），要在布局后恢复；代码可以选中 `IsEnabled=False` 的标签。
+- **`TabbedPage.SelectedPage` 比 `SelectedIndex` 晚一步更新**：读标题要监听 `SelectedPageProperty`。`TabbedPage` / `CarouselPage` 的 `Pages` 只能用代码赋值。
+- **`CommandBar.IsDynamicOverflowEnabled` 默认 `False`**：这时再窄也不溢出；打开后 4 个主命令的栏拖窄会依次进入溢出菜单（`ICommandBarElement.IsInOverflow`）。
+- **`DrawerPage`**：`DrawerBehavior=Locked` 会把抽屉打开并让 `DisplayMode` 变成 `Inline`，但代码仍能把 `IsOpen` 设回 `False`；复选框要读回真实值。
+- **命名碰撞**：`Views.Pages` 里第 03 份的 `CarouselPage`（Carousel 控件的页面）与 `Avalonia.Controls.CarouselPage` 同名，页面本身不受影响，探针里要写全名。
+- **官方 How-to 与 12.1.2 的出入**：无。TabControl 指南的"样式"一节、Navigation 指南的"侧栏导航"与"ViewLocator"两节不重复实现，分别指向 `StylingDemo` 与本项目的 `MainWindow`。
+- **探针断言实际条数**：本批累计 698 条（含第 00–04 份），全部通过且零警告日志。
+
 ## 验证标准
 
 1. `dotnet build hello-avalonia.slnx` 通过，且无新增警告

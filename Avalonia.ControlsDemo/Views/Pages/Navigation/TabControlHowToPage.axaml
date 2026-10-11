@@ -1,0 +1,74 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             xmlns:vm="using:Avalonia.ControlsDemo.ViewModels"
+             x:DataType="vm:TabControlHowToViewModel"
+             x:Class="Avalonia.ControlsDemo.Views.Pages.TabControlHowToPage">
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="实战：TabControl 的动态标签、关闭与向导"
+                               DocPath="docs/how-to/tabcontrol-how-to" />
+
+            <TextBlock Classes="caption" Text="动态标签：ItemsSource + ItemTemplate + ContentTemplate，带图标和关闭按钮" />
+            <Border Classes="stage" Padding="12">
+                <StackPanel Spacing="8">
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <Button Content="新建标签" Command="{Binding AddTabCommand}" />
+                        <TextBlock VerticalAlignment="Center" Text="TabStripPlacement" />
+                        <ComboBox Name="PlacementBox" Width="100" />
+                        <TextBlock VerticalAlignment="Center" Text="{Binding Tabs.Count, StringFormat='共 {0} 个标签'}" />
+                        <TextBlock VerticalAlignment="Center" Text="{Binding SelectedTab.Title, StringFormat='选中：{0}'}" />
+                    </StackPanel>
+                    <Border Height="200" BorderBrush="Gray" BorderThickness="1">
+                        <TabControl Name="Tabs" ItemsSource="{Binding Tabs}" SelectedItem="{Binding SelectedTab}">
+                            <TabControl.ItemTemplate>
+                                <DataTemplate x:DataType="vm:DocumentTab">
+                                    <StackPanel Orientation="Horizontal" Spacing="6">
+                                        <PathIcon Width="12" Height="12" Data="{Binding Icon}" />
+                                        <TextBlock VerticalAlignment="Center" Text="{Binding Title}" />
+                                        <Button Padding="4,0" Content="✕"
+                                                Command="{Binding $parent[TabControl].((vm:TabControlHowToViewModel)DataContext).CloseTabCommand}"
+                                                CommandParameter="{Binding .}" />
+                                    </StackPanel>
+                                </DataTemplate>
+                            </TabControl.ItemTemplate>
+                            <TabControl.ContentTemplate>
+                                <DataTemplate x:DataType="vm:DocumentTab">
+                                    <TextBox Margin="8" AcceptsReturn="True" Text="{Binding Body}" />
+                                </DataTemplate>
+                            </TabControl.ContentTemplate>
+                        </TabControl>
+                    </Border>
+                </StackPanel>
+            </Border>
+            <TextBlock Classes="hint" Text="标签头由 ItemTemplate 画（图标 + 标题 + 关闭按钮），内容由 ContentTemplate 画。关闭命令挂在 ViewModel 上，标签头用 $parent[TabControl] 够到它，并把当前标签作为 CommandParameter 传入；最后一个标签不会被关掉。改 TabStripPlacement 会让 TabControl 重置选中项，页面在布局后把它恢复。" />
+
+            <TextBlock Classes="caption" Text="向导：SelectedIndex 双向绑定，内容懒创建" />
+            <Border Classes="stage" Padding="12">
+                <StackPanel Spacing="8">
+                    <Border Height="110" BorderBrush="Gray" BorderThickness="1">
+                        <TabControl Name="Wizard" ItemsSource="{Binding WizardSteps}" SelectedIndex="{Binding WizardIndex}">
+                            <TabControl.ItemTemplate>
+                                <DataTemplate x:DataType="vm:WizardStep">
+                                    <TextBlock Text="{Binding Title}" />
+                                </DataTemplate>
+                            </TabControl.ItemTemplate>
+                            <TabControl.ContentTemplate>
+                                <DataTemplate x:DataType="vm:WizardStep">
+                                    <TextBlock Margin="8" TextWrapping="Wrap" Text="{Binding Body}" />
+                                </DataTemplate>
+                            </TabControl.ContentTemplate>
+                        </TabControl>
+                    </Border>
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <Button Content="上一步" Command="{Binding PreviousStepCommand}" />
+                        <Button Content="下一步" Command="{Binding NextStepCommand}" />
+                        <TextBlock VerticalAlignment="Center" Text="{Binding CreatedCount, StringFormat='已创建内容的步骤：{0} 个'}" />
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+            <TextBlock Classes="hint" Text="SelectedIndex 绑定到整数，向导按钮只改这个数字。步骤内容放在 WizardStep.Body 的 ??= 里，TabControl 只为选中的标签取内容，所以没到过的步骤不会被创建，回头再看也不会重建。" />
+            <TextBlock Classes="hint" Text="更深入的演示：Avalonia.StylingDemo →「选择器」（官方指南最后一节的 TabItem 样式）" />
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

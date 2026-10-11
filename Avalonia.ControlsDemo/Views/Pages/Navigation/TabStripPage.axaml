@@ -1,0 +1,25 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             x:Class="Avalonia.ControlsDemo.Views.Pages.TabStripPage">
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="TabStrip：只有标签条的选择器"
+                               DocPath="controls/navigation/tabstrip" />
+
+            <TextBlock Classes="caption" Text="TabStrip 驱动一块自己管理的内容" />
+            <Border Classes="stage" Padding="12">
+                <StackPanel Spacing="8">
+                    <TabStrip Name="Strip">
+                        <TabStripItem Content="全部" />
+                        <TabStripItem Content="未读" />
+                        <TabStripItem Content="已标星" />
+                    </TabStrip>
+                    <TextBlock Name="ContentText" />
+                    <Button Name="LastButton" HorizontalAlignment="Left" Content="选中最后一项" />
+                </StackPanel>
+            </Border>
+            <TextBlock Classes="hint" Text="TabStrip 只有标签条，没有内容区：它是 SelectingItemsControl，选中变化时由页面自己决定换什么内容，适合做过滤器或视图切换。要内容区跟着走，用 TabControl。" />
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

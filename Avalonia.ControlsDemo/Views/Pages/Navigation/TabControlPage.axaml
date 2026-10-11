@@ -1,0 +1,38 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             x:Class="Avalonia.ControlsDemo.Views.Pages.TabControlPage">
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="TabControl：标签页容器"
+                               DocPath="controls/navigation/tabcontrol" />
+
+            <TextBlock Classes="caption" Text="TabItem、TabStripPlacement 与 SelectedIndex" />
+            <Border Classes="stage" Padding="12">
+                <StackPanel Spacing="8">
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <TextBlock VerticalAlignment="Center" Text="TabStripPlacement" />
+                        <ComboBox Name="PlacementBox" Width="100" />
+                        <Button Name="DisabledButton" Content="用代码选中被禁用的标签" />
+                    </StackPanel>
+                    <TextBlock Name="StateText" />
+                    <Border Height="180" BorderBrush="Gray" BorderThickness="1">
+                        <TabControl Name="Tabs">
+                            <TabItem Header="概览">
+                                <TextBlock Margin="12" Text="概览标签的内容。" />
+                            </TabItem>
+                            <TabItem Header="详情" IsEnabled="False">
+                                <TextBlock Margin="12" Text="详情标签被禁用，鼠标点不了。" />
+                            </TabItem>
+                            <TabItem Header="设置">
+                                <TextBlock Margin="12" Text="设置标签的内容。" />
+                            </TabItem>
+                        </TabControl>
+                    </Border>
+                </StackPanel>
+            </Border>
+            <TextBlock Classes="hint" Text="TabStripPlacement 的类型是 Dock（Top / Bottom / Left / Right），默认 Top；改它会换一套模板，选中项被重置为第一个，页面在布局后把它恢复。IsEnabled=False 的标签用户点不了，但代码仍可以通过 SelectedIndex 选中它。" />
+            <TextBlock Classes="hint" Text="更深入的演示：Avalonia.StylingDemo →「选择器」" />
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>
