@@ -1,0 +1,49 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             x:Class="Avalonia.ControlsDemo.Views.Pages.TextBlockPage">
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="TextBlock：显示文字"
+                               DocPath="controls/data-display/text-display/textblock" />
+
+            <TextBlock Classes="caption" Text="1. 字号、换行、对齐与 MaxLines" />
+            <Border Classes="stage" Padding="12">
+                <StackPanel Spacing="8">
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <TextBlock Width="90" VerticalAlignment="Center" Text="FontSize" />
+                        <Slider Name="SizeSlider" Width="160" Minimum="10" Maximum="32" Value="14" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <TextBlock Width="90" VerticalAlignment="Center" Text="MaxLines" />
+                        <Slider Name="MaxLinesSlider" Width="160" Minimum="0" Maximum="5" Value="0" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Spacing="12">
+                        <TextBlock VerticalAlignment="Center" Text="TextWrapping" />
+                        <ComboBox Name="WrapBox" Width="130" />
+                        <TextBlock VerticalAlignment="Center" Text="TextAlignment" />
+                        <ComboBox Name="AlignBox" Width="110" />
+                    </StackPanel>
+                    <Border BorderBrush="Gray" BorderThickness="1" Width="300" HorizontalAlignment="Left" Padding="6">
+                        <TextBlock Name="Sample" Text="The quick brown fox jumps over the lazy dog. 敏捷的棕色狐狸跳过了那只懒狗。" />
+                    </Border>
+                </StackPanel>
+            </Border>
+            <TextBlock Classes="hint" Text="TextWrapping 默认是 NoWrap，宽度不够时直接截断；MaxLines=0 表示不限行数。TextBlock 只显示、不能选中，要选中用 SelectableTextBlock。" />
+
+            <TextBlock Classes="caption" Text="2. Inlines：同一个 TextBlock 里混排样式" />
+            <Border Classes="stage" Padding="12">
+                <TextBlock TextWrapping="Wrap" Width="320">
+                    <Run Text="普通文字，" />
+                    <Run FontWeight="Bold" Text="粗体，" />
+                    <Run FontStyle="Italic" Text="斜体，" />
+                    <Run Foreground="OrangeRed" Text="橙红色，" />
+                    <Run TextDecorations="Underline" Text="下划线。" />
+                    <LineBreak />
+                    <Run FontSize="11" Text="LineBreak 之后的第二行小字。" />
+                </TextBlock>
+            </Border>
+            <TextBlock Classes="hint" Text="Run 和 LineBreak 写在 TextBlock 里就是 Inlines；绑定文字用 Text 属性，混排样式才用 Inlines，二者不要同时写。" />
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

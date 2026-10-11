@@ -1,0 +1,26 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             x:Class="Avalonia.ControlsDemo.Views.Pages.SelectableTextBlockPage">
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="SelectableTextBlock：可选中、可复制的文字"
+                               DocPath="controls/data-display/text-display/selectabletextblock" />
+
+            <TextBlock Classes="caption" Text="SelectionStart / SelectionEnd 与 SelectedText" />
+            <Border Classes="stage" Padding="12">
+                <StackPanel Spacing="8">
+                    <SelectableTextBlock Name="Selectable" Width="320" HorizontalAlignment="Left" TextWrapping="Wrap"
+                                         Text="Hello Avalonia：用鼠标拖选这段文字，按 Ctrl+C 复制。" />
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <Button Name="SelectAllButton" Content="SelectAll()" />
+                        <Button Name="FirstWordButton" Content="选中前 5 个字符" />
+                        <Button Name="ClearButton" Content="清除选区" />
+                    </StackPanel>
+                    <TextBlock Name="SelectionText" Text="SelectedText：（空）" />
+                </StackPanel>
+            </Border>
+            <TextBlock Classes="hint" Text="普通 TextBlock 不能选中。SelectableTextBlock 继承 TextBlock，属性完全一样，只多了选区；CanCopy 为 True 时才有可复制的内容，右键菜单会出现「复制」。" />
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

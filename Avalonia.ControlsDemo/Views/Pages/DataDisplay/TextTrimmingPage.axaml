@@ -1,0 +1,32 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             x:Class="Avalonia.ControlsDemo.Views.Pages.TextTrimmingPage">
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="TextTrimming：文字放不下时怎么截"
+                               DocPath="controls/data-display/text-display/texttrimming" />
+
+            <TextBlock Classes="caption" Text="拖动宽度，换不同的截断方式" />
+            <Border Classes="stage" Padding="12">
+                <StackPanel Spacing="8">
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <TextBlock Width="60" VerticalAlignment="Center" Text="宽度" />
+                        <Slider Name="WidthSlider" Width="200" Minimum="40" Maximum="360" Value="120" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <TextBlock Width="60" VerticalAlignment="Center" Text="TextTrimming" />
+                        <ComboBox Name="TrimBox" Width="200" />
+                    </StackPanel>
+                    <Border BorderBrush="Gray" BorderThickness="1" HorizontalAlignment="Left" Padding="4">
+                        <TextBlock Name="Trimmed" Width="120" TextWrapping="NoWrap"
+                                   Text="C:\Users\Administrator\Documents\Reports\2026\summary-final.docx" />
+                    </Border>
+                    <TextBlock Name="LengthText" />
+                </StackPanel>
+            </Border>
+            <TextBlock Classes="hint" Text="TextTrimming 只改画出来的样子，Text 本身一个字符都没少，复制、绑定读到的仍是完整内容。必须配合 NoWrap（默认值）才会生效，换行状态下文字是折行而不是截断。" />
+            <TextBlock Classes="hint" Text="PathSegmentEllipsis 专为路径设计：优先保留文件名，从中间的目录段开始省略。" />
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

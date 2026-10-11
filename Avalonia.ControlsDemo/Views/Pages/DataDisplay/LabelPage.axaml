@@ -1,0 +1,23 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             x:Class="Avalonia.ControlsDemo.Views.Pages.LabelPage">
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="Label：带访问键的标签"
+                               DocPath="controls/data-display/text-display/label" />
+
+            <TextBlock Classes="caption" Text="Target 与访问键：按 Alt+N 把焦点交给输入框" />
+            <Border Classes="stage" Padding="12">
+                <StackPanel Spacing="8">
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <Label Name="NameLabel" Content="_Name" Target="{Binding #NameBox}" VerticalAlignment="Center" />
+                        <TextBox Name="NameBox" Width="200" PlaceholderText="点击这里，或按 Alt+N" />
+                    </StackPanel>
+                    <TextBlock Name="FocusText" Text="输入框：未聚焦" />
+                </StackPanel>
+            </Border>
+            <TextBlock Classes="hint" Text="Content 里 _ 后面的字母就是访问键。Label 自己不能聚焦，按下访问键时把焦点转给 Target。它是 ContentControl，Content 也可以是任意控件；只需要显示文字、没有访问键时用 TextBlock。" />
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>
