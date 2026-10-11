@@ -307,6 +307,16 @@ Menus 5 + Navigation 8 + Primitives 5 + System 1 + Web 4 = **84 页**，
 - **官方 How-to 与 12.1.2 的出入**：无。
 - **探针断言实际条数**：本批累计 369 条（含第 00、01 份），全部通过且零警告日志。
 
+### 批 3 实测结论（2026-10-11）
+
+- **`TableView` 在主包里**：`TableView : ListBox`，12.1.2 无需任何包与 `StyleInclude` 就能渲染；列类型只有 `TableViewColumn`（`Header`、`Width`、`Binding`），没有 `TableViewTextColumn`。`DataGrid` 仍是独立包，必须 `StyleInclude Themes/Fluent.xaml`。
+- **虚拟化让"行数"断言不可靠**：`DataGrid`、`TableView`、`ListBox` 只实现视口放得下的行，探针断言要写范围而不是总数；`DataGrid` 每行还会多一个填充单元格。
+- **`TreeView` 的两个坑**：样式里给 `TreeViewItem` 绑 `IsExpanded` 时，选择器会匹配所有节点，绑定类型必须是所有节点类型的共同基类，否则文件节点报强转警告；`CollapseSubTree` 期间 `Collapsed` 会被子节点冒泡触发多次，不能拿来计数。
+- **编译绑定的参数**：`ConverterParameter={x:Int32 0}` 编译不过（`x:Int32` 不是标记扩展），要用 `<Binding.ConverterParameter><x:Int32>0</x:Int32></Binding.ConverterParameter>` 的元素语法；`TransitioningContentControl` 对初始内容也报一次 `TransitionCompleted`，且 headless 里 `PageSlide` 不报完成。
+- **范围缺口**：官方 Data display 下还有 `charts/**`、`pdfviewer/**`、`structured-data/treedatagrid/**`，spec 的 12 页没有它们，转入 Premium 路标页。
+- **官方 How-to 与 12.1.2 的出入**：无。
+- **探针断言实际条数**：本批累计 484 条（含第 00–02 份），全部通过且零警告日志。
+
 ## 验证标准
 
 1. `dotnet build hello-avalonia.slnx` 通过，且无新增警告
