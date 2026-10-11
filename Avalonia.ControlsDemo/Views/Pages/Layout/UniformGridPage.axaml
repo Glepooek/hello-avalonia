@@ -1,0 +1,34 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             x:Class="Avalonia.ControlsDemo.Views.Pages.UniformGridPage">
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="UniformGrid：等大小格子"
+                               DocPath="controls/layout/panels/uniformgrid" />
+
+            <TextBlock Classes="caption" Text="Columns 与 FirstColumn" />
+            <Border Classes="stage" Padding="12">
+                <StackPanel Spacing="8">
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <TextBlock Width="80" VerticalAlignment="Center" Text="Columns" />
+                        <Slider Name="ColumnsSlider" Width="160" Minimum="1" Maximum="6" Value="3" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <TextBlock Width="80" VerticalAlignment="Center" Text="FirstColumn" />
+                        <Slider Name="FirstSlider" Width="160" Minimum="0" Maximum="5" Value="0" />
+                    </StackPanel>
+                    <UniformGrid Name="Uniform" Width="300" Height="140" HorizontalAlignment="Left" Columns="3">
+                        <Border Margin="2" Background="#E8564A"><TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="1" /></Border>
+                        <Border Margin="2" Background="#E8974A"><TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="2" /></Border>
+                        <Border Margin="2" Background="#E8D24A"><TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="3" /></Border>
+                        <Border Margin="2" Background="#6FE84A"><TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="4" /></Border>
+                        <Border Margin="2" Background="#4A9BE8"><TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="5" /></Border>
+                    </UniformGrid>
+                </StackPanel>
+            </Border>
+            <TextBlock Classes="hint" Text="每个格子一样大；Rows 与 Columns 只给一个，另一个按子元素个数自动算。FirstColumn 让第一行前面空出若干格。" />
+            <TextBlock Classes="hint" Text="更深入的演示：Avalonia.LayoutDemo →「布局面板」" />
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

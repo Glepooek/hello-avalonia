@@ -1,0 +1,45 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             x:Class="Avalonia.ControlsDemo.Views.Pages.GridPage">
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="Grid：行列网格"
+                               DocPath="controls/layout/panels/grid" />
+
+            <TextBlock Classes="caption" Text="1. 行列定义：像素、Auto、星号，加 ShowGridLines 与间距" />
+            <Border Classes="stage" Padding="12">
+                <StackPanel Spacing="8">
+                    <StackPanel Orientation="Horizontal" Spacing="12">
+                        <CheckBox Name="LinesCheck" Content="ShowGridLines" />
+                        <TextBlock VerticalAlignment="Center" Text="RowSpacing / ColumnSpacing" />
+                        <Slider Name="SpacingSlider" Width="140" Minimum="0" Maximum="20" Value="0" />
+                    </StackPanel>
+                    <Grid Name="Demo" Width="360" Height="150" HorizontalAlignment="Left"
+                          ColumnDefinitions="80,Auto,*,2*" RowDefinitions="40,*">
+                        <Border Grid.Column="0" Grid.Row="0" Background="#E8564A"><TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="80px" /></Border>
+                        <Border Grid.Column="1" Grid.Row="0" Background="#E8974A"><TextBlock Margin="8,0" VerticalAlignment="Center" Text="Auto" /></Border>
+                        <Border Grid.Column="2" Grid.Row="0" Background="#E8D24A"><TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="*" /></Border>
+                        <Border Grid.Column="3" Grid.Row="0" Background="#6FE84A"><TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="2*" /></Border>
+                        <Border Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="4" Background="#4A9BE8">
+                            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="第二行，ColumnSpan=4，高度 *" />
+                        </Border>
+                    </Grid>
+                </StackPanel>
+            </Border>
+            <TextBlock Classes="hint" Text="星号按剩余空间的比例分：* 与 2* 就是 1:2。Auto 取内容所需的宽度。行列定义可以写成 ColumnDefinitions=&quot;80,Auto,*,2*&quot; 这样的简写。" />
+
+            <TextBlock Classes="caption" Text="2. 同一格叠放：后声明的盖在上面" />
+            <Border Classes="stage" Padding="12">
+                <Grid Width="200" Height="80" HorizontalAlignment="Left">
+                    <Border Background="SteelBlue" />
+                    <Border Margin="30,20" Background="Orange" Opacity="0.85">
+                        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="叠在上层" />
+                    </Border>
+                </Grid>
+            </Border>
+            <TextBlock Classes="hint" Text="不写 Grid.Row / Grid.Column 就是第 0 行第 0 列；SharedSizeGroup、MinWidth / MaxWidth 等见紧随其后的「实战：Grid」。" />
+            <TextBlock Classes="hint" Text="更深入的演示：Avalonia.LayoutDemo →「布局面板」" />
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

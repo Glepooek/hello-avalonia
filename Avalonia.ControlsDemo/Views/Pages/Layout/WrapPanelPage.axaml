@@ -1,0 +1,40 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             x:Class="Avalonia.ControlsDemo.Views.Pages.WrapPanelPage">
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="WrapPanel：放不下就换行"
+                               DocPath="controls/layout/panels/wrappanel" />
+
+            <TextBlock Classes="caption" Text="Orientation、ItemSpacing 与 LineSpacing" />
+            <Border Classes="stage" Padding="12">
+                <StackPanel Spacing="8">
+                    <StackPanel Orientation="Horizontal" Spacing="12">
+                        <TextBlock VerticalAlignment="Center" Text="Orientation" />
+                        <ComboBox Name="OrientationBox" Width="130" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <TextBlock Width="80" VerticalAlignment="Center" Text="ItemSpacing" />
+                        <Slider Name="ItemGapSlider" Width="160" Minimum="0" Maximum="20" Value="4" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <TextBlock Width="80" VerticalAlignment="Center" Text="LineSpacing" />
+                        <Slider Name="LineGapSlider" Width="160" Minimum="0" Maximum="20" Value="4" />
+                    </StackPanel>
+                    <WrapPanel Name="Wrap" Width="260" Height="150" HorizontalAlignment="Left">
+                        <Border Width="70" Height="30" Background="#E8564A" />
+                        <Border Width="50" Height="40" Background="#E8974A" />
+                        <Border Width="80" Height="30" Background="#E8D24A" />
+                        <Border Width="60" Height="50" Background="#6FE84A" />
+                        <Border Width="90" Height="30" Background="#4A9BE8" />
+                        <Border Width="50" Height="30" Background="#9B6FE8" />
+                        <Border Width="70" Height="40" Background="#E86FB4" />
+                    </WrapPanel>
+                </StackPanel>
+            </Border>
+            <TextBlock Classes="hint" Text="Horizontal 先排一行再换行，Vertical 先排一列再换列；面板的宽（或高）决定在哪里换。ItemWidth / ItemHeight 能把所有格子压成同样大小。" />
+            <TextBlock Classes="hint" Text="更深入的演示：Avalonia.LayoutDemo →「布局面板」" />
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

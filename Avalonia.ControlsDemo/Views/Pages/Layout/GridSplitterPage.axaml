@@ -1,0 +1,35 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             x:Class="Avalonia.ControlsDemo.Views.Pages.GridSplitterPage">
+    <UserControl.Styles>
+        <!--  Appearance goes through a style, not a local Background on the element (rule 1).  -->
+        <Style Selector="GridSplitter">
+            <Setter Property="Background" Value="Orange" />
+        </Style>
+    </UserControl.Styles>
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="GridSplitter：拖动调整行列大小"
+                               DocPath="controls/layout/panels/gridsplitter" />
+
+            <TextBlock Classes="caption" Text="拖动橙色分隔条，或点一下它再按左右方向键" />
+            <Border Classes="stage" Padding="12">
+                <StackPanel Spacing="8">
+                    <CheckBox Name="PreviewCheck" Content="ShowsPreview（拖动时只移动预览线，松手才生效）" />
+                    <Grid Name="Split" Width="360" Height="120" HorizontalAlignment="Left" ColumnDefinitions="200,Auto,*">
+                        <Border Grid.Column="0" Background="#334682B4">
+                            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="左栏" />
+                        </Border>
+                        <GridSplitter Name="Splitter" Grid.Column="1" Width="6" />
+                        <Border Grid.Column="2" Background="#33FFA500">
+                            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="右栏" />
+                        </Border>
+                    </Grid>
+                    <TextBlock Name="WidthText" Text="左栏宽度 200" />
+                </StackPanel>
+            </Border>
+            <TextBlock Classes="hint" Text="GridSplitter 要放在自己独占的 Auto 列（或行）里，它改的是相邻行列的 Width / Height。聚焦后方向键每次移动 KeyboardIncrement（默认 10）。" />
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

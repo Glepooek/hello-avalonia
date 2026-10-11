@@ -1,0 +1,39 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             x:Class="Avalonia.ControlsDemo.Views.Pages.RelativePanelPage">
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="RelativePanel：子元素互相参照定位"
+                               DocPath="controls/layout/panels/relativepanel" />
+
+            <TextBlock Classes="caption" Text="RightOf、Below 与 AlignRightWithPanel" />
+            <Border Classes="stage" Padding="12">
+                <StackPanel Spacing="8">
+                    <CheckBox Name="PanelRightCheck" Content="给「跟随者」再加上 AlignRightWithPanel（与 RightOf 并存）" />
+                    <RelativePanel Name="Rel" Width="340" Height="140" HorizontalAlignment="Left" Background="#22808080">
+                        <Border Name="Anchor" Width="90" Height="40" Background="SteelBlue"
+                                RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignTopWithPanel="True">
+                            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="锚点" />
+                        </Border>
+                        <Border Name="Follower" Width="90" Height="40" Background="Orange"
+                                RelativePanel.RightOf="Anchor" RelativePanel.AlignTopWithPanel="True">
+                            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="跟随者" />
+                        </Border>
+                        <Border Width="190" Height="30" Background="SeaGreen"
+                                RelativePanel.Below="Anchor" RelativePanel.AlignLeftWith="Anchor">
+                            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="在锚点下方，左对齐" />
+                        </Border>
+                        <Border Name="Edge" Width="90" Height="30" Background="MediumPurple"
+                                RelativePanel.AlignRightWithPanel="True" RelativePanel.AlignBottomWithPanel="True">
+                            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="贴右下角" />
+                        </Border>
+                    </RelativePanel>
+                </StackPanel>
+            </Border>
+            <TextBlock Classes="hint" Text="参照对象写元素的 Name（字符串）。RelativePanel 共有 16 个附加属性：Above / Below / LeftOf / RightOf、AlignXxxWith、AlignXxxWithPanel 等。" />
+            <TextBlock Classes="hint" Text="实测：左右两侧各有一条约束时（RightOf 加 AlignRightWithPanel），元素占据两条约束之间的空间，定宽元素会在中间居中，而不是贴边；只写 AlignRightWithPanel 的紫色块才真正贴右。" />
+            <TextBlock Classes="hint" Text="更深入的演示：Avalonia.LayoutDemo →「布局面板」" />
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>
