@@ -1,24 +1,42 @@
-<UserControl xmlns="https://github.com/avaloniaui"
+<UserControl x:Class="Avalonia.StarterTutorialDemo.Views.Pages.AddingLayoutPage"
+             xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:shared="using:Avalonia.Shared.Controls"
-             x:Class="Avalonia.StarterTutorialDemo.Views.Pages.AddingLayoutPage">
+             xmlns:shared="using:Avalonia.Shared.Controls">
 
     <StackPanel Margin="12" Spacing="12">
-        <shared:DemoHeader Title="添加布局：用 Grid 摆放标签、输入框和按钮"
-                           DocPath="docs/get-started/starter-tutorial/adding-some-layout" />
+        <shared:DemoHeader Title="添加布局：用 Grid 摆放标签、输入框和按钮" DocPath="docs/get-started/starter-tutorial/adding-some-layout" />
 
-        <TextBlock TextWrapping="Wrap"
-                   Text="StackPanel 把 Grid 和 Button 纵向叠放；Grid 用 3 行 2 列摆放标签与输入框。ShowGridLines 打开后可以看到网格线。" />
+        <TextBlock TextWrapping="Wrap" Text="StackPanel 把 Grid 和 Button 纵向叠放；Grid 用 2 行 2 列摆放标签与输入框。ShowGridLines 打开后可以看到网格线。" />
 
-        <Border BorderBrush="#40FFFFFF" BorderThickness="1" CornerRadius="4" Padding="12">
-            <StackPanel Spacing="8" HorizontalAlignment="Center">
-                <Grid ShowGridLines="True" Margin="5"
+        <Border Padding="12"
+                BorderBrush="#40FFFFFF"
+                BorderThickness="1"
+                CornerRadius="4">
+            <StackPanel HorizontalAlignment="Center" Spacing="8">
+                <Grid Margin="5"
+                      ShowGridLines="True"
                       ColumnDefinitions="120,100"
-                      RowDefinitions="Auto,Auto,Auto">
-                    <TextBlock Grid.Row="0" Grid.Column="0" Margin="10" VerticalAlignment="Center">Celsius</TextBlock>
-                    <TextBlock Grid.Row="1" Grid.Column="0" Margin="10" VerticalAlignment="Center">Fahrenheit</TextBlock>
-                    <TextBox Grid.Row="0" Grid.Column="1" Margin="0 5" Text="0" />
-                    <TextBox Grid.Row="1" Grid.Column="1" Margin="0 5" Text="0" />
+                      RowDefinitions="Auto,Auto">
+                    <TextBlock Grid.Row="0"
+                               Grid.Column="0"
+                               Margin="10"
+                               VerticalAlignment="Center">
+                        Celsius
+                    </TextBlock>
+                    <TextBlock Grid.Row="1"
+                               Grid.Column="0"
+                               Margin="10"
+                               VerticalAlignment="Center">
+                        Fahrenheit
+                    </TextBlock>
+                    <TextBox Grid.Row="0"
+                             Grid.Column="1"
+                             Margin="0,5"
+                             Text="0" />
+                    <TextBox Grid.Row="1"
+                             Grid.Column="1"
+                             Margin="0,5"
+                             Text="0" />
                 </Grid>
                 <Button HorizontalAlignment="Center">Calculate</Button>
             </StackPanel>

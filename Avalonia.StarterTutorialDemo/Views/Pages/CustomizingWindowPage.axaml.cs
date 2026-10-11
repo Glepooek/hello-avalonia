@@ -1,5 +1,6 @@
 using Avalonia.Controls;
 using Avalonia.Interactivity;
+using Avalonia.Shared.Helpers;
 
 namespace Avalonia.StarterTutorialDemo.Views.Pages
 {
@@ -12,7 +13,7 @@ namespace Avalonia.StarterTutorialDemo.Views.Pages
 
         private async void OpenWindowButton_OnClick(object? sender, RoutedEventArgs e)
         {
-            if (TopLevel.GetTopLevel(this) is not Window owner)
+            if (AvaloniaHelper.GetTopLevel(this) is not Window owner)
             {
                 return;
             }

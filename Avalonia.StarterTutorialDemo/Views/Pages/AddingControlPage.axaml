@@ -3,16 +3,16 @@
              xmlns:shared="using:Avalonia.Shared.Controls"
              x:Class="Avalonia.StarterTutorialDemo.Views.Pages.AddingControlPage">
 
-    <StackPanel Margin="12" Spacing="12">
-        <shared:DemoHeader Title="添加控件：在窗口中放一个 Button 并定位"
+	<StackPanel Margin="12" Spacing="12">
+		<shared:DemoHeader Title="添加控件：在窗口中放一个 Button 并定位"
                            DocPath="docs/get-started/starter-tutorial/adding-a-control" />
 
-        <TextBlock TextWrapping="Wrap"
+		<TextBlock TextWrapping="Wrap"
                    Text="Window 的内容只能有一个子元素；下面的 Button 就是那个子元素。用 HorizontalAlignment / VerticalAlignment 决定它在窗口里的位置。" />
 
-        <Border BorderBrush="#40FFFFFF" BorderThickness="1" CornerRadius="4" Height="160">
-            <!--  A single Button as the only child, centered in its parent.  -->
-            <Button HorizontalAlignment="Center" VerticalAlignment="Center">Calculate</Button>
-        </Border>
-    </StackPanel>
+		<Border BorderBrush="#40FFFFFF" BorderThickness="1" CornerRadius="4" Height="160">
+			<!--  A single Button as the only child, centered in its parent.  -->
+			<Button HorizontalAlignment="Center" VerticalAlignment="Center">Calculate</Button>
+		</Border>
+	</StackPanel>
 </UserControl>

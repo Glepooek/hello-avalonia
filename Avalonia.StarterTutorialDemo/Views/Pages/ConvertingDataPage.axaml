@@ -1,22 +1,43 @@
-<UserControl xmlns="https://github.com/avaloniaui"
+<UserControl x:Class="Avalonia.StarterTutorialDemo.Views.Pages.ConvertingDataPage"
+             xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:shared="using:Avalonia.Shared.Controls"
-             x:Class="Avalonia.StarterTutorialDemo.Views.Pages.ConvertingDataPage">
+             xmlns:shared="using:Avalonia.Shared.Controls">
 
     <StackPanel Margin="12" Spacing="12">
-        <shared:DemoHeader Title="数据转换：点击按钮把摄氏温度换算成华氏"
-                           DocPath="docs/get-started/starter-tutorial/converting-data" />
+        <shared:DemoHeader Title="数据转换：点击按钮把摄氏温度换算成华氏" DocPath="docs/get-started/starter-tutorial/converting-data" />
 
-        <TextBlock TextWrapping="Wrap"
-                   Text="给 TextBox 加上 Name 后，code-behind 就能直接读写它们的 Text。输入非数字时，两个框都会被重置为 0。" />
+        <TextBlock TextWrapping="Wrap" Text="给 TextBox 加上 Name 后，code-behind 就能直接读写它们的 Text。输入非数字时，两个框都会被重置为 0。" />
 
-        <Border BorderBrush="#40FFFFFF" BorderThickness="1" CornerRadius="4" Padding="12">
-            <StackPanel Spacing="8" HorizontalAlignment="Center">
-                <Grid Margin="5" ColumnDefinitions="120,100" RowDefinitions="Auto,Auto">
-                    <TextBlock Grid.Row="0" Grid.Column="0" Margin="10" VerticalAlignment="Center">Celsius</TextBlock>
-                    <TextBlock Grid.Row="1" Grid.Column="0" Margin="10" VerticalAlignment="Center">Fahrenheit</TextBlock>
-                    <TextBox Grid.Row="0" Grid.Column="1" Margin="0 5" Text="0" Name="Celsius" />
-                    <TextBox Grid.Row="1" Grid.Column="1" Margin="0 5" Text="0" Name="Fahrenheit" />
+        <Border Padding="12"
+                BorderBrush="#40FFFFFF"
+                BorderThickness="1"
+                CornerRadius="4">
+            <StackPanel HorizontalAlignment="Center" Spacing="8">
+                <Grid Margin="5"
+                      ColumnDefinitions="120,100"
+                      RowDefinitions="Auto,Auto">
+                    <TextBlock Grid.Row="0"
+                               Grid.Column="0"
+                               Margin="10"
+                               VerticalAlignment="Center">
+                        Celsius
+                    </TextBlock>
+                    <TextBlock Grid.Row="1"
+                               Grid.Column="0"
+                               Margin="10"
+                               VerticalAlignment="Center">
+                        Fahrenheit
+                    </TextBlock>
+                    <TextBox Name="Celsius"
+                             Grid.Row="0"
+                             Grid.Column="1"
+                             Margin="0,5"
+                             Text="0" />
+                    <TextBox Name="Fahrenheit"
+                             Grid.Row="1"
+                             Grid.Column="1"
+                             Margin="0,5"
+                             Text="0" />
                 </Grid>
                 <Button HorizontalAlignment="Center" Click="Button_OnClick">Calculate</Button>
             </StackPanel>
