@@ -36,23 +36,16 @@ dotnet test Avalonia.TestingDemo.Tests --filter "FullyQualifiedName~ViewModelTes
 - 新写的代码 / XAML 注释用**英文**；界面文字（标签页标题、说明栏、按钮文案）用**中文**；之前迁移过来的中文注释保持原样，不要顺手改。
 - 设计文档放 `docs/superpowers/specs/`，实现计划放 `docs/superpowers/plans/`。
 
+## 计划驱动的实现与验证（贯穿全仓）
+
+大改动以「spec → 分批 plan → 执行」推进：设计文档在 `docs/superpowers/specs/`，实现计划在 `docs/superpowers/plans/`。计划里的代码块用 `#### \`相对路径\`` 标题标注目标文件（`**\`C:\绝对路径\`**` 标题是仓库外的探针文件），可整块抽取。
+
+- 抽取：`powershell -File C:\Temp\extract-plan.ps1 -Plan <计划> -RepoRoot <仓库根>`
+- 验证：仓库外的 headless 探针（`C:\Temp\probe-controls`、`C:\Temp\probe-bdemo`，不入库）；每批实测结论回填到 spec 的「批 N 实测结论」小节。
+- 探针文件永不提交；提交信息用英文。
+
 ## Avalonia 坑（已在本仓库反复踩过）
 
 - 在元素上写属性的**默认值**（本地值）会永久压制该属性的所有样式，且没有任何日志。
 - 绑定到结构体属性失败时**静默**，构建与冒烟测试都检不出，需要运行时断言。
 - 带 `{0}` 开头的 `StringFormat` 要加 `{}` 前缀转义。
-
-## ControlsDemo（已完成，待目视验证与合并）
-
-`docs/superpowers/specs/2026-10-10-avalonia-controls-demo-design.md` 与 `docs/superpowers/plans/2026-10-10-controls-demo-0*.md` 描述了一个按官方 Controls 分类整理的单项目 `Avalonia.ControlsDemo`（SplitView + TreeView 导航）。第 00–07 份计划已全部执行并提交（分支 `feat/controls-demo`），目录共 119 页：80 个可运行控件页 + 19 个实战页 + 20 个路标页（Web、付费控件、How-to 路标）。计划里的代码块用 `#### \`路径\`` 标题标注目标文件，可整块抽取。
-
-- 验证靠仓库外的 headless 探针（`C:\Temp\probe-controls`，不入库）；每批实测结论回填到 spec 的"批 N 实测结论"小节。
-- `DataGrid`、`ColorPicker` 是独立包，必须在 `App.axaml` 里 `StyleInclude` 才会渲染，否则静默空白。
-
-## BehaviorsDemo（Xaml.Behaviors.Avalonia）
-
-`docs/superpowers/specs/2026-10-11-avalonia-behaviors-demo-design.md` 与 `docs/superpowers/plans/2026-10-11-behaviors-demo-0*.md` 描述了单项目 `Avalonia.BehaviorsDemo`（左侧 TabControl 导航，共 15 页，按概念层次组织）。计划里的代码块用 `#### \`路径\`` 标题标注目标文件，可整块抽取；各页的"实测结论"回填在 spec 的「批 N 实测结论」小节。
-
-- 验证靠仓库外的 headless 探针（`C:\Temp\probe-bdemo`，不入库）。计时器类行为（`DebounceAction`、`TimerTrigger`）在 headless 里要跑 `Dispatcher.UIThread.MainLoop` 才会走。
-- 副作用动作都限制在安全范围：文件只动 `Path.GetTempPath()` 下的 `avalonia-behaviors-demo`，网络只连本进程的 127.0.0.1 回环服务，剪贴板与截图页有醒目提示。
-- 行为库的坑：继承普通 `Trigger`（如 `FileSystemWatcherTrigger`、`NetworkInformationTrigger`，以及自己写的 `Trigger<T>`）的触发器不会把 DataContext 传给里面的 Action，`InvokeCommandAction` 的 `{Binding}` 命令不执行且无日志，自写触发器应继承 `StyledElementTrigger<T>`；`Animation` 不能直接写在行为里（放进 `Style.Resources` 再 `DynamicResource` 引用）；`ListReorderDragBehavior` 必须经 `ListBoxItem` 样式挂载。
