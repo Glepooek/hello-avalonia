@@ -1,0 +1,38 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             xmlns:vm="using:Avalonia.ControlsDemo.ViewModels"
+             x:Class="Avalonia.ControlsDemo.Views.Pages.ContentControlPage">
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="ContentControl：只放一个内容"
+                               DocPath="controls/data-display/contentcontrol" />
+
+            <TextBlock Classes="caption" Text="Content 是字符串、控件，还是数据对象，决定了它怎么画" />
+            <Border Classes="stage" Padding="12">
+                <StackPanel Spacing="8">
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <Button Name="TextButton" Content="Content = 字符串" />
+                        <Button Name="ControlButton" Content="Content = 控件" />
+                        <Button Name="ModelButton" Content="Content = 数据对象" />
+                    </StackPanel>
+                    <Border BorderBrush="Gray" BorderThickness="1" Width="320" Height="70" HorizontalAlignment="Left">
+                        <ContentControl Name="Host" HorizontalAlignment="Center" VerticalAlignment="Center">
+                            <ContentControl.DataTemplates>
+                                <DataTemplate x:DataType="vm:DemoProduct">
+                                    <StackPanel Orientation="Horizontal" Spacing="8">
+                                        <TextBlock FontWeight="SemiBold" Text="{Binding Name}" />
+                                        <TextBlock Text="{Binding Price, StringFormat={}{0:C}}" />
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ContentControl.DataTemplates>
+                        </ContentControl>
+                    </Border>
+                    <TextBlock Name="TypeText" Text="Content 的类型：（未设置）" />
+                </StackPanel>
+            </Border>
+            <TextBlock Classes="hint" Text="字符串直接显示；控件原样放进去；其它对象找数据模板（ContentTemplate，或树上任一层的 DataTemplates）渲染，找不到就退回调用 ToString()。Button、Border 等的 Content 都是这套规则。" />
+            <TextBlock Classes="hint" Text="更深入的演示：Avalonia.DataTemplatesDemo →「控件内容」" />
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

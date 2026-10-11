@@ -1,0 +1,36 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             x:Class="Avalonia.ControlsDemo.Views.Pages.TransitioningContentControlPage">
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="TransitioningContentControl：换内容时带过渡"
+                               DocPath="controls/data-display/transitioningcontentcontrol" />
+
+            <TextBlock Classes="caption" Text="PageTransition 与 IsTransitionReversed" />
+            <Border Classes="stage" Padding="12">
+                <StackPanel Spacing="8">
+                    <StackPanel Orientation="Horizontal" Spacing="12">
+                        <Button Name="NextButton" Content="换下一页" />
+                        <TextBlock VerticalAlignment="Center" Text="PageTransition" />
+                        <ComboBox Name="TransitionBox" Width="150" />
+                        <CheckBox Name="ReverseCheck" Content="IsTransitionReversed" />
+                    </StackPanel>
+                    <TextBlock Name="DoneText" Text="已完成 0 次过渡" />
+                    <Border BorderBrush="Gray" BorderThickness="1" Width="320" Height="100" HorizontalAlignment="Left" ClipToBounds="True">
+                        <TransitioningContentControl Name="Host" Content="第 1 页">
+                            <TransitioningContentControl.ContentTemplate>
+                                <DataTemplate x:DataType="x:String">
+                                    <Border Background="#334682B4">
+                                        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="20" Text="{Binding}" />
+                                    </Border>
+                                </DataTemplate>
+                            </TransitioningContentControl.ContentTemplate>
+                        </TransitioningContentControl>
+                    </Border>
+                </StackPanel>
+            </Border>
+            <TextBlock Classes="hint" Text="它只是在改 Content 的瞬间播放 PageTransition，其余和 ContentControl 一样。外层 Border 要 ClipToBounds，否则滑动过渡会画到框外。每次换内容完成后触发一次 TransitionCompleted。" />
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>
