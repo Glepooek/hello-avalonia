@@ -1,0 +1,31 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             x:Class="Avalonia.ControlsDemo.Views.Pages.CalendarDatePickerPage">
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="CalendarDatePicker：带下拉月历的日期框"
+                               DocPath="controls/input/date-and-time/calendardatepicker" />
+
+            <TextBlock Classes="caption" Text="1. SelectedDateFormat：长、短、自定义" />
+            <Border Classes="stage" Padding="12">
+                <StackPanel Spacing="8">
+                    <StackPanel Orientation="Horizontal" Spacing="12">
+                        <CalendarDatePicker Name="Picker" Width="220" PlaceholderText="选择日期" />
+                        <TextBlock Name="PickerResult" VerticalAlignment="Center" Text="未选择" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Spacing="12">
+                        <ComboBox Name="FormatBox" Width="120" />
+                        <TextBox Name="CustomFormat" Width="160" Text="yyyy年M月d日" />
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+            <TextBlock Classes="hint" Text="自定义格式串只在 SelectedDateFormat 为 Custom 时生效；格式串写错不会抛异常，日期框显示原样文本。" />
+
+            <TextBlock Classes="caption" Text="2. DisplayDateStart / DisplayDateEnd：限制可选范围" />
+            <Border Classes="stage" Padding="12">
+                <CalendarDatePicker Name="RangedPicker" Width="220" PlaceholderText="仅 2026 年可选" />
+            </Border>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

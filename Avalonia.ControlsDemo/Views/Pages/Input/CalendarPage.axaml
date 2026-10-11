@@ -1,0 +1,45 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             x:Class="Avalonia.ControlsDemo.Views.Pages.CalendarPage">
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="Calendar：月历"
+                               DocPath="controls/input/date-and-time/calendar" />
+
+            <TextBlock Classes="caption" Text="1. SelectionMode：单日、范围、多范围、不可选" />
+            <Border Classes="stage" Padding="12">
+                <StackPanel Orientation="Horizontal" Spacing="24">
+                    <Calendar Name="Cal" />
+                    <StackPanel Spacing="8" VerticalAlignment="Top">
+                        <ComboBox Name="ModeBox" Width="180" />
+                        <TextBlock Name="SelectionText" TextWrapping="Wrap" MaxWidth="260" Text="已选 0 天" />
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+
+            <TextBlock Classes="caption" Text="2. DisplayMode 与 FirstDayOfWeek" />
+            <Border Classes="stage" Padding="12">
+                <StackPanel Orientation="Horizontal" Spacing="12">
+                    <TextBlock VerticalAlignment="Center" Text="DisplayMode" />
+                    <ComboBox Name="DisplayModeBox" Width="120" />
+                    <TextBlock VerticalAlignment="Center" Text="FirstDayOfWeek" />
+                    <ComboBox Name="FirstDayBox" Width="140" />
+                </StackPanel>
+            </Border>
+            <TextBlock Classes="hint" Text="DisplayMode 切换后，上面第一个日历随之变成月、年或十年视图。" />
+
+            <TextBlock Classes="caption" Text="3. BlackoutDates：黑名单日期不可选，代码强行选中会抛异常" />
+            <Border Classes="stage" Padding="12">
+                <StackPanel Orientation="Horizontal" Spacing="24">
+                    <Calendar Name="BlackoutCal" />
+                    <StackPanel Spacing="8" VerticalAlignment="Top">
+                        <Button Name="BlackoutButton" Content="用代码选中 1 月 6 日（黑名单）" />
+                        <TextBlock Name="BlackoutResult" TextWrapping="Wrap" MaxWidth="260" Text="尚未尝试" />
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+            <TextBlock Classes="hint" Text="抛出异常后 SelectedDate 仍保留被拒绝的值，SelectedDates 却是空的，所以不要用 SelectedDate 判断「有没有选中」。DisplayDateStart / DisplayDateEnd 可限制可浏览范围。" />
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

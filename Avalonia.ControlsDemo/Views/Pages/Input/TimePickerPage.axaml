@@ -1,0 +1,33 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             x:Class="Avalonia.ControlsDemo.Views.Pages.TimePickerPage">
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="TimePicker：时间选择"
+                               DocPath="controls/input/date-and-time/timepicker" />
+
+            <TextBlock Classes="caption" Text="ClockIdentifier、MinuteIncrement、UseSeconds" />
+            <Border Classes="stage" Padding="12">
+                <StackPanel Spacing="8">
+                    <StackPanel Orientation="Horizontal" Spacing="12">
+                        <TimePicker Name="Picker" />
+                        <TextBlock Name="PickerResult" VerticalAlignment="Center" Text="未选择" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Spacing="12">
+                        <TextBlock VerticalAlignment="Center" Text="ClockIdentifier" />
+                        <ComboBox Name="ClockBox" Width="140" />
+                        <CheckBox Name="SecondsCheck" Content="UseSeconds" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Spacing="12">
+                        <TextBlock Width="110" VerticalAlignment="Center" Text="MinuteIncrement" />
+                        <Slider Name="StepSlider" Width="200" Minimum="1" Maximum="30" Value="1" />
+                        <TextBlock VerticalAlignment="Center"
+                                   Text="{Binding #StepSlider.Value, StringFormat='{}{0:F0}'}" />
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+            <TextBlock Classes="hint" Text="ClockIdentifier 是字符串，只认 12HourClock 与 24HourClock；MinuteIncrement 要能整除 60 才有意义。" />
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

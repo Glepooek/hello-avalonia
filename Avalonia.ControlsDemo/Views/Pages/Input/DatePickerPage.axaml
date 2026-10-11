@@ -1,0 +1,41 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             x:Class="Avalonia.ControlsDemo.Views.Pages.DatePickerPage">
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="DatePicker：三列滚动选择的日期框"
+                               DocPath="controls/input/date-and-time/datepicker" />
+
+            <TextBlock Classes="caption" Text="1. 基本用法与 SelectedDate" />
+            <Border Classes="stage" Padding="12">
+                <StackPanel Orientation="Horizontal" Spacing="12">
+                    <DatePicker Name="Picker" />
+                    <TextBlock Name="PickerResult" VerticalAlignment="Center" Text="未选择" />
+                </StackPanel>
+            </Border>
+
+            <TextBlock Classes="caption" Text="2. 隐藏某一列，改格式" />
+            <Border Classes="stage" Padding="12">
+                <StackPanel Spacing="8">
+                    <StackPanel Orientation="Horizontal" Spacing="16">
+                        <CheckBox Name="DayCheck" Content="DayVisible" IsChecked="True" />
+                        <CheckBox Name="MonthCheck" Content="MonthVisible" IsChecked="True" />
+                        <CheckBox Name="YearCheck" Content="YearVisible" IsChecked="True" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Spacing="12">
+                        <TextBlock VerticalAlignment="Center" Text="MonthFormat" />
+                        <ComboBox Name="MonthFormatBox" Width="120" />
+                    </StackPanel>
+                    <DatePicker Name="FormatPicker" />
+                </StackPanel>
+            </Border>
+            <TextBlock Classes="hint" Text="MonthFormat 取 M、MM、MMM、MMMM；DayFormat 与 YearFormat 同理。只留年和月，就得到「选择月份」的控件。" />
+
+            <TextBlock Classes="caption" Text="3. MinYear / MaxYear" />
+            <Border Classes="stage" Padding="12">
+                <DatePicker Name="LimitedPicker" />
+            </Border>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>
