@@ -1,0 +1,40 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             mc:Ignorable="d"
+             d:DesignWidth="800"
+             d:DesignHeight="500"
+             x:Class="Avalonia.ControlsDemo.Views.Pages.ButtonPage">
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="Button：最基本的可点击控件"
+                               DocPath="controls/input/buttons/button" />
+
+            <TextBlock Classes="caption" Text="1. Click 事件" />
+            <Border Classes="stage" Padding="12">
+                <StackPanel Orientation="Horizontal" Spacing="12">
+                    <Button Name="ClickButton" Content="点我" Click="OnClickButtonClick" />
+                    <TextBlock Name="ClickCount" VerticalAlignment="Center" Text="点击次数：0" />
+                </StackPanel>
+            </Border>
+
+            <TextBlock Classes="caption" Text="2. ClickMode：Release 与 Press" />
+            <Border Classes="stage" Padding="12">
+                <StackPanel Spacing="8">
+                    <StackPanel Orientation="Horizontal" Spacing="12">
+                        <Button Name="ReleaseButton" ClickMode="Release" Content="Release（松开触发）" Click="OnReleaseClick" />
+                        <TextBlock Name="ReleaseCount" VerticalAlignment="Center" Text="0" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Spacing="12">
+                        <Button Name="PressButton" ClickMode="Press" Content="Press（按下触发）" Click="OnPressClick" />
+                        <TextBlock Name="PressCount" VerticalAlignment="Center" Text="0" />
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+            <TextBlock Classes="hint" Text="IsDefault 与 IsCancel 只在 Window 中生效：按回车等于点击 IsDefault 的按钮，按 Esc 等于点击 IsCancel 的按钮。" />
+            <TextBlock Classes="hint" Text="更深入的演示：Avalonia.InputDemo →「交互的写法」" />
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

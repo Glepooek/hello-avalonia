@@ -1,0 +1,35 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             mc:Ignorable="d"
+             d:DesignWidth="800"
+             d:DesignHeight="500"
+             x:Class="Avalonia.ControlsDemo.Views.Pages.ToggleButtonPage">
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="ToggleButton：有选中状态的按钮"
+                               DocPath="controls/input/buttons/togglebutton" />
+
+            <TextBlock Classes="caption" Text="1. 双态：IsChecked 在 True 与 False 之间切换" />
+            <Border Classes="stage" Padding="12">
+                <StackPanel Orientation="Horizontal" Spacing="12">
+                    <ToggleButton Name="TwoState" Content="开关" />
+                    <TextBlock VerticalAlignment="Center"
+                               Text="{Binding #TwoState.IsChecked, StringFormat='IsChecked = {0}'}" />
+                </StackPanel>
+            </Border>
+
+            <TextBlock Classes="caption" Text="2. 三态：IsThreeState 多出 null（不确定）" />
+            <Border Classes="stage" Padding="12">
+                <StackPanel Orientation="Horizontal" Spacing="12">
+                    <ToggleButton Name="ThreeState" IsThreeState="True" IsChecked="{x:Null}" Content="三态" />
+                    <TextBlock VerticalAlignment="Center"
+                               Text="{Binding #ThreeState.IsChecked, StringFormat='IsChecked = {0}', FallbackValue='IsChecked = null'}" />
+                </StackPanel>
+            </Border>
+            <TextBlock Classes="hint" Text="更深入的演示：Avalonia.StylingDemo →「伪类」（:checked 与 :indeterminate）" />
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

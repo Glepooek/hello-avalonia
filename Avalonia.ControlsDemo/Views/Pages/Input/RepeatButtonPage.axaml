@@ -1,0 +1,41 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             xmlns:conv="using:Avalonia.Shared.Converters"
+             mc:Ignorable="d"
+             d:DesignWidth="800"
+             d:DesignHeight="500"
+             x:Class="Avalonia.ControlsDemo.Views.Pages.RepeatButtonPage">
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="RepeatButton：按住不放持续触发"
+                               DocPath="controls/input/buttons/repeatbutton" />
+
+            <TextBlock Classes="caption" Text="按住按钮：先等待 Delay，再每隔 Interval 触发一次 Click" />
+            <Border Classes="stage" Padding="12">
+                <StackPanel Spacing="10">
+                    <StackPanel Orientation="Horizontal" Spacing="12">
+                        <RepeatButton Name="Repeater"
+                                      Delay="{Binding #DelaySlider.Value, Converter={x:Static conv:NumberConverters.DoubleToInt}}"
+                                      Interval="{Binding #IntervalSlider.Value, Converter={x:Static conv:NumberConverters.DoubleToInt}}"
+                                      Content="按住我"
+                                      Click="OnRepeaterClick" />
+                        <TextBlock Name="RepeatCount" VerticalAlignment="Center" Text="触发次数：0" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <TextBlock Width="120" VerticalAlignment="Center" Text="Delay（毫秒）" />
+                        <Slider Name="DelaySlider" Width="240" Minimum="0" Maximum="1000" Value="300" />
+                        <TextBlock VerticalAlignment="Center" Text="{Binding #DelaySlider.Value, StringFormat='{}{0:F0}'}" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <TextBlock Width="120" VerticalAlignment="Center" Text="Interval（毫秒）" />
+                        <Slider Name="IntervalSlider" Width="240" Minimum="20" Maximum="500" Value="100" />
+                        <TextBlock VerticalAlignment="Center" Text="{Binding #IntervalSlider.Value, StringFormat='{}{0:F0}'}" />
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

@@ -1,0 +1,32 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             mc:Ignorable="d"
+             d:DesignWidth="800"
+             d:DesignHeight="500"
+             x:Class="Avalonia.ControlsDemo.Views.Pages.HyperlinkButtonPage">
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="HyperlinkButton：看起来像链接的按钮"
+                               DocPath="controls/input/buttons/hyperlinkbutton" />
+
+            <TextBlock Classes="caption" Text="1. NavigateUri：点击后交给系统浏览器打开" />
+            <Border Classes="stage" Padding="12">
+                <HyperlinkButton Name="DocsLink"
+                                 Content="Avalonia 官方文档"
+                                 NavigateUri="https://docs.avaloniaui.net" />
+            </Border>
+
+            <TextBlock Classes="caption" Text="2. 没有 NavigateUri：只当作外观是链接的普通按钮" />
+            <Border Classes="stage" Padding="12">
+                <StackPanel Orientation="Horizontal" Spacing="12">
+                    <HyperlinkButton Name="PlainLink" Content="点击计数" Click="OnPlainLinkClick" />
+                    <TextBlock Name="PlainCount" VerticalAlignment="Center" Text="0" />
+                </StackPanel>
+            </Border>
+            <TextBlock Classes="hint" Text="真实打开链接依赖平台的 Launcher；更深入的演示：Avalonia.ServicesDemo →「Launcher」" />
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>
