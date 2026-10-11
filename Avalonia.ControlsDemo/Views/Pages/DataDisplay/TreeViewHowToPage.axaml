@@ -1,0 +1,61 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             xmlns:vm="using:Avalonia.ControlsDemo.ViewModels"
+             x:Class="Avalonia.ControlsDemo.Views.Pages.TreeViewHowToPage"
+             x:DataType="vm:TreeViewHowToViewModel">
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="TreeView 实战"
+                               DocPath="docs/how-to/treeview-how-to" />
+
+            <TextBlock Classes="caption" Text="1. 一棵树里放不同类型的节点：每种类型一个模板，并从模型控制展开" />
+            <Border Classes="stage" Padding="12">
+                <StackPanel Spacing="8">
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <Button Name="ExpandAllButton" Content="展开全部" />
+                        <Button Name="CollapseAllButton" Content="折叠全部" />
+                    </StackPanel>
+                    <TreeView Name="Mixed" ItemsSource="{Binding Roots}" Width="280" Height="170" HorizontalAlignment="Left">
+                        <TreeView.Styles>
+                            <!--  Bind each item's expansion to the model, so the code can open or close the tree without touching containers.  -->
+                            <Style Selector="TreeViewItem" x:DataType="vm:TreeNodeBase">
+                                <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}" />
+                            </Style>
+                        </TreeView.Styles>
+                        <TreeView.DataTemplates>
+                            <TreeDataTemplate DataType="vm:FolderNode" ItemsSource="{Binding Children}">
+                                <TextBlock FontWeight="SemiBold" Text="{Binding Name, StringFormat='📁 {0}'}" />
+                            </TreeDataTemplate>
+                            <DataTemplate DataType="vm:FileNode">
+                                <TextBlock Text="{Binding Name, StringFormat='📄 {0}'}" />
+                            </DataTemplate>
+                        </TreeView.DataTemplates>
+                    </TreeView>
+                    <TextBlock Name="MixedText" Text="选中：（无）" />
+                </StackPanel>
+            </Border>
+            <TextBlock Classes="hint" Text="TreeView.DataTemplates 按节点的 DataType 选模板：文件夹用 TreeDataTemplate（带 ItemsSource），文件用普通 DataTemplate。把 TreeViewItem 的 IsExpanded 绑到模型，「展开全部」就变成递归改 IsExpanded，不必去找容器。样式选择器会匹配每一个 TreeViewItem（文件节点也算），所以样式里的绑定类型要写两种节点的共同基类，写成 FolderNode 会在文件节点上报强转失败。" />
+
+            <TextBlock Classes="caption" Text="2. 懒加载：第一次展开时才生成子节点" />
+            <Border Classes="stage" Padding="12">
+                <StackPanel Spacing="8">
+                    <TreeView Name="LazyTree" ItemsSource="{Binding Lazy}" Width="280" Height="130" HorizontalAlignment="Left">
+                        <TreeView.Styles>
+                            <Style Selector="TreeViewItem" x:DataType="vm:LazyNode">
+                                <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}" />
+                            </Style>
+                        </TreeView.Styles>
+                        <TreeView.DataTemplates>
+                            <TreeDataTemplate DataType="vm:LazyNode" ItemsSource="{Binding Children}">
+                                <TextBlock Text="{Binding Name}" />
+                            </TreeDataTemplate>
+                        </TreeView.DataTemplates>
+                    </TreeView>
+                    <TextBlock Name="LazyText" Text="远程目录已加载 0 次" />
+                </StackPanel>
+            </Border>
+            <TextBlock Classes="hint" Text="节点一开始只带一个「加载中…」占位子项，这样 TreeView 才会画出展开箭头；IsExpanded 第一次变成 true 时，模型把占位换成真正的子节点。实际项目里把这一步换成异步读取，换完前先显示占位。" />
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

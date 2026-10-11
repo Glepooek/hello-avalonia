@@ -1,0 +1,65 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             xmlns:vm="using:Avalonia.ControlsDemo.ViewModels"
+             x:Class="Avalonia.ControlsDemo.Views.Pages.DataGridHowToPage"
+             x:DataType="vm:DataGridHowToViewModel">
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="DataGrid 实战"
+                               DocPath="docs/how-to/datagrid-how-to" />
+
+            <TextBlock Classes="caption" Text="1. 分组：DataGridCollectionView + DataGridPathGroupDescription" />
+            <Border Classes="stage" Padding="12">
+                <DataGrid Name="GroupGrid" ItemsSource="{Binding Grouped}" Width="480" Height="200" HorizontalAlignment="Left"
+                          AutoGenerateColumns="False" IsReadOnly="True">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn x:DataType="vm:DemoProduct" Header="名称" Binding="{Binding Name}" Width="*" />
+                        <DataGridTextColumn x:DataType="vm:DemoProduct" Header="价格" Binding="{Binding Price}" Width="80" />
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Border>
+            <TextBlock Classes="hint" Text="分组不改源集合：把集合包进 DataGridCollectionView，再往 GroupDescriptions 里加一条按属性名分组的描述，DataGrid 自己生成组头（点组头可折叠）。排序同理走 SortDescriptions。" />
+
+            <TextBlock Classes="caption" Text="2. 预设排序与 SortMemberPath" />
+            <Border Classes="stage" Padding="12">
+                <DataGrid Name="SortGrid" ItemsSource="{Binding Sorted}" Width="480" Height="170" HorizontalAlignment="Left"
+                          AutoGenerateColumns="False" IsReadOnly="True" CanUserSortColumns="True">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn x:DataType="vm:DemoProduct" Header="名称（预设降序）" Binding="{Binding Name}" Width="*" />
+                        <!--  A template column has no Binding to sort by, so SortMemberPath names the property to use.  -->
+                        <DataGridTemplateColumn Header="价格（模板列）" Width="140" SortMemberPath="Price">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate x:DataType="vm:DemoProduct">
+                                    <TextBlock Margin="8,0" VerticalAlignment="Center" Foreground="SeaGreen"
+                                               Text="{Binding Price, StringFormat={}{0:C}}" />
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Border>
+            <TextBlock Classes="hint" Text="模板列没有 Binding，点列头时 DataGrid 不知道按什么排；SortMemberPath 就是告诉它「按 Price 这个属性排」。" />
+
+            <TextBlock Classes="caption" Text="3. 行详情与冻结列" />
+            <Border Classes="stage" Padding="12">
+                <DataGrid Name="DetailGrid" ItemsSource="{Binding Details}" Width="480" Height="200" HorizontalAlignment="Left"
+                          AutoGenerateColumns="False" IsReadOnly="True" FrozenColumnCount="1"
+                          RowDetailsVisibilityMode="VisibleWhenSelected" HorizontalScrollBarVisibility="Auto">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn x:DataType="vm:DemoProduct" Header="名称" Binding="{Binding Name}" Width="120" />
+                        <DataGridTextColumn x:DataType="vm:DemoProduct" Header="分类" Binding="{Binding Category}" Width="160" />
+                        <DataGridTextColumn x:DataType="vm:DemoProduct" Header="价格" Binding="{Binding Price}" Width="160" />
+                        <DataGridCheckBoxColumn x:DataType="vm:DemoProduct" Header="有货" Binding="{Binding InStock}" Width="120" />
+                    </DataGrid.Columns>
+                    <DataGrid.RowDetailsTemplate>
+                        <DataTemplate x:DataType="vm:DemoProduct">
+                            <TextBlock Margin="12,4" Foreground="Gray" Text="{Binding Description, StringFormat='说明：{0}'}" />
+                        </DataTemplate>
+                    </DataGrid.RowDetailsTemplate>
+                </DataGrid>
+            </Border>
+            <TextBlock Classes="hint" Text="选中行下方展开详情（RowDetailsVisibilityMode=VisibleWhenSelected）；FrozenColumnCount=1 把名称列钉在左边，横向滚动时不动。四列加起来比 480 宽，才有横向滚动。" />
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

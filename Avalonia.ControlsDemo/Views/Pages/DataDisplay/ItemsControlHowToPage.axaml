@@ -1,0 +1,87 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             x:Class="Avalonia.ControlsDemo.Views.Pages.ItemsControlHowToPage">
+    <UserControl.Styles>
+        <!--  The stripe comes from a style on a class the code sets per container, never a local Background (rule 1).  -->
+        <Style Selector="ItemsControl.striped ContentPresenter.odd">
+            <Setter Property="Background" Value="#22808080" />
+        </Style>
+    </UserControl.Styles>
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="ItemsControl 实战"
+                               DocPath="docs/how-to/itemscontrol-how-to" />
+
+            <TextBlock Classes="caption" Text="1. 换 ItemsPanel 排成标签云，并在列表为空时显示提示" />
+            <Border Classes="stage" Padding="12">
+                <StackPanel Spacing="8">
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <Button Name="AddTagButton" Content="添加标签" />
+                        <Button Name="ClearTagsButton" Content="清空" />
+                    </StackPanel>
+                    <Border BorderBrush="Gray" BorderThickness="1" Width="320" MinHeight="60" HorizontalAlignment="Left" Padding="6">
+                        <Panel>
+                            <ItemsControl Name="Tags">
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <WrapPanel />
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate x:DataType="x:String">
+                                        <Border Margin="2" Padding="8,2" CornerRadius="10" Background="#334682B4">
+                                            <TextBlock Text="{Binding}" />
+                                        </Border>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                            <!--  The parameter must be a real int: ConverterParameter=0 would be the string "0", and {x:Int32 0} is not a markup extension.  -->
+                            <TextBlock Name="EmptyText" Foreground="Gray" HorizontalAlignment="Center" VerticalAlignment="Center"
+                                       Text="还没有标签">
+                                <TextBlock.IsVisible>
+                                    <Binding Path="#Tags.ItemCount" Converter="{x:Static ObjectConverters.Equal}">
+                                        <Binding.ConverterParameter>
+                                            <x:Int32>0</x:Int32>
+                                        </Binding.ConverterParameter>
+                                    </Binding>
+                                </TextBlock.IsVisible>
+                            </TextBlock>
+                        </Panel>
+                    </Border>
+                </StackPanel>
+            </Border>
+            <TextBlock Classes="hint" Text="ItemsPanel 决定子项怎么排：默认 StackPanel，换成 WrapPanel 就成了标签云。空状态不用写代码，让提示的 IsVisible 绑定到 ItemCount 是否等于 0 即可。" />
+
+            <TextBlock Classes="caption" Text="2. 用 ContainerPrepared 给每个容器打标记，做斑马纹" />
+            <Border Classes="stage" Padding="12">
+                <ItemsControl Name="Striped" Classes="striped" Width="240" HorizontalAlignment="Left">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate x:DataType="x:String">
+                            <TextBlock Margin="8,3" Text="{Binding}" />
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </Border>
+            <TextBlock Classes="hint" Text="每个条目生成容器时触发 ContainerPrepared，事件参数带容器和序号；在这里给奇数序号的容器加上 odd 样式类，页面级样式负责涂色。事件必须先订阅、再设 ItemsSource。" />
+
+            <TextBlock Classes="caption" Text="3. 大数据量：VirtualizingStackPanel 只实现看得见的部分" />
+            <Border Classes="stage" Padding="12">
+                <StackPanel Spacing="8">
+                    <TextBlock Name="RealizedText" />
+                    <ScrollViewer Name="BigScroller" Width="240" Height="120" HorizontalAlignment="Left"
+                                  BorderBrush="Gray" BorderThickness="1">
+                        <ItemsControl Name="Big">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <VirtualizingStackPanel />
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                        </ItemsControl>
+                    </ScrollViewer>
+                </StackPanel>
+            </Border>
+            <TextBlock Classes="hint" Text="ItemsControl 默认不虚拟化；项数很多时把 ItemsPanel 换成 VirtualizingStackPanel，并把它放进 ScrollViewer，容器数就只和视口有关，和总项数无关。" />
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

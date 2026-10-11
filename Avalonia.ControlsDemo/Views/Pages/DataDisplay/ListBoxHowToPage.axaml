@@ -1,0 +1,63 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             xmlns:vm="using:Avalonia.ControlsDemo.ViewModels"
+             x:Class="Avalonia.ControlsDemo.Views.Pages.ListBoxHowToPage"
+             x:DataType="vm:ListBoxHowToViewModel">
+    <UserControl.Styles>
+        <!--  Colour the selected row through the template part; setting Background on ListBoxItem is overridden by the theme.  -->
+        <Style Selector="ListBox.accent ListBoxItem:selected /template/ ContentPresenter">
+            <Setter Property="Background" Value="Orange" />
+        </Style>
+    </UserControl.Styles>
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="ListBox 实战"
+                               DocPath="docs/how-to/listbox-how-to" />
+
+            <TextBlock Classes="caption" Text="1. 用 CheckBox 做多选：状态放在数据上，不靠 ListBox 的选择" />
+            <Border Classes="stage" Padding="12">
+                <StackPanel Spacing="8">
+                    <ListBox Name="Todos" ItemsSource="{Binding Todos}" Width="240" Height="130" HorizontalAlignment="Left">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate x:DataType="vm:TodoItem">
+                                <CheckBox IsChecked="{Binding IsDone}" Content="{Binding Title}" />
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                    <TextBlock Name="DoneText" Text="{Binding DoneCount, StringFormat='已完成 {0} 项'}" />
+                </StackPanel>
+            </Border>
+            <TextBlock Classes="hint" Text="每行的 CheckBox 绑到数据的 IsDone，勾选就是改数据，所以不用开 SelectionMode=Multiple，也不用处理 SelectedItems。" />
+
+            <TextBlock Classes="caption" Text="2. 横向排列：ItemsPanel 换成水平 StackPanel" />
+            <Border Classes="stage" Padding="12">
+                <ListBox Name="Strip" Width="360" Height="80" HorizontalAlignment="Left"
+                         ScrollViewer.HorizontalScrollBarVisibility="Auto">
+                    <ListBox.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel Orientation="Horizontal" Spacing="4" />
+                        </ItemsPanelTemplate>
+                    </ListBox.ItemsPanel>
+                    <ListBoxItem Width="80" Content="卡片 1" />
+                    <ListBoxItem Width="80" Content="卡片 2" />
+                    <ListBoxItem Width="80" Content="卡片 3" />
+                    <ListBoxItem Width="80" Content="卡片 4" />
+                    <ListBoxItem Width="80" Content="卡片 5" />
+                    <ListBoxItem Width="80" Content="卡片 6" />
+                </ListBox>
+            </Border>
+            <TextBlock Classes="hint" Text="横向时别忘了 ScrollViewer.HorizontalScrollBarVisibility，默认是 Disabled，内容会被裁掉而不是出现滚动条。" />
+
+            <TextBlock Classes="caption" Text="3. 自定义选中外观：ListBoxItem:selected /template/ ContentPresenter" />
+            <Border Classes="stage" Padding="12">
+                <ListBox Name="Accent" Classes="accent" Width="240" Height="110" HorizontalAlignment="Left" SelectedIndex="1">
+                    <ListBoxItem Content="苹果" />
+                    <ListBoxItem Content="面包" />
+                    <ListBoxItem Content="樱桃" />
+                </ListBox>
+            </Border>
+            <TextBlock Classes="hint" Text="选中背景画在模板里的 ContentPresenter 上，直接给 ListBoxItem 设 Background 会被主题盖掉，必须用 /template/ 选到那个部件。" />
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>
