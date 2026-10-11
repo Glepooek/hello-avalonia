@@ -285,6 +285,13 @@ Menus 5 + Navigation 8 + Primitives 5 + System 1 + Web 4 = **84 页**，
    派生自现有控件要覆盖 `StyleKeyOverride`、`Watermark` 已过时改用 `PlaceholderText`）
    全部沿用，不在这里重复展开，实现计划的"规则"一节会逐条列出。
 
+### 批 0 实测结论（2026-10-11）
+
+- **风险 3（DataGrid 包）**：`Avalonia.Controls.DataGrid` 12.1.2。回归探针确认：不加 `StyleInclude` 时行数为 0；加 `avares://Avalonia.Controls.DataGrid/Themes/Fluent.xaml` 后行数为 2。这是"不新增依赖"的唯一例外，已在 `Directory.Packages.props` 声明。
+- **风险 4（ColorPicker / ColorView 包）**：`Avalonia.Controls.ColorPicker` 12.1.2。回归探针确认：不加样式时可视后代数为 0；加 `avares://Avalonia.Controls.ColorPicker/Themes/Fluent/Fluent.xaml` 后后代数大于 50。主题文件在 `Fluent/` 子目录下。
+- **风险 1（新页面类型）**：NavigationPage、ContentPage、DrawerPage、TabbedPage、CarouselPage、CommandBar 六个控件在桌面 headless 下全部能实例化、`Bounds` 非零、有可视后代（回归探针 6/6 通过）；无需降级，第 06 份全部做可运行页。成员清单见第 00 份计划 Task 7 Step 2。
+- **Buttons 样板中确认的写法**：无。8 个页面的探针共 65 条断言（含壳）一次通过，零警告日志。
+
 ## 验证标准
 
 1. `dotnet build hello-avalonia.slnx` 通过，且无新增警告
