@@ -1,6 +1,7 @@
 using Avalonia.Controls;
 using Avalonia.Headless.XUnit;
 using Avalonia.TestingDemo.Views.Pages;
+using Avalonia.Tests.Common;
 using System.Linq;
 using Xunit;
 

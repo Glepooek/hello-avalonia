@@ -5,10 +5,10 @@ using Avalonia.Input;
 using Avalonia.VisualTree;
 using System.Linq;
 
-namespace Avalonia.TestingDemo.Tests
+namespace Avalonia.Tests.Common
 {
     // Shared helpers for the headless UI tests.
-    internal static class UiHelpers
+    public static class UiHelpers
     {
         public static Window Show(Control page)
         {
