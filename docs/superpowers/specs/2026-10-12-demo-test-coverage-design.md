@@ -87,7 +87,8 @@ Appium 驱动的是外部进程，测试程序集不引用任何应用，也就�
 |---|---|
 | `UiHelpers` | 从 `TestingDemo.Tests` 迁入并改为 `public`：`Show`、`ByName`、`ByAutomationId`、`Click`、`Type`，签名与行为不变 |
 | `HeadlessApp.Build<TApp>()` | 返回 `AppBuilder.Configure<TApp>().UseSkia().UseHeadless(UseHeadlessDrawing=false)`，各项目的 `TestAppBuilder` 只剩一行调用 |
-| `TabWalker` | 对任意 `Window` 找到第一个 `TabControl`，逐个选中每个 `TabItem` 并强制布局，返回每页的 `Header` 与异常；供冒烟测试做 `[Theory]` 数据源 |
+| `TabWalker` | 对任意 `Window` 找到第一个 `TabControl`，逐个选中每个 `TabItem` 并强制布局，返回每页的 `Header` 与异常（单页抛错不中断后面的页）；冒烟测试在一个 `[AvaloniaFact]` 里断言页头列表与无异常 |
+| `LogCollector` | 收集 Warning 及以上的 Avalonia 日志，`Dispose` 时还原 `Logger.Sink`；独立提供，是否接入冒烟测试由批 1 逐页确认后定 |
 
 现有 `TestingDemo.Tests` 迁移后 24 个测试必须原样通过；这是批 0 的回归基线。
 
@@ -143,19 +144,19 @@ Appium 会接管真实鼠标键盘，所以必须显式开启。自定义 `Appiu
 
 1. 操作系统是 Windows。
 2. 环境变量 `HELLO_AVALONIA_APPIUM=1`。
-3. `http://127.0.0.1:4723/status` 可达。
+3. 本机 TCP 端口 4723 能连上（不要依赖 `/status` 的返回内容，见「批 0 实测结论」）。
 4. 目标应用的 exe 存在。
 
 这样 `dotnet test hello-avalonia.slnx` 在没有 WinAppDriver 时全绿（Appium 部分显示为跳过），不会误控桌面。
 
 ### 元素定位
 
-沿用参考库的 `FindElementByAccessibilityId`。两个**待实测的假设**（批 0 探针）：
+沿用参考库的 `FindElementByAccessibilityId`。两个假设已在批 0 实测，**均成立**：
 
-- **H-A**：Avalonia 的 UIA 节点在没有显式 `AutomationProperties.AutomationId` 时，会回退使用控件的 `Name`（即 `x:Name`）。若成立，现有 549 处 `x:Name` 直接可用，无需改动 `src/`。
-- **H-B**：`TabItem` 的 UIA `Name` 等于其 `Header` 文本，可以按"中文标签页标题"点击。
+- **H-A（成立）**：Avalonia 的 UIA 节点在没有显式 `AutomationProperties.AutomationId` 时，会回退使用控件的 `Name`（即 `x:Name`）。现有 549 处 `x:Name` 直接可用，无需改动 `src/`。
+- **H-B（成立）**：`TabItem` 的 UIA `Name` 等于其 `Header` 文本，可以按"中文标签页标题"点击。
 
-若 H-A 不成立：只给**对应测试实际用到的控件**补 `AutomationProperties.AutomationId`，不做全量标注；命名沿用 `TestingDemo` 的 kebab-case（如 `increment-btn`）。若 H-B 不成立：改按 `TabItem` 的序号定位。
+只有在某个控件**既没有 `Name` 也没有 `AutomationId`** 时，才给它补 `AutomationProperties.AutomationId`，命名沿用 `TestingDemo` 的 kebab-case（如 `increment-btn`），并且只补对应测试实际用到的控件。点击后读取状态必须带等待（见「批 0 实测结论」）。
 
 ## Appium 环境配置（安装 WinAppDriver 之后）
 
@@ -202,13 +203,13 @@ WinAppDriver 要求开启。路径：**设置 → 隐私和安全性 → 开发�
 - 要换端口或地址（`WinAppDriver.exe 4727`、`WinAppDriver.exe 10.0.0.10 4725`），README 说明必须**以管理员身份**运行；本设计不需要，所以默认用普通权限启动即可。
 - 夹具不会替你启动它。没启动时 Appium 用例会被跳过（见「运行门控」），而不是失败。
 
-校验服务是否起来（**未在本机实测**：我尝试启动时命令被权限拒绝，没有执行）：
+校验服务是否起来（批 0 实测：监听正常时 `/status` 也返回 `{"status":13,"value":{"error":"unknown error",…}}`，所以**只看能不能连上，不看返回内容**）：
 
 ```powershell
-curl.exe -s http://127.0.0.1:4723/status
+Test-NetConnection 127.0.0.1 -Port 4723 -InformationLevel Quiet
 ```
 
-预期返回一段包含 `build` 信息的 JSON；连接被拒绝说明服务没起来。
+返回 `True` 说明服务在监听；`False` 说明没起来。
 
 ### 步骤 4：配置测试项目（由批 0、批 7 落地）
 
@@ -268,7 +269,7 @@ dotnet test tests/Avalonia.Demos.AppiumTests
 | 3 | 03-headless-interaction-graphics | Events、Input、Graphics、CustomControls | 4 |
 | 4 | 04-headless-app-services | AppDevelopment、Services、Behaviors | 3 |
 | 5 | 05-headless-controls | ControlsDemo（121 页，按目录分类，必要时拆 05a/05b） | 1 |
-| 6 | 06-headless-exceptions | MusicStore、WebViewDemo、HtmlRendererDemo；TestingDemo 补 H1 | 3 + 1 |
+| 6 | 06-headless-exceptions | MusicStore、WebViewDemo、HtmlRendererDemo（TestingDemo 的 H1 已在批 0 随 `TabWalkerTests` 完成） | 3 |
 | 7 | 07-appium-foundation | Appium 项目骨架、`AppSession`、`AppiumFactAttribute`；`TestingDemo` 的 A1–A3 作为基准 | 1 |
 | 8 | 08-appium-tabbed | 其余 15 个 `TabControl` 应用的 A1 + A2（数据驱动，一份代码） | 15 |
 | 9 | 09-appium-special | ControlsDemo、HtmlRendererDemo、MusicStore、WebViewDemo 的 A1，以及 WebViewDemo 的 A3 | 4 |
@@ -319,7 +320,25 @@ dotnet test tests/Avalonia.Demos.AppiumTests
 2. **Headless 项目组织**：每个应用一个测试项目（共 20 个，含已有的 `TestingDemo.Tests`）。
 3. **Appium 范围**：只做 Windows，集中在一个项目里，用环境变量显式开启。
 
-## 批 0 实测结论（执行后回填）
+## 批 0 实测结论（计划 00 执行后）
+
+| 探针 | 结论 | 说明 |
+|---|---|---|
+| P1 编译 | 通过 | `Appium.WebDriver` 4.4.5 在 net10 的 xunit v3 项目里还原、编译均无警告 |
+| P1 运行 | 通过 | 客户端能连上 WinAppDriver 并创建会话、启动被测 exe。注意 `GET /status` 返回 `{"status":13,"value":{"error":"unknown error",…}}`，**不能**用它做健康检查，见下 |
+| P2 | 通过，但有时序发现 | 按 `AutomationId` 找到 `increment-btn`、`count-text`，点击生效（减号按钮由禁用变启用）。**点击后立刻读 `Text` 得到旧值 `0`，等 1.5 秒后重新读才是 `1`**，所以字面的 P2 断言失败过一次；诊断见下 |
+| P3（H-A） | 通过 | 只有 `Name`、没有 `AutomationId` 的 `LayoutDemo` `MarginSlider`，能用 `FindElementByAccessibilityId("MarginSlider")` 找到 |
+| P4（H-B） | 通过 | `FindElementByName("定位与间距")` 找到 `TabItem`，点击后 `Selected` 为真 |
+| P5 | 通过 | `TabWalker` 对 `LayoutDemo`（用其自己的 `App`）依次得到 `布局面板`、`定位与间距`、`响应式布局`，均无异常 |
+| P6 | 部分通过 | `LogCollector` 能收集运行时绑定到不存在属性的警告；编译绑定下"绑定到结构体属性"的静默失败**未验证**，所以没有接入 `TabWalker` |
+
+### 对批 7–10 的决定
+
+- **H-A 成立**：`x:Name` 直接就是 `AccessibilityId`，`src/` **不需要**补任何 `AutomationProperties.AutomationId`。spec 的「Appium 定位」里"若 H-A 不成立再补"的分支作废。
+- **H-B 成立**：批 8 按 `TabItem` 的 `Header` 文本定位标签页，不必按序号。
+- **所有 Appium 断言必须带等待**：点击之后读取状态要轮询到期望值或超时（建议每 200 ms 重试、上限 5 秒），不能点完立刻读。批 7 的 `AppSession` 要提供 `WaitFor(Func<bool>)` 之类的统一等待，各测试不要自己 `Thread.Sleep`。
+- **`AppiumFactAttribute` 的"WinAppDriver 可达"判断不能用 `/status` 的返回内容**：它对健康的服务也回 `status=13`。改为"TCP 端口 4723 能连上"（`TcpClient.Connect`），这与 spec「运行门控」第 3 条的意图一致，但实现方式要改。
+- P2 的诊断（一个变量一次）：点击 `increment-btn` 后，立刻读 `count-text.Text`=`0`；等 1.5 秒后重新查找并读取=`1`，旧句柄再读也是 `1`；`decrement-btn.Enabled` 点击前 `False`、等待后 `True`。结论是 WinAppDriver 读到的是 UI Automation 的缓存，延迟后才更新，不是点击没生效。具体需要等多久**没有测**，只知道 1.5 秒足够，所以上面 5 秒的上限是保守估计，批 7 应实测后收紧。
 
 ## 批 1 实测结论（执行后回填）
 
