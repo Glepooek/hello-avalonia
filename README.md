@@ -71,4 +71,3 @@ dotnet test Avalonia.TestingDemo.Tests
 
 - 包版本统一在 `Directory.Packages.props` 声明，项目引用不带 `Version`
 - 新增代码与 XAML 注释用英文，界面文字（Tab 标题、说明条、按钮文案）用中文；从 hello-dotnet 迁移来的既有中文注释保持原样
-- 设计文档位于 `docs/superpowers/specs/`

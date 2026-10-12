@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## 仓库是什么
 
-Avalonia 12.1.2 / .NET 10 的学习型演示集合：每个 `Avalonia.*Demo` 目录是一个**独立可运行的 WinExe 项目**，按 Avalonia 官方文档的分类组织（Fundamentals、Layout、Styling、DataBinding 等）。全部项目收在 `hello-avalonia.slnx`。
+每个 `Avalonia.*Demo` 目录是一个**独立可运行的 WinExe 项目**，全部收在 `hello-avalonia.slnx`。项目清单与各自演示内容见 `README.md`。
 
 ## 常用命令
 
@@ -22,19 +22,18 @@ dotnet test Avalonia.TestingDemo.Tests --filter "FullyQualifiedName~ViewModelTes
 - **集中管理包版本**：版本只写在根目录 `Directory.Packages.props`（central package management），csproj 里的 `PackageReference` **不带 `Version`**。新增包时先在那里登记。
 - **`Directory.Build.props`** 统一输出路径为 `bin\Debug|Release`，并设 `AppendTargetFrameworkToOutputPath=false`（输出目录里没有 `net10.0` 这一层）。
 - **`Avalonia.Shared`** 是所有演示共用的库：`DemoHeader` 控件、`SharedStyles.axaml`、`ViewModelBase`、`EventLog`、`DoubleToThicknessConverter` 等。演示项目通过 `ProjectReference` 引用它；通用的东西放这里，不要在各项目里复制。
-- 各演示项目结构一致：`App.axaml` + `Program.cs` + `Views/MainWindow` + `Views/Pages/*`（每个知识点一页）+ `ViewModels/`。默认开启编译绑定（`AvaloniaUseCompiledBindingsByDefault=true`）。
+- 典型演示项目（`MusicStore`、`WebViewDemo`、`HtmlRendererDemo` 等较完整的应用除外）结构一致：`App.axaml` + `Program.cs` + `Views/MainWindow` + `Views/Pages/*`（每个知识点一页）+ `ViewModels/`。默认开启编译绑定（`AvaloniaUseCompiledBindingsByDefault=true`）。
+- `Avalonia.StarterTutorialDemo` 是例外：照官方入门教程用 code-behind（无 `ViewModels/`、不用 MVVM），别给它补 ViewModel。
 - MVVM 一律用 CommunityToolkit.Mvvm（`[ObservableProperty]`、`[RelayCommand]`）。
-- `Avalonia.MusicStore`、`Avalonia.WebViewDemo`、`Avalonia.HtmlRendererDemo` 是较完整的示例应用；`Avalonia.TestingDemo` 与 `.Tests` 演示 Headless 测试（控件查询、交互、渲染快照）。
 
 ## 包版本的特殊约定（见 `Directory.Packages.props` 注释）
 
 - `Avalonia.Diagnostics` 固定在 11.3.22：v12 的 DevTools 已内置在主包里。
 - 行为库用 `Xaml.Behaviors.Avalonia`（12.0.7）；旧的 `Avalonia.Xaml.Behaviors` 与 v12 二进制不兼容，不要换回去。
 
-## 代码约定（来自 README）
+## 代码约定
 
 - 新写的代码 / XAML 注释用**英文**；界面文字（标签页标题、说明栏、按钮文案）用**中文**；之前迁移过来的中文注释保持原样，不要顺手改。
-- 设计文档放 `docs/superpowers/specs/`，实现计划放 `docs/superpowers/plans/`。
 
 ## 计划驱动的实现与验证（贯穿全仓）
 
