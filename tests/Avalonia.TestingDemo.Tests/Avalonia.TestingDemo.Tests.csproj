@@ -15,6 +15,6 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\Avalonia.TestingDemo\Avalonia.TestingDemo.csproj" />
+        <ProjectReference Include="..\..\src\Avalonia.TestingDemo\Avalonia.TestingDemo.csproj" />
     </ItemGroup>
 </Project>

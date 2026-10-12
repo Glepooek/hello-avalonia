@@ -6,15 +6,16 @@
 
 ```bash
 dotnet build hello-avalonia.slnx
-dotnet run --project Avalonia.LayoutDemo     # 换成任意 Avalonia.*Demo
-dotnet test Avalonia.TestingDemo.Tests       # 唯一的测试项目（xUnit v3 + Headless）
-dotnet test Avalonia.TestingDemo.Tests --filter "FullyQualifiedName~ViewModelTests"
+dotnet run --project src/Avalonia.LayoutDemo     # 换成任意 Avalonia.*Demo
+dotnet test tests/Avalonia.TestingDemo.Tests     # 唯一的测试项目（xUnit v3 + Headless）
+dotnet test tests/Avalonia.TestingDemo.Tests --filter "FullyQualifiedName~ViewModelTests"
 ```
 
 无 lint 配置；`TreatWarningsAsErrors=false`。
 
 ## 项目结构
 
+- 目录约定：演示项目与 `Avalonia.Shared` 放 `src/`，测试项目放 `tests/`；`Directory.*.props` 与 `.slnx` 留在仓库根。新项目按此归位，同时登记到 `hello-avalonia.slnx` 的对应 `<Folder>`。
 - 典型演示：`App.axaml` + `Program.cs` + `Views/MainWindow` + `Views/Pages/*`（每个知识点一页）+ `ViewModels/`；默认开启编译绑定。
 - 例外：`MusicStore`、`WebViewDemo`、`HtmlRendererDemo` 是较完整的应用；`StarterTutorialDemo` 照官方教程用 code-behind，无 `ViewModels/`，别补 ViewModel。
 - `Avalonia.Shared` 是共用库（`DemoHeader`、`SharedStyles.axaml`、`ViewModelBase`、`EventLog` 等），通用代码放这里，不要在各项目复制。
@@ -34,7 +35,7 @@ dotnet test Avalonia.TestingDemo.Tests --filter "FullyQualifiedName~ViewModelTes
 
 ## 计划驱动的实现
 
-大改动按「spec → 分批 plan → 执行」推进：设计文档在 `docs/superpowers/specs/`，计划在 `docs/superpowers/plans/`。计划里的代码块以 `#### \`相对路径\`` 标注目标文件（`**\`C:\绝对路径\`**` 是仓库外的探针文件），可整块抽取。
+大改动按「spec → 分批 plan → 执行」推进：设计文档在 `docs/superpowers/specs/`，计划在 `docs/superpowers/plans/`。计划里的代码块以 `#### \`相对路径\`` 标注目标文件（相对仓库根，新计划须带 `src/` 或 `tests/` 前缀；`**\`C:\绝对路径\`**` 是仓库外的探针文件），可整块抽取。
 
 - 抽取：`powershell -File C:\Temp\extract-plan.ps1 -Plan <计划> -RepoRoot <仓库根>`
 - 验证：用仓库外的 headless 探针（`C:\Temp\probe-controls`、`C:\Temp\probe-bdemo`）；每批实测结论回填到 spec 的「批 N 实测结论」。
