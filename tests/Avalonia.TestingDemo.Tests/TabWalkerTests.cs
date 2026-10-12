@@ -33,9 +33,10 @@ namespace Avalonia.TestingDemo.Tests
         public void Walk_reports_a_tab_that_throws_and_keeps_going()
         {
             var tabs = new TabControl();
+            var after = new TextBlock { Text = "still fine" };
             tabs.Items.Add(new TabItem { Header = "ok", Content = new TextBlock { Text = "fine" } });
             tabs.Items.Add(new TabItem { Header = "bad", Content = new BrokenControl() });
-            tabs.Items.Add(new TabItem { Header = "after", Content = new TextBlock { Text = "still fine" } });
+            tabs.Items.Add(new TabItem { Header = "after", Content = after });
             var window = UiHelpers.Show(tabs);
 
             var visits = TabWalker.Walk(window);
@@ -44,6 +45,9 @@ namespace Avalonia.TestingDemo.Tests
             Assert.Null(visits[0].Error);
             Assert.IsType<InvalidOperationException>(visits[1].Error);
             Assert.Null(visits[2].Error);
+            // A clean Error alone could also mean the layout pass silently did nothing after the failure.
+            Assert.True(after.IsMeasureValid);
+            Assert.True(after.Bounds.Width > 0);
         }
 
         [AvaloniaFact]

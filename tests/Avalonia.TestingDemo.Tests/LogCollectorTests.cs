@@ -24,13 +24,14 @@ namespace Avalonia.TestingDemo.Tests
         [AvaloniaFact]
         public void Restores_the_previous_sink_on_dispose()
         {
-            var before = Logger.Sink;
+            // Nest two collectors: with a null sink before the test, restoring to null would also look correct.
+            using var outer = new LogCollector();
 
             using (new LogCollector())
             {
             }
 
-            Assert.Same(before, Logger.Sink);
+            Assert.Same(outer, Logger.Sink);
         }
     }
 }

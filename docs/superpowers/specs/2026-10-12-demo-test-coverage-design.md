@@ -59,7 +59,7 @@
 - `C:\Program Files\Windows Application Driver\WinAppDriver.exe` 已安装。
 - Windows 开发者模式已开启（`AllowDevelopmentWithoutDevLicense = 1`）。
 - 已装 Node.js，但未装 `appium` 命令；Appium 1 + WinAppDriver 的方案不需要它。
-- 未实测：WinAppDriver 能否驱动 Avalonia 12 窗口、`Appium.WebDriver` 4.4.5 能否在 net10.0 上工作。这两项在批 0 里用探针验证。
+- 批 0 已实测（见「批 0 实测结论」）：WinAppDriver 能驱动 Avalonia 12 窗口，`Appium.WebDriver` 4.4.5 能在 net10.0 上工作，但点击后读取状态需要等待。
 
 ## 架构
 
@@ -81,7 +81,7 @@ Appium 驱动的是外部进程，测试程序集不引用任何应用，也就�
 
 ### `Avalonia.Tests.Common`（共享测试库）
 
-普通类库（非 Exe），引用 `Avalonia.Headless.XUnit` 与 `xunit.v3.assert`，不引用任何应用。内容：
+普通类库（非 Exe），引用 `Avalonia.Headless` 与 `Avalonia.Skia`，不引用 xunit，也不引用任何应用。内容：
 
 | 类型 | 职责 |
 |---|---|
@@ -153,7 +153,7 @@ Appium 会接管真实鼠标键盘，所以必须显式开启。自定义 `Appiu
 
 沿用参考库的 `FindElementByAccessibilityId`。两个假设已在批 0 实测，**均成立**：
 
-- **H-A（成立）**：Avalonia 的 UIA 节点在没有显式 `AutomationProperties.AutomationId` 时，会回退使用控件的 `Name`（即 `x:Name`）。现有 549 处 `x:Name` 直接可用，无需改动 `src/`。
+- **H-A（成立，仅对可交互控件已验证）**：Avalonia 的 UIA 节点在没有显式 `AutomationProperties.AutomationId` 时，会回退使用控件的 `Name`（即 `x:Name`）。批 0 只实测了一个 `Slider`；`Border`、`Grid`、`StackPanel` 这类布局元素是否出现在 UIA 树里**没有测**，所以"549 处 `x:Name` 都可用"不成立，只能说带 `Name` 的**可交互控件**可以直接按 `Name` 定位。
 - **H-B（成立）**：`TabItem` 的 UIA `Name` 等于其 `Header` 文本，可以按"中文标签页标题"点击。
 
 只有在某个控件**既没有 `Name` 也没有 `AutomationId`** 时，才给它补 `AutomationProperties.AutomationId`，命名沿用 `TestingDemo` 的 kebab-case（如 `increment-btn`），并且只补对应测试实际用到的控件。点击后读取状态必须带等待（见「批 0 实测结论」）。
@@ -250,7 +250,7 @@ dotnet test tests/Avalonia.Demos.AppiumTests
 | 全部用例"跳过" | 未设 `HELLO_AVALONIA_APPIUM=1`；WinAppDriver 没起；exe 未构建 | 逐项对照「运行门控」四个条件 |
 | 创建会话报 `UnknownError` / 找不到应用 | `app` 路径不是绝对路径，或 Debug 版本未构建 | 先 `dotnet build`，核对 `bin\Debug` 下的 exe |
 | 启动 WinAppDriver 报开发者模式相关错误 | 未开启开发人员模式 | 回到步骤 2 |
-| 能连上但按 `AutomationId` 找不到元素 | 该控件没有设 `AutomationId`，且 H-A 不成立 | 看批 0 探针 P3 的结论，给用到的控件补 `AutomationProperties.AutomationId` |
+| 能连上但按名字找不到元素 | 该控件不是可交互控件（例如布局容器可能不在 UIA 树里），或既没有 `Name` 也没有 `AutomationId` | 改为定位它内部的可交互控件或文本；仍不行才给该控件补 `AutomationProperties.AutomationId` |
 | 端口 4723 被占用 | 上一次的 `WinAppDriver.exe` 还在 | `Get-Process WinAppDriver \| Stop-Process` |
 
 ### 备选方案：Appium 2 + appium-windows-driver（未实测，仅在探针失败时启用）
@@ -293,7 +293,7 @@ dotnet test tests/Avalonia.Demos.AppiumTests
 |---|---|---|
 | WinAppDriver 最新发布仍是 2020-11 的 v1.2.1（仓库未归档，2025-04 仍有推送），可能驱动不了 Avalonia 12 / net10 应用 | 整个 Appium 层 | 批 0 探针 P2 先验证；失败则改用 Appium 2 + appium-windows-driver（本机已有 Node），或 FlaUI（直接走 UIA，无需服务端），并回头改本设计 |
 | `Appium.WebDriver` 4.4.5 依赖 Selenium 3，可能与 net10 不兼容 | Appium 客户端 | 批 0 探针 P1 |
-| H-A 不成立，`src/` 要补 `AutomationId` | `src/` 改动面变大 | 只补用到的控件；每批 plan 列出具体控件清单；每批执行后确认对应页面的样式与绑定未受影响 |
+| 被测控件既没有 `Name` 也没有 `AutomationId`，或是不在 UIA 树里的布局容器 | 个别测试需要给 `src/` 补 `AutomationId` | 只补用到的控件；每批 plan 列出具体控件清单；每批执行后确认对应页面的样式与绑定未受影响 |
 | 页面依赖真实时间/动画，Headless 断言不稳 | 偶发失败 | 只断言结构与状态，不断言动画中间态；动画页只做 H1 |
 | 部分页面在 Headless 下构造即抛异常（`WebView` 页、窗口管理页、`StorageProvider`） | H1 误报 | 在各批 plan 里读代码后建立带理由的"跳过清单"，不无声吞异常 |
 | `MusicStore` 的搜索走 iTunes 网络，没有可替换的接缝 | H3/A3 不稳 | 不改 `src/`；Headless 只测窗口与 ViewModel 的离线部分，Appium 只做 A1 |
@@ -326,7 +326,7 @@ dotnet test tests/Avalonia.Demos.AppiumTests
 |---|---|---|
 | P1 编译 | 通过 | `Appium.WebDriver` 4.4.5 在 net10 的 xunit v3 项目里还原、编译均无警告 |
 | P1 运行 | 通过 | 客户端能连上 WinAppDriver 并创建会话、启动被测 exe。注意 `GET /status` 返回 `{"status":13,"value":{"error":"unknown error",…}}`，**不能**用它做健康检查，见下 |
-| P2 | 通过，但有时序发现 | 按 `AutomationId` 找到 `increment-btn`、`count-text`，点击生效（减号按钮由禁用变启用）。**点击后立刻读 `Text` 得到旧值 `0`，等 1.5 秒后重新读才是 `1`**，所以字面的 P2 断言失败过一次；诊断见下 |
+| P2 | 失败（字面判据），已诊断 | P2 的判据是「点击后读回 `1`」，该断言失败过一次：点击后立刻读 `count-text` 得到 `0`。随后的诊断显示点击本身生效——按 `AutomationId` 找到了 `increment-btn`、`count-text`，等 1.5 秒后读到 `1`，减号按钮由禁用变启用。所以**定位、点击、驱动能力都已验证，缺的是等待**；诊断见下 |
 | P3（H-A） | 通过 | 只有 `Name`、没有 `AutomationId` 的 `LayoutDemo` `MarginSlider`，能用 `FindElementByAccessibilityId("MarginSlider")` 找到 |
 | P4（H-B） | 通过 | `FindElementByName("定位与间距")` 找到 `TabItem`，点击后 `Selected` 为真 |
 | P5 | 通过 | `TabWalker` 对 `LayoutDemo`（用其自己的 `App`）依次得到 `布局面板`、`定位与间距`、`响应式布局`，均无异常 |
@@ -334,11 +334,11 @@ dotnet test tests/Avalonia.Demos.AppiumTests
 
 ### 对批 7–10 的决定
 
-- **H-A 成立**：`x:Name` 直接就是 `AccessibilityId`，`src/` **不需要**补任何 `AutomationProperties.AutomationId`。spec 的「Appium 定位」里"若 H-A 不成立再补"的分支作废。
+- **H-A 在可交互控件上成立**：带 `Name` 的 `Slider` 可直接按 `Name` 定位，不需要 `AutomationId`；是否所有控件类型都如此见上面的限定。
 - **H-B 成立**：批 8 按 `TabItem` 的 `Header` 文本定位标签页，不必按序号。
 - **所有 Appium 断言必须带等待**：点击之后读取状态要轮询到期望值或超时（建议每 200 ms 重试、上限 5 秒），不能点完立刻读。批 7 的 `AppSession` 要提供 `WaitFor(Func<bool>)` 之类的统一等待，各测试不要自己 `Thread.Sleep`。
-- **`AppiumFactAttribute` 的"WinAppDriver 可达"判断不能用 `/status` 的返回内容**：它对健康的服务也回 `status=13`。改为"TCP 端口 4723 能连上"（`TcpClient.Connect`），这与 spec「运行门控」第 3 条的意图一致，但实现方式要改。
-- P2 的诊断（一个变量一次）：点击 `increment-btn` 后，立刻读 `count-text.Text`=`0`；等 1.5 秒后重新查找并读取=`1`，旧句柄再读也是 `1`；`decrement-btn.Enabled` 点击前 `False`、等待后 `True`。结论是 WinAppDriver 读到的是 UI Automation 的缓存，延迟后才更新，不是点击没生效。具体需要等多久**没有测**，只知道 1.5 秒足够，所以上面 5 秒的上限是保守估计，批 7 应实测后收紧。
+- **`AppiumFactAttribute` 的"WinAppDriver 可达"判断不能用 `/status` 的返回内容**：它对健康的服务也回 `status=13`。「运行门控」第 3 条已改为 TCP 端口 4723 能连上（`TcpClient.Connect`）。
+- P2 的诊断（一个变量一次，各只跑了一次）：点击前 `count-text`=`0`、`decrement-btn.Enabled`=`False`；点击后等 1.5 秒，重新查找 `count-text` 为 `1`，旧句柄再读也是 `1`，`decrement-btn.Enabled`=`True`。「点击后立刻读到 `0`」只来自 P2 那一次运行，**没有重复测过**，所以不知道是否每次都会读到旧值。**原因没有查明**：可能是 WinAppDriver 读到的是 UI Automation 的缓存，也可能是应用异步处理点击；P4 点击后立刻读 `Selected` 就拿到了新值，说明并非所有属性都有延迟。需要等多久同样没有测，只知道 1.5 秒足够，上面 5 秒的上限是保守估计，批 7 应实测后收紧。
 
 ## 批 1 实测结论（执行后回填）
 
