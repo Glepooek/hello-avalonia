@@ -2,6 +2,7 @@ using Avalonia.Automation;
 using Avalonia.Controls;
 using Avalonia.Headless;
 using Avalonia.Input;
+using Avalonia.Threading;
 using Avalonia.VisualTree;
 using System.Linq;
 
@@ -24,8 +25,11 @@ namespace Avalonia.Tests.Common
             => root.GetVisualDescendants().OfType<T>().First(c => AutomationProperties.GetAutomationId(c) == id);
 
         // A real left click at the centre of the control: unlike RaiseEvent(Click) this runs the bound Command.
+        // Demo pages sit in ScrollViewers, so scroll the target into view first or the click lands on something else.
         public static void Click(this Window window, Control control)
         {
+            control.BringIntoView();
+            Dispatcher.UIThread.RunJobs();
             var center = control.TranslatePoint(new Point(control.Bounds.Width / 2, control.Bounds.Height / 2), window)!.Value;
             window.MouseDown(center, MouseButton.Left);
             window.MouseUp(center, MouseButton.Left);
