@@ -12,10 +12,6 @@ namespace Avalonia.StylingDemo.Tests
 {
     public class InteractionTests
     {
-        // Button.Content is not always a string (DemoHeader has an icon button), so compare with Equals instead of casting.
-        private static Button ButtonWithText(Window window, string text)
-            => window.GetVisualDescendants().OfType<Button>().Single(b => text.Equals(b.Content));
-
         [AvaloniaFact]
         public void Toggle_chip_owns_the_on_pseudo_class_while_it_is_latched()
         {
@@ -51,7 +47,7 @@ namespace Avalonia.StylingDemo.Tests
         public void Unchecking_the_box_disables_the_controlled_button_and_marks_it_with_the_disabled_pseudo_class()
         {
             var window = UiHelpers.Show(new PseudoClassesPage());
-            var controlled = ButtonWithText(window, "被控制的按钮");
+            var controlled = window.ButtonWithText("被控制的按钮");
             Assert.DoesNotContain(":disabled", controlled.Classes);
 
             window.ByName<CheckBox>("EnableBox").IsChecked = false;
@@ -81,10 +77,10 @@ namespace Avalonia.StylingDemo.Tests
             var text = window.ByName<TextBlock>("CodeClassesText");
             Assert.Equal("当前 Classes：swatch", text.Text);
 
-            window.Click(ButtonWithText(window, "切换 green"));
+            window.Click(window.ButtonWithText("切换 green"));
             Assert.Equal("当前 Classes：swatch green", text.Text);
 
-            window.Click(ButtonWithText(window, "切换 green"));
+            window.Click(window.ButtonWithText("切换 green"));
             Assert.Equal("当前 Classes：swatch", text.Text);
         }
 
@@ -111,11 +107,11 @@ namespace Avalonia.StylingDemo.Tests
                 var window = UiHelpers.Show(new ThemesPage());
                 var text = window.ByName<TextBlock>("ActualText");
 
-                window.Click(ButtonWithText(window, "Dark"));
+                window.Click(window.ButtonWithText("Dark"));
                 Assert.Equal(ThemeVariant.Dark, app.RequestedThemeVariant);
                 Assert.Equal("请求：Dark　实际：Dark", text.Text);
 
-                window.Click(ButtonWithText(window, "Light"));
+                window.Click(window.ButtonWithText("Light"));
                 Assert.Equal("请求：Light　实际：Light", text.Text);
             }
             finally

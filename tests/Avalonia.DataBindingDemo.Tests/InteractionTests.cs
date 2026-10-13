@@ -20,10 +20,6 @@ namespace Avalonia.DataBindingDemo.Tests
             window.Type(box, text);
         }
 
-        // Button.Content is not always a string (DemoHeader has an icon button), so compare with Equals instead of casting.
-        private static Button ButtonWithText(Window window, string text)
-            => window.GetVisualDescendants().OfType<Button>().Single(b => text.Equals(b.Content));
-
         [AvaloniaFact]
         public void Commands_page_counts_and_enables_decrement_only_above_zero()
         {
@@ -31,7 +27,7 @@ namespace Avalonia.DataBindingDemo.Tests
             var decrement = window.ByName<Button>("DecrementButton");
             Assert.False(decrement.IsEffectivelyEnabled);
 
-            window.Click(ButtonWithText(window, "+1"));
+            window.Click(window.ButtonWithText("+1"));
             Assert.Equal("Count = 1", window.ByName<TextBlock>("CountText").Text);
             Assert.True(decrement.IsEffectivelyEnabled);
 
@@ -45,7 +41,7 @@ namespace Avalonia.DataBindingDemo.Tests
         {
             var window = UiHelpers.Show(new CommandsPage());
 
-            window.Click(ButtonWithText(window, "+10"));
+            window.Click(window.ButtonWithText("+10"));
             window.Click(window.ByName<Button>("MethodButton"));
 
             Assert.Equal("Count = 10", window.ByName<TextBlock>("CountText").Text);
@@ -80,7 +76,10 @@ namespace Avalonia.DataBindingDemo.Tests
             Replace(window, window.ByName<TextBox>("AgeBox"), "200");
 
             Assert.Equal(18, ((ValidationViewModel)page.DataContext!).Age);
-            Assert.True(DataValidationErrors.GetHasErrors(window.ByName<TextBox>("AgeBox")));
+            // Replace clears the box first, and the clear alone already raises an error (cannot convert ""),
+            // so pin the message that only the setter produces.
+            var errors = DataValidationErrors.GetErrors(window.ByName<TextBox>("AgeBox"))!.Select(e => e?.ToString()).ToList();
+            Assert.Contains(errors, e => e!.Contains("年龄必须在 0 到 150 之间"));
         }
 
         [AvaloniaFact]
@@ -99,8 +98,10 @@ namespace Avalonia.DataBindingDemo.Tests
             Assert.Equal(0, celsius.Value, 6);
 
             // Half-typed input is ignored by the converter instead of resetting the source.
+            // Start from a non-zero value: a reset to default(double) would be invisible at 0.
+            celsius.Value = 37;
             Replace(window, fahrenheit, "-");
-            Assert.Equal(0, celsius.Value, 6);
+            Assert.Equal(37, celsius.Value, 6);
         }
 
         [AvaloniaFact]
@@ -122,7 +123,7 @@ namespace Avalonia.DataBindingDemo.Tests
             var window = UiHelpers.Show(new CollectionsPage());
             Assert.Equal("共 3 人", window.ByName<TextBlock>("LiveCount").Text);
 
-            window.Click(ButtonWithText(window, "两边各加一人"));
+            window.Click(window.ButtonWithText("两边各加一人"));
 
             Assert.Equal("共 4 人", window.ByName<TextBlock>("LiveCount").Text);
             Assert.Equal(4, window.ByName<ListBox>("LiveList").ItemCount);

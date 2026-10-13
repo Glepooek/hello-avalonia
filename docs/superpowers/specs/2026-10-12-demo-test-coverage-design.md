@@ -367,15 +367,17 @@ dotnet test tests/Avalonia.Demos.AppiumTests
 | `Avalonia.DataTemplatesDemo.Tests` | 14 | 9 | 渲染文字精确断言；模板集合顺序、选择器、代码建模板、复用、`ViewLocator`（含"找不到视图"）、面板虚拟化、树展开 |
 | `Avalonia.StylingDemo.Tests` | 10 | 9 | `ToggleChip` 的 `:on` 伪类、样式类绑定、`ControlTheme` 继承、主题变体（带还原）、字体滑块 |
 | `Avalonia.DataBindingDemo.Tests` | 25 | 12 | H2：命令、校验、集合、集合视图、转换器；H3：命令、校验、转换器、集合、主从、集合视图；冒烟里"恰好两条"警告 |
-| `Avalonia.TestingDemo.Tests`（新增） | 1 | — | `UiHelpersTests`：`Click` 能点到视口之外 |
+| `Avalonia.TestingDemo.Tests`（新增） | 2 | — | `UiHelpersTests`：`Click` 能点到视口之外；`ButtonWithText` 按文字找按钮且不强转 `Content` |
 
-执行时的实测：构建警告数 5（批开始前 6）；`dotnet test hello-avalonia.slnx` 共 131 个测试通过（TestingDemo 31 + 批 1 的 37 + 本批 63）；构建耗时本批未取得可比数字（尝试 `--no-incremental` 超过 10 分钟被中断，随后的增量构建重建了全部输出，用时 5 分钟，不能当基准）；破坏检查：PropertySystem 给 `StyledGauge` 加本地值 `Value="10"` → 1 个失败；DataTemplates 改 `ViewLocator` 映射 → 2 个；Styling 把 `:on` 改成 `:off` → 2 个；DataBinding 删 `NotifyCanExecuteChangedFor` → 2 个，均已还原。`UiHelpers.Click` 的回归测试先红（`Expected: 1  Actual: 0`）后绿。
+执行时的实测：构建警告数 5（批开始前 6）；`dotnet test hello-avalonia.slnx` 共 132 个测试通过（TestingDemo 32 + 批 1 的 37 + 本批 63）；构建耗时本批未取得可比数字（尝试 `--no-incremental` 超过 10 分钟被中断，随后的增量构建重建了全部输出，用时 5 分钟，不能当基准）；破坏检查：PropertySystem 给 `StyledGauge` 加本地值 `Value="10"` → 1 个失败；DataTemplates 改 `ViewLocator` 映射 → 2 个；Styling 把 `:on` 改成 `:off` → 2 个；DataBinding 删 `NotifyCanExecuteChangedFor` → 2 个，均已还原。`UiHelpers.Click` 的回归测试先红（`Expected: 1  Actual: 0`）后绿。
 
 **对后续批的决定与发现**（计划阶段在探针里实测，执行阶段原样复现）：
 
 - **`UiHelpers.Click` 必须先把目标滚进视口**：测试窗口 600×480，演示页大多在 `ScrollViewer` 里，视口外的按钮点击会静默落空（命令不执行、无日志）。已在共享库修复并有回归测试；批 3–6 的点击测试不需要再自己 `BringIntoView`。
-- **`UiHelpers.Type` 是插入而非替换**：对已有文字的 `TextBox` 需要先把 `Text` 置空再 `Type`（批 2 在 `DataBindingDemo.Tests` 里用本地 `Replace` 辅助）。若后续批里这个模式再出现两次以上，再考虑上提到共享库。
-- **`LogCollector` 在有故意坏绑定的应用上的用法**：`DataBindingDemo` 的 `DebuggingPage` 故意放了两个坏绑定，冒烟断言写成"恰好两条、各按关键字匹配"，既防多报也防漏报，同时是 `LogCollector` 的正向对照（它确实能收到真实的绑定警告）。`BindingLogSink.Current` 是静态单例，但 `LogCollector.Dispose` 会还原 `Logger.Sink`，没有串到别的测试。
+- **`UiHelpers.Type` 是插入而非替换**：对已有文字的 `TextBox` 需要先把 `Text` 置空再 `Type`（批 2 在 `DataBindingDemo.Tests` 里用本地 `Replace` 辅助）。若后续批里这个模式再出现两次以上，再考虑上提到共享库。注意清空本身会让绑定报一次转换错误（如 `Could not convert ''`），断言校验错误时要匹配 setter 自己的消息，不能只看 `GetHasErrors`。
+- **`UiHelpers.ButtonWithText(text)`**：按文字找按钮（`"文字".Equals(b.Content)`，不强转）。评审时发现批 2 的四个项目各抄了一份，已上提到共享库；批 3–6 直接用。
+- **断言要能看见"被重置"**：测"忽略半截输入"之类的用例，起点不能是 `default` 值（0、null），否则源被重置为默认值也看不出来。
+- **`LogCollector` 在有故意坏绑定的应用上的用法**：`DataBindingDemo` 的 `DebuggingPage` 故意放了两个坏绑定，冒烟断言写成"恰好两条、各按关键字匹配"，既防多报也防漏报，同时是 `LogCollector` 的正向对照（它确实能收到真实的绑定警告）。`BindingLogSink.Current` 是静态单例，且**会串到后面的测试**：若某个测试先构造了 `DebuggingPage`，`BindingLogSink` 会包住当时的 `LogCollector`；`LogCollector.Dispose` 还原 `Logger.Sink` 为 `null` 后，`Current` 仍非空、却已不在 `Logger.Sink` 上，同进程里之后的 `DebuggingPage` 日志列表会是空的。批 2 没有测试断言这个列表，所以没出问题；以后要测它，须先重置 `BindingLogSink` 或单独进程。冒烟断言的两条警告不受影响（评审用探针重复走窗口三遍，仍恰好两条）。
 - **编译绑定下 `TextBox.Text`/`Slider.Value` 的双向绑定同步生效**，不需要 `RunJobs`；需要 `RunJobs` 的只有 `TextChanged`、`SizeChanged`、展开树节点这类经 dispatcher 派发的事件。
 - **进程级状态要在 `finally` 里还原**：`ThemesPage` 直接改 `Application.Current.RequestedThemeVariant`，测试用 `try/finally` 还原；批 3–6 里改全局状态的页面（窗口管理、剪贴板、`Application.Current` 上的资源）照此处理。
 - **虚拟化的断言不要写死数量**：`DefaultPanelList` 在 600×480 里只实现 4 项，写"少于总数"而不是 `4`，避免依赖窗口高度。

@@ -24,6 +24,10 @@ namespace Avalonia.Tests.Common
         public static T ByAutomationId<T>(this Visual root, string id) where T : Control
             => root.GetVisualDescendants().OfType<T>().First(c => AutomationProperties.GetAutomationId(c) == id);
 
+        // Button.Content is not always a string (DemoHeader has an icon button), so compare with Equals instead of casting.
+        public static Button ButtonWithText(this Visual root, string text)
+            => root.GetVisualDescendants().OfType<Button>().Single(b => text.Equals(b.Content));
+
         // A real left click at the centre of the control: unlike RaiseEvent(Click) this runs the bound Command.
         // Demo pages sit in ScrollViewers, so scroll the target into view first or the click lands on something else.
         public static void Click(this Window window, Control control)

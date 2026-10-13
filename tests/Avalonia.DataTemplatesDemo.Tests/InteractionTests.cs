@@ -17,10 +17,6 @@ namespace Avalonia.DataTemplatesDemo.Tests
         private static List<string?> Texts(Visual root)
             => root.GetVisualDescendants().OfType<TextBlock>().Select(t => t.Text).ToList();
 
-        // Button.Content is not always a string (DemoHeader has an icon button), so compare with Equals instead of casting.
-        private static Button ButtonWithText(Window window, string text)
-            => window.GetVisualDescendants().OfType<Button>().Single(b => text.Equals(b.Content));
-
         [AvaloniaFact]
         public void Controls_render_themselves_but_arbitrary_objects_fall_back_to_to_string()
         {
@@ -136,11 +132,11 @@ namespace Avalonia.DataTemplatesDemo.Tests
             var host = window.ByName<ContentControl>("Host");
             Assert.Single(host.GetVisualDescendants().OfType<DashboardView>());
 
-            window.Click(ButtonWithText(window, "SettingsViewModel"));
+            window.Click(window.ButtonWithText("SettingsViewModel"));
             Assert.Single(host.GetVisualDescendants().OfType<SettingsView>());
             Assert.Empty(host.GetVisualDescendants().OfType<DashboardView>());
 
-            window.Click(ButtonWithText(window, "MissingViewModel（没有对应视图）"));
+            window.Click(window.ButtonWithText("MissingViewModel（没有对应视图）"));
             Assert.Equal(
                 new[] { "找不到视图：Avalonia.DataTemplatesDemo.Views.Located.MissingView" },
                 Texts(host));

@@ -11,10 +11,6 @@ namespace Avalonia.PropertySystemDemo.Tests
 {
     public class InteractionTests
     {
-        // Button.Content is not always a string (DemoHeader has an icon button), so compare with Equals instead of casting.
-        private static Button ButtonWithText(Window window, string text)
-            => window.GetVisualDescendants().OfType<Button>().Single(b => text.Equals(b.Content));
-
         [AvaloniaTheory]
         [InlineData(150, 100, "100%")]
         [InlineData(-20, 0, "0%")]
@@ -96,7 +92,7 @@ namespace Avalonia.PropertySystemDemo.Tests
             Assert.False(HighlightBehavior.GetIsHighlighted(b));
 
             Assert.Equal("第 1 层读到：（尚未设置）", window.ByName<TextBlock>("Level1Text").Text);
-            window.Click(ButtonWithText(window, "在最外层设置 TagLine"));
+            window.Click(window.ButtonWithText("在最外层设置 TagLine"));
             Assert.Equal("第 1 层读到：我在最外层被设置", window.ByName<TextBlock>("Level1Text").Text);
             Assert.Equal("第 2 层读到：我在最外层被设置", window.ByName<TextBlock>("Level2Text").Text);
         }
@@ -107,7 +103,7 @@ namespace Avalonia.PropertySystemDemo.Tests
         {
             var window = UiHelpers.Show(new PrecedencePage());
 
-            window.Click(ButtonWithText(window, "重新读取"));
+            window.Click(window.ButtonWithText("重新读取"));
 
             Assert.Equal("A 实际宽度：300（样式给的 300）", window.ByName<TextBlock>("ReadoutA").Text);
             Assert.Equal("B 实际宽度：150（本地值 150 压过样式 300）", window.ByName<TextBlock>("ReadoutB").Text);
@@ -122,7 +118,7 @@ namespace Avalonia.PropertySystemDemo.Tests
         {
             var window = UiHelpers.Show(new MetadataPage());
 
-            window.Click(ButtonWithText(window, button));
+            window.Click(window.ButtonWithText(button));
 
             Assert.Equal(expected, window.ByName<TextBlock>("CoerceLog").Text);
         }
