@@ -1,5 +1,6 @@
 using Avalonia.Controls;
 using Avalonia.Headless.XUnit;
+using Avalonia.Media;
 using Avalonia.Tests.Common;
 using System;
 using Xunit;
@@ -35,6 +36,23 @@ namespace Avalonia.TestingDemo.Tests
 
             Assert.Same(target, window.ButtonWithText("go"));
             Assert.Throws<InvalidOperationException>(() => window.ButtonWithText("missing"));
+        }
+
+        // Self-drawn controls that forget AffectsRender change a property without changing the picture, so the only
+        // way to see it is to compare pixels.
+        [AvaloniaFact]
+        public void CaptureFrame_is_stable_for_the_same_scene_and_changes_when_the_scene_changes()
+        {
+            var border = new Border { Background = Brushes.Red };
+            var window = UiHelpers.Show(border);
+
+            var first = window.CaptureFrame();
+            var again = window.CaptureFrame();
+            border.Background = Brushes.Blue;
+            var changed = window.CaptureFrame();
+
+            Assert.Equal(first, again);
+            Assert.NotEqual(first, changed);
         }
     }
 }

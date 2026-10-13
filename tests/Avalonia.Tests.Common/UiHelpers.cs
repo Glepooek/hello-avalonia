@@ -2,8 +2,10 @@ using Avalonia.Automation;
 using Avalonia.Controls;
 using Avalonia.Headless;
 using Avalonia.Input;
+using Avalonia.Media.Imaging;
 using Avalonia.Threading;
 using Avalonia.VisualTree;
+using System.IO;
 using System.Linq;
 
 namespace Avalonia.Tests.Common
@@ -44,6 +46,17 @@ namespace Avalonia.Tests.Common
         {
             control.Focus();
             window.KeyTextInput(text);
+        }
+
+        // Renders whatever is pending and returns the window's current frame as PNG bytes. Needs the Skia headless
+        // setup in HeadlessApp; with the default headless drawing the bitmap is 1x1 and every frame looks the same.
+        public static byte[] CaptureFrame(this Window window)
+        {
+            Dispatcher.UIThread.RunJobs();
+            AvaloniaHeadlessPlatform.ForceRenderTimerTick();
+            using var stream = new MemoryStream();
+            window.CaptureRenderedFrame()!.Save(stream, new PngBitmapEncoderOptions());
+            return stream.ToArray();
         }
     }
 }
