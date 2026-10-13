@@ -85,7 +85,7 @@ Appium 驱动的是外部进程，测试程序集不引用任何应用，也就�
 
 | 类型 | 职责 |
 |---|---|
-| `UiHelpers` | 从 `TestingDemo.Tests` 迁入并改为 `public`：`Show`、`ByName`、`ByAutomationId`、`Click`、`Type`，签名与行为不变 |
+| `UiHelpers` | 从 `TestingDemo.Tests` 迁入并改为 `public`：`Show`、`ByName`、`ByAutomationId`、`Click`、`Type`，签名不变；批 2 起 `Click` 点击前先 `BringIntoView()` 并 `RunJobs()`，以点到滚动视口之外的控件；`Type` 是在光标处插入而非替换 |
 | `HeadlessApp.Build<TApp>()` | 返回 `AppBuilder.Configure<TApp>().UseSkia().UseHeadless(UseHeadlessDrawing=false)`，各项目的 `TestAppBuilder` 只剩一行调用 |
 | `TabWalker` | 对任意 `Window` 找到第一个 `TabControl`，逐个选中每个 `TabItem` 并强制布局，返回每页的 `Header` 与异常（单页抛错不中断后面的页）；冒烟测试在一个 `[AvaloniaFact]` 里断言页头列表与无异常 |
 | `LogCollector` | 收集 Warning 及以上的 Avalonia 日志，`Dispose` 时还原 `Logger.Sink`；批 1 起每个应用的冒烟测试里多一个 `Walking_every_tab_logs_no_warnings`，走完全部标签页后断言没有任何 Warning 日志 |
@@ -359,7 +359,28 @@ dotnet test tests/Avalonia.Demos.AppiumTests
 - **容器查询在 Headless 里生效**：`ContainerQuery` 随窗口宽度正确切换，可以直接断言。
 - **破坏检查有效**：四个项目各挑一个关键测试，临时改 `src/` 一行后均如期失败（`NotifyCanExecuteChangedFor` 删除 → 1 个失败；`Math.Max(1, Count)` → 2 个；`500d`→`600d` → 1 个；`9d/5d`→`9d/4d` → 3 个），并已还原。
 
-## 批 2 实测结论（执行后回填）
+## 批 2 实测结论（计划 02 执行后）
+
+| 项目 | 测试数 | H1 页数 | 说明 |
+|---|---|---|---|
+| `Avalonia.PropertySystemDemo.Tests` | 14 | 5 | 无 ViewModel；`GaugeControl` 的 coerce 与只读 `Readout`、附加属性与继承、值优先级、元数据；`warning` 样式类设值 |
+| `Avalonia.DataTemplatesDemo.Tests` | 14 | 9 | 渲染文字精确断言；模板集合顺序、选择器、代码建模板、复用、`ViewLocator`（含"找不到视图"）、面板虚拟化、树展开 |
+| `Avalonia.StylingDemo.Tests` | 10 | 9 | `ToggleChip` 的 `:on` 伪类、样式类绑定、`ControlTheme` 继承、主题变体（带还原）、字体滑块 |
+| `Avalonia.DataBindingDemo.Tests` | 25 | 12 | H2：命令、校验、集合、集合视图、转换器；H3：命令、校验、转换器、集合、主从、集合视图；冒烟里"恰好两条"警告 |
+| `Avalonia.TestingDemo.Tests`（新增） | 1 | — | `UiHelpersTests`：`Click` 能点到视口之外 |
+
+执行时的实测：构建警告数 5（批开始前 6）；`dotnet test hello-avalonia.slnx` 共 131 个测试通过（TestingDemo 31 + 批 1 的 37 + 本批 63）；构建耗时本批未取得可比数字（尝试 `--no-incremental` 超过 10 分钟被中断，随后的增量构建重建了全部输出，用时 5 分钟，不能当基准）；破坏检查：PropertySystem 给 `StyledGauge` 加本地值 `Value="10"` → 1 个失败；DataTemplates 改 `ViewLocator` 映射 → 2 个；Styling 把 `:on` 改成 `:off` → 2 个；DataBinding 删 `NotifyCanExecuteChangedFor` → 2 个，均已还原。`UiHelpers.Click` 的回归测试先红（`Expected: 1  Actual: 0`）后绿。
+
+**对后续批的决定与发现**（计划阶段在探针里实测，执行阶段原样复现）：
+
+- **`UiHelpers.Click` 必须先把目标滚进视口**：测试窗口 600×480，演示页大多在 `ScrollViewer` 里，视口外的按钮点击会静默落空（命令不执行、无日志）。已在共享库修复并有回归测试；批 3–6 的点击测试不需要再自己 `BringIntoView`。
+- **`UiHelpers.Type` 是插入而非替换**：对已有文字的 `TextBox` 需要先把 `Text` 置空再 `Type`（批 2 在 `DataBindingDemo.Tests` 里用本地 `Replace` 辅助）。若后续批里这个模式再出现两次以上，再考虑上提到共享库。
+- **`LogCollector` 在有故意坏绑定的应用上的用法**：`DataBindingDemo` 的 `DebuggingPage` 故意放了两个坏绑定，冒烟断言写成"恰好两条、各按关键字匹配"，既防多报也防漏报，同时是 `LogCollector` 的正向对照（它确实能收到真实的绑定警告）。`BindingLogSink.Current` 是静态单例，但 `LogCollector.Dispose` 会还原 `Logger.Sink`，没有串到别的测试。
+- **编译绑定下 `TextBox.Text`/`Slider.Value` 的双向绑定同步生效**，不需要 `RunJobs`；需要 `RunJobs` 的只有 `TextChanged`、`SizeChanged`、展开树节点这类经 dispatcher 派发的事件。
+- **进程级状态要在 `finally` 里还原**：`ThemesPage` 直接改 `Application.Current.RequestedThemeVariant`，测试用 `try/finally` 还原；批 3–6 里改全局状态的页面（窗口管理、剪贴板、`Application.Current` 上的资源）照此处理。
+- **虚拟化的断言不要写死数量**：`DefaultPanelList` 在 600×480 里只实现 4 项，写"少于总数"而不是 `4`，避免依赖窗口高度。
+- **只靠 H1 的页面**：`AsyncPage`（真实时间、`Bitmap` 资源）、`DebuggingPage` 的日志列表、`StylingDemo` 的 `SelectorsPage`/`ContainerQueriesPage`/`SharingStylesPage`/`PrecedencePage`（只有视觉效果）。
+- **环境**：Bash 工具里 `dotnet build --no-incremental` 全解决方案会超过 10 分钟；要全量重建请后台运行。
 
 ## 批 3 实测结论（执行后回填）
 
