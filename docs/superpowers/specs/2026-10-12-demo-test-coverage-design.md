@@ -88,7 +88,7 @@ Appium 驱动的是外部进程，测试程序集不引用任何应用，也就�
 | `UiHelpers` | 从 `TestingDemo.Tests` 迁入并改为 `public`：`Show`、`ByName`、`ByAutomationId`、`Click`、`Type`，签名与行为不变 |
 | `HeadlessApp.Build<TApp>()` | 返回 `AppBuilder.Configure<TApp>().UseSkia().UseHeadless(UseHeadlessDrawing=false)`，各项目的 `TestAppBuilder` 只剩一行调用 |
 | `TabWalker` | 对任意 `Window` 找到第一个 `TabControl`，逐个选中每个 `TabItem` 并强制布局，返回每页的 `Header` 与异常（单页抛错不中断后面的页）；冒烟测试在一个 `[AvaloniaFact]` 里断言页头列表与无异常 |
-| `LogCollector` | 收集 Warning 及以上的 Avalonia 日志，`Dispose` 时还原 `Logger.Sink`；独立提供，是否接入冒烟测试由批 1 逐页确认后定 |
+| `LogCollector` | 收集 Warning 及以上的 Avalonia 日志，`Dispose` 时还原 `Logger.Sink`；批 1 起每个应用的冒烟测试里多一个 `Walking_every_tab_logs_no_warnings`，走完全部标签页后断言没有任何 Warning 日志 |
 
 现有 `TestingDemo.Tests` 迁移后 24 个测试必须原样通过；这是批 0 的回归基线。
 
@@ -340,7 +340,24 @@ dotnet test tests/Avalonia.Demos.AppiumTests
 - **`AppiumFactAttribute` 的"WinAppDriver 可达"判断不能用 `/status` 的返回内容**：它对健康的服务也回 `status=13`。「运行门控」第 3 条已改为 TCP 端口 4723 能连上（`TcpClient.Connect`）。
 - P2 的诊断（一个变量一次，各只跑了一次）：点击前 `count-text`=`0`、`decrement-btn.Enabled`=`False`；点击后等 1.5 秒，重新查找 `count-text` 为 `1`，旧句柄再读也是 `1`，`decrement-btn.Enabled`=`True`。「点击后立刻读到 `0`」只来自 P2 那一次运行，**没有重复测过**，所以不知道是否每次都会读到旧值。**原因没有查明**：可能是 WinAppDriver 读到的是 UI Automation 的缓存，也可能是应用异步处理点击；P4 点击后立刻读 `Selected` 就拿到了新值，说明并非所有属性都有延迟。需要等多久同样没有测，只知道 1.5 秒足够，上面 5 秒的上限是保守估计，批 7 应实测后收紧。
 
-## 批 1 实测结论（执行后回填）
+## 批 1 实测结论（计划 01 执行后）
+
+| 项目 | 测试数 | H1 页数 | 说明 |
+|---|---|---|---|
+| `Avalonia.FundamentalsDemo.Tests` | 10 | 6 | H2：`MvvmViewModel`、`TreesViewModel`；H3：`CodeBehindPage`、`MvvmPage`、`TreesPage` |
+| `Avalonia.XamlDemo.Tests` | 9 | 7 | 无 ViewModel，H2 由 `RepeatTextExtension` 顶替；H3：`DirectivesPage`、`CompilationPage` |
+| `Avalonia.LayoutDemo.Tests` | 10 | 3 | H2：`ResponsiveViewModel`；H3：`PositioningPage`、`ResponsivePage`（含容器查询） |
+| `Avalonia.StarterTutorialDemo.Tests` | 8 | 6 | 无 ViewModel，不补；H3：`EventsPage`、`ConvertingDataPage`、`ExercisesPage`；`CustomizingWindowPage` 弹窗只靠 H1 |
+
+执行时的实测：构建警告数 6（批开始前 6）；`dotnet test hello-avalonia.slnx` 共 67 个测试通过（TestingDemo 30 + 本批 37）；全解决方案构建约 41 秒（本批开始前同一会话里测得约 55 秒，批 0 记录的是约 70 秒，波动来自增量构建，不是测试项目带来的提速）。
+
+**对后续批的决定与发现**（计划阶段在探针里实测，执行阶段原样复现）：
+
+- **`LogCollector` 接入冒烟测试：成立，已接入。** 四个应用走完全部标签页都是 0 条 Warning 日志。局限不变：它只能收到运行时绑定的警告，编译绑定下"绑定到结构体属性"的静默失败收不到，所以这类绑定仍要像 `LayoutDemo` 的 `Thickness` 测试那样在运行时断言控件上的真实值。批 2（DataBinding、Styling）最可能撞上故意演示绑定错误的页面，接入前逐页确认。
+- **`TextChanged`、`SizeChanged` 经 dispatcher 延后派发**：测试里改完文字或窗口宽度，要 `Dispatcher.UIThread.RunJobs()` 之后才能断言。不这样做时，相关断言会读到旧值，更糟的是可能假通过（窗口初始宽度恰好满足断言）；断言 `CurrentWidth` 这类能证明事件真的派发过的值可以防假通过。这条对批 2–6 的所有事件相关测试都适用。
+- **`Button.Content` 不一定是字符串**：`DemoHeader` 里有个按钮的 `Content` 是 `PathIcon`。按文字查按钮用 `"文字".Equals(b.Content)`，不要强转 `string`。批 2–6 沿用。
+- **容器查询在 Headless 里生效**：`ContainerQuery` 随窗口宽度正确切换，可以直接断言。
+- **破坏检查有效**：四个项目各挑一个关键测试，临时改 `src/` 一行后均如期失败（`NotifyCanExecuteChangedFor` 删除 → 1 个失败；`Math.Max(1, Count)` → 2 个；`500d`→`600d` → 1 个；`9d/5d`→`9d/4d` → 3 个），并已还原。
 
 ## 批 2 实测结论（执行后回填）
 

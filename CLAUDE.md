@@ -7,7 +7,8 @@
 ```bash
 dotnet build hello-avalonia.slnx
 dotnet run --project src/Avalonia.LayoutDemo     # 换成任意 Avalonia.*Demo
-dotnet test tests/Avalonia.TestingDemo.Tests     # 唯一的测试项目（xUnit v3 + Headless）
+dotnet test hello-avalonia.slnx                  # 全部测试项目（xUnit v3 + Headless），每个应用一个 Avalonia.<X>Demo.Tests
+dotnet test tests/Avalonia.TestingDemo.Tests     # 只跑单个测试项目，换成任意 Avalonia.*Demo.Tests
 dotnet test tests/Avalonia.TestingDemo.Tests --filter "FullyQualifiedName~ViewModelTests"
 ```
 
