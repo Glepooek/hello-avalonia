@@ -85,7 +85,7 @@ Appium 驱动的是外部进程，测试程序集不引用任何应用，也就�
 
 | 类型 | 职责 |
 |---|---|
-| `UiHelpers` | 从 `TestingDemo.Tests` 迁入并改为 `public`：`Show`、`ByName`、`ByAutomationId`、`Click`、`Type`，签名不变；批 2 起 `Click` 点击前先 `BringIntoView()` 并 `RunJobs()`，以点到滚动视口之外的控件；`Type` 是在光标处插入而非替换 |
+| `UiHelpers` | 从 `TestingDemo.Tests` 迁入并改为 `public`：`Show`、`ByName`、`ByAutomationId`、`Click`、`Type`，签名不变；批 2 起 `Click` 点击前先 `BringIntoView()` 并 `RunJobs()`，以点到滚动视口之外的控件；`Type` 是在光标处插入而非替换；批 3 起新增 `ButtonWithText`（批 2 评审时上提）与 `CaptureFrame`（截取当前渲染帧的 PNG 字节，用来断言"自绘控件真的重绘了"），并新增 `CultureScope.Invariant()`（固定 `CultureInfo.CurrentCulture` 并在 `Dispose` 时还原） |
 | `HeadlessApp.Build<TApp>()` | 返回 `AppBuilder.Configure<TApp>().UseSkia().UseHeadless(UseHeadlessDrawing=false)`，各项目的 `TestAppBuilder` 只剩一行调用 |
 | `TabWalker` | 对任意 `Window` 找到第一个 `TabControl`，逐个选中每个 `TabItem` 并强制布局，返回每页的 `Header` 与异常（单页抛错不中断后面的页）；冒烟测试在一个 `[AvaloniaFact]` 里断言页头列表与无异常 |
 | `LogCollector` | 收集 Warning 及以上的 Avalonia 日志，`Dispose` 时还原 `Logger.Sink`；批 1 起每个应用的冒烟测试里多一个 `Walking_every_tab_logs_no_warnings`，走完全部标签页后断言没有任何 Warning 日志 |
@@ -384,7 +384,31 @@ dotnet test tests/Avalonia.Demos.AppiumTests
 - **只靠 H1 的页面**：`AsyncPage`（真实时间、`Bitmap` 资源）、`DebuggingPage` 的日志列表、`StylingDemo` 的 `SelectorsPage`/`ContainerQueriesPage`/`SharingStylesPage`/`PrecedencePage`（只有视觉效果）。
 - **环境**：Bash 工具里 `dotnet build --no-incremental` 全解决方案会超过 10 分钟；要全量重建请后台运行。
 
-## 批 3 实测结论（执行后回填）
+## 批 3 实测结论（计划 03 执行后）
+
+| 项目 | 测试数 | H1 页数 | 说明 |
+|---|---|---|---|
+| `Avalonia.EventsDemo.Tests` | 10 | 5 | 生命周期事件的先后顺序（含需要 `RunJobs` 的 `SizeChanged`/`Loaded`）、隧道与冒泡的六步顺序、`Handled` 打开/关闭两种结果（含 `handledEventsToo`）、自定义路由事件的冒泡与 `Source`、输入事件日志 |
+| `Avalonia.InputDemo.Tests` | 20 | 8 | H2：`InteractivityViewModel` 的命令可用性；H3：Click/Tapped/Command/HotKey 的区别、键盘读数与 `KeyBinding`、指针捕获与夹取、焦点环（`:focus-visible`）与 Tab 顺序、手势计数、逐字符输入过滤 |
+| `Avalonia.GraphicsDemo.Tests` | 13 | 13 | `Sketch` 三个开关的像素比较（Theory）、缓动采样（区域设置固定）、组合几何、布局变换与渲染变换、命中测试、合成视觉属性、`RenderOptions`、页面过渡的切换 |
+| `Avalonia.CustomControlsDemo.Tests` | 18 | 7 | `Meter`（夹取、`:full`、模板部件、换主题）、`RingGauge` 尺寸与重绘（单独摆放）、`RadialPanel` 几何与尺寸、弹出层真实点击选色与轻触关闭、控件树的 `DataContext`、`LabeledSlider` 双向同步 |
+| `Avalonia.TestingDemo.Tests`（新增） | 2 | — | `UiHelpersTests.CaptureFrame`（稳定且随场景变化）、`CultureScopeTests`（固定并还原） |
+
+执行时的实测：构建警告数 6（批开始前记录为 5；这 6 条全部来自 `src/` 里既有的警告——`MusicStore` 的 CS0618 与 CS8604、`WebViewDemo` 的 CS8604、`System.Xaml` 的 MSB3245、`iTunesSearch` 的 NU1701——新增的测试项目与共享库为 0 条；增量构建只在项目重编译时才报编译器警告，两次口径不同）；`dotnet test hello-avalonia.slnx` 共 195 个测试通过（TestingDemo 34 + 批 1 的 37 + 批 2 的 63 + 本批 61）；破坏检查：Events 把 `e.Handled = true` 改成 `false` → 1 个失败、把路由策略改成 `Direct` → 1 个；Input 删 `NotifyCanExecuteChangedFor` → 2 个、去掉 `Math.Clamp` → 1 个；Graphics 注释掉 `Sketch` 的 `AffectsRender` → 3 个、去掉 `Clear` 方块的 `Background="Transparent"` → 1 个；CustomControls 去掉 `Meter` 的夹取 → 1 个、`RadialPanel` 的 Y 符号取反 → 2 个、注释掉 `RingGauge` 的 `AffectsRender` → 1 个，均已还原。`CaptureFrame` 与 `CultureScope` 的测试先因编译失败（CS1061 / CS0103）变红，实现后变绿。
+
+**对后续批的决定与发现**（计划阶段在探针里实测，执行阶段原样复现）：
+
+- **自绘控件要比像素，不能只比属性，而且要单独摆放**：`UiHelpers.CaptureFrame` 依赖 `HeadlessApp` 的 Skia 配置（`UseHeadlessDrawing=false`）；同一场景连截两次字节相同，改一个画笔字节就变，所以"属性变了画面没变"的漏标 `AffectsRender` 能被抓到。但**在演示页里测不出来**：计划第一版把 `RingGauge` 放在 `CustomDrawnPage` 里拖滑块，注释掉 `AffectsRender` 后测试仍通过——页面上旁边的读数同时变了，整帧照样不同。自绘控件的重绘测试必须像 `Sketch` 那样把控件单独放进窗口，只改它自己的属性。批 4–6 里凡是自绘或带 `Render` 重写的控件都照此处理，并且用"注释掉 `AffectsRender`"的破坏检查证明测试真能看见。
+- **区域设置会改变格式化文字，而且固定成不变区域设置后格式也不是你以为的那样**：`P0`、`F3` 在 sv-SE、fr-FR 下的符号和空格不同；涉及格式化数字的断言一律包在 `using var culture = CultureScope.Invariant();` 里，`Dispose` 会还原，不会串到别的测试。注意不变区域设置把 `P0` 写成 `"40 %"`（带空格），而 en-US、zh-CN 是 `"40%"`，所以断言写 `"40 %"`；不要凭印象写 `"40%"`。
+- **连点两下的手势计数**：第二下算 `DoubleTapped`，**不会**再给 `Tapped` 加一；连点三下 `Tapped` 才是 2。
+- **带 `Command` 的按钮在 `CanExecute == false` 时 `IsEnabled` 仍是 `true`**：断言"灰了"要用 `IsEffectivelyEnabled`，同时点击不执行命令。
+- **弹出层的内容在 Headless 里画在窗口的叠加层上**：打开之前视觉树里没有，打开之后可以用 `window.GetVisualDescendants()` 找到，真实点击能选色、点别处能轻触关闭，不需要反射去取 `Popup`。断言要先写"打开前 0 个、打开后恰好 N 个"，防止"找不到"被 `Any` 之类的写法吞掉。
+- **点击落在窗口之外会静默落空**：`Click` 的 `BringIntoView` 只在 `ScrollViewer` 里有用；控件所在行比 600 宽的测试窗口更宽、又不在滚动视口里时，要先把 `window.Width` 放宽再点（`CustomPanelPage`）。
+- **`Window.KeyPress` 能驱动 `KeyBinding`、`Button.HotKey`、`MenuItem.HotKey`、Tab 导航与页面的 `KeyDown` 处理器**；只写 `InputGesture`（不写 `HotKey`）的菜单项不会被触发，这正是 `InteractivityPage` 在演示的差别。
+- **拒绝输入的 `TextInput` 隧道处理器按"事件"过滤**：一次 `Type(box, "a1b2")` 是**一个** `TextInput` 事件，含字母就整串被拒；要模拟用户逐字敲，需逐字符调用 `Type`。
+- **事件顺序的断言**：`SizeChanged`、`Loaded` 经 dispatcher 派发，要 `RunJobs()` 之后才出现在日志里；`AttachedToLogicalTree`、`AttachedToVisualTree`、`Initialized` 是同步的。
+- **`Bitmap.Save(Stream)` 的无选项重载已过时**（CS0618），截图要显式传 `new PngBitmapEncoderOptions()`。
+- **只靠 H1 的页面**：Input 的 `DragDropPage`（`DoDragDropAsync` 是真实的操作系统拖放）、`RoutedEventsPage`（静态说明页）；Graphics 的 `BrushesPage`、`EffectsPage`、`IconsPage`、`DrawingPage`（除 `Sketch`）、`AnimationsPage`、`TransitionsPage`；CustomControls 的 `PropertiesAndEventsPage`（静态说明页）。动画与过渡的中间态按 spec 不断言。
 
 ## 批 4 实测结论（执行后回填）
 
