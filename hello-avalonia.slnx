@@ -24,6 +24,7 @@
   </Folder>
   <Folder Name="/tests/">
     <Project Path="tests/Avalonia.Tests.Common/Avalonia.Tests.Common.csproj" />
+    <Project Path="tests/Avalonia.FundamentalsDemo.Tests/Avalonia.FundamentalsDemo.Tests.csproj" />
     <Project Path="tests/Avalonia.TestingDemo.Tests/Avalonia.TestingDemo.Tests.csproj" />
   </Folder>
 </Solution>
