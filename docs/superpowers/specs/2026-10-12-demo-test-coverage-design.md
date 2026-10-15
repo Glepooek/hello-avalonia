@@ -49,7 +49,7 @@
 | 20 个应用的 `Program` 是 `internal`，无 `InternalsVisibleTo` | 测试不能复用 `Program.BuildAvaloniaApp()`，要自己 `AppBuilder.Configure<App>()`（现有 TestingDemo.Tests 就是这样） |
 | 各应用的 `App`、`MainWindow` 都是 `public`，`MainWindow` 都有无参构造 | Headless 可直接 `new MainWindow()` |
 | `[assembly: AvaloniaTestApplication]` 每个程序集只能有一个，且指向一个 `App` | 各应用的 `App.axaml` 样式/资源不同，**每个应用需要独立的测试程序集** |
-| 16 个应用用顶层 `TabControl` 导航；`ControlsDemo` 用 `SplitView + TreeView`（121 个页面）；`HtmlRendererDemo`、`MusicStore`、`WebViewDemo` 无页面导航 | 通用"遍历全部标签页"的冒烟测试可覆盖 16 个，其余 4 个单独处理 |
+| 16 个应用用顶层 `TabControl` 导航；`ControlsDemo` 用 `SplitView + TreeView`（119 个页面）；`HtmlRendererDemo`、`MusicStore`、`WebViewDemo` 无页面导航 | 通用"遍历全部标签页"的冒烟测试可覆盖 16 个，其余 4 个单独处理 |
 | 只有 `TestingDemo` 给控件设了 `AutomationId`（16 处）；其余应用有 `Name` 但几乎没有 `AutomationId` | Appium 定位是最大的不确定项，见「Appium 定位」 |
 | 有大量时间/平台相关页面：`DispatcherTimer`、`Task.Delay`、动画、`StorageProvider`、剪贴板、`Launcher`、`WebView`、窗口管理 | 这些页面在 Headless 里只断言"能构造并布局"，不断言副作用 |
 | `Directory.Packages.props` 已有 `xunit.v3` 3.2.2、`Avalonia.Headless.XUnit` 12.1.2、`Microsoft.NET.Test.Sdk`；**没有任何 Appium/Selenium 包** | 需要新增 `Appium.WebDriver` 登记 |
@@ -104,7 +104,7 @@ Appium 驱动的是外部进程，测试程序集不引用任何应用，也就�
 | **H2 ViewModel** | 每个带逻辑的 ViewModel 用普通 `[Fact]`/`[Theory]` 测命令可执行状态、属性联动、校验；不起 Avalonia | 有 `ViewModels/` 的项目 |
 | **H3 交互** | 在含可交互控件的页面里，至少一条"点击/输入 → 断言界面变化"的用例，沿用 `UiHelpers.Click/Type` | 有交互页面的项目 |
 
-H1 对 16 个 `TabControl` 应用共用 `TabWalker`；`ControlsDemo` 遍历 `PageCatalog` 的 121 个节点；其余 3 个单独写。
+H1 对 16 个 `TabControl` 应用共用 `TabWalker`；`ControlsDemo` 遍历 `PageCatalog` 的 119 个节点；其余 3 个单独写。
 
 H3 的"至少一条"是下限。哪些页面值得测，由各批 plan 在读过页面代码后列出，spec 不预先枚举。
 
@@ -268,7 +268,7 @@ dotnet test tests/Avalonia.Demos.AppiumTests
 | 2 | 02-headless-styling-binding | Styling、DataBinding、DataTemplates、PropertySystem | 4 |
 | 3 | 03-headless-interaction-graphics | Events、Input、Graphics、CustomControls | 4 |
 | 4 | 04-headless-app-services | AppDevelopment、Services、Behaviors | 3 |
-| 5 | 05-headless-controls | ControlsDemo（121 页，按目录分类，必要时拆 05a/05b） | 1 |
+| 5 | 05-headless-controls | ControlsDemo（119 页）。已拆分：05a 外壳 H1 + 全部 ViewModel H2 + 19 个实战页 H3；05b 80 个控件页 H3，按目录分任务 | 1 |
 | 6 | 06-headless-exceptions | MusicStore、WebViewDemo、HtmlRendererDemo（TestingDemo 的 H1 已在批 0 随 `TabWalkerTests` 完成） | 3 |
 | 7 | 07-appium-foundation | Appium 项目骨架、`AppSession`、`AppiumFactAttribute`；`TestingDemo` 的 A1–A3 作为基准 | 1 |
 | 8 | 08-appium-tabbed | 其余 15 个 `TabControl` 应用的 A1 + A2（数据驱动，一份代码） | 15 |
@@ -441,7 +441,33 @@ dotnet test tests/Avalonia.Demos.AppiumTests
 - **xUnit 分析器**：`Assert.Equal(1, list.Count)` 触发 xUnit2013 警告，改为 `Assert.Single`，新项目保持 0 警告。
 - 计划里两条未在探针里跑过的 Services 断言（清空后读到 `TryGetTextAsync 返回 null（剪贴板里没有文本）`、不存在的路径返回 null）原样通过。
 
-## 批 5 实测结论（执行后回填）
+## 批 5 实测结论
+
+### 05a（计划 05a 执行后）
+
+| 项目 | 测试数 | H1 节点数 | 说明 |
+|---|---|---|---|
+| `Avalonia.ControlsDemo.Tests` | 81 | 119 | `SmokeTests` 9：目录总数与分目录计数、`PageType` 不重复、`DisplayTitle` 唯一且前缀与 `Kind` 对应、启动状态、走完 119 个节点（0 异常、0 Warning）、选中目录清空页面、点击树项；`ViewModelTests` 21 + `PersistenceTests` 8（全部在临时目录）；`HowToDataInputTests` 21（12 个实战页）；`HowToShellTests` 22（7 个实战页，含过渡缺陷测试） |
+
+执行时的实测：构建警告数 6（批开始前 6）；`dotnet test hello-avalonia.slnx` 共 351 个测试通过（批 4 结束时的 270 + 本批 81）；破坏检查：删 `ImageHowToPage` 的目录登记 → 4 个；去掉「实战：」前缀 → 1 个；Expander 去掉 `_openSection == index` 守卫 → 1 个；去掉 `if (_loading) return;` → 3 个；去掉 `_forward.Clear()` → 1 个；`OrdinalIgnoreCase` 改 `Ordinal` → 1 个；`MaxItems` 60 → 70 → 1 个；去掉 `odd` 类 → 1 个；`IsDigit` 改 `IsLetterOrDigit` → 1 个；`DetachedFromVisualTree` 去掉 `_confirmedClose = true` → 1 个，均已还原。
+
+**`src/` 改动（用户 2026-10-15 确认）**：`NavigationHowToPage` 用 `Host.PageTransition switch { CrossFade => 1, PageSlide => 2, _ => 0 }` 初始化下拉框，但 Avalonia 12 的 `TransitioningContentControl` 默认过渡是私有嵌套类 `ImmutableCrossFade`（不是 `CrossFade` 的子类），于是下拉框显示「无」，切页却仍在淡入淡出。改为 `null => 0, PageSlide => 2, _ => 1`；先写的 `Transition_box_shows_the_transition_the_host_really_uses` 修复前失败（Expected `CrossFade`，Actual `无`）、修复后通过。
+
+**对 05b 的决定与发现**（计划阶段在探针里实测，执行阶段原样复现）：
+
+- **测试不碰真实的用户数据目录**：`DataPersistenceHowToPage` 构造时用 `%AppData%`/`%LocalAppData%` 下的 `Avalonia.ControlsDemo`。只构造只读不写（H1 依赖这一点，`Opening_the_page_reads_without_writing` 钉住）；凡是要操作的测试，先把 `DataContext` 换成临时目录上的 ViewModel。05b 若有页面写文件，照此处理。
+- **类型名与 Avalonia 12 自带控件冲突**：`CarouselPage`（以及 `NavigationPage`、`TabbedPage` 等）在 Avalonia 12 里有同名控件，`using Avalonia.Controls;` 时报 CS0104；测试文件用 `using CarouselPage = Avalonia.ControlsDemo.Views.Pages.CarouselPage;` 这类别名。05b 的控件页更容易撞名，先 build 再写断言。
+- **`UserControl.KeyBindings` 要焦点在页内**：刚 `Show` 时没有焦点，快捷键无效；先点一下页内控件。断言"之前无效、之后有效"两半。
+- **"隐藏"可能发生在祖先上**：`ImageHowToPage` 的占位文字本身一直 `IsVisible`，被隐藏的是外层 `Border`；判断可见性用 `IsEffectivelyVisible`。
+- **`TreeViewHowToPage` 不处理选中置 null**：文字停在上一次的选中项，没有断言"清空后回到初始文字"；这是页面的已知行为，未列为缺陷。
+- **窗口泄漏**：`WindowHowToPage` 在 `DetachedFromVisualTree` 里关掉它开的全部窗口（含无所有者的独立窗口与脏编辑窗口）；开窗口的测试一律在 `finally` 里关宿主。H1 走完 119 个节点后也关窗口。
+- **贴边按钮**：`WindowHowToPage` 的 `RestoreButton` 右边缘在 600 宽窗口的 x=567，测试放宽到 900；05b 遇到"点了没反应"先查按钮是否超出 600 宽。
+- **本批没有跳过清单**：风险表里"Headless 下构造即抛"的担忧，在 ControlsDemo 上不成立——H1 走完 119 个节点（含 `Web` 目录 4 页、`付费控件` 7 页）0 个异常、0 条 Warning。
+- **H2 的 `[AvaloniaFact]` 例外**：spec 要求 H2 不起 Avalonia，但 `TabControlHowToViewModel`（`StreamGeometry.Parse`）、`ImageHowToViewModel`（`AssetLoader`、`Bitmap`）与 `NotificationsHowToViewModel`（`await` 后回 UI 线程）离开平台就跑不了，这 5 条用 `[AvaloniaFact]`；其余 24 条是普通 `[Fact]`。
+
+执行时与计划不符、改了测试的地方：
+
+- 无。五个任务的每条 `Expected:` 都与实测一致；Task 4 的破坏检查第一次改错了行（`sed` 删掉的是 `DetachedFromVisualTree` 处理器声明而非 `_confirmedClose = true;`，另有一次匹配到两处），改为定点修改后得到计划的 1 个失败。
 
 ## 批 6 实测结论（执行后回填）
 
