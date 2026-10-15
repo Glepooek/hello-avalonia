@@ -447,11 +447,13 @@ dotnet test tests/Avalonia.Demos.AppiumTests
 
 | 项目 | 测试数 | H1 节点数 | 说明 |
 |---|---|---|---|
-| `Avalonia.ControlsDemo.Tests` | 81 | 119 | `SmokeTests` 9：目录总数与分目录计数、`PageType` 不重复、`DisplayTitle` 唯一且前缀与 `Kind` 对应、启动状态、走完 119 个节点（0 异常、0 Warning）、选中目录清空页面、点击树项；`ViewModelTests` 21 + `PersistenceTests` 8（全部在临时目录）；`HowToDataInputTests` 21（12 个实战页）；`HowToShellTests` 22（7 个实战页，含过渡缺陷测试） |
+| `Avalonia.ControlsDemo.Tests` | 82 | 119 | `SmokeTests` 9：目录总数与分目录计数、`PageType` 不重复、`DisplayTitle` 唯一且前缀与 `Kind` 对应、启动状态、走完 119 个节点（0 异常、0 Warning）、选中目录清空页面、点击树项；`ViewModelTests` 21 + `PersistenceTests` 8（全部在临时目录）；`HowToDataInputTests` 21（12 个实战页）；`HowToShellTests` 23（7 个实战页，含过渡缺陷测试与「打开页面不写回设置」的守卫） |
 
-执行时的实测：构建警告数 6（批开始前 6）；`dotnet test hello-avalonia.slnx` 共 351 个测试通过（批 4 结束时的 270 + 本批 81）；破坏检查：删 `ImageHowToPage` 的目录登记 → 4 个；去掉「实战：」前缀 → 1 个；Expander 去掉 `_openSection == index` 守卫 → 1 个；去掉 `if (_loading) return;` → 3 个；去掉 `_forward.Clear()` → 1 个；`OrdinalIgnoreCase` 改 `Ordinal` → 1 个；`MaxItems` 60 → 70 → 1 个；去掉 `odd` 类 → 1 个；`IsDigit` 改 `IsLetterOrDigit` → 1 个；`DetachedFromVisualTree` 去掉 `_confirmedClose = true` → 1 个，均已还原。
+执行时的实测：构建警告数 6（批开始前 6）；`dotnet test hello-avalonia.slnx` 共 352 个测试通过（批 4 结束时的 270 + 本批 82）；破坏检查：删 `ImageHowToPage` 的目录登记 → 4 个；去掉「实战：」前缀 → 1 个；Expander 去掉 `_openSection == index` 守卫 → 1 个；去掉 `if (_loading) return;` → 3 个；去掉 `_forward.Clear()` → 1 个；`OrdinalIgnoreCase` 改 `Ordinal` → 1 个；`MaxItems` 60 → 70 → 1 个；去掉 `odd` 类 → 1 个；`IsDigit` 改 `IsLetterOrDigit` → 1 个；`DetachedFromVisualTree` 去掉 `_confirmedClose = true` → 1 个，均已还原。
 
 **`src/` 改动（用户 2026-10-15 确认）**：`NavigationHowToPage` 用 `Host.PageTransition switch { CrossFade => 1, PageSlide => 2, _ => 0 }` 初始化下拉框，但 Avalonia 12 的 `TransitioningContentControl` 默认过渡是私有嵌套类 `ImmutableCrossFade`（不是 `CrossFade` 的子类），于是下拉框显示「无」，切页却仍在淡入淡出。改为 `null => 0, PageSlide => 2, _ => 1`；先写的 `Transition_box_shows_the_transition_the_host_really_uses` 修复前失败（Expected `CrossFade`，Actual `无`）、修复后通过。
+
+**`src/` 改动之二：打开页面会写回钳制后的字号（整批审阅发现）**：`DataPersistenceHowToPage` 的 Slider 范围是 10–28，`DataPersistenceHowToViewModel.Apply` 原样套用文件里的 `FontSize`；值越界时 Slider 钳制它，双向绑定把钳制后的值写回，于是**只打开页面（含 H1 走树）就会改写真实用户目录里的 `settings.json`**——前提是该用户的字号越界。新增 `Showing_the_page_over_an_existing_settings_file_saves_nothing`：临时目录里放 `FontSize: 8` 的设置文件，显示页面后断言 `SaveCount` 为 0 且文件字节不变；修复前失败（Expected 0，Actual 1），换 `FontSize: 14` 则不写（说明只在越界时触发）。`Apply` 改为 `FontSize = Math.Clamp(settings.FontSize, 10, 28)`，仍受 `_loading` 保护，修复后通过。
 
 **对 05b 的决定与发现**（计划阶段在探针里实测，执行阶段原样复现）：
 
@@ -467,7 +469,8 @@ dotnet test tests/Avalonia.Demos.AppiumTests
 
 执行时与计划不符、改了测试的地方：
 
-- 无。五个任务的每条 `Expected:` 都与实测一致；Task 4 的破坏检查第一次改错了行（`sed` 删掉的是 `DetachedFromVisualTree` 处理器声明而非 `_confirmedClose = true;`，另有一次匹配到两处），改为定点修改后得到计划的 1 个失败。
+- 没有测试需要为了通过而改断言：五个任务的每条 `Expected:` 都与实测一致。Task 4 的破坏检查两次改错行（`sed` 一次匹配到两处、一次删掉 `DetachedFromVisualTree` 处理器声明而非 `_confirmedClose = true;`），改为定点修改后得到计划的 1 个失败。
+- 整批审阅后追加一条测试与一处 `src/` 修复（上面的「改动之二」），不在计划内。
 
 ## 批 6 实测结论（执行后回填）
 
