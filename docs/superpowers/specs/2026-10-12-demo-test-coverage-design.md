@@ -27,7 +27,7 @@
 
 - 不追求逐控件、逐属性的 100% 行为覆盖。覆盖契约见「测试分层」。
 - 不做 macOS / Linux 的 Appium（参考库做了，本库只有 Windows 目标需求，YAGNI）。
-- 不改演示项目的业务代码；仅在 Appium 确需定位时，给被测控件补 `AutomationProperties.AutomationId`（见「Appium 定位」）。
+- 不改演示项目的业务代码；仅在 Appium 确需定位时，给被测控件补 `AutomationProperties.AutomationId`（见「Appium 定位」）。例外：测试发现的真实缺陷，经用户确认后可在该批计划里单列任务修复，先写会失败的测试再改 `src/`（批 4 的 `ActivatableLifetimePage`，见「批 4 实测结论」）。
 - 不接 CI 配置、不做视频录制、不做性能基准。
 - 不为 `WebViewDemo` 里网页的内容本身写断言，只验证窗口能弹出、按钮能触发。
 - 不为 `MusicStore` 的 iTunes 网络结果写断言（见「风险」）。
@@ -85,7 +85,7 @@ Appium 驱动的是外部进程，测试程序集不引用任何应用，也就�
 
 | 类型 | 职责 |
 |---|---|
-| `UiHelpers` | 从 `TestingDemo.Tests` 迁入并改为 `public`：`Show`、`ByName`、`ByAutomationId`、`Click`、`Type`，签名不变；批 2 起 `Click` 点击前先 `BringIntoView()` 并 `RunJobs()`，以点到滚动视口之外的控件；`Type` 是在光标处插入而非替换；批 3 起新增 `ButtonWithText`（批 2 评审时上提）与 `CaptureFrame`（截取当前渲染帧的 PNG 字节，用来断言"自绘控件真的重绘了"），并新增 `CultureScope.Invariant()`（固定 `CultureInfo.CurrentCulture` 并在 `Dispose` 时还原） |
+| `UiHelpers` | 从 `TestingDemo.Tests` 迁入并改为 `public`：`Show`、`ByName`、`ByAutomationId`、`Click`、`Type`，签名不变；批 2 起 `Click` 点击前先 `BringIntoView()` 并 `RunJobs()`，以点到滚动视口之外的控件；`Type` 是在光标处插入而非替换；批 3 起新增 `ButtonWithText`（批 2 评审时上提）与 `CaptureFrame`（截取当前渲染帧的 PNG 字节，用来断言"自绘控件真的重绘了"），并新增 `CultureScope.Invariant()`（固定 `CultureInfo.CurrentCulture` 并在 `Dispose` 时还原）；批 4 起 `Click` 在 `BringIntoView` **之前**也先 `RunJobs()`（页面在 `Show` 之后自己滚动时，旧顺序会把目标滚走，点击静默落空），并新增 `WaitUntil(condition, timeoutMs = 5000)`（轮询 dispatcher 直到条件成立，超时抛 `TimeoutException`，用于 `Task.Run`、计时器、HTTP、文件监视器等自带时钟的结果） |
 | `HeadlessApp.Build<TApp>()` | 返回 `AppBuilder.Configure<TApp>().UseSkia().UseHeadless(UseHeadlessDrawing=false)`，各项目的 `TestAppBuilder` 只剩一行调用 |
 | `TabWalker` | 对任意 `Window` 找到第一个 `TabControl`，逐个选中每个 `TabItem` 并强制布局，返回每页的 `Header` 与异常（单页抛错不中断后面的页）；冒烟测试在一个 `[AvaloniaFact]` 里断言页头列表与无异常 |
 | `LogCollector` | 收集 Warning 及以上的 Avalonia 日志，`Dispose` 时还原 `Logger.Sink`；批 1 起每个应用的冒烟测试里多一个 `Walking_every_tab_logs_no_warnings`，走完全部标签页后断言没有任何 Warning 日志 |
@@ -284,7 +284,7 @@ dotnet test tests/Avalonia.Demos.AppiumTests
 1. `dotnet build hello-avalonia.slnx` 0 错误，警告数不高于该批开始前。
 2. 该批新增的每个测试项目 `dotnet test tests/<项目>` 失败 0；Appium 批在 `HELLO_AVALONIA_APPIUM=1` 且 WinAppDriver 已运行时失败 0，否则只允许"跳过"。
 3. `TestingDemo.Tests` 的 24 个测试始终保持通过。
-4. `git status` 确认没有探针文件（`C:\Temp\probe-*`）被提交，且 `src/` 下的改动只限于 `AutomationProperties.AutomationId`。
+4. `git status` 确认没有探针文件（`C:\Temp\probe-*`）被提交，且 `src/` 下的改动只限于 `AutomationProperties.AutomationId`，以及该批计划里经用户确认的缺陷修复。
 5. 把该批的实测结论（含意外发现）回填到本文对应的「批 N 实测结论」。
 
 ## 风险
@@ -410,7 +410,36 @@ dotnet test tests/Avalonia.Demos.AppiumTests
 - **`Bitmap.Save(Stream)` 的无选项重载已过时**（CS0618），截图要显式传 `new PngBitmapEncoderOptions()`。
 - **只靠 H1 的页面**：Input 的 `DragDropPage`（`DoDragDropAsync` 是真实的操作系统拖放）、`RoutedEventsPage`（静态说明页）；Graphics 的 `BrushesPage`、`EffectsPage`、`IconsPage`、`DrawingPage`（除 `Sketch`）、`AnimationsPage`、`TransitionsPage`；CustomControls 的 `PropertiesAndEventsPage`（静态说明页）。动画与过渡的中间态按 spec 不断言。
 
-## 批 4 实测结论（执行后回填）
+## 批 4 实测结论（计划 04 执行后）
+
+| 项目 | 测试数 | H1 页数 | 说明 |
+|---|---|---|---|
+| `Avalonia.AppDevelopmentDemo.Tests` | 20 | 10 | H1 含 `LoggingPage` 接管 `Logger.Sink` 的盲区与还原；H2：`Greeter`（注入假时钟、固定区域设置）、`Counter`、`ListLoggerProvider`；H3：DI 生命周期、本地化切换、静态与动态资源、应用日志与框架日志、未处理异常、三种跨线程写法、`Show(owner)`/`ShowDialog`/拦截关闭、自动化 Peer |
+| `Avalonia.ServicesDemo.Tests` | 12 | 8 | 剪贴板往返、三种选择器在不支持时的提示、按路径列真实文件夹（自建临时目录）、`NoopLauncher`（点击前先断言类型）、移动端服务为 null、快捷键配置、窗口激活计数（含重访标签页） |
+| `Avalonia.BehaviorsDemo.Tests` | 40 | 15 | H2：7 个 ViewModel 测试；H3：触发器与 Action 的顺序与开关、事件转命令（节流、防抖、`DelayAction` 与 `AsyncActionGroup`）、数据触发器、计时与任务触发器、焦点与键盘路由、校验规则、集合 Action、弹出层与通知、三种拖拽、自适应类名、文件系统沙箱与监视器、回环 HTTP、剪贴板 Action、`RenderTargetBitmapBehavior`、两个自定义行为 |
+| `Avalonia.TestingDemo.Tests`（新增） | 3 | — | `UiHelpersTests`：页面自己滚动后仍能点中、`WaitUntil` 等到后台结果、`WaitUntil` 超时抛异常 |
+
+执行时的实测：构建警告数 6（批开始前 6）；`dotnet test hello-avalonia.slnx` 共 270 个测试通过（批 3 结束时的 195 + 本批 3 + 72）；破坏检查：`Click` 去掉第一个 `RunJobs` → 1 个失败（Expected 1，Actual 0）；`LoggingPage` 不还原 sink → 3 个；`OnReplace` 改成改画刷颜色 → 1 个；`e.Handled = false` → 1 个（`RunJobs` 把异常抛进测试）；Launcher 类型守卫改名 → 在点击前失败；`CanSubmit` 改成 `||` → 2 个；KeyTrigger 去掉 Tunnel → 1 个（`EnterTunnelCount` 为 0）；拆掉 `AsyncActionGroup` → 1 个（点 B 后立刻两条），均已还原。
+
+**`src/` 改动（用户 2026-10-15 确认）**：`ActivatableLifetimePage` 每次 `Loaded` 都给窗口挂一对 `Activated`/`Deactivated` lambda、从不退订，重访标签页 N 次后一次激活计 N 次。改为具名处理器 + `OnUnloaded` 退订；先写的 `Revisiting_the_activation_tab_still_counts_one_activation_once` 修复前失败（Expected 2，Actual 3：第二次访问后一次激活加 2）、修复后通过。遗留：同一方法里 `IActivatableLifetime.Activated`/`Deactivated` 的 lambda 形状相同，但桌面与 Headless 下该服务为 null，测不到，未改。
+
+**对后续批的决定与发现**（计划阶段在探针里实测，执行阶段原样复现）：
+
+- **页面在 `Show` 之后自己滚动，第一下点击会静默落空**：`ListBox`（`SelectionMode="Multiple"`）在第一次 `RunJobs` 里把首项滚进视口，把整页带下 305px。连窗口级隧道处理器都收不到按下，`GetVisualsAt` 对能正常点击的按钮也返回空，所以"点没点中"只能用业务结果判断。`UiHelpers.Click` 已改为先清空排队的工作；以后若再遇到"第一下点击没反应、第二下才有"，先怀疑这一类。
+- **页面会改进程级状态**：`LoggingPage` 在显示期间接管 `Logger.Sink`，`LogCollector` 在这一页收不到任何东西（冒烟测试的盲区）；`UnhandledExceptionsPage` 订阅 dispatcher 的异常事件。两页都在 `OnUnloaded` 里还原，测试结束前必须 `Close()` 窗口。批 5–6 里凡是改静态或进程级状态的页面，照此加"还原"测试。
+- **异步结果一律 `WaitUntil`**：它超时抛异常，所以忘了断言也不会把超时变成通过。"立即为 0"之类的断言后面要跟一个"后来确实变了"的等待，否则行为永远不跑也能通过。唯一的固定等待是 `TimerTrigger`"停在 5 格"——等不出"不会发生的事"。
+- **Headless 的平台服务**：剪贴板是进程内存桩；`StorageProvider` 不能弹选择器，但按路径取文件夹**读真实磁盘**；`Launcher` 是 `NoopLauncher`；`InputPane`、`InsetsManager`、`IActivatableLifetime` 为 null；`ShowDialog` 不阻塞，对话框就是又一个 `OwnedWindows`。碰外部资源的测试先断言服务类型，再操作。
+- **拖拽要带按键状态**：`MouseMove` 不带 `RawInputModifiers.LeftMouseButton` 时，拖拽行为把它当悬停，什么都不动、也不报错。
+- **Behaviors 测试读 ViewModel，不读 `StringFormat` 出来的文字**：页面上的计数文字是给人看的，改文案不该让行为测试失败。
+- **风险表里"Headless 下构造即抛"的页面，本批实测都不抛**：`WindowManagementPage`、`StorageProviderPage` 在 `TabWalker` 下 0 个异常，并且都有 H3；本批没有跳过清单。
+- **只靠 H1 的页面**：AppDevelopment 的 `WebContentPage`、`DataValidationPage`；Services 的 `FocusManagerPage`；Behaviors 的 `AnimationPage`、`DragPage` 的文字/文件投放、`NetworkPage` 的 `NetworkInformationTrigger`、`ScreenshotPage` 的 `ScreenshotAction`（Headless 下不产出文件）。
+
+执行时与计划不符、改了测试的地方：
+
+- **Services `ClipboardPage` 的 `ClearButton` 在 600 宽下点不中**：它排在 `TextBox`（260 宽）与两个按钮之后的同一横行，超出窗口；临时诊断显示 `Click` 事件 0 次，而 `ClearAsync` 本身正常完成。该测试改为先 `window.Width = 900`。`WindowManagementPage` 在 600 宽下能点中，计划预留的放宽没用上。
+- **Behaviors 校验错误用 `\r\n` 分隔**：真实输出是 `用户名不能为空\r\n至少 3 个字符\r\n…`（行为库按 `Environment.NewLine` 拼接），计划按探针显示的文字写成了 `\n`；断言改为 `string.Join(Environment.NewLine, …)`。多行字符串断言以后都这样拼。
+- **xUnit 分析器**：`Assert.Equal(1, list.Count)` 触发 xUnit2013 警告，改为 `Assert.Single`，新项目保持 0 警告。
+- 计划里两条未在探针里跑过的 Services 断言（清空后读到 `TryGetTextAsync 返回 null（剪贴板里没有文本）`、不存在的路径返回 null）原样通过。
 
 ## 批 5 实测结论（执行后回填）
 
