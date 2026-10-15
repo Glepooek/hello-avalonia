@@ -5,8 +5,11 @@ using Avalonia.Input;
 using Avalonia.Media.Imaging;
 using Avalonia.Threading;
 using Avalonia.VisualTree;
+using System;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Avalonia.Tests.Common
 {
@@ -32,8 +35,11 @@ namespace Avalonia.Tests.Common
 
         // A real left click at the centre of the control: unlike RaiseEvent(Click) this runs the bound Command.
         // Demo pages sit in ScrollViewers, so scroll the target into view first or the click lands on something else.
+        // Flush queued work before that: a page that scrolls itself after Show (a ListBox bringing its first item
+        // into view) would otherwise scroll the target away again between BringIntoView and the click.
         public static void Click(this Window window, Control control)
         {
+            Dispatcher.UIThread.RunJobs();
             control.BringIntoView();
             Dispatcher.UIThread.RunJobs();
             var center = control.TranslatePoint(new Point(control.Bounds.Width / 2, control.Bounds.Height / 2), window)!.Value;
@@ -57,6 +63,22 @@ namespace Avalonia.Tests.Common
             using var stream = new MemoryStream();
             window.CaptureRenderedFrame()!.Save(stream, new PngBitmapEncoderOptions());
             return stream.ToArray();
+        }
+
+        // Pumps the dispatcher until the condition holds, for work that finishes on its own clock (Task.Run, timers,
+        // HTTP, file watchers). Throws rather than returning false, so a forgotten assert cannot turn a timeout into a pass.
+        public static async Task WaitUntil(Func<bool> condition, int timeoutMs = 5000)
+        {
+            var watch = Stopwatch.StartNew();
+            while (true)
+            {
+                Dispatcher.UIThread.RunJobs();
+                if (condition())
+                    return;
+                if (watch.ElapsedMilliseconds > timeoutMs)
+                    throw new TimeoutException($"Condition not met within {timeoutMs} ms.");
+                await Task.Delay(10);
+            }
         }
     }
 }

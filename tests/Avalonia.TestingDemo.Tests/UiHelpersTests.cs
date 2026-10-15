@@ -2,7 +2,9 @@ using Avalonia.Controls;
 using Avalonia.Headless.XUnit;
 using Avalonia.Media;
 using Avalonia.Tests.Common;
+using Avalonia.Threading;
 using System;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace Avalonia.TestingDemo.Tests
@@ -22,6 +24,45 @@ namespace Avalonia.TestingDemo.Tests
             window.Click(button);
 
             Assert.Equal(1, clicks);
+        }
+
+        // BehaviorsDemo's CollectionPage does this: a ListBox scrolls its first item into view on the first RunJobs
+        // after Show, which used to carry the target off screen between BringIntoView and the click.
+        [AvaloniaFact]
+        public void Click_reaches_a_control_when_the_page_scrolls_itself_after_show()
+        {
+            var clicks = 0;
+            var top = new Button { Content = "top", Height = 40 };
+            top.Click += (_, _) => clicks++;
+            var bottom = new Border { Height = 40 };
+            var panel = new StackPanel { Children = { top, new Border { Height = 2000 }, bottom } };
+            var window = UiHelpers.Show(new ScrollViewer { Content = panel });
+            Dispatcher.UIThread.Post(() => bottom.BringIntoView());
+
+            window.Click(top);
+
+            Assert.Equal(1, clicks);
+        }
+
+        [AvaloniaFact]
+        public async Task WaitUntil_returns_once_background_work_lands_on_the_ui_thread()
+        {
+            var done = false;
+            _ = Task.Run(async () =>
+            {
+                await Task.Delay(50);
+                Dispatcher.UIThread.Post(() => done = true);
+            });
+
+            Assert.False(done);
+            await UiHelpers.WaitUntil(() => done);
+            Assert.True(done);
+        }
+
+        [AvaloniaFact]
+        public async Task WaitUntil_throws_when_the_condition_never_holds()
+        {
+            await Assert.ThrowsAsync<TimeoutException>(() => UiHelpers.WaitUntil(() => false, 100));
         }
 
         // Button.Content is not always a string (DemoHeader has an icon button), so the match must not cast it.
