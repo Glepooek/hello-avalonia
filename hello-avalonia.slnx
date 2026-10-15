@@ -39,6 +39,7 @@
     <Project Path="tests/Avalonia.AppDevelopmentDemo.Tests/Avalonia.AppDevelopmentDemo.Tests.csproj" />
     <Project Path="tests/Avalonia.ServicesDemo.Tests/Avalonia.ServicesDemo.Tests.csproj" />
     <Project Path="tests/Avalonia.BehaviorsDemo.Tests/Avalonia.BehaviorsDemo.Tests.csproj" />
+    <Project Path="tests/Avalonia.ControlsDemo.Tests/Avalonia.ControlsDemo.Tests.csproj" />
     <Project Path="tests/Avalonia.TestingDemo.Tests/Avalonia.TestingDemo.Tests.csproj" />
   </Folder>
 </Solution>
