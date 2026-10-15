@@ -13,11 +13,13 @@ namespace Avalonia.ControlsDemo.Views.Pages
             DataContext = new NavigationHowToViewModel();
 
             TransitionBox.ItemsSource = new[] { "无", "CrossFade", "PageSlide" };
+            // The default transition is a private cross-fade type, not CrossFade, so match "none" and PageSlide
+            // explicitly and treat anything else as a cross-fade.
             TransitionBox.SelectedIndex = Host.PageTransition switch
             {
-                CrossFade => 1,
+                null => 0,
                 PageSlide => 2,
-                _ => 0
+                _ => 1
             };
             TransitionBox.SelectionChanged += (_, _) =>
             {
