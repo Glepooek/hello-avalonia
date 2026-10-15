@@ -9,6 +9,7 @@ namespace Avalonia.ServicesDemo.Views.Pages
     {
         private int _activated;
         private int _deactivated;
+        private Window? _window;
 
         public ActivatableLifetimePage()
         {
@@ -36,10 +37,36 @@ namespace Avalonia.ServicesDemo.Views.Pages
             // Window-level activation exists everywhere a desktop window does.
             if (TopLevel.GetTopLevel(this) is Window window)
             {
-                window.Activated += (_, _) => { _activated++; ShowCounts(); };
-                window.Deactivated += (_, _) => { _deactivated++; ShowCounts(); };
+                _window = window;
+                window.Activated += OnWindowActivated;
+                window.Deactivated += OnWindowDeactivated;
             }
 
+            ShowCounts();
+        }
+
+        // Loaded runs again every time the tab is revisited, so drop the handlers here or each visit adds another pair.
+        protected override void OnUnloaded(RoutedEventArgs e)
+        {
+            if (_window is not null)
+            {
+                _window.Activated -= OnWindowActivated;
+                _window.Deactivated -= OnWindowDeactivated;
+                _window = null;
+            }
+
+            base.OnUnloaded(e);
+        }
+
+        private void OnWindowActivated(object? sender, EventArgs e)
+        {
+            _activated++;
+            ShowCounts();
+        }
+
+        private void OnWindowDeactivated(object? sender, EventArgs e)
+        {
+            _deactivated++;
             ShowCounts();
         }
 
