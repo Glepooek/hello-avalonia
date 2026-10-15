@@ -102,7 +102,8 @@ namespace Avalonia.ControlsDemo.ViewModels
         {
             _loading = true;
             Username = settings.Username;
-            FontSize = settings.FontSize;
+            // Match the slider's range (10-28) so the binding never has to coerce, and save, a loaded value.
+            FontSize = Math.Clamp(settings.FontSize, 10, 28);
             NotifyEnabled = settings.NotifyEnabled;
             _loading = false;
         }

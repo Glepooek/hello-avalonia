@@ -485,6 +485,45 @@ namespace Avalonia.ControlsDemo.Tests
 
         // ---- System ----
 
+        // The smoke walk shows this page over the real %AppData%, where a settings file may already exist. Showing it
+        // must save nothing back, even when the file holds a font size below the slider's minimum.
+        [AvaloniaFact]
+        public void Showing_the_page_over_an_existing_settings_file_saves_nothing()
+        {
+            var root = Path.Combine(Path.GetTempPath(), "controls-demo-tests-" + Guid.NewGuid().ToString("N"));
+            try
+            {
+                var settings = Path.Combine(root, "settings");
+                Directory.CreateDirectory(settings);
+                var file = Path.Combine(settings, "settings.json");
+                File.WriteAllText(file, "{ \"Username\": \"小明\", \"FontSize\": 8, \"NotifyEnabled\": true }");
+                var written = File.ReadAllText(file);
+
+                var page = new DataPersistenceHowToPage();
+                var vm = new DataPersistenceHowToViewModel(settings, Path.Combine(root, "recent"));
+                page.DataContext = vm;
+                var window = UiHelpers.Show(page);
+                try
+                {
+                    Dispatcher.UIThread.RunJobs();
+                    window.UpdateLayout();
+                    Dispatcher.UIThread.RunJobs();
+
+                    Assert.Equal(0, vm.SaveCount);
+                    Assert.Equal(written, File.ReadAllText(file));
+                    Assert.False(Directory.Exists(Path.Combine(root, "recent")));
+                }
+                finally
+                {
+                    window.Close();
+                }
+            }
+            finally
+            {
+                if (Directory.Exists(root)) Directory.Delete(root, recursive: true);
+            }
+        }
+
         // The page's own view model would read and write the real %AppData%; swap in one on a temp folder before
         // anything can change a setting. Constructing the page only reads, which the smoke walk already relies on.
         [AvaloniaFact]
