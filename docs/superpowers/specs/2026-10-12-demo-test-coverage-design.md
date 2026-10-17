@@ -617,4 +617,26 @@ dotnet test hello-avalonia.slnx                      # 全部，Appium 会话经
 
 ## 批 9 实测结论（执行后回填）
 
+计划：`docs/superpowers/plans/2026-10-12-demo-tests-09-appium-special.md`；探针：`C:\Temp\probe-b9\`（未提交）。
+
+**交付**：4 个没有 `TabControl` 的应用各一个 Appium 项目，共 7 个用例：ControlsDemo、HtmlRendererDemo、MusicStore 各 1 个 A1；WebViewDemo 1 个 A1 加 3 个 A3（网页窗口加载测试页且 JS → C# 回复、关窗都生效；C# → JS 调用后页面显示结果；按钮 2 弹出 `NativeWebDialog`）。不新增包，`src/` 未改。MusicStore 没有 `Demo` 后缀，项目名是 `Avalonia.MusicStore.AppiumTests`。
+- 单项目实跑：ControlsDemo 约 7 s，HtmlRenderer、MusicStore 各约 3 s，WebView 4 个约 25 s。
+- 开着开关跑整个解决方案：566 通过（523 + 批 7 的 6 + 批 8 的 30 + 本批 7），0 失败，约 9 分钟（21:05–21:14）；40 个测试项目，结束后没有残留的 `Avalonia.*` 与 `msedgewebview2` 进程。
+- 不设开关：523 通过 + 43 跳过，退出码 0。
+- 新项目构建 0 错误、0 警告。
+
+**破坏检查**：7/7 按预期失败，每条只让目标用例失败——C1 分类名 `Feedback` → `Feedbacks`；H1 标签 `IconFont` → `Icon Font`；M1 窗口标题改名；W1 桥里 `checkAppUpdate` 分支改名（页面收不到回复）；W2 注释掉 `Close()`（页面关不了窗）；W3 `Receive` 的条件取反（C# → JS 不发）；W4 注释掉 `MainWindowViewModel.cs` 第 76 行带所有者的 `dialog.Show(owner)`。还原后整体重新构建、四个项目重跑全部通过，`git status --short src` 为空。
+
+**对批 10 有用的发现**：
+- **WinAppDriver 的 `WindowHandles` 不列有所有者的窗口**：`WebViewWindow` 打开后 Win32 `EnumWindows` 2 s 内就能看到，`WindowHandles` 10 s 内一直是 1。在应用会话里 `FindElementsByName(<窗口标题>)` 能找到 `ControlType.Window`（约 0.9 s）。批 10 里任何"弹出窗口"的断言都按这个找，不要数句柄。
+- **被盖住的元素点不中，也不报错**：WinAppDriver 按坐标点击，网页窗口（900×600，`CenterOwner`）盖住 600×400 主窗口上的按钮 3，点击落在网页上，10 s 内没有任何效果。有所有者的窗口总在所有者之上，激活主窗口也没用。本批用页面自己的"最小化窗口"让开，并等 Win32 `IsIconic` 为真。Win32 `MoveWindow` 挪窗不可靠：要求 X=613，UIA 报 X=278，两套坐标不一致（原因未查明），窗口仍盖着按钮。
+- **WebView2 把网页的 UIA 树暴露两遍**：每段文字、每个按钮都能找到两个，点第一个即可；最小化后网页文字仍可读。
+- 元素范围的查找返回 `AppiumWebElement`，不是 `WindowsElement`，写成后者会报 CS0266。
+- ControlsDemo 的 `TreeItem` 自己没有 `Text`，分类名与页面名是树下的 `Text` 元素；启动时只展开第一个分类。HtmlRenderer 的 `HtmlPanel` 自绘，不在 UIA 树里。MusicStore 商店按钮的 UIA 名字是 `Avalonia.Controls.PathIcon`（内容的 `ToString()`）；批 10 若做它的 A3（打开商店窗口，不搜索），需要先给按钮加 `AutomationProperties.Name` 或 AutomationId。
+- WebView2 在 `Quit` 后还要几秒才退出完，与批 8 观察到的"进程退出要等待"一致。
+
+**执行时与计划不符**：
+- 与批 7、8 相同，探针、实跑和破坏检查先于计划成文，提交顺序仍是计划 → 代码 → 文档。计划里的 13 个代码块抽出后与提交的文件逐字节一致。
+- 探针第三轮直接点按钮 3，复现了被遮挡的问题，才改成先最小化；`PageButton` 起初写成返回 `WindowsElement`，编译期 CS0266 后改为 `AppiumWebElement`。
+
 ## 批 10 实测结论（执行后回填）
