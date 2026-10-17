@@ -10,7 +10,7 @@ dotnet run --project src/Avalonia.LayoutDemo     # 换成任意 Avalonia.*Demo
 dotnet test hello-avalonia.slnx                  # 全部测试项目（xUnit v3 + Headless），每个应用一个 Avalonia.<X>Demo.Tests
 dotnet test tests/Avalonia.TestingDemo.Tests     # 只跑单个测试项目，换成任意 Avalonia.*Demo.Tests
 dotnet test tests/Avalonia.TestingDemo.Tests --filter "FullyQualifiedName~ViewModelTests"
-$env:HELLO_AVALONIA_APPIUM=1; dotnet test tests/Avalonia.TestingDemo.AppiumTests   # PowerShell；每个应用一个 Avalonia.<X>Demo.AppiumTests；需先运行 WinAppDriver，会接管鼠标键盘
+$env:HELLO_AVALONIA_APPIUM=1; dotnet test tests/Avalonia.TestingDemo.AppiumTests   # PowerShell；每个应用一个 Avalonia.<应用>.AppiumTests（MusicStore 无 Demo 后缀）；需先运行 WinAppDriver，会接管鼠标键盘
 ```
 
 无 lint 配置；`TreatWarningsAsErrors=false`。
