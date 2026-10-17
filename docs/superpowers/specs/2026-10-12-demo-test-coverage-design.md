@@ -129,6 +129,9 @@ A3 的候选（由对应批的 plan 确认）：
 - `InputDemo` / `EventsDemo`：真实鼠标与键盘事件、焦点移动。
 - `ServicesDemo`：文件对话框打开后能取消（验证不崩溃，不选文件）。
 - `AppDevelopmentDemo`：无障碍页，对照 `ok-btn` 的 `AutomationId` 与 UIA 树。
+- `MusicStore`（批 10 追加，使用者 2026-10-17 同意）：商店窗口能打开、能关闭，不搜索、不联网；为此给只有图标的商店按钮加 `AutomationProperties.Name`。
+
+以上候选在批 7、9、10 全部交付；InputDemo 的 Ctrl+Shift+K KeyBinding 例外，见「批 10 实测结论」。
 
 Appium 不重复 H2；ViewModel 逻辑只在 Headless 测一次。
 
@@ -303,7 +306,7 @@ dotnet test hello-avalonia.slnx                      # 全部，Appium 会话经
 | 被测控件既没有 `Name` 也没有 `AutomationId`，或是不在 UIA 树里的布局容器 | 个别测试需要给 `src/` 补 `AutomationId` | 只补用到的控件；每批 plan 列出具体控件清单；每批执行后确认对应页面的样式与绑定未受影响 |
 | 页面依赖真实时间/动画，Headless 断言不稳 | 偶发失败 | 只断言结构与状态，不断言动画中间态；动画页只做 H1 |
 | 部分页面在 Headless 下构造即抛异常（`WebView` 页、窗口管理页、`StorageProvider`） | H1 误报 | 在各批 plan 里读代码后建立带理由的"跳过清单"，不无声吞异常 |
-| `MusicStore` 的搜索走 iTunes 网络，没有可替换的接缝 | H3/A3 不稳 | 不改 `src/`；Headless 只测窗口与 ViewModel 的离线部分，Appium 只做 A1 |
+| `MusicStore` 的搜索走 iTunes 网络，没有可替换的接缝 | H3/A3 不稳 | 不改搜索逻辑；Headless 只测窗口与 ViewModel 的离线部分；Appium 做 A1，批 10 起加"打开并关闭商店窗口"（不键入搜索词，不联网） |
 | 20 个测试项目拖慢整体构建与测试 | 开发体验 | 批 0 记录基线（现状：全解决方案构建约 70 秒，`TestingDemo.Tests` 运行约 4 秒），每批报告增量，批 6 后复评是否需要把测试分组 |
 | Appium 运行时接管桌面 | 干扰使用者 | 环境变量开关 + 全局串行 + 文档说明运行期间不要操作机器 |
 | 绑定到结构体属性失败不抛异常 | 冒烟测试发现不了 | 批 0 探针 P6 评估能否通过 Avalonia 日志收集绑定错误；能则加入 `TabWalker`，不能则作罢，不阻塞 |
@@ -640,3 +643,26 @@ dotnet test hello-avalonia.slnx                      # 全部，Appium 会话经
 - 探针第三轮直接点按钮 3，复现了被遮挡的问题，才改成先最小化；`PageButton` 起初写成返回 `WindowsElement`，编译期 CS0266 后改为 `AppiumWebElement`。
 
 ## 批 10 实测结论（执行后回填）
+
+计划：`docs/superpowers/plans/2026-10-12-demo-tests-10-appium-flows.md`；探针与脚本：`C:\Temp\probe-b10\`（未提交）。
+
+**交付**：5 个应用的已有 Appium 项目各加 `FlowTests.cs`，共 6 个 A3 用例——InputDemo 2 个（Tab 顺序与 `:focus-visible`；按钮 HotKey Ctrl+S）、EventsDemo 1 个（真实鼠标点击与方向键的事件流）、ServicesDemo 1 个（打开、保存对话框都能用 Escape 取消）、AppDevelopmentDemo 1 个（`AutomationProperties` 进入 UIA 树且与 Peer 一致）、MusicStore 1 个（商店窗口打开再关闭）。不新增包、不新建项目。
+- 共享库：`AppSession.SelectTab`、`AppSession.FindWindow`、`KeyChord`（经 `SendInput` 按虚拟键），`UnicodeKeyboard` 与 `KeyChord` 共用新的内部类 `NativeInput`；`Dispose` 在 `Quit` 后等 5 s，进程仍在就结束它并记在 `KilledAfterQuit`。WebFlowTests 改用 `FindWindow`；TestingDemo 的 `Closing_the_session_ends_the_app` 加断言 `KilledAfterQuit` 为假。
+- `src/` 只改一行：MusicStore 商店按钮加 `AutomationProperties.Name="Music Store"`（与其 `ToolTip.Tip` 同文）。
+**全量实跑**：开着开关 `dotnet build hello-avalonia.slnx` 0 个错误（警告只有 MusicStore 的 NU1701 等既有项），`dotnet test` **572 通过、0 失败**、退出码 0，跑完没有残留的 `Avalonia.*` 进程；不设开关 **523 通过、49 跳过**（跳过数 43 + 本批 6）、退出码 0。
+
+**破坏检查**：8/8 按预期，每条只让目标用例失败——I1 去掉 C 的 `IsTabStop="False"`；I2 去掉 `HotKey="Ctrl+S"`；E1 去掉 `PointerReleased`；E2 去掉 Pad 的 `KeyDown`；S1 改打开对话框的标题；S2 改保存取消后的提示；A1 去掉 `HelpText`；M1 去掉商店按钮的 `AutomationProperties.Name`。M1 的文件有未提交的改动，破坏检查改用"先备份、跑完从备份还原"的脚本，不用 `git checkout`。
+
+**发现**：
+- **WinAppDriver 的 `Keyboard.SendKeys` 不可靠**：Tab、Shift+Tab、Ctrl+S 能送到；Right 方向键在 EventsDemo 的事件流里没有留下 KeyDown，改用 `SendInput` 虚拟键后送到了。它在 Selenium 里也已标为过时（CS0618）。所有按键改走 `KeyChord`。
+- **Ctrl+Shift 组合键在本机不稳定**：焦点在输入框里时，搜狗拼音把 Shift+K 变成 `Key=ImeProcessed`（Ctrl+K 则是 `Key=K`）。焦点在按钮上时，探针里 Ctrl+Shift+K 触发了一次，写成测试后连续两次都没触发。本机 `zh-Hans-CN` 装有搜狗拼音与微软拼音两个输入法，而 Ctrl+Shift 是 Windows 在同语言输入法之间切换的热键——这是最可能的原因，但"每按一次就切换一次"**没有直接验证**（验证要再切一次使用者的输入法）。决定：Appium 不按 Ctrl+Shift 组合键，Ctrl+Shift+K 的 KeyBinding 只由 Headless 覆盖。顺带：页面说明写"焦点在窗口里任何位置都可以"，在中文输入法下焦点在输入框里时并不成立；属于演示文案，本批不改 `src/`。
+- **`Border` 没有 UIA 元素**：EventsDemo 的 `Pad` 按 AutomationId 找不到；点它里面的 `TextBlock`，点击照样落在 Pad 上。
+- **测试在系统对话框开着时失败，应用会留下来**：S1 让测试等不到对话框，`Quit` 之后 ServicesDemo 仍在运行，下一条检查构建时 exe 被锁（MSB3027）。加了 `Dispose` 兜底后重跑 S1，没有残留进程。
+- 文件对话框首次打开约 4.6 s，保存对话框约 2.7 s；等待上限 15 s。对话框用 Escape 取消，不点系统语言命名的"取消"。
+- `AutomationProperties.Name` 会替换按钮内容作为 UIA 名字：`ok-btn` 叫 `Confirm`，按内容 `确定` 找不到。
+- MusicStore 商店窗口扩展了客户区，`Close` 等标题栏按钮由 Avalonia 自绘，可以按名字点；另有原生标题栏的 `关闭`（禁用）。Escape 关不掉它。
+
+**执行时与计划不符**：
+- 与批 7–9 相同，探针、实跑和破坏检查先于计划成文，提交顺序仍是计划 → 代码 → 文档。计划里的 12 个代码块抽出后与仓库文件一致（`MainWindow.axaml` 只差工作区的 CRLF 行尾，仓库开着 `core.autocrlf`）。
+- 第一版测试用 `Keyboard.SendKeys`，实跑时 Ctrl+Shift+K 与方向键两个用例失败，才改成 `KeyChord` 并去掉 Ctrl+Shift+K；`Dispose` 的兜底是破坏检查 S1 暴露问题后加的，加后重跑了 S1、S2 与 TestingDemo。
+- 第一次在 PowerShell 里跑破坏检查脚本时，`sh` 不在 PowerShell 的 PATH 上，实际什么都没跑；改在 Bash 里跑。
