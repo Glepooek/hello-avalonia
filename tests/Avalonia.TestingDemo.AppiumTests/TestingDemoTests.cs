@@ -45,6 +45,8 @@ namespace Avalonia.TestingDemo.AppiumTests
 
             app.Dispose();
 
+            // Dispose kills an app that outlives Quit; this test is about Quit, so the kill must not have been needed.
+            Assert.False(app.KilledAfterQuit);
             AppSession.WaitFor(() => started.HasExited, $"process {started.Id} has exited");
         }
 

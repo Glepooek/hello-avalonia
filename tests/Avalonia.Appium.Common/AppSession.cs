@@ -3,6 +3,8 @@ using OpenQA.Selenium.Appium;
 using OpenQA.Selenium.Appium.Windows;
 using System;
 using System.Diagnostics;
+using System.Linq;
+using System.Runtime.InteropServices;
 using System.Threading;
 
 namespace Avalonia.Appium.Common
@@ -21,17 +23,36 @@ namespace Avalonia.Appium.Common
         private const string DesktopLockName = @"Local\HelloAvalonia.Appium";
         private static readonly TimeSpan DesktopLockTimeout = TimeSpan.FromMinutes(10);
 
+        // How long Dispose waits for the app to exit after Quit; batch 8 and 9 saw apps take a few seconds.
+        private const int QuitGraceMs = 5000;
+
         private readonly string _app;
         private WindowsDriver<WindowsElement>? _driver;
+        private Process? _process;
         private Mutex? _desktopLock;
 
         public AppSession(string app) => _app = app;
 
         public WindowsDriver<WindowsElement> Driver => _driver ??= Start();
 
+        // True when the app was still running after Quit and its grace period, and Dispose had to kill it.
+        public bool KilledAfterQuit { get; private set; }
+
         public WindowsElement ById(string automationId) => Driver.FindElementByAccessibilityId(automationId);
 
         public WindowsElement ByName(string name) => Driver.FindElementByName(name);
+
+        // WindowHandles leaves out owned windows and dialogs (batch 9), but the session finds them by title.
+        public WindowsElement? FindWindow(string title) =>
+            Driver.FindElementsByName(title).FirstOrDefault(w => w.TagName == "ControlType.Window");
+
+        // Picked from the tab strip, not by name, so text on a page can never be clicked instead.
+        public void SelectTab(string header)
+        {
+            var tab = Driver.FindElementsByTagName("TabItem").Single(t => t.Text == header);
+            tab.Click();
+            WaitFor(() => tab.Selected, $"tab {header} is selected");
+        }
 
         // Clicks the box to focus it, then types. See UnicodeKeyboard for why WinAppDriver's SendKeys is not used.
         public void TypeInto(WindowsElement box, string text)
@@ -84,7 +105,9 @@ namespace Avalonia.Appium.Common
                 options.AddAdditionalCapability("app", exe);
                 options.AddAdditionalCapability("platformName", "Windows");
                 options.AddAdditionalCapability("deviceName", "WindowsPC");
-                return new WindowsDriver<WindowsElement>(DriverUri, options);
+                var driver = new WindowsDriver<WindowsElement>(DriverUri, options);
+                _process = ProcessOf(driver);
+                return driver;
             }
             catch
             {
@@ -121,7 +144,9 @@ namespace Avalonia.Appium.Common
             _desktopLock = null;
         }
 
-        // Ending the session also closes the app WinAppDriver launched (batch 7 checked: no CloseApp needed).
+        // Ending the session also closes the app WinAppDriver launched (batch 7 checked: no CloseApp needed). But
+        // in batch 10 a test that failed with a Windows file dialog open left the app running after Quit, and the
+        // next build could not replace its exe; so an app still running after the grace period is killed.
         public void Dispose()
         {
             try
@@ -131,8 +156,34 @@ namespace Avalonia.Appium.Common
             finally
             {
                 _driver = null;
+                EndApp();
                 ReleaseDesktop();
             }
         }
+
+        private void EndApp()
+        {
+            if (_process is null)
+                return;
+            if (!_process.WaitForExit(QuitGraceMs))
+            {
+                _process.Kill(entireProcessTree: true);
+                _process.WaitForExit();
+                KilledAfterQuit = true;
+            }
+            _process.Dispose();
+            _process = null;
+        }
+
+        // WinAppDriver names the app's main window by its handle as a hex string.
+        private static Process ProcessOf(WindowsDriver<WindowsElement> driver)
+        {
+            var window = new IntPtr(Convert.ToInt64(driver.CurrentWindowHandle, 16));
+            GetWindowThreadProcessId(window, out var processId);
+            return Process.GetProcessById((int)processId);
+        }
+
+        [DllImport("user32.dll")]
+        private static extern uint GetWindowThreadProcessId(IntPtr window, out uint processId);
     }
 }

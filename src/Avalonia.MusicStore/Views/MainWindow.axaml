@@ -36,7 +36,8 @@
             <Button Grid.Row="0"
                     HorizontalAlignment="Right"
                     Command="{Binding ShowAlbumsCommand}"
-                    ToolTip.Tip="Music Store">
+                    ToolTip.Tip="Music Store"
+                    AutomationProperties.Name="Music Store">
                 <PathIcon Data="{StaticResource store_microsoft_regular}" />
             </Button>
 

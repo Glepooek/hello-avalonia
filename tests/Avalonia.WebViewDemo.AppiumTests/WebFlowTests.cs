@@ -32,7 +32,7 @@ namespace Avalonia.WebViewDemo.AppiumTests
             AppSession.WaitFor(() => Texts(web).Any(t => t.StartsWith("Already up to date (")), "the page shows the app's reply");
 
             PageButton(web, "关闭窗口").Click();
-            AppSession.WaitFor(() => app.Driver.FindElementsByName("WebViewWindow").Count == 0, "the app closed the web window");
+            AppSession.WaitFor(() => app.FindWindow("WebViewWindow") is null, "the app closed the web window");
         }
 
         [AppiumFact(App)]
@@ -59,16 +59,15 @@ namespace Avalonia.WebViewDemo.AppiumTests
             app.ByName(OpenWebDialog).Click();
 
             // The dialog loads a public web site; only the window is checked, so the test needs no network.
-            AppSession.WaitFor(() => app.Driver.FindElementsByName("NativeWebDialog Demo").Any(w => w.TagName == "ControlType.Window"),
-                "the NativeWebDialog window is open");
+            AppSession.WaitFor(() => app.FindWindow("NativeWebDialog Demo") is not null, "the NativeWebDialog window is open");
         }
 
-        // WinAppDriver does not list owned windows in WindowHandles, but finds them by title from the app's session.
+        // The web window is owned by the main window, so it is found by title rather than in WindowHandles.
         private static WindowsElement OpenWebWindow(AppSession app)
         {
             app.ByName(OpenWebView).Click();
             WindowsElement? web = null;
-            AppSession.WaitFor(() => (web = app.Driver.FindElementsByName("WebViewWindow").FirstOrDefault()) is not null, "the web window is open");
+            AppSession.WaitFor(() => (web = app.FindWindow("WebViewWindow")) is not null, "the web window is open");
             AppSession.WaitFor(() => Texts(web!).Contains(PageGreeting), "the test page has loaded", PageLoadTimeoutMs);
             return web!;
         }
