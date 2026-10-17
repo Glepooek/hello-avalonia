@@ -242,6 +242,7 @@ dotnet test tests/Avalonia.Demos.AppiumTests
 - WinAppDriver 通过 UI Automation 操作**真实的交互式桌面**：运行期间不要动鼠标键盘，不要锁屏；用远程桌面时不要最小化或断开会话，否则用例会找不到元素。（常见经验，未实测。）
 - 同一时刻只允许一个会话，所以 Appium 项目全局串行，不要同时开两个 `dotnet test`。
 - 每个用例结束后夹具会关闭会话并结束被测进程；如果测试被强杀，手动结束遗留的 `Avalonia.*.exe` 与 `WinAppDriver.exe`。
+- **中文输入法会吞掉 `SendKeys`**（批 7 实测，搜狗拼音）：WinAppDriver 的 `SendKeys` 发虚拟键，进入输入法组字，`abc3` 变成 `安保处`。测试一律用 `AppSession.TypeInto`（`SendInput` + `KEYEVENTF_UNICODE`），不受输入法影响，不必切换使用者的输入法。
 
 ### 常见问题
 
@@ -546,6 +547,30 @@ dotnet test tests/Avalonia.Demos.AppiumTests
 - `Avalonia.MusicStore.Tests` 经传递引用重复报告 `src` 已有的 `NU1701`（iTunesSearch 只有 .NET Framework 版本），警告由 6 涨到 10。在该测试 csproj 里加 `NoWarn NU1701` 并写明原因后回到 5（计划未预见）。
 
 ## 批 7 实测结论（执行后回填）
+
+计划：`docs/superpowers/plans/2026-10-12-demo-tests-07-appium-foundation.md`；探针：`C:\Temp\probe-b7\`（未提交）。
+
+**交付**：`tests/Avalonia.Demos.AppiumTests`，含 `AppPaths`、`AppiumFactAttribute`、`AppSession`、`UnicodeKeyboard`，以及 TestingDemo 的 6 个用例（A1 1、A2 1、夹具 1、A3 3）。
+- 实跑：6 个全部通过，约 35 秒，连跑两次。
+- 不设开关：6 个跳过，退出码 0。
+- 全量：523 通过 + 6 跳过；构建 0 错误，警告 ≤ 5（增量构建 3 个）。
+
+**实测**（WinAppDriver 1.2.1，Windows 10 19045，搜狗拼音）：
+- 启动约 2.7 s。
+- 点击后读值没有复现批 0 的延迟，等待都在 58–266 ms 内收敛，默认上限定为 3 s。
+- `Quit()` 即结束被测进程，不需要 `CloseApp()`。
+- `FindElementsByTagName("TabItem")`/`("ListItem")` 可用。
+- 4723 端口由 `http.sys` 承载，`netstat` 显示 PID 4，要用 `netsh http show servicestate` 才能找到 WinAppDriver 的进程号。
+
+**与 spec 的偏离**：
+- 会话每个测试一个，不用 `IClassFixture`：TestingDemo 有状态，共享会话会让测试依赖执行顺序。批 8 的 A1+A2 无状态，可以再评估类夹具。
+- 键入用 `UnicodeKeyboard`，不用 `SendKeys`：见「运行期间的注意事项」。
+
+**破坏检查**：6/6 条按预期失败，含 `SendKeys` 那条的 2 个失败。`SendKeys` 那条只在中文输入法环境成立。
+
+**执行时与计划不符**：
+- 探针里的 `Dispose` 原本先 `CloseApp()` 再 `Quit()`。破坏检查「去掉 `CloseApp`」后测试仍然全绿，说明 `Quit()` 已经关闭被测进程，于是删掉 `CloseApp` 及其 try/catch，破坏检查改为「去掉 `Quit`」。计划写的是改后的版本。
+- 本批的执行（探针、实跑、破坏检查）先于计划成文，计划依据的就是这些实测；提交顺序仍是计划 → 代码 → 文档。
 
 ## 批 8 实测结论（执行后回填）
 
