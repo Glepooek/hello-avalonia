@@ -7,8 +7,8 @@
 ```bash
 dotnet build hello-avalonia.slnx
 dotnet run --project src/Avalonia.LayoutDemo     # 换成任意 Avalonia.*Demo
-dotnet test hello-avalonia.slnx                  # 全部测试项目（xUnit v3 + Headless），每个应用一个 Avalonia.<X>Demo.Tests
-dotnet test tests/Avalonia.TestingDemo.Tests     # 只跑单个测试项目，换成任意 Avalonia.*Demo.Tests
+dotnet test hello-avalonia.slnx                  # 全部测试项目（xUnit v3 + Headless），每个应用一个 Avalonia.<应用>.Tests
+dotnet test tests/Avalonia.TestingDemo.Tests     # 只跑单个测试项目，换成任意 Avalonia.<应用>.Tests
 dotnet test tests/Avalonia.TestingDemo.Tests --filter "FullyQualifiedName~ViewModelTests"
 $env:HELLO_AVALONIA_APPIUM=1; dotnet test tests/Avalonia.TestingDemo.AppiumTests   # PowerShell；每个应用一个 Avalonia.<应用>.AppiumTests（MusicStore 无 Demo 后缀）；需先运行 WinAppDriver，会接管鼠标键盘
 ```
@@ -34,16 +34,23 @@ $env:HELLO_AVALONIA_APPIUM=1; dotnet test tests/Avalonia.TestingDemo.AppiumTests
 
 ## 编码约定
 
-- 新写的注释（代码与 XAML）用英文；界面文字（标签页标题、说明栏、按钮文案）用中文；迁移来的中文注释保持原样，不要顺手改。
+- 新写的注释（代码与 XAML）用英文；界面文字（标签页标题、说明栏、按钮文案）用中文；从 hello-dotnet 迁移来的中文注释保持原样，不要顺手改。
 - 提交信息用英文。
 
 ## 计划驱动的实现
 
-大改动按「spec → 分批 plan → 执行」推进：设计文档在 `docs/superpowers/specs/`，计划在 `docs/superpowers/plans/`。计划里的代码块以 `#### \`相对路径\`` 标注目标文件（相对仓库根，新计划须带 `src/` 或 `tests/` 前缀；`**\`C:\绝对路径\`**` 是仓库外的探针文件），可整块抽取。
+大改动按「spec → 分批 plan → 执行」推进：设计文档在 `docs/superpowers/specs/`，计划在 `docs/superpowers/plans/`。计划里的代码块以 `#### \`相对路径\`` 标注目标文件（相对仓库根，新计划须带 `src/` 或 `tests/` 前缀；`**\`.claude/temp/…\`**` 是探针文件），可整块抽取。
 
-- 抽取：`powershell -File C:\Temp\extract-plan.ps1 -Plan <计划> -RepoRoot <仓库根>`
-- 验证：用仓库外的 headless 探针（`C:\Temp\probe-controls`、`C:\Temp\probe-bdemo`）；每批实测结论回填到 spec 的「批 N 实测结论」。
-- 探针文件永不提交。
+- 抽取：按 `#### \`路径\`` 标题把代码块写到对应路径的脚本，放在 `.claude/temp/` 下。
+- 验证：用 headless 探针，放在 `.claude/temp/<批次>/`（如 `.claude/temp/probe-b11/`）；每批实测结论回填到 spec 的「批 N 实测结论」。
+- 探针文件永不提交：`.claude/temp/` 已在 `.gitignore` 里，提交前仍用 `git status` 确认。
+- 探针在仓库目录树内，会继承根目录的 `Directory.Build.props` 与 `Directory.Packages.props`。默认保持继承：探针与正式测试用同一套版本，结论搬过去最可靠；探针 csproj 的 `PackageReference` 不写 `Version`。
+- 只有要试未登记的包或别的版本时才隔离，优先只在那个探针的 csproj 里设 `ManagePackageVersionsCentrally=false`（影响最小）。若整个 `.claude/temp/` 都要隔离，可在其中放空的 `Directory.Build.props`（`<Project />`，截断向上查找）与只设 `ManagePackageVersionsCentrally=false` 的 `Directory.Packages.props`，并注意：
+  - 只隔离探针自己，被引用的 `src` 项目仍按仓库配置构建；共用的包照抄 `Directory.Packages.props` 的版本，写低了按 NuGet 规则会报 NU1605（本仓库未实测）。
+  - 删掉这两个文件后探针重新继承仓库配置，写了 `Version` 的探针会报 NU1008（同样未实测）；只在该批探针不再用时删。
+  - 它们在 gitignore 里不随仓库走，需要时由探针脚本在批次开始时创建。
+- 引用演示项目直接写相对路径的 `ProjectReference`（csproj 在 `.claude/temp/probe-b11/` 时是 `../../../src/Avalonia.LayoutDemo/Avalonia.LayoutDemo.csproj`），不要建指向 `src` 的目录联接。
+- 2026-10-17 之前的探针在 `C:\Temp\probe-*`，spec 与计划里的这类路径是历史记录，不要改。
 
 ## Avalonia 坑（本仓库反复踩过）
 

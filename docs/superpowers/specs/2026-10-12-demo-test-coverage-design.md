@@ -294,7 +294,7 @@ dotnet test hello-avalonia.slnx                      # 全部，Appium 会话经
 1. `dotnet build hello-avalonia.slnx` 0 错误，警告数不高于该批开始前。
 2. 该批新增的每个测试项目 `dotnet test tests/<项目>` 失败 0；Appium 批在 `HELLO_AVALONIA_APPIUM=1` 且 WinAppDriver 已运行时失败 0，否则只允许"跳过"。
 3. `TestingDemo.Tests` 的测试始终保持通过（批 0 迁入时 24 个，之后各批在同一个项目里追加，现为 37 个）。
-4. `git status` 确认没有探针文件（`C:\Temp\probe-*`）被提交，且 `src/` 下的改动只限于 `AutomationProperties.AutomationId`/`Name`，以及该批计划里经用户确认的缺陷修复。
+4. `git status` 确认没有探针文件（`.claude/temp/`；批 10 及以前在 `C:\Temp\probe-*`）被提交，且 `src/` 下的改动只限于 `AutomationProperties.AutomationId`/`Name`，以及该批计划里经用户确认的缺陷修复。
 5. 把该批的实测结论（含意外发现）回填到本文对应的「批 N 实测结论」。
 
 ## 风险
