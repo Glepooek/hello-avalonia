@@ -122,7 +122,16 @@ public partial class WebViewWindow : Window, IRecipient<MessageParam>
             return;
         }
 
-        var result = await webView.InvokeScript("window.calculateAdd(12, 13)");
-        Debug.WriteLine($"JS returned: {result}");
+        // InvokeScript throws until the first page has loaded; an exception escaping this async void handler
+        // would take the whole app down, so a click that comes too early is just logged.
+        try
+        {
+            var result = await webView.InvokeScript("window.calculateAdd(12, 13)");
+            Debug.WriteLine($"JS returned: {result}");
+        }
+        catch (InvalidOperationException ex)
+        {
+            Debug.WriteLine($"JS call skipped: {ex.Message}");
+        }
     }
 }
