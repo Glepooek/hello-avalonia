@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <!-- xunit v3 test projects are executables. -->
+        <OutputType>Exe</OutputType>
+        <TargetFramework>net10.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <IsPackable>false</IsPackable>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Appium.WebDriver" />
+        <PackageReference Include="xunit.v3" />
+        <PackageReference Include="xunit.runner.visualstudio" />
+        <PackageReference Include="Microsoft.NET.Test.Sdk" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <!-- Build order only: the tests launch the app's exe and never load its assembly. -->
+        <ProjectReference Include="..\..\src\Avalonia.LayoutDemo\Avalonia.LayoutDemo.csproj" ReferenceOutputAssembly="false" />
+        <ProjectReference Include="..\Avalonia.Appium.Common\Avalonia.Appium.Common.csproj" />
+    </ItemGroup>
+</Project>
