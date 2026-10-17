@@ -472,6 +472,46 @@ dotnet test tests/Avalonia.Demos.AppiumTests
 - 没有测试需要为了通过而改断言：五个任务的每条 `Expected:` 都与实测一致。Task 4 的破坏检查两次改错行（`sed` 一次匹配到两处、一次删掉 `DetachedFromVisualTree` 处理器声明而非 `_confirmedClose = true;`），改为定点修改后得到计划的 1 个失败。
 - 整批审阅后追加一条测试与一处 `src/` 修复（上面的「改动之二」），不在计划内。
 
+### 05b（计划 05b 执行后）
+
+| 测试文件 | 用例数 | 覆盖的控件页 | 说明 |
+|---|---|---|---|
+| `ControlDataFeedbackTests` | 31 | Data display 12、Feedback 4 | 选择与读数、`ItemsPanel` 切换、`ScrollIntoView`、`ContentControl` 三种内容、DataGrid 排序、树全部展开/折叠、访问键、真实拖选文字、过渡完成计数、通知卡片（类型、点击、`MaxItems`）、Popup 轻触关闭、进度条百分比与竖向尺寸 |
+| `ControlInputTests` | 42 | Input 22 | `ClickMode` 按下/松开、ButtonSpinner、单选分组、SplitButton 主次部件、三态循环、日历选择模式与停用日期、日期/时间格式与部件显隐、父子复选框、调色板选色、可编辑 ComboBox、NumericUpDown 夹取、滑块吸附、AutoCompleteBox 过滤、掩码输入、TextBox 的 `MaxLength`/只读/回车/密码 |
+| `ControlLayoutTests` | 33 | Layout 19（`GroupBoxPage` 只靠 H1） | 结构体属性的真实值与子元素位置、Expander 方向、Flyout 四个方位、PipsPager、刷新、滚动偏移与夹取、SplitView 两种模式、各面板的真实排列、GridSplitter 拖拽/预览/键盘 |
+| `ControlShellTests` | 43 | Media 3、Menus 4、Navigation 8、Primitives 5、System 1（`SeparatorPage` 只靠 H1） | 右键菜单与取消、菜单与 MenuFlyout、原生菜单挂上/摘下、CommandBar 溢出、NavigationPage 栈与模态栈、TabControl 禁用页与换位保选中、ScrollBar 的 `Scroll` 事件类型、主题作用域、示例窗口（拦截关闭、离开页面强制关闭、属性下发）、托盘图标挂上与还原 |
+
+执行时的实测：构建警告数 6（批开始前 6）；`dotnet test hello-avalonia.slnx` 共 501 个测试通过（05a 结束时的 352 + 本批 149）；破坏检查：Task 1 五项、Task 2 五项、Task 3 五项、Task 4 六项，每项恰好让目标测试失败（`ColorPickerPage` 的 `NewColor` → `OldColor` 是 2 个），均已还原。
+
+**`src/` 改动（用户 2026-10-17 确认，6 处，均先写会失败的测试再修）**：
+
+| 页面 | 缺陷 | 修复前（实测） | 修复 |
+|---|---|---|---|
+| `CalendarDatePickerPage` | 清空格式框或只剩 `Q` 时，`CustomDateFormatString` 抛出的异常从 `TextChanged` 漏出，应用崩溃 | `FormatException` / `ArgumentException` | 空串与无效格式保留上一个有效格式 |
+| `NativeMenuPage` | 离开页面后菜单仍挂在窗口上：v12 的 `e.RootVisual` 是 `TopLevelHost` | `GetMenu(window)` 仍是 `Built` | 挂上时记下 `TopLevel`，离开时用它摘下 |
+| `PipsPagerPage` | 复选框初始不勾、提示写"默认隐藏"，v12 默认显示 | 复选框 False，控件 True | XAML `IsChecked="True"`，改提示 |
+| `ToggleButtonPage` | 三态为 null 时读数 `IsChecked = ` | 读数缺 `null` | `FallbackValue` → `TargetNullValue` |
+| `CheckBoxPage` | 点已全选的父项进入"部分选中"、子项不清空 | 父项 null，文字 `父项：全选` | 去掉父项的 `IsThreeState` |
+| `ProgressBarPage` | 竖向时主题的 `MinHeight = 200` 压过 `Height = 100` | 20×200 | 竖向 `MinHeight = 0`，横向 `ClearValue` |
+
+**对后续批的决定与发现**（计划阶段在探针里实测，执行阶段原样复现）：
+
+- **Avalonia 12 的默认值与 API 行为变了，旧写法静默失效**：本批 6 个缺陷里 3 个属于这一类（`RootVisual` 的类型、`PipsPager` 按钮默认显示、竖向 `ProgressBar` 的 `MinHeight`），加上 05a 的 `ImmutableCrossFade`。都不抛异常、不写日志，只有断言真实状态才看得见。批 6（MusicStore、WebViewDemo、HtmlRendererDemo）里凡是依赖默认值或事件参数类型的代码，读代码时先查一遍。
+- **弹出层一律在叠加层里找**，并写"打开前 0 个、打开后恰好 N 个"；关上的子菜单项、折叠的 Expander 内容不在视觉树里，用 `FindControl` 或先展开。
+- **可见性断言要防"永远通过"**：`ToggleSwitch` 靠 `Opacity`、PipsPager 第一页的「上一页」靠 `Opacity` 与禁用，`IsEffectivelyVisible` 都一直为真。
+- **键盘测试每次按键前重新聚焦目标**：点过复选框或按钮后焦点就不在原控件上了，方向键静默无效。
+- **`TextChanged` 里的异常从输入调用本身抛出**，`Record.Exception` 要包住 `Type`/`KeyPress`。
+- **`Color.ToString()` 对已知颜色返回名字**；运行时异常消息的尾巴随 UI 语言变化，`CultureScope` 管不到，用 `StartsWith`。
+- **`NumericUpDown.NumberFormat` 在类型第一次被使用时取一次区域设置**：`CultureScope` 管不到它，结果随测试顺序变化。断言格式化的数字时，用控件自己的 `NumberFormat` 来生成期望值。
+- **并行探针**：本批第一次用 4 个 git worktree 并行做探针（每组一个），互不争用 `obj/`、破坏检查可以安全地改 `src/`；首次构建每个 worktree 约 5 分钟（还原包），之后约 20 秒。
+- **只靠 H1 的页面**：`GroupBoxPage`、`SeparatorPage`（纯 XAML）。页面里有意不测的部分：悬停计时的 ToolTip、动画中间帧、触摸滑动、DataGrid 编辑与列拖拽、`NavigateUri`、`RepeatButton` 的真实重复、真实托盘与原生菜单导出。
+
+执行时与计划不符、改了测试的地方：
+
+- **`Money_box_formats_with_c2_and_spins_by_half` 依赖测试顺序**：Task 2 Step 2 红了 4 个而不是 3 个，多出的就是它（Expected `¤12.50`，Actual `¥12.50`）。单独跑能过，排在 `Numeric_spin_respects_maximum_but_code_writes_are_kept_as_is` 之后就失败。原因是 `NumericUpDown.NumberFormat` 的默认值在进程里第一次用到这个类型时，取的是当时的区域设置，之后不再变，`CultureScope` 改不了它；探针里通过，只是因为碰巧先跑了带 `CultureScope` 的测试。现在期望文字改用控件自己的 `NumberFormat` 来格式化，两条测试放在一起跑也都能过。计划里的代码块和"容易写错的地方"已同步更新（随 Task 2 一起提交）。
+- **Task 3 的 `RefreshContainerPage` 破坏检查**：第一次用脚本跑时没输出结果行，原样重跑后看到恰好 1 个失败，是预期中的 5 秒超时。第一次为什么没出结果行没有查明；其余 20 项破坏检查都是一次通过。
+- PipsPager 按计划用 XAML 的 `IsChecked="True"` 修，没有用探针里"构造时同步"的写法；红绿结果与计划一致（31 个过、2 个失败 → 33 个全过）。
+
 ## 批 6 实测结论（执行后回填）
 
 ## 批 7 实测结论（执行后回填）
