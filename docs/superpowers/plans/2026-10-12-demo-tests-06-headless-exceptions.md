@@ -54,7 +54,7 @@
    - 原因：`WebViewWindow` 与 MusicStore 的 `MainWindowViewModel` 都注册在进程级的 `WeakReferenceMessenger.Default` 上。漏掉注销，关掉的窗口仍会响应 #3，同一专辑也会被加两次。
    - 测试：Task 2 的 `Window_listens_for_js_calls_until_it_is_closed`；Task 1 的 `Receiving_an_album_adds_it_once_and_saves_it_to_the_cache`。两条都有破坏检查。
 5. **图标字体静默回退**
-   - 原因：`IconFont` 资源的 URI 写错或字体没打包时，不报错、不出日志，TextBlock 改用系统字体，U+E71A 显示成方框或空白。
+   - 原因：`IconFont` 资源若写成裸族名 `iconfont`（漏掉 `avares://…/Assets/#` 前缀），不报错、不出日志，TextBlock 改用系统字体，U+E71A 显示成方框或空白。（执行时实测：`avares://` 集合里写错族名不会静默回退，而是在排版时抛 `InvalidOperationException: Could not create glyphTypeface`。）
    - 测试：Task 3 的 `Icon_text_is_shaped_with_the_bundled_icon_font` 断言实际排版用的字体族名，有破坏检查。
 
 另有两处**已知但本批不修**的问题，只写进回填，不写测试：
@@ -108,7 +108,7 @@
 - **MusicStore 的界面文字随 UI 区域设置变**：本机 zh-CN 显示「购买专辑」，en-US 显示 "Buy Album"。断言用 `Assets.Langs.Resources.btn_BuyAlbum`、`Resources.txt_SearchAlbums`。
 - **封面文件叫 `.bmp`，里面可以是任何格式**：`Bitmap.DecodeToWidth` 按内容解码，测试用 `RenderTargetBitmap.Save` 写 PNG 就行。`DecodeToWidth(…, 400)` 总是按 400 宽缩放，20×10 的图解出来是 400×200。
 - **HtmlPanel 的像素**：帧格式是 `Rgba8888`（按 `px & 0xff` 取 R 也对，"暗"判据对通道顺序不敏感）。带 VM 时面板区域有约 3569 个暗像素（rgb 都 < 100），不带 VM 时为 0，因为面板背景是白的。阈值取 500。
-- **字体回退是静默的**：图标 TextBlock 的 `TextLayout.TextLines[*].TextRuns.OfType<ShapedTextRun>()` 的 `GlyphRun.GlyphTypeface.FamilyName` 实测是 `iconfont`，字形号 125。URI 写错时会变成系统字体名。
+- **字体回退是静默的**：图标 TextBlock 的 `TextLayout.TextLines[*].TextRuns.OfType<ShapedTextRun>()` 的 `GlyphRun.GlyphTypeface.FamilyName` 实测是 `iconfont`，字形号 125。资源写成裸族名时会变成系统字体名（静默）；`avares://` 集合里族名写错则抛异常（不静默）。
 
 ## 文件结构
 
@@ -734,7 +734,7 @@ Co-Authored-By: Claude Opus 5.5 (1M context) <noreply@anthropic.com>"
 | `ViewModels/MainWindowViewModel.cs` 的 `Receive` 去掉 `!Albums.Contains(...)` 判断（无条件 `Add`） | `Receiving_an_album_adds_it_once_and_saves_it_to_the_cache` |
 | `Models/Album.cs` 的 `SanitizeFileName` 改成 `return name;` | `Names_with_invalid_file_characters_round_trip` |
 | `ViewModels/MusicStoreViewModel.cs` 去掉 `AvaloniaHelper.GetTopLevel(control)?.Close();` | `Buying_the_selected_album_closes_the_store_and_adds_it_to_the_main_window` |
-| `Models/Album.cs` 的 `LoadCoverBitmapAsync` 里两处 `CachePath + ".bmp"` 改成 `CachePath + ".png"` | `A_cover_saved_beside_the_album_loads_without_the_network` 与 `Main_window_loads_cached_albums_with_their_covers`（两条都依赖本地封面，**预期 2 个失败**） |
+| `Models/Album.cs` 的 `LoadCoverBitmapAsync` 里两处 `CachePath + ".bmp"` 改成 `CachePath + ".png"` | `A_cover_saved_beside_the_album_loads_without_the_network` 与 `Main_window_loads_cached_albums_with_their_covers`（两条都依赖本地封面，**预期 2 个失败**）。执行时实测 3 个：`A_smaller_cover_overwrite_leaves_only_the_new_image` 也先 `LoadCover` 读本地封面，同样落到网络 URL `u` 上；主窗口那条在测试清理阶段失败，输出里没有 `[FAIL]` 行，只在摘要计数里 |
 
 第 2 行的 `SanitizeFileName` 改动会让 `AC/DC` 的路径变成子目录。这时 `Receiving_an_album_…` 和购买流程也可能一起失败；只要 `Names_with_invalid_file_characters_round_trip` 在失败列表里就算通过，并在回填里记下实际失败数。
 
@@ -1253,8 +1253,9 @@ namespace Avalonia.HtmlRendererDemo.Tests
             }
         }
 
-        // A missing or misnamed font resource does not fail: text silently falls back to a system font, which has
-        // no glyph at U+E71A. So the test checks which typeface actually shaped the icon.
+        // A wrong family inside the avares:// collection throws, but a family that never goes through the collection
+        // (for example the bare name "iconfont") silently falls back to a system font, which has no glyph at U+E71A.
+        // So the test checks which typeface actually shaped the icon.
         [AvaloniaFact]
         public void Icon_text_is_shaped_with_the_bundled_icon_font()
         {
@@ -1295,7 +1296,7 @@ Co-Authored-By: Claude Opus 5.5 (1M context) <noreply@anthropic.com>"
 | 临时改动 | 预期失败的测试 |
 |---|---|
 | `Views/MainWindow.axaml` 的 HtmlPanel 去掉 `Background="White"` | `Html_panel_draws_the_bound_markup`（无 VM 的一半：深色主题背景让暗像素不再是 0） |
-| `App.axaml` 的 `IconFont` 资源 URI 里 `#iconfont` 改成 `#iconfont2` | `Icon_text_is_shaped_with_the_bundled_icon_font`（字体族名变成系统回退字体） |
+| `App.axaml` 的 `IconFont` 资源值 `avares://Avalonia.HtmlRendererDemo/Assets/#iconfont` 改成裸族名 `iconfont` | `Icon_text_is_shaped_with_the_bundled_icon_font`（字体族名变成系统回退字体）。执行时改正：计划原写 `#iconfont2`，实测会让 3 个测试都因 `Could not create glyphTypeface` 失败，不是"恰好 1 个" |
 
 Run: `git status --short src`
 Expected: 无输出。

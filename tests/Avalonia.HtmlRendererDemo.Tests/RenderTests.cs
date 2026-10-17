@@ -64,8 +64,9 @@ namespace Avalonia.HtmlRendererDemo.Tests
             }
         }
 
-        // A missing or misnamed font resource does not fail: text silently falls back to a system font, which has
-        // no glyph at U+E71A. So the test checks which typeface actually shaped the icon.
+        // A wrong family inside the avares:// collection throws, but a family that never goes through the collection
+        // (for example the bare name "iconfont") silently falls back to a system font, which has no glyph at U+E71A.
+        // So the test checks which typeface actually shaped the icon.
         [AvaloniaFact]
         public void Icon_text_is_shaped_with_the_bundled_icon_font()
         {
