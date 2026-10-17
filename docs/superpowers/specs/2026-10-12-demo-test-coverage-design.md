@@ -514,6 +514,37 @@ dotnet test tests/Avalonia.Demos.AppiumTests
 
 ## 批 6 实测结论（执行后回填）
 
+计划：`docs/superpowers/plans/2026-10-12-demo-tests-06-headless-exceptions.md`；探针：`C:\Temp\probe-b6\`（未提交）。
+
+**交付**：3 个新测试项目，共 22 个用例。全量 523 个通过，0 跳过；构建 0 错误，警告 5 个（批前 6 个，不增）。
+
+| 项目 | 用例 | 内容 |
+|---|---|---|
+| `Avalonia.MusicStore.Tests` | 13 | H1 2、H2 9（含缓存 5）、H3 2 |
+| `Avalonia.WebViewDemo.Tests` | 6 | H1 2、H2 1、H3 3 |
+| `Avalonia.HtmlRendererDemo.Tests` | 3 | H1 1、H3 2（像素 + 字形） |
+
+**修复的缺陷**（用户 2026-10-17 确认，均先红后绿）：
+1. `WebViewWindow.Receive`：页面加载完之前调用 `InvokeScript` 会抛 `InvalidOperationException`，从 `async void` 漏出会让应用退出。修复：捕获并记日志。
+2. `Album.LoadCachedAsync`：名字带「.」的专辑被当成封面文件跳过，重启后丢失。修复：只跳过 `.bmp`。
+3. `Album.SaveAsync`/`SaveCoverBitmapStream`：`File.OpenWrite` 不截断，短内容覆写后残留旧尾巴，下次启动抛 `JsonException`。修复：改用 `File.Create`。
+
+**已知未修**（只记录，无测试）：
+- 搜索竞态：快速连打时，旧搜索的结果可能追加在新搜索之后。只能经网络复现，spec 不许加接缝。
+- 重复购买：两次搜索得到的同一张专辑会被加两次，因为 `Albums.Contains` 按引用比较。
+
+**headless 的硬边界**（后续批同样适用）：
+- 没有桌面生命周期，`GetMainWindow()` 为 null，依赖它的命令（`ShowWebViewCommand`、`ShowAlbumsCommand`）不能直接执行。
+- UI 线程是 MTA，WebView2 无法启动，`NativeWebView`/`NativeWebDialog` 只能构造。
+- `async void` 里的同步异常会在下一次 `RunJobs` 时重抛。如果漏到测试结束，会以 "Test Case Cleanup Failure" 失败，输出里没有 `[FAIL]` 行，只计入摘要。
+
+**破坏检查**：MusicStore 4/4、WebView 3/3、HtmlRenderer 2/2 条都让目标测试失败，还原后 `git status --short src` 为空。
+
+**执行时与计划不符**：
+- 破坏检查「`SanitizeFileName` 原样返回」实测 3 个失败（往返、收到专辑、购买流程），计划已预见。「封面改读 `.png`」实测 3 个失败，计划写 2 个，漏了 `A_smaller_cover_overwrite_…`，它也先读本地封面。
+- 图标字体的破坏检查：计划原写 `#iconfont2`，实测 `avares://` 集合里写错族名不会静默回退，而是抛 `Could not create glyphTypeface`，3 个测试全红。改用裸族名 `iconfont` 后恰好 1 个失败，测试注释与计划都已按实测改正。
+- `Avalonia.MusicStore.Tests` 经传递引用重复报告 `src` 已有的 `NU1701`（iTunesSearch 只有 .NET Framework 版本），警告由 6 涨到 10。在该测试 csproj 里加 `NoWarn NU1701` 并写明原因后回到 5（计划未预见）。
+
 ## 批 7 实测结论（执行后回填）
 
 ## 批 8 实测结论（执行后回填）
