@@ -1,4 +1,5 @@
 ﻿using iTunesSearch.Library;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -64,7 +65,7 @@ namespace Avalonia.MusicStore.Models
                 Directory.CreateDirectory("./Cache");
             }
 
-            using (var fs = File.OpenWrite(CachePath))
+            using (var fs = File.Create(CachePath))
             {
                 await SaveToStreamAsync(this, fs);
             }
@@ -72,7 +73,7 @@ namespace Avalonia.MusicStore.Models
 
         public Stream SaveCoverBitmapStream()
         {
-            return File.OpenWrite(CachePath + ".bmp");
+            return File.Create(CachePath + ".bmp");
         }
 
         private static async Task SaveToStreamAsync(Album data, Stream stream)
@@ -96,7 +97,8 @@ namespace Avalonia.MusicStore.Models
 
             foreach (var file in Directory.EnumerateFiles("./Cache"))
             {
-                if (!string.IsNullOrWhiteSpace(new DirectoryInfo(file).Extension)) continue;
+                // Album names can contain dots ("R.E.M."), so only cover files are skipped, not every file with an extension.
+                if (file.EndsWith(".bmp", StringComparison.OrdinalIgnoreCase)) continue;
 
                 await using var fs = File.OpenRead(file);
                 results.Add(await Album.LoadFromStream(fs).ConfigureAwait(false));
