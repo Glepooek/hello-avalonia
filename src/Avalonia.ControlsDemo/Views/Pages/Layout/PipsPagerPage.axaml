@@ -17,12 +17,13 @@
                         <Slider Name="PagesSlider" Width="200" Minimum="2" Maximum="12" Value="5" />
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Spacing="16">
-                        <CheckBox Name="PreviousCheck" Content="IsPreviousButtonVisible" />
-                        <CheckBox Name="NextCheck" Content="IsNextButtonVisible" />
+                        <!-- Avalonia 12's PipsPager shows both buttons by default. -->
+                        <CheckBox Name="PreviousCheck" IsChecked="True" Content="IsPreviousButtonVisible" />
+                        <CheckBox Name="NextCheck" IsChecked="True" Content="IsNextButtonVisible" />
                     </StackPanel>
                 </StackPanel>
             </Border>
-            <TextBlock Classes="hint" Text="PipsPager 只显示「第几页」，不管页面内容；配合 Carousel 或自己的切换逻辑使用。上一页 / 下一页按钮默认隐藏。" />
+            <TextBlock Classes="hint" Text="PipsPager 只显示「第几页」，不管页面内容；配合 Carousel 或自己的切换逻辑使用。上一页 / 下一页按钮默认显示（在第一页时「上一页」透明且不可点）。" />
         </StackPanel>
     </ScrollViewer>
 </UserControl>
