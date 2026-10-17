@@ -26,6 +26,16 @@ namespace Avalonia.ControlsDemo.Views.Pages
                 Bar.Orientation = vertical ? Orientation.Vertical : Orientation.Horizontal;
                 Bar.Width = vertical ? 20 : 280;
                 Bar.Height = vertical ? 100 : double.NaN;
+                // The Fluent :vertical style sets MinHeight = 200, which beats Height. Clear it again when going back
+                // so no local value is left to override the theme.
+                if (vertical)
+                {
+                    Bar.MinHeight = 0;
+                }
+                else
+                {
+                    Bar.ClearValue(MinHeightProperty);
+                }
             };
 
             // Percentage is only recomputed once the bar has been laid out, so the readout listens to it
