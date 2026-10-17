@@ -5,6 +5,7 @@ namespace Avalonia.ControlsDemo.Views.Pages
     public partial class NativeMenuPage : UserControl
     {
         private int _clicks;
+        private TopLevel? _top;
 
         public NativeMenuPage()
         {
@@ -33,15 +34,21 @@ namespace Avalonia.ControlsDemo.Views.Pages
                     ShowExport();
                 }
             };
-            DetachedFromVisualTree += (_, e) =>
+            DetachedFromVisualTree += (_, _) =>
             {
-                // Leave the window as it was, whatever the box says.
-                if (AttachCheck.IsChecked == true && e.RootVisual is TopLevel top)
+                // Leave the window as it was, whatever the box says. e.RootVisual is the TopLevelHost in Avalonia 12,
+                // not the window, so use the top level remembered on attach.
+                if (AttachCheck.IsChecked == true && _top is not null)
                 {
-                    NativeMenu.SetMenu(top, null);
+                    NativeMenu.SetMenu(_top, null);
                 }
+                _top = null;
             };
-            AttachedToVisualTree += (_, _) => ShowExport();
+            AttachedToVisualTree += (_, _) =>
+            {
+                _top = TopLevel.GetTopLevel(this);
+                ShowExport();
+            };
             ShowItems();
         }
 
