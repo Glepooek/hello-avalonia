@@ -48,18 +48,22 @@
     <Project Path="tests/Avalonia.TestingDemo.AppiumTests/Avalonia.TestingDemo.AppiumTests.csproj" />
     <Project Path="tests/Avalonia.AppDevelopmentDemo.AppiumTests/Avalonia.AppDevelopmentDemo.AppiumTests.csproj" />
     <Project Path="tests/Avalonia.BehaviorsDemo.AppiumTests/Avalonia.BehaviorsDemo.AppiumTests.csproj" />
+    <Project Path="tests/Avalonia.ControlsDemo.AppiumTests/Avalonia.ControlsDemo.AppiumTests.csproj" />
     <Project Path="tests/Avalonia.CustomControlsDemo.AppiumTests/Avalonia.CustomControlsDemo.AppiumTests.csproj" />
     <Project Path="tests/Avalonia.DataBindingDemo.AppiumTests/Avalonia.DataBindingDemo.AppiumTests.csproj" />
     <Project Path="tests/Avalonia.DataTemplatesDemo.AppiumTests/Avalonia.DataTemplatesDemo.AppiumTests.csproj" />
     <Project Path="tests/Avalonia.EventsDemo.AppiumTests/Avalonia.EventsDemo.AppiumTests.csproj" />
     <Project Path="tests/Avalonia.FundamentalsDemo.AppiumTests/Avalonia.FundamentalsDemo.AppiumTests.csproj" />
     <Project Path="tests/Avalonia.GraphicsDemo.AppiumTests/Avalonia.GraphicsDemo.AppiumTests.csproj" />
+    <Project Path="tests/Avalonia.HtmlRendererDemo.AppiumTests/Avalonia.HtmlRendererDemo.AppiumTests.csproj" />
     <Project Path="tests/Avalonia.InputDemo.AppiumTests/Avalonia.InputDemo.AppiumTests.csproj" />
     <Project Path="tests/Avalonia.LayoutDemo.AppiumTests/Avalonia.LayoutDemo.AppiumTests.csproj" />
+    <Project Path="tests/Avalonia.MusicStore.AppiumTests/Avalonia.MusicStore.AppiumTests.csproj" />
     <Project Path="tests/Avalonia.PropertySystemDemo.AppiumTests/Avalonia.PropertySystemDemo.AppiumTests.csproj" />
     <Project Path="tests/Avalonia.ServicesDemo.AppiumTests/Avalonia.ServicesDemo.AppiumTests.csproj" />
     <Project Path="tests/Avalonia.StarterTutorialDemo.AppiumTests/Avalonia.StarterTutorialDemo.AppiumTests.csproj" />
     <Project Path="tests/Avalonia.StylingDemo.AppiumTests/Avalonia.StylingDemo.AppiumTests.csproj" />
+    <Project Path="tests/Avalonia.WebViewDemo.AppiumTests/Avalonia.WebViewDemo.AppiumTests.csproj" />
     <Project Path="tests/Avalonia.XamlDemo.AppiumTests/Avalonia.XamlDemo.AppiumTests.csproj" />
   </Folder>
 </Solution>
