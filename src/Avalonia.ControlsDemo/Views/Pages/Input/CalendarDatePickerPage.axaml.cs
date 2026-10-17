@@ -18,7 +18,25 @@ namespace Avalonia.ControlsDemo.Views.Pages
                     Picker.SelectedDateFormat = format;
                 }
             };
-            CustomFormat.TextChanged += (_, _) => Picker.CustomDateFormatString = CustomFormat.Text ?? string.Empty;
+            // CustomDateFormatString rejects "" and a lone non-standard letter ("Q") throws while the date is
+            // re-formatted, so keep the last good format instead of letting an edit crash the app.
+            CustomFormat.TextChanged += (_, _) =>
+            {
+                var format = CustomFormat.Text;
+                if (string.IsNullOrEmpty(format))
+                {
+                    return;
+                }
+                try
+                {
+                    _ = DateTime.Today.ToString(format);
+                }
+                catch (FormatException)
+                {
+                    return;
+                }
+                Picker.CustomDateFormatString = format;
+            };
             Picker.CustomDateFormatString = CustomFormat.Text ?? string.Empty;
 
             Picker.SelectedDateChanged += (_, e) =>

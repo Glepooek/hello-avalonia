@@ -905,6 +905,7 @@ Expected: 无输出。
 - `Ticked` 滑块的读数一开始是 XAML 里的字面量 `Value = 0`，第一次变化后才是 `F1` 格式；避开 `F1` 的舍入平局值（42.25 → `42.2`）。
 - `ColorView` 的调色板是模板里的第二个 `TabItem`（没有名字、表头是图标），按序号选。
 - 多行框里按 Enter 插入的是 `Environment.NewLine`，XAML 里的初始文字用的是 `\n`，结果两种换行并存。
+- **`NumericUpDown.NumberFormat` 的默认值在该类型第一次被使用时取一次当时的区域设置**，之后不变，`CultureScope` 管不到它（执行时发现：探针里碰巧先跑了带 `CultureScope` 的测试才得到 `¤12.50`，换个顺序就是本机的 `¥12.50`）。期望文字用控件自己的 `NumberFormat` 格式化。
 - `AutoCompleteBoxPage` 提示说 Contains 模式下 `rr` 只匹配 Cherry，实际是 `Blueberry`、`Cherry`；只是提示措辞，不算缺陷，不改。
 
 - [ ] **Step 1: 放入测试文件**
@@ -1767,21 +1768,22 @@ namespace Avalonia.ControlsDemo.Tests
             }
         }
 
-        // Invariant culture formats C2 with the generic currency sign.
+        // NumberFormat's default is the culture current when NumericUpDown is first used in the process, so
+        // CultureScope cannot pin it; format the expected text with the box's own NumberFormat instead.
         [AvaloniaFact]
         public void Money_box_formats_with_c2_and_spins_by_half()
         {
-            using var culture = CultureScope.Invariant();
             var (window, _) = PageHelpers.Open<NumericUpDownPage>();
             try
             {
                 var money = window.ByName<NumericUpDown>("Money");
                 var text = money.GetVisualDescendants().OfType<TextBox>().First();
-                Assert.Equal("¤12.50", text.Text);
+                Assert.Equal(12.5m.ToString("C2", money.NumberFormat), text.Text);
 
                 window.Click(money.ByName<RepeatButton>("PART_IncreaseButton"));
                 Dispatcher.UIThread.RunJobs();
-                Assert.Equal("¤13.00", text.Text);
+                Assert.Equal(13m, money.Value);
+                Assert.Equal(13m.ToString("C2", money.NumberFormat), text.Text);
             }
             finally
             {

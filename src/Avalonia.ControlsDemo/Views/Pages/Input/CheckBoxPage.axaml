@@ -19,7 +19,7 @@
             <TextBlock Classes="caption" Text="2. 三态：父项汇总子项" />
             <Border Classes="stage" Padding="12">
                 <StackPanel Spacing="4">
-                    <CheckBox Name="ParentBox" IsThreeState="True" Content="全选" />
+                    <CheckBox Name="ParentBox" Content="全选" />
                     <CheckBox Name="ChildA" Margin="24,0,0,0" Content="选项 A" />
                     <CheckBox Name="ChildB" Margin="24,0,0,0" Content="选项 B" />
                     <CheckBox Name="ChildC" Margin="24,0,0,0" Content="选项 C" />

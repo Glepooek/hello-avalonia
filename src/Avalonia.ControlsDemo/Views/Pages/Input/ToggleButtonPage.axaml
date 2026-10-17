@@ -26,7 +26,7 @@
                 <StackPanel Orientation="Horizontal" Spacing="12">
                     <ToggleButton Name="ThreeState" IsThreeState="True" IsChecked="{x:Null}" Content="三态" />
                     <TextBlock VerticalAlignment="Center"
-                               Text="{Binding #ThreeState.IsChecked, StringFormat='IsChecked = {0}', FallbackValue='IsChecked = null'}" />
+                               Text="{Binding #ThreeState.IsChecked, StringFormat='IsChecked = {0}', TargetNullValue='IsChecked = null'}" />
                 </StackPanel>
             </Border>
             <TextBlock Classes="hint" Text="更深入的演示：Avalonia.StylingDemo →「伪类」（:checked 与 :indeterminate）" />
