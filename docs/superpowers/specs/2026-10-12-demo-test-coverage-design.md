@@ -593,6 +593,28 @@ dotnet test hello-avalonia.slnx                      # 全部，Appium 会话经
 
 ## 批 8 实测结论（执行后回填）
 
+计划：`docs/superpowers/plans/2026-10-12-demo-tests-08-appium-tabbed.md`；探针与生成脚本：`C:\Temp\probe-b8\`（未提交）。
+
+**交付**：15 个 `Avalonia.<X>Demo.AppiumTests`，每个 2 个用例（A1、A2），共 30 个；共享库新增 `TabbedApp`，新登记 `xunit.v3.assert` 3.2.2。每个项目只写应用名、窗口标题和标签页列表，检查逻辑只有一份。
+- 开着开关跑整个解决方案：559 通过（523 + TestingDemo 6 + 本批 30），0 失败，约 8 分钟；16 个 Appium 项目在并行进程里经命名 Mutex 排队，结束后没有残留进程。
+- 不设开关：523 通过 + 36 跳过，退出码 0。
+- 构建 0 错误；新项目 0 警告（全量重编译时总数 8，全部来自 `src/` 与 `Avalonia.MusicStore.Tests` 里既有的警告）。
+
+**A2 的判据**：选中标签页后，`TabControl` 下有可见的 `Text` 元素，并且这组文字与上一页不同。两轮探针对 129 个标签页逐一验证：每页都有 `Text`，相邻两页从没有相同的文字组，元素范围的查找最慢 764 ms。
+
+**对批 9–10 的发现**：
+- **`FindElementsByXPath("./*")` 返回元素自己**：在 `TabItem` 上查到 `TabItem`、在 `Tab` 上查到 `Tab`。写成"有子元素"的断言永远为真。查子孙元素一律用元素范围的 `FindElementsByTagName`，它走 UIA 原生查找。
+- 标签页标题不是 `Text` 元素，`TabItem` 下也没有 `Text`；`TabControl` 的 UIA 标签名是 `Tab`。
+- 129 个标题按名字都只匹配到 `TabItem`，但 `TabbedApp` 仍从标签条里按 `Text` 挑，不依赖"页面文字不和标题同名"。
+- Behaviors 的第 15 个竖排标签页换到第二列，照样能点中；15 个应用走完全部标签页后都只有一个窗口。
+- `Quit()` 返回时被测进程可能还没退出完（破坏检查后 `tasklist` 一度还看得到，片刻后消失），断言进程退出要等待，批 7 的 `Closing_the_session_ends_the_app` 已是这样写的。
+
+**破坏检查**（LayoutDemo 的 `MainWindow.axaml`，每条一行）：4/4 按预期失败——改标题 → 2 个；第 2 页换成第 1 页 → A2；第 3 页置空 → A2；禁用第 2 个标签页 → A2（`Not true after 3000 ms: tab 定位与间距 is selected.`）。还原后重新构建并实跑，2 个通过，`git status --short src` 为空。
+
+**执行时与计划不符**：
+- 与批 7 相同，探针、实跑和破坏检查先于计划成文，计划按实测结果写；提交顺序仍是计划 → 代码 → 文档。计划里的 47 个代码块用仓库外的抽取脚本抽出后与提交的文件逐字节一致（并用故意改坏一个文件的对照确认比对有效）。
+- CLAUDE.md 写的抽取脚本 `C:\Temp\extract-plan.ps1` 在本机不存在，本批改用 `C:\Temp\probe-b8\extract.sh`（同样按 `#### \`路径\`` 取代码块）。
+
 ## 批 9 实测结论（执行后回填）
 
 ## 批 10 实测结论（执行后回填）
