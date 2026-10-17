@@ -27,7 +27,7 @@
 
 - 不追求逐控件、逐属性的 100% 行为覆盖。覆盖契约见「测试分层」。
 - 不做 macOS / Linux 的 Appium（参考库做了，本库只有 Windows 目标需求，YAGNI）。
-- 不改演示项目的业务代码；仅在 Appium 确需定位时，给被测控件补 `AutomationProperties.AutomationId`（见「Appium 定位」）。例外：测试发现的真实缺陷，经用户确认后可在该批计划里单列任务修复，先写会失败的测试再改 `src/`（批 4 的 `ActivatableLifetimePage`，见「批 4 实测结论」）。
+- 不改演示项目的业务代码；仅在 Appium 确需定位时，给被测控件补 `AutomationProperties.AutomationId` 或 `AutomationProperties.Name`（见「Appium 定位」；批 10 给只有图标的 MusicStore 商店按钮补了 `Name`，见「批 10 实测结论」）。例外：测试发现的真实缺陷，经用户确认后可在该批计划里单列任务修复，先写会失败的测试再改 `src/`（批 4 的 `ActivatableLifetimePage`，见「批 4 实测结论」）。
 - 不接 CI 配置、不做视频录制、不做性能基准。
 - 不为 `WebViewDemo` 里网页的内容本身写断言，只验证窗口能弹出、按钮能触发。
 - 不为 `MusicStore` 的 iTunes 网络结果写断言（见「风险」）。
@@ -68,7 +68,7 @@ tests/
 ├─ Avalonia.Tests.Common/            共享测试库（新）：UiHelpers、标签页遍历、Headless AppBuilder 工厂
 ├─ Avalonia.TestingDemo.Tests/       已有；改为引用 Common
 ├─ Avalonia.<X>Demo.Tests/           新增 ×19，每个应用一个 Headless 测试项目
-├─ Avalonia.Appium.Common/           Appium 共享库：AppPaths、AppiumFactAttribute、AppSession、UnicodeKeyboard
+├─ Avalonia.Appium.Common/           Appium 共享库：AppPaths、AppiumFactAttribute、AppSession、UnicodeKeyboard、KeyChord（批 10 起）
 └─ Avalonia.<X>Demo.AppiumTests/     每个应用一个 Appium 测试项目（批 7 后按用户要求从单一项目拆分）
 ```
 
@@ -250,8 +250,8 @@ dotnet test hello-avalonia.slnx                      # 全部，Appium 会话经
 
 - WinAppDriver 通过 UI Automation 操作**真实的交互式桌面**：运行期间不要动鼠标键盘，不要锁屏；用远程桌面时不要最小化或断开会话，否则用例会找不到元素。（常见经验，未实测。）
 - 同一时刻只允许一个会话：程序集内全局串行，跨测试进程由 `AppSession` 的命名 Mutex 排队，所以同时开两个 `dotnet test` 也只会互相等待，不会抢桌面（拆分后实测，见「批 7 实测结论」）。
-- 每个用例结束后夹具会关闭会话并结束被测进程；如果测试被强杀，手动结束遗留的 `Avalonia.*.exe` 与 `WinAppDriver.exe`。
-- **中文输入法会吞掉 `SendKeys`**（批 7 实测，搜狗拼音）：WinAppDriver 的 `SendKeys` 发虚拟键，进入输入法组字，`abc3` 变成 `安保处`。测试一律用 `AppSession.TypeInto`（`SendInput` + `KEYEVENTF_UNICODE`），不受输入法影响，不必切换使用者的输入法。
+- 每个用例结束后夹具会关闭会话并结束被测进程；批 10 起 `Dispose` 在 `Quit` 后等 5 s，进程仍在就连同子进程结束（`KilledAfterQuit` 记录这一情况），以防测试在系统对话框开着时失败后留下残留进程锁住 exe。如果测试被强杀，手动结束遗留的 `Avalonia.*.exe` 与 `WinAppDriver.exe`。
+- **中文输入法会吞掉 `SendKeys`**（批 7 实测，搜狗拼音）：WinAppDriver 的 `SendKeys` 发虚拟键，进入输入法组字，`abc3` 变成 `安保处`。键入一律用 `AppSession.TypeInto`（`SendInput` + `KEYEVENTF_UNICODE`），不受输入法影响，不必切换使用者的输入法。按键（Tab、方向键、Escape、Ctrl 组合键）一律用 `KeyChord.Press`（批 10 实测：`SendKeys` 送不到方向键，且已过时）；不按 Ctrl+Shift 组合键，它是 Windows 切换输入法的热键，还会改掉使用者的输入法。
 
 ### 常见问题
 
@@ -293,8 +293,8 @@ dotnet test hello-avalonia.slnx                      # 全部，Appium 会话经
 
 1. `dotnet build hello-avalonia.slnx` 0 错误，警告数不高于该批开始前。
 2. 该批新增的每个测试项目 `dotnet test tests/<项目>` 失败 0；Appium 批在 `HELLO_AVALONIA_APPIUM=1` 且 WinAppDriver 已运行时失败 0，否则只允许"跳过"。
-3. `TestingDemo.Tests` 的 24 个测试始终保持通过。
-4. `git status` 确认没有探针文件（`C:\Temp\probe-*`）被提交，且 `src/` 下的改动只限于 `AutomationProperties.AutomationId`，以及该批计划里经用户确认的缺陷修复。
+3. `TestingDemo.Tests` 的测试始终保持通过（批 0 迁入时 24 个，之后各批在同一个项目里追加，现为 37 个）。
+4. `git status` 确认没有探针文件（`C:\Temp\probe-*`）被提交，且 `src/` 下的改动只限于 `AutomationProperties.AutomationId`/`Name`，以及该批计划里经用户确认的缺陷修复。
 5. 把该批的实测结论（含意外发现）回填到本文对应的「批 N 实测结论」。
 
 ## 风险
@@ -307,7 +307,7 @@ dotnet test hello-avalonia.slnx                      # 全部，Appium 会话经
 | 页面依赖真实时间/动画，Headless 断言不稳 | 偶发失败 | 只断言结构与状态，不断言动画中间态；动画页只做 H1 |
 | 部分页面在 Headless 下构造即抛异常（`WebView` 页、窗口管理页、`StorageProvider`） | H1 误报 | 在各批 plan 里读代码后建立带理由的"跳过清单"，不无声吞异常 |
 | `MusicStore` 的搜索走 iTunes 网络，没有可替换的接缝 | H3/A3 不稳 | 不改搜索逻辑；Headless 只测窗口与 ViewModel 的离线部分；Appium 做 A1，批 10 起加"打开并关闭商店窗口"（不键入搜索词，不联网） |
-| 20 个测试项目拖慢整体构建与测试 | 开发体验 | 批 0 记录基线（现状：全解决方案构建约 70 秒，`TestingDemo.Tests` 运行约 4 秒），每批报告增量，批 6 后复评是否需要把测试分组 |
+| 20 个测试项目拖慢整体构建与测试 | 开发体验 | 批 0 记录基线（现状：全解决方案构建约 70 秒，`TestingDemo.Tests` 运行约 4 秒），每批报告增量；批 6 后复评的结论：**不分组**。批 10 实测（不设开关，各项目并行）除 `ControlsDemo.Tests` 2 m 5 s、`BehaviorsDemo.Tests` 32 s 外，其余项目都不超过 17 s；20 个 Appium 项目不开开关时各自 29–146 ms（全部跳过，各项目耗时相加约 1.3 s），没有拖慢 Headless 运行 |
 | Appium 运行时接管桌面 | 干扰使用者 | 环境变量开关 + 全局串行 + 文档说明运行期间不要操作机器 |
 | 绑定到结构体属性失败不抛异常 | 冒烟测试发现不了 | 批 0 探针 P6 评估能否通过 Avalonia 日志收集绑定错误；能则加入 `TabWalker`，不能则作罢，不阻塞 |
 
