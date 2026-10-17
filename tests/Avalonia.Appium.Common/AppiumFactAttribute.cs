@@ -4,7 +4,7 @@ using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using Xunit;
 
-namespace Avalonia.Demos.AppiumTests
+namespace Avalonia.Appium.Common
 {
     // Appium drives the real mouse and keyboard, so a test only runs when it is switched on explicitly and can
     // actually work; otherwise it is skipped with the first reason that applies.

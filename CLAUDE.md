@@ -10,7 +10,7 @@ dotnet run --project src/Avalonia.LayoutDemo     # 换成任意 Avalonia.*Demo
 dotnet test hello-avalonia.slnx                  # 全部测试项目（xUnit v3 + Headless），每个应用一个 Avalonia.<X>Demo.Tests
 dotnet test tests/Avalonia.TestingDemo.Tests     # 只跑单个测试项目，换成任意 Avalonia.*Demo.Tests
 dotnet test tests/Avalonia.TestingDemo.Tests --filter "FullyQualifiedName~ViewModelTests"
-$env:HELLO_AVALONIA_APPIUM=1; dotnet test tests/Avalonia.Demos.AppiumTests   # PowerShell；需先运行 WinAppDriver，会接管鼠标键盘
+$env:HELLO_AVALONIA_APPIUM=1; dotnet test tests/Avalonia.TestingDemo.AppiumTests   # PowerShell；每个应用一个 Avalonia.<X>Demo.AppiumTests；需先运行 WinAppDriver，会接管鼠标键盘
 ```
 
 无 lint 配置；`TreatWarningsAsErrors=false`。
@@ -22,6 +22,7 @@ $env:HELLO_AVALONIA_APPIUM=1; dotnet test tests/Avalonia.Demos.AppiumTests   # P
 - 例外：`MusicStore`、`WebViewDemo`、`HtmlRendererDemo` 是较完整的应用；`StarterTutorialDemo` 照官方教程用 code-behind，无 `ViewModels/`，别补 ViewModel。
 - `Avalonia.Shared` 是共用库（`DemoHeader`、`SharedStyles.axaml`、`ViewModelBase`、`EventLog` 等），通用代码放这里，不要在各项目复制。
 - `tests/Avalonia.Tests.Common` 是测试共用库（`HeadlessApp`、`UiHelpers`、`TabWalker`、`LogCollector`）：各应用的测试项目引用它，不要在测试项目里复制辅助代码；`TestAppBuilder` 只写 `HeadlessApp.Build<App>()`。
+- `tests/Avalonia.Appium.Common` 是 Appium 共用库（`AppSession`、`AppiumFactAttribute`、`AppPaths`、`UnicodeKeyboard`）：键入一律用 `AppSession.TypeInto`，不用 `SendKeys`（中文输入法会吞掉）；`AppSession` 持有跨进程命名 Mutex，多个 Appium 项目并行时轮流用桌面。
 - MVVM 一律用 CommunityToolkit.Mvvm（`[ObservableProperty]`、`[RelayCommand]`）。
 - `Directory.Build.props` 统一输出到 `bin\Debug|Release`，且 `AppendTargetFrameworkToOutputPath=false`（路径里没有 `net10.0`）。
 

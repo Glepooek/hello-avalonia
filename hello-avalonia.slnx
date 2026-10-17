@@ -44,6 +44,7 @@
     <Project Path="tests/Avalonia.MusicStore.Tests/Avalonia.MusicStore.Tests.csproj" />
     <Project Path="tests/Avalonia.WebViewDemo.Tests/Avalonia.WebViewDemo.Tests.csproj" />
     <Project Path="tests/Avalonia.HtmlRendererDemo.Tests/Avalonia.HtmlRendererDemo.Tests.csproj" />
-    <Project Path="tests/Avalonia.Demos.AppiumTests/Avalonia.Demos.AppiumTests.csproj" />
+    <Project Path="tests/Avalonia.Appium.Common/Avalonia.Appium.Common.csproj" />
+    <Project Path="tests/Avalonia.TestingDemo.AppiumTests/Avalonia.TestingDemo.AppiumTests.csproj" />
   </Folder>
 </Solution>

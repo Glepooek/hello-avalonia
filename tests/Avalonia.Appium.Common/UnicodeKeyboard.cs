@@ -1,7 +1,7 @@
 using System;
 using System.Runtime.InteropServices;
 
-namespace Avalonia.Demos.AppiumTests
+namespace Avalonia.Appium.Common
 {
     // Types text into whatever has keyboard focus as Unicode packets (KEYEVENTF_UNICODE). WinAppDriver's SendKeys
     // sends virtual keys, which a Chinese IME (Sogou or Microsoft Pinyin) turns into pinyin candidates: "abc3"

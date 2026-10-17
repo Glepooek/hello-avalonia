@@ -1,8 +1,9 @@
 using System.Diagnostics;
 using System.Linq;
+using Avalonia.Appium.Common;
 using Xunit;
 
-namespace Avalonia.Demos.AppiumTests
+namespace Avalonia.TestingDemo.AppiumTests
 {
     // Batch 7 baseline: TestingDemo has an AutomationId on every control it tests, so these tests show the shape
     // every later Appium test follows. Each test starts its own app, so no state carries from one test to the next.

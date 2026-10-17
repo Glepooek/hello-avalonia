@@ -68,16 +68,20 @@ tests/
 ├─ Avalonia.Tests.Common/            共享测试库（新）：UiHelpers、标签页遍历、Headless AppBuilder 工厂
 ├─ Avalonia.TestingDemo.Tests/       已有；改为引用 Common
 ├─ Avalonia.<X>Demo.Tests/           新增 ×19，每个应用一个 Headless 测试项目
-└─ Avalonia.Demos.AppiumTests/       新增 ×1，所有应用的 Appium 测试集中在一个项目
+├─ Avalonia.Appium.Common/           Appium 共享库：AppPaths、AppiumFactAttribute、AppSession、UnicodeKeyboard
+└─ Avalonia.<X>Demo.AppiumTests/     每个应用一个 Appium 测试项目（批 7 后按用户要求从单一项目拆分）
 ```
 
 ### 为什么 Headless 每个应用一个项目
 
 `[assembly: AvaloniaTestApplication]` 每个程序集只能指向一个 `App`，而各应用的 `App.axaml` 带着自己的主题、样式与资源。合并成一个项目就得用一个中立的 `Application`，页面里的 `StaticResource`、自定义样式会找不到。代价是项目数多（20 个），但每个项目只有三五个文件，由模板生成。
 
-### 为什么 Appium 只用一个项目
+### 为什么 Appium 也每个应用一个项目
 
-Appium 驱动的是外部进程，测试程序集不引用任何应用，也就没有"一个程序集一个 App"的限制。集中后共享一个 `AppSession` 夹具，只维护一份驱动配置。
+Appium 驱动的是外部进程，技术上没有"一个程序集一个 App"的限制，批 7 最初也只建了一个 `Avalonia.Demos.AppiumTests`。批 7 之后用户要求改为与 Headless 相同的对应关系（2026-10-17）：看项目名就知道测的是哪个应用，也能单独跑一个应用的 Appium 测试。
+
+- 驱动配置只有一份，放在 `Avalonia.Appium.Common`，各测试项目引用它，不复制。
+- 拆分带来一个新问题：`dotnet test hello-avalonia.slnx` 会**并行启动多个测试进程**，`DisableTestParallelization` 只管得住一个程序集内部。所以 `AppSession` 从创建会话到 `Dispose` 一直持有一个本机命名 Mutex（`Local\HelloAvalonia.Appium`），不同测试进程的会话轮流使用桌面。Mutex 属于获取它的线程，测试都是同步的，`Start` 与 `Dispose` 在同一线程上；被强杀的进程留下的锁以 `AbandonedMutexException` 的形式交给下一个会话。
 
 ### `Avalonia.Tests.Common`（共享测试库）
 
@@ -134,9 +138,9 @@ Appium 不重复 H2；ViewModel 逻辑只在 Headless 测一次。
 
 - 客户端：`Appium.WebDriver` 4.4.5（Appium 1 协议），在 `Directory.Packages.props` 登记；只写 Windows，不带参考库的 `APPIUM2` 开关与 macOS 驱动。
 - 服务端：WinAppDriver，监听 `http://127.0.0.1:4723`。**夹具不负责启动它**，由使用者手动运行；没运行就跳过（见「运行门控」）。
-- 会话：每个应用一个 `AppSession`（`IClassFixture` 级别），用 `app` 能力指向 `src\<proj>\bin\Debug\<proj>.exe`，会话关闭即结束进程。路径通过向上查找 `hello-avalonia.slnx` 定位仓库根，再找 `Debug`、`Release` 中较新的 exe。
-- 构建顺序：Appium 项目对 20 个应用做 `ProjectReference ... ReferenceOutputAssembly="false"`，保证测试前 exe 已构建。
-- 全局串行：`[assembly: CollectionBehavior(DisableTestParallelization = true)]`，因为同一时刻只能有一个会话控制桌面。
+- 会话：每个测试一个 `AppSession`（批 7 实测后放弃 `IClassFixture`，见「批 7 实测结论」），用 `app` 能力指向 `src\<proj>\bin\Debug\<proj>.exe`，会话关闭即结束进程。路径通过向上查找 `hello-avalonia.slnx` 定位仓库根，再找 `Debug`、`Release` 中较新的 exe。
+- 构建顺序：每个 `Avalonia.<X>Demo.AppiumTests` 对自己的应用做 `ProjectReference ... ReferenceOutputAssembly="false"`，保证测试前 exe 已构建。
+- 全局串行：程序集内 `[assembly: CollectionBehavior(DisableTestParallelization = true)]`；跨测试进程靠 `AppSession` 的命名 Mutex，因为同一时刻只能有一个会话控制桌面。
 
 ### 运行门控
 
@@ -214,8 +218,9 @@ Test-NetConnection 127.0.0.1 -Port 4723 -InformationLevel Quiet
 ### 步骤 4：配置测试项目（由批 0、批 7 落地）
 
 1. `Directory.Packages.props` 登记：`<PackageVersion Include="Appium.WebDriver" Version="4.4.5" />`。
-2. `Avalonia.Demos.AppiumTests.csproj`：`OutputType=Exe`（xunit v3）、引用 `Appium.WebDriver`、`xunit.v3`、`xunit.runner.visualstudio`、`Microsoft.NET.Test.Sdk`，并对 20 个应用做 `ProjectReference ... ReferenceOutputAssembly="false"` 以保证 exe 先被构建。
-3. `AppSession` 创建会话时的能力（与参考库 Windows 分支一致）：
+2. `tests/Avalonia.Appium.Common`：普通类库，引用 `Appium.WebDriver` 与 `xunit.v3.extensibility.core`（定义 `AppiumFactAttribute` 只需要它；引用 `xunit.v3` 会把类库变成测试可执行文件）。
+3. `Avalonia.<X>Demo.AppiumTests.csproj`：`OutputType=Exe`（xunit v3）、引用 `Appium.WebDriver`、`xunit.v3`、`xunit.runner.visualstudio`、`Microsoft.NET.Test.Sdk` 与 `Avalonia.Appium.Common`，并对被测应用做 `ProjectReference ... ReferenceOutputAssembly="false"` 以保证 exe 先被构建。
+4. `AppSession` 创建会话时的能力（与参考库 Windows 分支一致）：
 
    | 能力 | 值 |
    |---|---|
@@ -224,7 +229,7 @@ Test-NetConnection 127.0.0.1 -Port 4723 -InformationLevel Quiet
    | `deviceName` | `WindowsPC` |
 
    服务地址 `http://127.0.0.1:4723`（Windows 不加 `/wd/hub`；参考库只在 macOS 分支加）。
-4. exe 路径规则：`Directory.Build.props` 把输出统一到 `bin\Debug\`（没有 `net10.0` 层），所以是 `src\<项目名>\bin\Debug\<项目名>.exe`。
+5. exe 路径规则：`Directory.Build.props` 把输出统一到 `bin\Debug\`（没有 `net10.0` 层），所以是 `src\<项目名>\bin\Debug\<项目名>.exe`。
 
 ### 步骤 5：运行
 
@@ -232,15 +237,16 @@ Test-NetConnection 127.0.0.1 -Port 4723 -InformationLevel Quiet
 
 ```powershell
 $env:HELLO_AVALONIA_APPIUM = "1"
-dotnet test tests/Avalonia.Demos.AppiumTests
+dotnet test tests/Avalonia.TestingDemo.AppiumTests   # 单个应用；换成任意 Avalonia.<X>Demo.AppiumTests
+dotnet test hello-avalonia.slnx                      # 全部，Appium 会话经命名 Mutex 轮流执行
 ```
 
-不设环境变量，或 WinAppDriver 没起，整个项目显示为"跳过"，退出码仍为 0。
+不设环境变量，或 WinAppDriver 没起，Appium 用例全部显示为"跳过"，退出码仍为 0。
 
 ### 运行期间的注意事项
 
 - WinAppDriver 通过 UI Automation 操作**真实的交互式桌面**：运行期间不要动鼠标键盘，不要锁屏；用远程桌面时不要最小化或断开会话，否则用例会找不到元素。（常见经验，未实测。）
-- 同一时刻只允许一个会话，所以 Appium 项目全局串行，不要同时开两个 `dotnet test`。
+- 同一时刻只允许一个会话：程序集内全局串行，跨测试进程由 `AppSession` 的命名 Mutex 排队，所以同时开两个 `dotnet test` 也只会互相等待，不会抢桌面（拆分后实测，见「批 7 实测结论」）。
 - 每个用例结束后夹具会关闭会话并结束被测进程；如果测试被强杀，手动结束遗留的 `Avalonia.*.exe` 与 `WinAppDriver.exe`。
 - **中文输入法会吞掉 `SendKeys`**（批 7 实测，搜狗拼音）：WinAppDriver 的 `SendKeys` 发虚拟键，进入输入法组字，`abc3` 变成 `安保处`。测试一律用 `AppSession.TypeInto`（`SendInput` + `KEYEVENTF_UNICODE`），不受输入法影响，不必切换使用者的输入法。
 
@@ -319,7 +325,7 @@ dotnet test tests/Avalonia.Demos.AppiumTests
 
 1. **Appium 技术栈**：WinAppDriver + `Appium.WebDriver` 4.4.5（与参考库一致、本机已装）。WinAppDriver 最新版仍是 2020-11 的 v1.2.1，批 0 探针失败时再换，见「备选方案」。
 2. **Headless 项目组织**：每个应用一个测试项目（共 20 个，含已有的 `TestingDemo.Tests`）。
-3. **Appium 范围**：只做 Windows，集中在一个项目里，用环境变量显式开启。
+3. **Appium 范围**：只做 Windows，用环境变量显式开启。原定集中在一个项目里；批 7 之后用户改为每个应用一个 Appium 测试项目（2026-10-17），见「为什么 Appium 也每个应用一个项目」。
 
 ## 批 0 实测结论（计划 00 执行后）
 
@@ -571,6 +577,19 @@ dotnet test tests/Avalonia.Demos.AppiumTests
 **执行时与计划不符**：
 - 探针里的 `Dispose` 原本先 `CloseApp()` 再 `Quit()`。破坏检查「去掉 `CloseApp`」后测试仍然全绿，说明 `Quit()` 已经关闭被测进程，于是删掉 `CloseApp` 及其 try/catch，破坏检查改为「去掉 `Quit`」。计划写的是改后的版本。
 - 本批的执行（探针、实跑、破坏检查）先于计划成文，计划依据的就是这些实测；提交顺序仍是计划 → 代码 → 文档。
+
+### 批 7 之后：按应用拆分 Appium 项目（用户 2026-10-17 要求）
+
+用户指出 `Avalonia.Demos.AppiumTests` 的名字对不上被测项目，要求每个应用一个测试项目。改动：
+
+- `tests/Avalonia.Demos.AppiumTests` → `tests/Avalonia.TestingDemo.AppiumTests`（只留 `AssemblyInfo.cs` 与 `TestingDemoTests.cs`），四个辅助类移到新类库 `tests/Avalonia.Appium.Common`，命名空间随之改名；新登记 `xunit.v3.extensibility.core` 3.2.2。
+- `AppSession` 加跨进程命名 Mutex（理由见「为什么 Appium 也每个应用一个项目」）。
+
+实测：
+- 不设开关：6 个跳过，退出码 0。
+- 有锁、同一 DLL 两个 `dotnet test` 同时实跑：12/12 通过，两个进程分别用时 77 s、76 s，几乎同时结束；单个用例用时由约 5 s 变为 7–16 s（含等锁），说明会话是交替进行的。
+- 破坏检查（去掉 `AcquireDesktop()`，同样两进程并跑）：5/6 与 2/6 失败，并遗留 3 个 `Avalonia.TestingDemo.exe` 进程（已手动结束）。所以不加锁时两个会话确实会抢桌面，锁是必需的。还原后 `git diff` 只剩本次改动。
+- 全量（不设开关）跑了 3 次：2 次 523 通过 + 6 跳过；第 1 次 `Avalonia.ControlsDemo.Tests` 有 1 个失败（230/231），单独重跑 231 全过。**是哪个测试、为什么失败都没有查明**：那次只保留了摘要行。它与本次改动无关（`ControlsDemo.Tests` 不引用 Appium 代码），但说明 ControlsDemo 在全量并行负载下存在偶发失败，再出现时要保留完整输出（`dotnet test ... > 文件`）再查。
 
 ## 批 8 实测结论（执行后回填）
 

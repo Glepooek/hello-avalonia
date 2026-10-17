@@ -5,7 +5,7 @@ using System;
 using System.Diagnostics;
 using System.Threading;
 
-namespace Avalonia.Demos.AppiumTests
+namespace Avalonia.Appium.Common
 {
     // One WinAppDriver session for one demo app. The app starts on first use of Driver, so a test that is skipped
     // never launches anything; Dispose ends the session and the app with it.
@@ -16,8 +16,14 @@ namespace Avalonia.Demos.AppiumTests
         // Batch 7 measured every wait after a click or keystroke at under 300 ms; 3 s leaves room for a busy machine.
         public const int DefaultTimeoutMs = 3000;
 
+        // Each app has its own Appium test project, and `dotnet test` on the solution runs test projects in parallel
+        // processes. They all drive the one desktop, so a session holds this machine-wide lock from start to Dispose.
+        private const string DesktopLockName = @"Local\HelloAvalonia.Appium";
+        private static readonly TimeSpan DesktopLockTimeout = TimeSpan.FromMinutes(10);
+
         private readonly string _app;
         private WindowsDriver<WindowsElement>? _driver;
+        private Mutex? _desktopLock;
 
         public AppSession(string app) => _app = app;
 
@@ -71,18 +77,62 @@ namespace Avalonia.Demos.AppiumTests
         private WindowsDriver<WindowsElement> Start()
         {
             var exe = AppPaths.FindExe(_app) ?? throw new InvalidOperationException($"{_app}.exe is not built.");
-            var options = new AppiumOptions();
-            options.AddAdditionalCapability("app", exe);
-            options.AddAdditionalCapability("platformName", "Windows");
-            options.AddAdditionalCapability("deviceName", "WindowsPC");
-            return new WindowsDriver<WindowsElement>(DriverUri, options);
+            AcquireDesktop();
+            try
+            {
+                var options = new AppiumOptions();
+                options.AddAdditionalCapability("app", exe);
+                options.AddAdditionalCapability("platformName", "Windows");
+                options.AddAdditionalCapability("deviceName", "WindowsPC");
+                return new WindowsDriver<WindowsElement>(DriverUri, options);
+            }
+            catch
+            {
+                ReleaseDesktop();
+                throw;
+            }
+        }
+
+        // A Mutex belongs to the thread that took it; the tests are synchronous, so Start and Dispose share a thread.
+        private void AcquireDesktop()
+        {
+            var mutex = new Mutex(false, DesktopLockName);
+            try
+            {
+                if (!mutex.WaitOne(DesktopLockTimeout))
+                    throw new TimeoutException($"Another Appium test held the desktop for over {DesktopLockTimeout.TotalMinutes} minutes.");
+            }
+            catch (AbandonedMutexException)
+            {
+                // A test process was killed mid-session; the lock is ours now.
+            }
+            catch
+            {
+                mutex.Dispose();
+                throw;
+            }
+            _desktopLock = mutex;
+        }
+
+        private void ReleaseDesktop()
+        {
+            _desktopLock?.ReleaseMutex();
+            _desktopLock?.Dispose();
+            _desktopLock = null;
         }
 
         // Ending the session also closes the app WinAppDriver launched (batch 7 checked: no CloseApp needed).
         public void Dispose()
         {
-            _driver?.Quit();
-            _driver = null;
+            try
+            {
+                _driver?.Quit();
+            }
+            finally
+            {
+                _driver = null;
+                ReleaseDesktop();
+            }
         }
     }
 }

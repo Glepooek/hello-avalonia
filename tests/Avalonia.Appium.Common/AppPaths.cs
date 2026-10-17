@@ -2,7 +2,7 @@ using System;
 using System.IO;
 using System.Linq;
 
-namespace Avalonia.Demos.AppiumTests
+namespace Avalonia.Appium.Common
 {
     // Finds the built exe of a demo app: walks up to the folder holding hello-avalonia.slnx, then picks the newer of
     // src\<app>\bin\Debug and bin\Release (Directory.Build.props drops the target framework folder).
