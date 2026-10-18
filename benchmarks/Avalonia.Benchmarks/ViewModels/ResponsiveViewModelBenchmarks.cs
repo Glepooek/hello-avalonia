@@ -18,7 +18,15 @@ public class ResponsiveViewModelBenchmarks
 
     private ResponsiveViewModel _vm = null!;
 
-    // Primed to CompactWidth so the no-change benchmark below starts already settled.
+    // false: [ObservableProperty] setters compare before assigning, so passing the width the
+    // VM already has raises nothing. This is the floor, and writing the benchmark this way
+    // by accident is the trap — it reports "free" and answers nothing.
+    // true: alternating across the breakpoint makes all three setters assign and notify,
+    // which is what a resize that actually changes the layout pays for.
+    [Params(false, true)]
+    public bool CrossesBreakpoint;
+
+    // Primed to CompactWidth so the no-change case starts already settled.
     [GlobalSetup]
     public void NewViewModel()
     {
@@ -26,23 +34,10 @@ public class ResponsiveViewModelBenchmarks
         _vm.UpdateLayout(CompactWidth);
     }
 
-    // [ObservableProperty] setters compare before assigning, so passing the width the
-    // VM already has raises nothing. This is the floor: what UpdateLayout costs on a
-    // size change that crosses no breakpoint. Writing the benchmark this way by
-    // accident is the trap — it reports "free" and answers nothing.
-    [Benchmark(Baseline = true)]
-    public void UpdateLayoutNoChange()
-    {
-        _vm.UpdateLayout(CompactWidth);
-        Guard(CompactWidth);
-    }
-
-    // Alternating across the breakpoint makes all three setters assign and notify,
-    // which is what a resize that actually changes the layout pays for.
     [Benchmark]
     public void UpdateLayout()
     {
-        var width = _vm.CurrentWidth == CompactWidth ? WideWidth : CompactWidth;
+        var width = CrossesBreakpoint && _vm.CurrentWidth == CompactWidth ? WideWidth : CompactWidth;
         _vm.UpdateLayout(width);
         Guard(width);
     }

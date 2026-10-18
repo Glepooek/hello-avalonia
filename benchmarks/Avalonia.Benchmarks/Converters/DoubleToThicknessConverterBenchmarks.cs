@@ -12,11 +12,15 @@ public class DoubleToThicknessConverterBenchmarks
     private static readonly CultureInfo Culture = CultureInfo.InvariantCulture;
 
     private readonly DoubleToThicknessConverter _converter = DoubleToThicknessConverter.Instance;
+    private object? _value;
 
-    [Benchmark(Baseline = true)]
-    public object? Convert() => _converter.Convert(12.5, typeof(Thickness), null, Culture);
+    // "string" takes the UnsetValue branch, the one a careless edit turns into a throw.
+    [Params("double", "string")]
+    public string Input = "double";
 
-    // The UnsetValue branch is the one a careless edit turns into a throw.
+    [GlobalSetup]
+    public void Setup() => _value = Input == "double" ? 12.5 : "12.5";
+
     [Benchmark]
-    public object? ConvertInvalid() => _converter.Convert("12.5", typeof(Thickness), null, Culture);
+    public object? Convert() => _converter.Convert(_value, typeof(Thickness), null, Culture);
 }

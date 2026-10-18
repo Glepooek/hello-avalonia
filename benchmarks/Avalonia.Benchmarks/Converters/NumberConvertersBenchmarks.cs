@@ -19,5 +19,5 @@ public class NumberConvertersBenchmarks
     private readonly IValueConverter _converter = NumberConverters.DoubleToInt;
 
     [Benchmark]
-    public object? Convert() => _converter.Convert(42.7, typeof(int), null, Culture);
+    public object? DoubleToInt() => _converter.Convert(42.7, typeof(int), null, Culture);
 }

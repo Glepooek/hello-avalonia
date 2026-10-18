@@ -7,16 +7,17 @@ namespace Avalonia.Benchmarks.Converters;
 
 [MemoryDiagnoser]
 [JsonExporterAttribute.FullCompressed]
-public class CelsiusConverterBenchmarks
+public class CelsiusToFahrenheitConverterBenchmarks
 {
     private static readonly CultureInfo Culture = CultureInfo.InvariantCulture;
 
     private readonly CelsiusToFahrenheitConverter _converter = new();
 
-    [Benchmark(Baseline = true)]
+    // Runs on every slider tick; ToString("F1") allocates a new string each time.
+    [Benchmark]
     public object? Convert() => _converter.Convert(21.5, typeof(string), null, Culture);
 
-    // ConvertBack runs on every keystroke: double.TryParse plus the round trip back.
+    // Runs on every keystroke: double.TryParse, then the result is boxed into object.
     [Benchmark]
     public object? ConvertBack() => _converter.ConvertBack("70.7", typeof(double), null, Culture);
 }

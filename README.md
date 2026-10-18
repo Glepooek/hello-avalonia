@@ -111,7 +111,7 @@ Appium 测试会接管鼠标键盘，运行期间不要操作机器、不要锁�
 [benchmarks/Avalonia.Benchmarks](benchmarks/Avalonia.Benchmarks) 用 BenchmarkDotNet 测转换器与 ViewModel 的热路径。它不是测试项目，`dotnet test` 不会运行它；要用 Release、在命令行下运行，不挂调试器：
 
 ```powershell
-dotnet run -c Release --project benchmarks/Avalonia.Benchmarks -- --filter *Celsius*
+dotnet run -c Release --project benchmarks/Avalonia.Benchmarks -- --filter '*Celsius*'
 ```
 
-写法与 CI 门禁见 [BenchmarkDotNet 规范](docs/2026-10-18-benchmarkdotnet-standards.md)。
+加一个基准照 [BenchmarkDotNet 规范](docs/2026-10-18-benchmarkdotnet-standards.md) §1「快速上手」；写法规则与 CI 门禁见同文 §3、§4。

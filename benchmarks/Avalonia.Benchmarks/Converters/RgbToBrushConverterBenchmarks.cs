@@ -1,4 +1,5 @@
 using System.Globalization;
+using System.Linq;
 using Avalonia.DataBindingDemo.Converters;
 using Avalonia.Media;
 using BenchmarkDotNet.Attributes;
@@ -13,14 +14,16 @@ public class RgbToBrushConverterBenchmarks
     private static readonly CultureInfo Culture = CultureInfo.InvariantCulture;
 
     private readonly RgbToBrushConverter _converter = new();
-    private readonly object?[] _rgb = [120d, 200d, 45d];
-    private readonly object?[] _incomplete = [120d, 200d];
+    private object?[] _values = [];
 
-    // Every resolved call allocates a SolidColorBrush; Allocated is the number that matters here.
-    [Benchmark(Baseline = true)]
-    public object? Convert() => _converter.Convert(_rgb, typeof(IBrush), null, Culture);
+    // 3 = every source resolved, allocates a SolidColorBrush; 2 = one still unresolved, DoNothing path.
+    [Params(3, 2)]
+    public int Channels;
 
-    // Unresolved sources take the DoNothing path: no allocation, same delegate call.
+    [GlobalSetup]
+    public void Setup() => _values = new object?[] { 120d, 200d, 45d }.Take(Channels).ToArray();
+
+    // Allocated is the number that matters here.
     [Benchmark]
-    public object? ConvertIncomplete() => _converter.Convert(_incomplete, typeof(IBrush), null, Culture);
+    public object? Convert() => _converter.Convert(_values, typeof(IBrush), null, Culture);
 }
