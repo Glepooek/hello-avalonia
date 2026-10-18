@@ -22,7 +22,7 @@ namespace Avalonia.ControlsDemo.Tests
         {
             control.BringIntoView();
             Dispatcher.UIThread.RunJobs();
-            return control.TranslatePoint(new Point(control.Bounds.Width / 2, control.Bounds.Height / 2), window)!.Value;
+            return window.CenterOf(control);
         }
 
         // Keys go to the focused element, so focus the target first.

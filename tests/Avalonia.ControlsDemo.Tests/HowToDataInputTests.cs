@@ -137,7 +137,8 @@ namespace Avalonia.ControlsDemo.Tests
 
         // ---- Feedback ----
 
-        // Info and success toasts last 3 s; WaitUntil's 5 s default covers that with room to spare.
+        // Info and success toasts last 3 s on a real timer. The wait is 15 s, not the 5 s default, so a loaded CI machine
+        // cannot turn a slow timer into a failure; WaitUntil returns as soon as the condition holds, so passing runs stay fast.
         [AvaloniaFact]
         public async Task Timed_toasts_disappear_and_the_sticky_one_needs_its_close_button()
         {
@@ -149,7 +150,7 @@ namespace Avalonia.ControlsDemo.Tests
             window.Press("StickyButton");
             Assert.Equal(new[] { "第 1 条信息", "第 2 条：已完成", "第 3 条：出错了，需要手动关闭" }, vm.Toasts.Select(t => t.Message));
 
-            await UiHelpers.WaitUntil(() => vm.Toasts.Count == 1);
+            await UiHelpers.WaitUntil(() => vm.Toasts.Count == 1, timeoutMs: 15000);
             Assert.True(vm.Toasts[0].IsError);
 
             window.Click(window.ByName<ItemsControl>("ToastList").GetVisualDescendants().OfType<Button>().Single());
@@ -165,7 +166,7 @@ namespace Avalonia.ControlsDemo.Tests
 
             window.Press("StatusButton");
             Assert.StartsWith("已保存（", window.Text("StatusText"));
-            await UiHelpers.WaitUntil(() => window.Text("StatusText") == "就绪");
+            await UiHelpers.WaitUntil(() => window.Text("StatusText") == "就绪", timeoutMs: 15000);
 
             window.Press("BannerButton");
             Assert.True(window.ByName<Border>("Banner").IsVisible);
@@ -240,7 +241,7 @@ namespace Avalonia.ControlsDemo.Tests
                 var slider = window.ByName<Slider>(name);
                 slider.BringIntoView();
                 Dispatcher.UIThread.RunJobs();
-                var point = slider.TranslatePoint(new Point(slider.Bounds.Width * 0.9, slider.Bounds.Height / 2), window)!.Value;
+                var point = slider.PointIn(new Point(slider.Bounds.Width * 0.9, slider.Bounds.Height / 2), window);
                 window.MouseDown(point, MouseButton.Left);
                 window.MouseUp(point, MouseButton.Left);
                 Dispatcher.UIThread.RunJobs();

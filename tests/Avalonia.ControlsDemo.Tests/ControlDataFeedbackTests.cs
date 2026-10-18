@@ -320,8 +320,8 @@ namespace Avalonia.ControlsDemo.Tests
         {
             var (window, _) = PageHelpers.Open<SelectableTextBlockPage>();
             var selectable = window.ByName<SelectableTextBlock>("Selectable");
-            var start = selectable.TranslatePoint(new Point(1, 8), window)!.Value;
-            var end = selectable.TranslatePoint(new Point(60, 8), window)!.Value;
+            var start = selectable.PointIn(new Point(1, 8), window);
+            var end = selectable.PointIn(new Point(60, 8), window);
 
             window.MouseDown(start, MouseButton.Left);
             window.MouseMove(end, RawInputModifiers.LeftMouseButton);

@@ -65,19 +65,20 @@ namespace Avalonia.Appium.Common
         public void WaitForText(string automationId, string expected, int timeoutMs = DefaultTimeoutMs)
         {
             string? last = null;
-            if (!Poll(() => (last = ById(automationId).Text ?? "") == expected, timeoutMs))
+            if (!Poll(() => (last = ById(automationId).Text ?? "") == expected, timeoutMs, $"'{automationId}' reads '{expected}'"))
                 throw new TimeoutException($"'{automationId}' still reads '{last}' after {timeoutMs} ms; expected '{expected}'.");
         }
 
         public static void WaitFor(Func<bool> condition, string what, int timeoutMs = DefaultTimeoutMs)
         {
-            if (!Poll(condition, timeoutMs))
+            if (!Poll(condition, timeoutMs, what))
                 throw new TimeoutException($"Not true after {timeoutMs} ms: {what}.");
         }
 
-        private static bool Poll(Func<bool> condition, int timeoutMs)
+        private static bool Poll(Func<bool> condition, int timeoutMs, string? what = null)
         {
             var watch = Stopwatch.StartNew();
+            WebDriverException? last = null;
             while (true)
             {
                 try
@@ -85,12 +86,18 @@ namespace Avalonia.Appium.Common
                     if (condition())
                         return true;
                 }
-                catch (WebDriverException)
+                catch (WebDriverException ex)
                 {
                     // The element may not exist yet; keep polling until the timeout.
+                    last = ex;
                 }
                 if (watch.ElapsedMilliseconds > timeoutMs)
+                {
+                    // A timeout caused by a driver error is only diagnosable if the error survives.
+                    if (last is not null)
+                        throw new TimeoutException($"Not true after {timeoutMs} ms{(what is null ? "" : ": " + what)}. Last driver error: {last.Message}", last);
                     return false;
+                }
                 Thread.Sleep(100);
             }
         }
@@ -99,18 +106,30 @@ namespace Avalonia.Appium.Common
         {
             var exe = AppPaths.FindExe(_app) ?? throw new InvalidOperationException($"{_app}.exe is not built.");
             AcquireDesktop();
+            WindowsDriver<WindowsElement>? driver = null;
             try
             {
                 var options = new AppiumOptions();
                 options.AddAdditionalCapability("app", exe);
                 options.AddAdditionalCapability("platformName", "Windows");
                 options.AddAdditionalCapability("deviceName", "WindowsPC");
-                var driver = new WindowsDriver<WindowsElement>(DriverUri, options);
+                driver = new WindowsDriver<WindowsElement>(DriverUri, options);
                 _process = ProcessOf(driver);
                 return driver;
             }
             catch
             {
+                // The session exists but was never handed out, so Dispose would not reach it: end it here.
+                try
+                {
+                    driver?.Quit();
+                }
+                catch (WebDriverException)
+                {
+                    // Keep the original exception; a failed Quit adds nothing to it.
+                }
+                _process?.Dispose();
+                _process = null;
                 ReleaseDesktop();
                 throw;
             }
@@ -156,8 +175,15 @@ namespace Avalonia.Appium.Common
             finally
             {
                 _driver = null;
-                EndApp();
-                ReleaseDesktop();
+                try
+                {
+                    EndApp();
+                }
+                finally
+                {
+                    // The desktop lock must be released even when ending the app throws.
+                    ReleaseDesktop();
+                }
             }
         }
 

@@ -25,6 +25,8 @@ namespace Avalonia.Tests.Common
                 try
                 {
                     tabs.SelectedIndex = i;
+                    if (tabs.SelectedIndex != i)
+                        throw new InvalidOperationException($"Setting SelectedIndex to {i} left it at {tabs.SelectedIndex}.");
                     Dispatcher.UIThread.RunJobs();
                     window.UpdateLayout();
                     visits.Add(new TabVisit(i, header, null));

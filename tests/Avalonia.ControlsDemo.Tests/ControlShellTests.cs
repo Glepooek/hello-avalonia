@@ -104,7 +104,7 @@ namespace Avalonia.ControlsDemo.Tests
             Dispatcher.UIThread.RunJobs();
             control.BringIntoView();
             Dispatcher.UIThread.RunJobs();
-            var center = control.TranslatePoint(new Point(control.Bounds.Width / 2, control.Bounds.Height / 2), window)!.Value;
+            var center = window.CenterOf(control);
             window.MouseDown(center, MouseButton.Right);
             window.MouseUp(center, MouseButton.Right);
             Dispatcher.UIThread.RunJobs();

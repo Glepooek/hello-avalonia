@@ -3,7 +3,6 @@ using Avalonia.Headless.XUnit;
 using Avalonia.Media;
 using Avalonia.Tests.Common;
 using System;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
@@ -303,7 +302,7 @@ namespace Avalonia.ControlsDemo.Tests
 
             _ = vm.ShowStatusCommand.ExecuteAsync(null);
             Assert.StartsWith("已保存（", vm.StatusMessage);
-            await UiHelpers.WaitUntil(() => vm.StatusMessage == "就绪");
+            await UiHelpers.WaitUntil(() => vm.StatusMessage == "就绪", timeoutMs: 15000);
 
             vm.ShowBannerNowCommand.Execute(null);
             Assert.True(vm.ShowBanner);

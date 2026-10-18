@@ -50,7 +50,7 @@ namespace Avalonia.BehaviorsDemo.Tests
         }
 
         private static Point Center(Window window, Control control)
-            => control.TranslatePoint(new Point(control.Bounds.Width / 2, control.Bounds.Height / 2), window)!.Value;
+            => window.CenterOf(control);
 
         // The drag behaviors read the button state from the move itself: a MouseMove without LeftMouseButton is a
         // hover, and nothing moves.

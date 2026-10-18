@@ -17,7 +17,7 @@ namespace Avalonia.InputDemo.Tests
         private static string Text(Control page, string name) => page.ByName<TextBlock>(name).Text!;
 
         private static Point CentreOf(Window window, Control control)
-            => control.TranslatePoint(new Point(control.Bounds.Width / 2, control.Bounds.Height / 2), window)!.Value;
+            => window.CenterOf(control);
 
         [AvaloniaFact]
         public void Click_handler_and_Tapped_add_one_even_while_the_command_is_locked()
@@ -144,7 +144,7 @@ namespace Avalonia.InputDemo.Tests
             var window = UiHelpers.Show(page);
             var handle = page.ByName<Border>("Handle");
             var track = page.ByName<Canvas>("Track");
-            Point OnTrack(double x) => track.TranslatePoint(new Point(x, 25), window)!.Value;
+            Point OnTrack(double x) => track.PointIn(new Point(x, 25), window);
 
             window.MouseDown(CentreOf(window, handle), MouseButton.Left);
             Assert.Equal("拖动中（已捕获）", Text(page, "DragState"));

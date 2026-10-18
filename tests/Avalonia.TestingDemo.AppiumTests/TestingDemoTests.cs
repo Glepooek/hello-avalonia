@@ -40,8 +40,18 @@ namespace Avalonia.TestingDemo.AppiumTests
         {
             var before = Process.GetProcessesByName(App).Select(p => p.Id).ToHashSet();
             var app = new AppSession(App);
-            _ = app.Driver.Title;
-            var started = Assert.Single(Process.GetProcessesByName(App), p => !before.Contains(p.Id));
+            Process started;
+            try
+            {
+                _ = app.Driver.Title;
+                started = Assert.Single(Process.GetProcessesByName(App), p => !before.Contains(p.Id));
+            }
+            catch
+            {
+                // An assert above must not leave the app running; Dispose is safe to call twice.
+                app.Dispose();
+                throw;
+            }
 
             app.Dispose();
 
@@ -76,6 +86,8 @@ namespace Avalonia.TestingDemo.AppiumTests
         {
             using var app = new AppSession(App);
             app.ByName("表单").Click();
+            // Selecting a tab is asynchronous: wait for its content before asserting on it.
+            AppSession.WaitFor(() => app.ById("name-box").Displayed, "form tab content is shown");
             Assert.False(app.ById("submit-btn").Enabled);
 
             app.TypeInto(app.ById("name-box"), "张");
@@ -100,7 +112,9 @@ namespace Avalonia.TestingDemo.AppiumTests
         {
             using var app = new AppSession(App);
             app.ByName("列表").Click();
+            // WaitForText polls until the tab content exists, so the assertion below never races the tab switch.
             app.WaitForText("summary-text", "共 0 项");
+            AppSession.WaitFor(() => app.ById("add-btn").Displayed, "list tab content is shown");
             Assert.False(app.ById("add-btn").Enabled);
 
             foreach (var item in new[] { "apple", "pear" })

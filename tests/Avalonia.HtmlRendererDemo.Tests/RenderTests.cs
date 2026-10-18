@@ -5,6 +5,7 @@ using Avalonia.HtmlRendererDemo.ViewModels;
 using Avalonia.HtmlRendererDemo.Views;
 using Avalonia.Media;
 using Avalonia.Media.TextFormatting;
+using Avalonia.Tests.Common;
 using Avalonia.Threading;
 using Avalonia.VisualTree;
 using System.Linq;
@@ -32,7 +33,7 @@ namespace Avalonia.HtmlRendererDemo.Tests
             var panel = window.GetVisualDescendants().OfType<HtmlPanel>().Single();
             AvaloniaHeadlessPlatform.ForceRenderTimerTick();
             using var frame = window.CaptureRenderedFrame()!;
-            var origin = panel.TranslatePoint(default, window)!.Value;
+            var origin = panel.PointIn(default, window);
             using var buffer = frame.Lock();
             var dark = 0;
             for (var y = (int)origin.Y; y < (int)(origin.Y + panel.Bounds.Height); y++)

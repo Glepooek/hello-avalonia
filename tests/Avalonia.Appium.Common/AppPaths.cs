@@ -8,10 +8,14 @@ namespace Avalonia.Appium.Common
     // src\<app>\bin\Debug and bin\Release (Directory.Build.props drops the target framework folder).
     public static class AppPaths
     {
-        public static string RepoRoot { get; } = FindRepoRoot();
+        // Null when no hello-avalonia.slnx sits above the test binaries. A throwing static initializer would surface as
+        // a TypeInitializationException during test discovery; null lets FindExe report "not built" and the test skip.
+        public static string? RepoRoot { get; } = FindRepoRoot();
 
         public static string? FindExe(string app)
         {
+            if (RepoRoot is null)
+                return null;
             return new[] { "Debug", "Release" }
                 .Select(config => Path.Combine(RepoRoot, "src", app, "bin", config, app + ".exe"))
                 .Where(File.Exists)
@@ -19,14 +23,14 @@ namespace Avalonia.Appium.Common
                 .FirstOrDefault();
         }
 
-        private static string FindRepoRoot()
+        private static string? FindRepoRoot()
         {
             for (var dir = new DirectoryInfo(AppContext.BaseDirectory); dir is not null; dir = dir.Parent)
             {
                 if (File.Exists(Path.Combine(dir.FullName, "hello-avalonia.slnx")))
                     return dir.FullName;
             }
-            throw new InvalidOperationException($"No hello-avalonia.slnx above {AppContext.BaseDirectory}.");
+            return null;
         }
     }
 }

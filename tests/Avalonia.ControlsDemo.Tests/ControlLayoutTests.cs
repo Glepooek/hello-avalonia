@@ -116,7 +116,7 @@ namespace Avalonia.ControlsDemo.Tests
                 window.UpdateLayout();
                 var content = Content();
                 var header = ExpanderHeader(sideways);
-                Assert.True(content.TranslatePoint(default, header)!.Value.Y >= header.Bounds.Height);
+                Assert.True(content.PointIn(default, header).Y >= header.Bounds.Height);
 
                 box.SelectedItem = ExpandDirection.Right;
                 Dispatcher.UIThread.RunJobs();
@@ -124,7 +124,7 @@ namespace Avalonia.ControlsDemo.Tests
                 Assert.Equal(ExpandDirection.Right, sideways.ExpandDirection);
                 content = Content();
                 header = ExpanderHeader(sideways);
-                Assert.True(content.TranslatePoint(default, header)!.Value.X >= header.Bounds.Width);
+                Assert.True(content.PointIn(default, header).X >= header.Bounds.Width);
             }
             finally
             {
@@ -176,8 +176,8 @@ namespace Avalonia.ControlsDemo.Tests
                 window.UpdateLayout();
 
                 var shown = Assert.Single(Shown());
-                var topLeft = shown.TranslatePoint(default, target)!.Value;
-                var bottomRight = shown.TranslatePoint(new Point(shown.Bounds.Width, shown.Bounds.Height), target)!.Value;
+                var topLeft = shown.PointIn(default, target);
+                var bottomRight = shown.PointIn(new Point(shown.Bounds.Width, shown.Bounds.Height), target);
                 switch (button)
                 {
                     case "上": Assert.True(bottomRight.Y <= 0, $"bottom {bottomRight.Y}"); break;
@@ -614,7 +614,7 @@ namespace Avalonia.ControlsDemo.Tests
         }
 
         private static Point Center(Window window, Control control)
-            => control.TranslatePoint(new Point(control.Bounds.Width / 2, control.Bounds.Height / 2), window)!.Value;
+            => window.CenterOf(control);
 
         [AvaloniaFact]
         public void Dragging_the_splitter_resizes_the_left_column()
@@ -715,7 +715,7 @@ namespace Avalonia.ControlsDemo.Tests
             {
                 var under = window.ByName<Border>("Under");
                 var over = window.ByName<Border>("Over");
-                var probe = window.ByName<Panel>("Stack").TranslatePoint(new Point(150, 60), window)!.Value;
+                var probe = window.ByName<Panel>("Stack").PointIn(new Point(150, 60), window);
                 // Hit testing walks the composition tree, which only catches up with layout and ZIndex changes on a
                 // render tick; without the flush the first probe can land on nothing under load.
                 Border? Top()
