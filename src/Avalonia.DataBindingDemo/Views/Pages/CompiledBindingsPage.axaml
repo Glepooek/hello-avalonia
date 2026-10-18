@@ -18,7 +18,7 @@
                 <StackPanel Spacing="6">
                     <TextBlock TextWrapping="Wrap"
                                Text="所以每个 {Binding} 都按 x:DataType 声明的类型在构建期解析。把 SyntaxPage.axaml 里的 Message 改成 Mesage 再构建，会得到 AVLN 开头的编译错误，而不是运行时一条容易漏看的警告。" />
-                    <SelectableTextBlock FontFamily="Consolas, monospace"
+                    <SelectableTextBlock FontFamily="Consolas, Menlo, monospace"
                                          Text="&lt;AvaloniaUseCompiledBindingsByDefault&gt;true&lt;/AvaloniaUseCompiledBindingsByDefault&gt;" />
                 </StackPanel>
             </Border>

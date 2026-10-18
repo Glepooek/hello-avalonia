@@ -50,7 +50,7 @@
                 <StackPanel Spacing="4">
                     <TextBlock TextWrapping="Wrap"
                                Text="页面顶部的说明条、小节标题（caption）、提示文字（hint）、演示边框（stage）都来自 Avalonia.Shared 程序集，每个演示项目在 App.axaml 里用一行 StyleInclude 引入：" />
-                    <SelectableTextBlock FontFamily="Consolas, monospace"
+                    <SelectableTextBlock FontFamily="Consolas, Menlo, monospace"
                                          Text="&lt;StyleInclude Source=&quot;avares://Avalonia.Shared/Themes/SharedStyles.axaml&quot; /&gt;" />
                 </StackPanel>
             </Border>

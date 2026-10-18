@@ -16,7 +16,7 @@
             <StackPanel Spacing="8">
                 <TextBlock TextWrapping="Wrap"
                            Text="FocusManager 通过 TopLevel.FocusManager 取得，既是一个服务，也是输入交互的一部分。官方文档把它同时列在 Services 和 Input &amp; Interaction 下，完整演示放在更贴合的 Input 项目里。" />
-                <SelectableTextBlock FontFamily="Consolas, monospace"
+                <SelectableTextBlock FontFamily="Consolas, Menlo, monospace"
                                      Text="dotnet run --project Avalonia.InputDemo   →  「焦点」标签页" />
                 <TextBlock Classes="hint"
                            Text="那里演示 GetFocusedElement、Tab 顺序、IsTabStop、NavigationMethod 与 :focus-visible 的区别。" />

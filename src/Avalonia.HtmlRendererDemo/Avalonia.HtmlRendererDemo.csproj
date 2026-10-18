@@ -26,8 +26,4 @@
     <ItemGroup>
         <ProjectReference Include="..\Avalonia.Shared\Avalonia.Shared.csproj" />
     </ItemGroup>
-
-    <ItemGroup>
-        <Reference Include="System.Xaml" />
-    </ItemGroup>
 </Project>

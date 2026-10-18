@@ -16,7 +16,7 @@
             <StackPanel Spacing="8">
                 <TextBlock TextWrapping="Wrap"
                            Text="输入事件几乎都是路由事件（Tunnel / Bubble / Direct）。官方文档把它放在 Input &amp; Interaction 下，但它本质上属于事件机制，因此完整演示放在 Events 项目里。" />
-                <SelectableTextBlock FontFamily="Consolas, monospace"
+                <SelectableTextBlock FontFamily="Consolas, Menlo, monospace"
                                      Text="dotnet run --project Avalonia.EventsDemo   →  「路由三阶段」「Handled」「自定义路由事件」三个标签页" />
                 <TextBlock Classes="hint"
                            Text="那里用三层嵌套元素演示 Tunnel/Bubble 的触发顺序，演示 Handled 如何截断冒泡、handledEventsToo 如何越过截断，并自己声明一个路由事件。" />

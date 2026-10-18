@@ -19,7 +19,7 @@
                         <!--  The doc path is dimmed: it is a reference, not the message. It is
                               ellipsised rather than wrapped, since a path broken across lines
                               reads worse than a truncated one.  -->
-                        <TextBlock FontFamily="Consolas, monospace"
+                        <TextBlock FontFamily="Consolas, Menlo, monospace"
                                    FontSize="12"
                                    Opacity="0.65"
                                    Text="{TemplateBinding DocPath}"

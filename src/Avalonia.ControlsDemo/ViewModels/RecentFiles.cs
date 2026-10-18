@@ -14,6 +14,10 @@ namespace Avalonia.ControlsDemo.ViewModels
 
         private static readonly JsonSerializerOptions Options = new() { Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping };
 
+        // Linux file systems are case-sensitive; Windows and (by default) macOS are not.
+        private static readonly StringComparison PathComparison =
+            OperatingSystem.IsLinux() ? StringComparison.Ordinal : StringComparison.OrdinalIgnoreCase;
+
         public RecentFiles(string folder)
         {
             FolderPath = folder;
@@ -36,7 +40,7 @@ namespace Avalonia.ControlsDemo.ViewModels
             // Opening a file that is already listed moves it to the top instead of listing it twice.
             for (int i = Items.Count - 1; i >= 0; i--)
             {
-                if (string.Equals(Items[i], path, StringComparison.OrdinalIgnoreCase)) Items.RemoveAt(i);
+                if (string.Equals(Items[i], path, PathComparison)) Items.RemoveAt(i);
             }
 
             Items.Insert(0, path);

@@ -16,7 +16,7 @@
             <StackPanel Spacing="8">
                 <TextBlock TextWrapping="Wrap"
                            Text="Avalonia 12 的 Web 内容由 Avalonia.Controls.WebView 提供（NativeWebView 与 WebView 控件）。它依赖各平台的原生浏览器组件，不适合放进一个要保持轻量的页面标签里，所以完整演示放在单独的项目。" />
-                <SelectableTextBlock FontFamily="Consolas, monospace"
+                <SelectableTextBlock FontFamily="Consolas, Menlo, monospace"
                                      Text="dotnet run --project Avalonia.WebViewDemo" />
                 <TextBlock Classes="hint"
                            Text="另有 Avalonia.HtmlRendererDemo：不用浏览器，直接把 HTML 子集渲染成 Avalonia 控件。" />

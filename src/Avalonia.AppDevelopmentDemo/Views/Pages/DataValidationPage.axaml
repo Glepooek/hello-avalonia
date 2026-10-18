@@ -16,7 +16,7 @@
             <StackPanel Spacing="8">
                 <TextBlock TextWrapping="Wrap"
                            Text="数据校验靠绑定把 INotifyDataErrorInfo 或 DataValidationException 的错误传到控件的 DataValidationErrors 上。它是数据绑定的一部分，完整演示放在数据绑定项目里。" />
-                <SelectableTextBlock FontFamily="Consolas, monospace"
+                <SelectableTextBlock FontFamily="Consolas, Menlo, monospace"
                                      Text="dotnet run --project Avalonia.DataBindingDemo   →  「校验」标签页" />
             </StackPanel>
         </Border>

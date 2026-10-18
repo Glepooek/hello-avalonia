@@ -6,8 +6,9 @@ using Xunit;
 
 namespace Avalonia.ControlsDemo.Tests
 {
-    // The app keeps these files under %AppData% and %LocalAppData%; every test here points the stores at its own
-    // temp folder instead, so running the tests never touches the settings of a real copy of the app.
+    // The app keeps these files under the user's ApplicationData and LocalApplicationData folders; every test here
+    // points the stores at its own temp folder instead, so running the tests never touches the settings of a real
+    // copy of the app.
     public sealed class PersistenceTests : IDisposable
     {
         private readonly string _root = Path.Combine(Path.GetTempPath(), "controls-demo-tests-" + Guid.NewGuid().ToString("N"));
@@ -109,10 +110,11 @@ namespace Avalonia.ControlsDemo.Tests
             Assert.Equal(@"C:\docs\12.txt", recent.Items[0]);
             Assert.Equal(@"C:\docs\3.txt", recent.Items[^1]);
 
-            // Case-insensitive: the same file with different casing is not listed twice.
+            // Paths differing only in case are the same file except on Linux, where both stay listed.
             recent.Add(@"C:\DOCS\5.TXT");
             Assert.Equal(@"C:\DOCS\5.TXT", recent.Items[0]);
-            Assert.Single(recent.Items, p => p.EndsWith("5.txt", StringComparison.OrdinalIgnoreCase));
+            Assert.Equal(OperatingSystem.IsLinux() ? 2 : 1,
+                recent.Items.Count(p => p.EndsWith("5.txt", StringComparison.OrdinalIgnoreCase)));
             Assert.Equal(10, recent.Items.Count);
 
             Assert.Equal(recent.Items, new RecentFiles(Recent).Items);

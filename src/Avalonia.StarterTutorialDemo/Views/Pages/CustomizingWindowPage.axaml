@@ -11,7 +11,7 @@
                    Text="这些都是 Window 元素上的属性。点击按钮会弹出一个按教程设置过的小窗口（Title、固定尺寸、不可缩放、居中显示）。" />
 
 		<Border BorderBrush="#40FFFFFF" BorderThickness="1" CornerRadius="4" Padding="12">
-			<TextBlock FontFamily="Consolas" TextWrapping="Wrap">
+			<TextBlock FontFamily="Consolas, Menlo, monospace" TextWrapping="Wrap">
 				&lt;Window Title="GetStartedApp"
 				Width="250" Height="180"
 				CanResize="False"

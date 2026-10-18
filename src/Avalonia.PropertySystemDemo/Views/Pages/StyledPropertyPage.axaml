@@ -49,7 +49,7 @@
 
             <TextBlock Classes="caption" Text="3. 注册一个 StyledProperty 要写什么" />
             <Border Classes="stage" Padding="10">
-                <SelectableTextBlock FontFamily="Consolas, monospace" TextWrapping="Wrap"
+                <SelectableTextBlock FontFamily="Consolas, Menlo, monospace" TextWrapping="Wrap"
                                      Text="public static readonly StyledProperty&lt;double&gt; ValueProperty =&#10;    AvaloniaProperty.Register&lt;GaugeControl, double&gt;(&#10;        nameof(Value),&#10;        defaultValue: 0d,&#10;        coerce: static (_, v) =&gt; Math.Clamp(v, 0d, 100d));" />
             </Border>
         </StackPanel>

@@ -16,7 +16,7 @@
             <StackPanel Spacing="8">
                 <TextBlock TextWrapping="Wrap"
                            Text="{}{Binding} 本身就是一个标记扩展。官方文档在 Data Binding 与 XAML 两个分类下都讲了标记扩展；内置扩展一览与自定义 MarkupExtension 的写法放在 XAML 项目里。" />
-                <SelectableTextBlock FontFamily="Consolas, monospace"
+                <SelectableTextBlock FontFamily="Consolas, Menlo, monospace"
                                      Text="dotnet run --project Avalonia.XamlDemo   →  「标记扩展」标签页" />
             </StackPanel>
         </Border>

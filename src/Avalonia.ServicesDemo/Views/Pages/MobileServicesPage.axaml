@@ -27,7 +27,7 @@
 
             <TextBlock Classes="caption" Text="3. 正确的写法" />
             <Border Classes="stage" Padding="10">
-                <SelectableTextBlock FontFamily="Consolas, monospace"
+                <SelectableTextBlock FontFamily="Consolas, Menlo, monospace"
                                      Text="if (TopLevel.GetTopLevel(this)?.InputPane is { } pane)&#x0a;{&#x0a;    pane.StateChanged += (s, e) =&gt; Adjust(e.EndRect);&#x0a;}" />
             </Border>
         </StackPanel>

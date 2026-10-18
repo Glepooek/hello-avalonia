@@ -29,7 +29,7 @@
             <TextBlock Classes="hint" Text="字体文件放在 Assets/Fonts/ 下，由 csproj 里的 AvaloniaResource Include=&quot;Assets\**&quot; 打进程序集。码位 U+E603、E604、E60C、E610。" />
 
             <TextBlock Classes="caption" Text="2. 字体回退链：前一个找不到就用下一个" />
-            <TextBlock FontFamily="不存在的字体, Consolas, monospace" Text="FontFamily=&quot;不存在的字体, Consolas, monospace&quot;" />
+            <TextBlock FontFamily="不存在的字体, Consolas, Menlo, monospace" Text="FontFamily=&quot;不存在的字体, Consolas, Menlo, monospace&quot;" />
 
             <TextBlock Classes="caption" Text="3. 排版属性（拖动滑块）" />
             <Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto" Margin="0,0,0,6">

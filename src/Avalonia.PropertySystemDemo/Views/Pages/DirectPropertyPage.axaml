@@ -51,7 +51,7 @@
 
             <TextBlock Classes="caption" Text="3. 注册一个 DirectProperty 要写什么" />
             <Border Classes="stage" Padding="10">
-                <SelectableTextBlock FontFamily="Consolas, monospace" TextWrapping="Wrap"
+                <SelectableTextBlock FontFamily="Consolas, Menlo, monospace" TextWrapping="Wrap"
                                      Text="private string _readout = &quot;0%&quot;;&#10;&#10;public static readonly DirectProperty&lt;GaugeControl, string&gt; ReadoutProperty =&#10;    AvaloniaProperty.RegisterDirect&lt;GaugeControl, string&gt;(&#10;        nameof(Readout), o =&gt; o._readout);&#10;&#10;// 写入必须走 SetAndRaise，否则绑定收不到通知&#10;private set =&gt; SetAndRaise(ReadoutProperty, ref _readout, value);" />
             </Border>
         </StackPanel>
