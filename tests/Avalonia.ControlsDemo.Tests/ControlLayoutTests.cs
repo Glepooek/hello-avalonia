@@ -716,8 +716,16 @@ namespace Avalonia.ControlsDemo.Tests
                 var under = window.ByName<Border>("Under");
                 var over = window.ByName<Border>("Over");
                 var probe = window.ByName<Panel>("Stack").TranslatePoint(new Point(150, 60), window)!.Value;
-                Border? Top() => (window.InputHitTest(probe) as Visual)?.GetSelfAndVisualAncestors()
-                    .OfType<Border>().FirstOrDefault(b => b == under || b == over);
+                // Hit testing walks the composition tree, which only catches up with layout and ZIndex changes on a
+                // render tick; without the flush the first probe can land on nothing under load.
+                Border? Top()
+                {
+                    window.UpdateLayout();
+                    Dispatcher.UIThread.RunJobs();
+                    AvaloniaHeadlessPlatform.ForceRenderTimerTick();
+                    return (window.InputHitTest(probe) as Visual)?.GetSelfAndVisualAncestors()
+                        .OfType<Border>().FirstOrDefault(b => b == under || b == over);
+                }
                 Assert.Same(over, Top());
 
                 window.Press("SwapButton");
