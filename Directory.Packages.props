@@ -35,5 +35,7 @@
         <PackageVersion Include="xunit.v3.assert" Version="3.2.2" />
         <PackageVersion Include="xunit.runner.visualstudio" Version="3.1.5" />
         <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="18.10.1" />
+        <!-- Benchmarks only; the benchmark project is an Exe and is not run by dotnet test. -->
+        <PackageVersion Include="BenchmarkDotNet" Version="0.15.8" />
     </ItemGroup>
 </Project>
