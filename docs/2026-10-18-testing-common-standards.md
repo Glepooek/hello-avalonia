@@ -34,7 +34,7 @@
 | L0 单元测试 | ViewModel、Service、Converter、纯算法 | xUnit `[Fact]` / `[Theory]` | 同左 | 快 | 否 |
 | L1 进程内 UI | 控件行为、布局、样式、绑定、输入、路由 | `Avalonia.Headless.XUnit` + `[AvaloniaFact]` | `[WpfFact]`（Xunit.StaFact），或 XPF headless | 快 | 否 |
 | L2 视觉回归 | 渲染出的像素、自定义控件外观、主题 | Skia + `CaptureRenderedFrame()` | `RenderTargetBitmap` | 中 | 否 |
-| L3 端到端 | 完整应用、原生窗口、菜单、焦点、无障碍 | Appium + WinAppDriver | Appium + WinAppDriver，或 FlaUI（UIA3） | 慢 | **是** |
+| L3 端到端 | 完整应用、原生窗口、菜单、焦点、无障碍 | Appium + WinAppDriver（仅 Windows） | Appium + WinAppDriver，或 FlaUI（UIA3） | 慢 | **是** |
 
 这是三份文档里唯一一张完整的分层表，框架文档只补「本仓库落在哪」。
 

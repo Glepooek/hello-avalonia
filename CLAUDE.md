@@ -10,7 +10,7 @@ dotnet run --project src/Avalonia.LayoutDemo     # 换成任意 Avalonia.*Demo
 dotnet test hello-avalonia.slnx                  # 全部测试项目（xUnit v3 + Headless），每个应用一个 Avalonia.<应用>.Tests
 dotnet test tests/Avalonia.TestingDemo.Tests     # 只跑单个测试项目，换成任意 Avalonia.<应用>.Tests
 dotnet test tests/Avalonia.TestingDemo.Tests --filter "FullyQualifiedName~ViewModelTests"
-$env:HELLO_AVALONIA_APPIUM=1; dotnet test tests/Avalonia.TestingDemo.AppiumTests   # PowerShell；每个应用一个 Avalonia.<应用>.AppiumTests（MusicStore 无 Demo 后缀）；需先运行 WinAppDriver，会接管鼠标键盘
+$env:HELLO_AVALONIA_APPIUM=1; dotnet test tests/Avalonia.TestingDemo.AppiumTests   # PowerShell，仅 Windows；每个应用一个 Avalonia.<应用>.AppiumTests（MusicStore 无 Demo 后缀）；需先运行 WinAppDriver，会接管鼠标键盘
 ```
 
 无 lint 配置；`TreatWarningsAsErrors=false`。
@@ -25,7 +25,7 @@ $env:HELLO_AVALONIA_APPIUM=1; dotnet test tests/Avalonia.TestingDemo.AppiumTests
 - `tests/Avalonia.Appium.Common` 是 Appium 共用库（`AppSession`、`AppiumFactAttribute`、`AppPaths`、`UnicodeKeyboard`、`KeyChord`）；键入、按键、子窗口、并行的用法规则见 `.claude/rules/testing.md` §3。
 - 写或改测试前先读 `.claude/rules/testing.md`，写或改基准前先读 `.claude/rules/benchmarks.md`：两者按路径加载，只在碰到 `tests/**`、`benchmarks/**` 下的文件时才自动进上下文。
 - MVVM 一律用 CommunityToolkit.Mvvm（`[ObservableProperty]`、`[RelayCommand]`）。
-- `Directory.Build.props` 统一输出到 `bin\Debug|Release`，且 `AppendTargetFrameworkToOutputPath=false`（路径里没有 `net10.0`）。
+- `Directory.Build.props` 统一输出到 `bin/Debug|Release`，且 `AppendTargetFrameworkToOutputPath=false`（路径里没有 `net10.0`）。
 
 ## 包版本
 

@@ -45,13 +45,13 @@ public class FooConverterBenchmarks
 
 **② 冒烟。** 先用 dry job 确认能跑通，大约十几秒。dry 跑出来的数字**不能看**：
 
-```powershell
+```bash
 dotnet run -c Release --project benchmarks/Avalonia.Benchmarks -- --job dry --filter '*FooConverter*'
 ```
 
 **③ 正式跑。** 先关掉其他程序、插上电源，再跑：
 
-```powershell
+```bash
 dotnet run -c Release --project benchmarks/Avalonia.Benchmarks -- --filter '*FooConverter*'
 ```
 
@@ -198,7 +198,7 @@ public class CollectionViewsViewModelBenchmarks
 
 不要拿两次单独的 `Mean` 相减就下结论。用 dotnet/performance 仓库里的 `ResultsComparer`（`src/tools/ResultsComparer`）[3]，它做的是统计检验：
 
-```powershell
+```bash
 # 1. 改动前后各跑一次，fulljson 会生成 ResultsComparer 要读的 *-report-full.json
 dotnet run -c Release --project benchmarks/Avalonia.Benchmarks -- --filter '*FooConverter*' --exporters fulljson --artifacts BenchmarkDotNet.Artifacts/before
 #    ……改代码……

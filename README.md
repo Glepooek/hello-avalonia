@@ -28,7 +28,7 @@ Avalonia UI 学习示例集合。每个项目演示一个独立主题，可单�
 | [Avalonia.MusicStore](src/Avalonia.MusicStore) | 完整应用：专辑搜索（iTunes API）、购买、本地缓存、RESX 多语言 |
 | [Avalonia.WebViewDemo](src/Avalonia.WebViewDemo) | NativeWebView 嵌入控件、NativeWebDialog 原生窗口、JS ↔ C# 双向调用 |
 | [Avalonia.HtmlRendererDemo](src/Avalonia.HtmlRendererDemo) | HtmlPanel 富文本渲染、IconFont 与 PathIcon 图标 |
-| [Avalonia.Shared](src/Avalonia.Shared) | 共享类库：演示页说明条控件、窗口 Helper、Win32 互操作、消息载体、ViewModel 基类 |
+| [Avalonia.Shared](src/Avalonia.Shared) | 共享类库：演示页说明条控件、窗口 Helper、消息载体、ViewModel 基类 |
 
 ### 控件目录对照表（Avalonia.ControlsDemo）
 
@@ -52,9 +52,9 @@ Avalonia UI 学习示例集合。每个项目演示一个独立主题，可单�
 
 ## 环境
 
-- .NET 10.0 SDK
-- Windows 上运行 WebViewDemo 需要 WebView2 Runtime
-- 跑 Appium 测试需要 [WinAppDriver 1.2.1](https://github.com/microsoft/WinAppDriver/releases) 与 Windows 开发人员模式
+- .NET 10.0 SDK；演示、Headless 测试与基准面向 Windows、macOS、Linux，不调用平台专属 API（目前只在 Windows 上实测过）
+- WebViewDemo 依赖系统浏览器内核：Windows 需要 WebView2 Runtime，macOS 用系统自带的 WKWebView，Linux 需要安装 WebKitGTK（装了 WPE WebKit 时优先用它）
+- 跑 Appium 测试（仅 Windows）需要 [WinAppDriver 1.2.1](https://github.com/microsoft/WinAppDriver/releases) 与 Windows 开发人员模式
 
 主要依赖（版本统一在 [Directory.Packages.props](Directory.Packages.props)）：
 
@@ -72,7 +72,7 @@ dotnet build hello-avalonia.slnx
 dotnet run --project src/Avalonia.LayoutDemo      # 换成任意演示项目
 ```
 
-所有项目统一输出到各自的 `bin\Debug\`（路径里没有 `net10.0`）。
+所有项目统一输出到各自的 `bin/Debug/`（路径里没有 `net10.0`）。
 
 ## 项目测试
 
@@ -81,7 +81,7 @@ dotnet run --project src/Avalonia.LayoutDemo      # 换成任意演示项目
 | 项目 | 内容 |
 |---|---|
 | `Avalonia.<应用>.Tests` ×20 | xUnit v3 + Avalonia Headless，不开窗口、不占桌面：走完全部标签页（无警告日志）、ViewModel 单测、关键页面的点击与输入；`TestingDemo.Tests` 另含渲染像素断言 |
-| `Avalonia.<应用>.AppiumTests` ×20 | WinAppDriver + Appium 驱动真实进程，**默认跳过**：全部应用的启动、16 个 TabControl 应用的逐页导航，以及只有真实进程才能验证的流程——TestingDemo 三个面板、真实键鼠事件（Input、Events）、文件对话框取消（Services）、UIA 自动化属性（AppDevelopment）、网页窗口与 JS ↔ C# 调用（WebView）、商店窗口（MusicStore） |
+| `Avalonia.<应用>.AppiumTests` ×20 | WinAppDriver + Appium 驱动真实进程，仅 Windows，**默认跳过**：全部应用的启动、16 个 TabControl 应用的逐页导航，以及只有真实进程才能验证的流程——TestingDemo 三个面板、真实键鼠事件（Input、Events）、文件对话框取消（Services）、UIA 自动化属性（AppDevelopment）、网页窗口与 JS ↔ C# 调用（WebView）、商店窗口（MusicStore） |
 | [Avalonia.Tests.Common](tests/Avalonia.Tests.Common) | Headless 共用辅助：`HeadlessApp`、`UiHelpers`、`TabWalker`、`LogCollector`、`CultureScope` |
 | [Avalonia.Appium.Common](tests/Avalonia.Appium.Common) | Appium 共用辅助：`AppSession`、`AppiumFactAttribute`、`AppPaths`、`UnicodeKeyboard`、`KeyChord` |
 
@@ -89,11 +89,15 @@ dotnet run --project src/Avalonia.LayoutDemo      # 换成任意演示项目
 
 运行：
 
-```powershell
-dotnet test hello-avalonia.slnx                   # 全部；Appium 测试显示为跳过
+```bash
+dotnet test hello-avalonia.slnx                   # 全部；Appium 测试显示为跳过（非 Windows 上始终跳过）
 dotnet test tests/Avalonia.LayoutDemo.Tests       # 单个应用
+```
 
-# Appium：先在另一个终端启动 WinAppDriver（需开启 Windows 开发人员模式）
+Appium 测试只能在 Windows 上运行（PowerShell）：
+
+```powershell
+# 先在另一个终端启动 WinAppDriver（需开启 Windows 开发人员模式）
 & "C:\Program Files\Windows Application Driver\WinAppDriver.exe"
 $env:HELLO_AVALONIA_APPIUM = "1"
 dotnet test tests/Avalonia.TestingDemo.AppiumTests
@@ -110,7 +114,7 @@ Appium 测试会接管鼠标键盘，运行期间不要操作机器、不要锁�
 
 [benchmarks/Avalonia.Benchmarks](benchmarks/Avalonia.Benchmarks) 用 BenchmarkDotNet 测转换器与 ViewModel 的热路径。它不是测试项目，`dotnet test` 不会运行它；要用 Release、在命令行下运行，不挂调试器：
 
-```powershell
+```bash
 dotnet run -c Release --project benchmarks/Avalonia.Benchmarks -- --filter '*Celsius*'
 ```
 
