@@ -22,7 +22,8 @@ $env:HELLO_AVALONIA_APPIUM=1; dotnet test tests/Avalonia.TestingDemo.AppiumTests
 - 例外：`MusicStore`、`WebViewDemo`、`HtmlRendererDemo` 是较完整的应用；`StarterTutorialDemo` 照官方教程用 code-behind，无 `ViewModels/`，别补 ViewModel。
 - `Avalonia.Shared` 是共用库（`DemoHeader`、`SharedStyles.axaml`、`ViewModelBase`、`EventLog` 等），通用代码放这里，不要在各项目复制。
 - `tests/Avalonia.Tests.Common` 是测试共用库（`HeadlessApp`、`UiHelpers`、`TabWalker`、`LogCollector`）：各应用的测试项目引用它，不要在测试项目里复制辅助代码；`TestAppBuilder` 只写 `HeadlessApp.Build<App>()`。
-- `tests/Avalonia.Appium.Common` 是 Appium 共用库（`AppSession`、`AppiumFactAttribute`、`AppPaths`、`UnicodeKeyboard`、`KeyChord`）：键入一律用 `AppSession.TypeInto`，按键（Tab、方向键、Escape、Ctrl 组合键）一律用 `KeyChord.Press`，都不用 WinAppDriver 的 `SendKeys`（中文输入法吞字母，方向键送不到）；不按 Ctrl+Shift 组合键（它是 Windows 切换输入法的热键，结果时有时无）；弹出的子窗口用 `AppSession.FindWindow` 按标题找（`WindowHandles` 不列有所有者的窗口）；`AppSession` 持有跨进程命名 Mutex，多个 Appium 项目并行时轮流用桌面，`Dispose` 会结束 `Quit` 后仍残留的被测进程。
+- `tests/Avalonia.Appium.Common` 是 Appium 共用库（`AppSession`、`AppiumFactAttribute`、`AppPaths`、`UnicodeKeyboard`、`KeyChord`）；键入、按键、子窗口、并行的用法规则见 `.claude/rules/testing.md` §3。
+- 写或改测试前先读 `.claude/rules/testing.md`，写或改基准前先读 `.claude/rules/benchmarks.md`：两者按路径加载，只在碰到 `tests/**`、`benchmarks/**` 下的文件时才自动进上下文。
 - MVVM 一律用 CommunityToolkit.Mvvm（`[ObservableProperty]`、`[RelayCommand]`）。
 - `Directory.Build.props` 统一输出到 `bin\Debug|Release`，且 `AppendTargetFrameworkToOutputPath=false`（路径里没有 `net10.0`）。
 

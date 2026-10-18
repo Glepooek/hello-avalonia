@@ -50,33 +50,6 @@ Avalonia UI 学习示例集合。每个项目演示一个独立主题，可单�
 
 导航树里，实战页标题带「实战：」前缀，路标页带「↗」前缀；路标页只说明用途与指向，不重复实现演示。
 
-## 项目测试
-
-测试项目都在 `tests/`，每个应用各有一个 Headless 项目和一个 Appium 项目。
-
-| 项目 | 内容 |
-|---|---|
-| `Avalonia.<应用>.Tests` ×20 | xUnit v3 + Avalonia Headless，不开窗口、不占桌面：走完全部标签页（无警告日志）、ViewModel 单测、关键页面的点击与输入；`TestingDemo.Tests` 另含渲染像素断言 |
-| `Avalonia.<应用>.AppiumTests` ×20 | WinAppDriver + Appium 驱动真实进程，**默认跳过**：全部应用的启动、16 个 TabControl 应用的逐页导航，以及只有真实进程才能验证的流程——TestingDemo 三个面板、真实键鼠事件（Input、Events）、文件对话框取消（Services）、UIA 自动化属性（AppDevelopment）、网页窗口与 JS ↔ C# 调用（WebView）、商店窗口（MusicStore） |
-| [Avalonia.Tests.Common](tests/Avalonia.Tests.Common) | Headless 共用辅助：`HeadlessApp`、`UiHelpers`、`TabWalker`、`LogCollector`、`CultureScope` |
-| [Avalonia.Appium.Common](tests/Avalonia.Appium.Common) | Appium 共用辅助：`AppSession`、`AppiumFactAttribute`、`AppPaths`、`UnicodeKeyboard`、`KeyChord` |
-
-`<应用>` 是去掉 `Avalonia.` 前缀的项目名，如 `Avalonia.LayoutDemo.Tests`、`Avalonia.MusicStore.AppiumTests`。目前共 523 个 Headless 测试、49 个 Appium 测试。
-
-运行：
-
-```powershell
-dotnet test hello-avalonia.slnx                   # 全部；Appium 测试显示为跳过
-dotnet test tests/Avalonia.LayoutDemo.Tests       # 单个应用
-
-# Appium：先在另一个终端启动 WinAppDriver（需开启 Windows 开发人员模式）
-& "C:\Program Files\Windows Application Driver\WinAppDriver.exe"
-$env:HELLO_AVALONIA_APPIUM = "1"
-dotnet test tests/Avalonia.TestingDemo.AppiumTests
-```
-
-Appium 测试会接管鼠标键盘，运行期间不要操作机器、不要锁屏。安装、门控条件与常见问题见 [测试设计文档](docs/superpowers/specs/2026-10-12-demo-test-coverage-design.md) 的「Appium 环境配置」。
-
 ## 环境
 
 - .NET 10.0 SDK
@@ -90,7 +63,7 @@ Appium 测试会接管鼠标键盘，运行期间不要操作机器、不要锁�
 | UI 框架 | Avalonia 12.1.2（含 Desktop、Fluent 主题、DataGrid、ColorPicker） |
 | 扩展控件 | Avalonia.Controls.WebView、Avalonia.HtmlRenderer、MessageBox.Avalonia、AsyncImageLoader.Avalonia |
 | 行为与 MVVM | Xaml.Behaviors.Avalonia、CommunityToolkit.Mvvm |
-| 测试 | xUnit v3、Avalonia.Headless.XUnit、Appium.WebDriver 4.4.5 |
+| 测试 | xUnit v3、Avalonia.Headless.XUnit、Appium.WebDriver 4.4.5、BenchmarkDotNet |
 
 ## 构建与运行
 
@@ -100,3 +73,45 @@ dotnet run --project src/Avalonia.LayoutDemo      # 换成任意演示项目
 ```
 
 所有项目统一输出到各自的 `bin\Debug\`（路径里没有 `net10.0`）。
+
+## 项目测试
+
+测试项目都在 `tests/`，每个应用各有一个 Headless 项目和一个 Appium 项目。
+
+| 项目 | 内容 |
+|---|---|
+| `Avalonia.<应用>.Tests` ×20 | xUnit v3 + Avalonia Headless，不开窗口、不占桌面：走完全部标签页（无警告日志）、ViewModel 单测、关键页面的点击与输入；`TestingDemo.Tests` 另含渲染像素断言 |
+| `Avalonia.<应用>.AppiumTests` ×20 | WinAppDriver + Appium 驱动真实进程，**默认跳过**：全部应用的启动、16 个 TabControl 应用的逐页导航，以及只有真实进程才能验证的流程——TestingDemo 三个面板、真实键鼠事件（Input、Events）、文件对话框取消（Services）、UIA 自动化属性（AppDevelopment）、网页窗口与 JS ↔ C# 调用（WebView）、商店窗口（MusicStore） |
+| [Avalonia.Tests.Common](tests/Avalonia.Tests.Common) | Headless 共用辅助：`HeadlessApp`、`UiHelpers`、`TabWalker`、`LogCollector`、`CultureScope` |
+| [Avalonia.Appium.Common](tests/Avalonia.Appium.Common) | Appium 共用辅助：`AppSession`、`AppiumFactAttribute`、`AppPaths`、`UnicodeKeyboard`、`KeyChord` |
+
+`<应用>` 是去掉 `Avalonia.` 前缀的项目名，如 `Avalonia.LayoutDemo.Tests`、`Avalonia.MusicStore.AppiumTests`。
+
+运行：
+
+```powershell
+dotnet test hello-avalonia.slnx                   # 全部；Appium 测试显示为跳过
+dotnet test tests/Avalonia.LayoutDemo.Tests       # 单个应用
+
+# Appium：先在另一个终端启动 WinAppDriver（需开启 Windows 开发人员模式）
+& "C:\Program Files\Windows Application Driver\WinAppDriver.exe"
+$env:HELLO_AVALONIA_APPIUM = "1"
+dotnet test tests/Avalonia.TestingDemo.AppiumTests
+```
+
+Appium 测试会接管鼠标键盘，运行期间不要操作机器、不要锁屏。WinAppDriver 的安装、门控条件与常见问题见 [测试设计文档](docs/superpowers/specs/2026-10-12-demo-test-coverage-design.md) 的「Appium 环境配置」；键入、按键、子窗口的使用规则见 [Avalonia 测试规范](docs/2026-10-18-avalonia-testing-standards.md) §3.6。
+
+写测试：
+
+- 新建测试项目、写第一个测试，照 [Avalonia 测试规范](docs/2026-10-18-avalonia-testing-standards.md) §1「5 分钟上手」；点击、键入、等待异步等辅助方法见同文 §3.4 的 `UiHelpers` 速查表；
+- 选层、ViewModel、HTTP mock、SQLite 等与框架无关的规则见 [通用测试规范](docs/2026-10-18-testing-common-standards.md)，WPF 项目见 [WPF 测试规范](docs/2026-10-18-wpf-testing-standards.md)。
+
+## 性能基准
+
+[benchmarks/Avalonia.Benchmarks](benchmarks/Avalonia.Benchmarks) 用 BenchmarkDotNet 测转换器与 ViewModel 的热路径。它不是测试项目，`dotnet test` 不会运行它；要用 Release、在命令行下运行，不挂调试器：
+
+```powershell
+dotnet run -c Release --project benchmarks/Avalonia.Benchmarks -- --filter *Celsius*
+```
+
+写法与 CI 门禁见 [BenchmarkDotNet 规范](docs/2026-10-18-benchmarkdotnet-standards.md)。
