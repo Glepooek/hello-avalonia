@@ -3,7 +3,7 @@
 > 适用范围：任意 .NET 桌面项目（Avalonia / WPF 同理）。
 > 文中出现的 `Avalonia.*Demo`、`src/`、`tests/` 只是**本仓库的举例**，规则本身不依赖它们。
 >
-> 与测试规范（`2026-10-18-avalonia-wpf-testing-standards.md`）并列：那份负责「对不对」，本文负责「快不快」。
+> 与测试规范（`2026-10-18-testing-common-standards.md`、`2026-10-18-avalonia-testing-standards.md`、`2026-10-18-wpf-testing-standards.md`）并列：那几份负责「对不对」，本文负责「快不快」。
 
 ---
 

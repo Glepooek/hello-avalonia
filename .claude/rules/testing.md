@@ -1,6 +1,6 @@
 # 测试规范（Avalonia / WPF）
 
-配套文档：`docs/2026-10-18-avalonia-wpf-testing-standards.md`（含出处与置信度）。以下是可执行的硬规则。性能基准（BenchmarkDotNet）不在本文范围，见 `docs/2026-10-18-benchmarkdotnet-standards.md`（基准是性能测试，但不进功能回归的阻断门禁）。
+配套文档（含出处与置信度）：通用 `docs/2026-10-18-testing-common-standards.md`、Avalonia `docs/2026-10-18-avalonia-testing-standards.md`、WPF `docs/2026-10-18-wpf-testing-standards.md`。以下是可执行的硬规则。性能基准（BenchmarkDotNet）不在本文范围，见 `docs/2026-10-18-benchmarkdotnet-standards.md`（基准是性能测试，但不进功能回归的阻断门禁）。
 
 ## 1. 选层
 
