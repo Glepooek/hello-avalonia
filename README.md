@@ -22,7 +22,8 @@ Avalonia UI 学习示例集合。每个项目演示一个独立主题，可单�
 | [Avalonia.ControlsDemo](src/Avalonia.ControlsDemo) | 按官方 Controls 目录组织的控件演示（119 页，侧边导航，见下方对照表） |
 | [Avalonia.CustomControlsDemo](src/Avalonia.CustomControlsDemo) | UserControl、TemplatedControl 与 ControlTheme、自绘控件、控件树、自定义 Panel、自定义 Flyout |
 | [Avalonia.BehaviorsDemo](src/Avalonia.BehaviorsDemo) | Xaml.Behaviors.Avalonia：Behavior / Trigger / Action 机制、事件转命令、数据触发、焦点键盘指针、表单验证、集合、窗口弹出通知、拖拽、响应式、动画，以及文件系统、网络、剪贴板、截图（均限制在沙箱内）和自定义 Behavior（侧边导航，共 15 页） |
-| [Avalonia.ServicesDemo](src/Avalonia.ServicesDemo) | 剪贴板、文件对话框、StorageProvider、Launcher、平台设置，以及 InputPane / InsetsManager / IActivatableLifetime 的可用性检测 |
+| [Avalonia.ServicesDemo](src/Avalonia.ServicesDemo) | 剪贴板、文件对话框、StorageProvider、Launcher、用 Process.Start 跨平台启动另一个程序、平台设置，以及 InputPane / InsetsManager / IActivatableLifetime 的可用性检测 |
+| [Avalonia.ServicesDemo.LaunchTarget](src/Avalonia.ServicesDemo.LaunchTarget) | ServicesDemo「启动程序」页启动的程序 2：显示收到的参数，按指定退出码退出 |
 | [Avalonia.AppDevelopmentDemo](src/Avalonia.AppDevelopmentDemo) | 依赖注入、本地化、日志、未处理异常、资源查找、线程模型、窗口管理、无障碍 |
 | [Avalonia.TestingDemo](src/Avalonia.TestingDemo) | 被测应用：计数器、表单、列表三个易于断言的面板（测试写法的基准样例，见「项目测试」） |
 | [Avalonia.MusicStore](src/Avalonia.MusicStore) | 完整应用：专辑搜索（iTunes API）、购买、本地缓存、RESX 多语言 |

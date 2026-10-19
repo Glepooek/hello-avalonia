@@ -29,6 +29,9 @@
         <TabItem Header="Launcher">
             <pages:LauncherPage />
         </TabItem>
+        <TabItem Header="启动程序">
+            <pages:ProcessLaunchPage />
+        </TabItem>
         <TabItem Header="平台设置">
             <pages:PlatformSettingsPage />
         </TabItem>

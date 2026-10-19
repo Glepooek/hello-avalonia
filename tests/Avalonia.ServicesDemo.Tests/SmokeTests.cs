@@ -17,7 +17,7 @@ namespace Avalonia.ServicesDemo.Tests
             var visits = TabWalker.Walk(window);
 
             Assert.Equal(
-                new[] { "剪贴板", "文件对话框", "StorageProvider", "焦点管理", "Launcher", "平台设置", "移动端服务", "可激活生命周期" },
+                new[] { "剪贴板", "文件对话框", "StorageProvider", "焦点管理", "Launcher", "启动程序", "平台设置", "移动端服务", "可激活生命周期" },
                 visits.Select(v => v.Header));
             Assert.All(visits, v => Assert.Null(v.Error));
         }

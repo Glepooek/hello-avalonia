@@ -15,6 +15,7 @@
     <Project Path="src/Avalonia.MusicStore/Avalonia.MusicStore.csproj" />
     <Project Path="src/Avalonia.PropertySystemDemo/Avalonia.PropertySystemDemo.csproj" />
     <Project Path="src/Avalonia.ServicesDemo/Avalonia.ServicesDemo.csproj" />
+    <Project Path="src/Avalonia.ServicesDemo.LaunchTarget/Avalonia.ServicesDemo.LaunchTarget.csproj" />
     <Project Path="src/Avalonia.Shared/Avalonia.Shared.csproj" />
     <Project Path="src/Avalonia.StarterTutorialDemo/Avalonia.StarterTutorialDemo.csproj" />
     <Project Path="src/Avalonia.StylingDemo/Avalonia.StylingDemo.csproj" />

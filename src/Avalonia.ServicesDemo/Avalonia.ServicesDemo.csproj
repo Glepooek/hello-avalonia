@@ -22,5 +22,7 @@
 
     <ItemGroup>
         <ProjectReference Include="..\Avalonia.Shared\Avalonia.Shared.csproj" />
+        <!-- Program 2 of the 启动程序 page: referencing an exe project copies its apphost next to this app. -->
+        <ProjectReference Include="..\Avalonia.ServicesDemo.LaunchTarget\Avalonia.ServicesDemo.LaunchTarget.csproj" />
     </ItemGroup>
 </Project>

@@ -7,7 +7,7 @@ namespace Avalonia.ServicesDemo.AppiumTests
     {
         private const string App = "Avalonia.ServicesDemo";
         private const string Title = "Avalonia Services Demo";
-        private static readonly string[] Tabs = { "剪贴板", "文件对话框", "StorageProvider", "焦点管理", "Launcher", "平台设置", "移动端服务", "可激活生命周期" };
+        private static readonly string[] Tabs = { "剪贴板", "文件对话框", "StorageProvider", "焦点管理", "Launcher", "启动程序", "平台设置", "移动端服务", "可激活生命周期" };
 
         [AppiumFact(App)]
         public void App_starts_with_its_main_window_and_every_tab() => TabbedApp.AssertStartsWithItsTabs(App, Title, Tabs);

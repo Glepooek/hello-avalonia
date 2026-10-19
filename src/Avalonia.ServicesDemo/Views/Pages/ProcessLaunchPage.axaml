@@ -1,0 +1,43 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             mc:Ignorable="d"
+             d:DesignWidth="760"
+             d:DesignHeight="560"
+             x:Class="Avalonia.ServicesDemo.Views.Pages.ProcessLaunchPage">
+
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <!--  No DocPath: starting a process is plain .NET (System.Diagnostics.Process); Avalonia has no API for it.  -->
+            <shared:DemoHeader Title="启动程序：程序 1 用 Process.Start 启动同目录的程序 2" />
+
+            <TextBlock Classes="caption" Text="1. 传给程序 2 的参数（每行一个，含空格、引号也原样送达）" />
+            <TextBox Name="ArgsBox"
+                     AutomationProperties.AutomationId="ArgsBox"
+                     Width="420"
+                     Height="80"
+                     HorizontalAlignment="Left"
+                     AcceptsReturn="True"
+                     Text="你好 世界&#10;--mode=&quot;viewer&quot;" />
+
+            <TextBlock Classes="caption" Text="2. 启动并等待它退出" />
+            <Button Name="LaunchButton"
+                    AutomationProperties.AutomationId="LaunchButton"
+                    Content="Process.Start 启动程序 2"
+                    Click="OnLaunch" />
+
+            <TextBlock Classes="caption" Text="3. 结果" />
+            <Border Classes="stage" Padding="10">
+                <TextBlock Name="Result"
+                           AutomationProperties.AutomationId="Result"
+                           Text="（还没有操作）"
+                           TextWrapping="Wrap" />
+            </Border>
+
+            <TextBlock Classes="hint" Margin="0,12,0,0"
+                       Text="程序 2（Avalonia.ServicesDemo.LaunchTarget）被本项目 ProjectReference 引用，构建时它的 apphost、runtimeconfig.json、deps.json 会拷到本程序旁边，所以用 AppContext.BaseDirectory 就能找到它。平台差异集中在 SiblingApp：Windows 上是 .exe，Linux / macOS 上的 apphost 没有扩展名（打进 macOS .app 包后两个 apphost 同在 Contents/MacOS，路径不变；不要用 open 启动，open 会立刻返回，拿不到程序 2 的退出码）。参数用 ArgumentList 逐个添加，各平台的引号规则由 .NET 处理。等待用 WaitForExitAsync，不阻塞 UI 线程。Android、iOS、浏览器在沙箱里运行，不能启动任意进程，只能用 Launcher 打开对方注册的 URL scheme。" />
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

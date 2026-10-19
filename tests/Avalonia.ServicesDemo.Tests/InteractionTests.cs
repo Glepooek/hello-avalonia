@@ -173,11 +173,11 @@ namespace Avalonia.ServicesDemo.Tests
                 tabs.SelectedIndex = index;
                 Dispatcher.UIThread.RunJobs();
             }
-            Assert.Equal("可激活生命周期", (tabs.Items[7] as TabItem)?.Header);
+            Assert.Equal("可激活生命周期", (tabs.Items[8] as TabItem)?.Header);
 
-            Select(7);
+            Select(8);
             Select(0);
-            Select(7);
+            Select(8);
             var before = Activations(window);
             window.Activate();
             Dispatcher.UIThread.RunJobs();
