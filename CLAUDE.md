@@ -11,13 +11,14 @@ dotnet test hello-avalonia.slnx                  # 全部测试项目（xUnit v3
 dotnet test tests/Avalonia.TestingDemo.Tests     # 只跑单个测试项目，换成任意 Avalonia.<应用>.Tests
 dotnet test tests/Avalonia.TestingDemo.Tests --filter "FullyQualifiedName~ViewModelTests"
 $env:HELLO_AVALONIA_APPIUM=1; dotnet test tests/Avalonia.TestingDemo.AppiumTests   # PowerShell，仅 Windows；每个应用一个 Avalonia.<应用>.AppiumTests（MusicStore 无 Demo 后缀）；需先运行 WinAppDriver，会接管鼠标键盘
+dotnet run -c Release --project benchmarks/Avalonia.Benchmarks -- --filter '*Celsius*'   # 基准：必须 Release、不挂调试器；dotnet test 不跑它
 ```
 
 无 lint 配置；`TreatWarningsAsErrors=false`。
 
 ## 项目结构
 
-- 目录约定：演示项目与 `Avalonia.Shared` 放 `src/`，测试项目放 `tests/`；`Directory.*.props` 与 `.slnx` 留在仓库根。新项目按此归位，同时登记到 `hello-avalonia.slnx` 的对应 `<Folder>`。
+- 目录约定：演示项目与 `Avalonia.Shared` 放 `src/`，测试项目放 `tests/`，BenchmarkDotNet 基准放 `benchmarks/`；`Directory.*.props` 与 `.slnx` 留在仓库根。新项目按此归位，同时登记到 `hello-avalonia.slnx` 的对应 `<Folder>`。
 - 典型演示：`App.axaml` + `Program.cs` + `Views/MainWindow` + `Views/Pages/*`（每个知识点一页）+ `ViewModels/`；默认开启编译绑定。
 - 例外：`MusicStore`、`WebViewDemo`、`HtmlRendererDemo` 是较完整的应用；`StarterTutorialDemo` 照官方教程用 code-behind，无 `ViewModels/`，别补 ViewModel。
 - `Avalonia.Shared` 是共用库（`DemoHeader`、`SharedStyles.axaml`、`ViewModelBase`、`EventLog` 等），通用代码放这里，不要在各项目复制。
@@ -29,6 +30,7 @@ $env:HELLO_AVALONIA_APPIUM=1; dotnet test tests/Avalonia.TestingDemo.AppiumTests
 
 ## 包版本
 
+- Avalonia 12.1.2 / `net10.0`：按 v12 API 写，别套 v11 的写法。
 - 版本只写在 `Directory.Packages.props`（中央包管理）；csproj 的 `PackageReference` 不带 `Version`，新增包先在那里登记。
 - `Avalonia.Diagnostics` 固定 11.3.22：v12 的 DevTools 已内置于主包。
 - 行为库用 `Xaml.Behaviors.Avalonia`（12.0.7）；旧的 `Avalonia.Xaml.Behaviors` 与 v12 二进制不兼容，不要换回去。
@@ -37,6 +39,7 @@ $env:HELLO_AVALONIA_APPIUM=1; dotnet test tests/Avalonia.TestingDemo.AppiumTests
 
 - 新写的注释（代码与 XAML）用英文；界面文字（标签页标题、说明栏、按钮文案）用中文；从 hello-dotnet 迁移来的中文注释保持原样，不要顺手改。
 - 提交信息用英文。
+- 推送时两个远端都要推：`origin`（GitHub）与 `gcorigin`（GitCode）。`main` 只跟踪 `origin`，裸 `git push` 会漏掉 GitCode，应写 `git push origin <分支>; git push gcorigin <分支>`。
 
 ## 计划驱动的实现
 
