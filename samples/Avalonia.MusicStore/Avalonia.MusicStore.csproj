@@ -27,7 +27,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\Avalonia.Shared\Avalonia.Shared.csproj" />
+        <ProjectReference Include="..\..\src\Avalonia.Shared\Avalonia.Shared.csproj" />
     </ItemGroup>
 
     <ItemGroup>

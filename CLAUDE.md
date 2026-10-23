@@ -18,9 +18,9 @@ dotnet run -c Release --project benchmarks/Avalonia.Benchmarks -- --filter '*Cel
 
 ## 项目结构
 
-- 目录约定：演示项目与 `Avalonia.Shared` 放 `src/`，测试项目放 `tests/`，BenchmarkDotNet 基准放 `benchmarks/`；`Directory.*.props` 与 `.slnx` 留在仓库根。新项目按此归位，同时登记到 `hello-avalonia.slnx` 的对应 `<Folder>`。
+- 目录约定：演示项目与 `Avalonia.Shared` 放 `src/`，较完整的应用（现为 `MusicStore`）放 `samples/`，测试项目放 `tests/`，BenchmarkDotNet 基准放 `benchmarks/`；`Directory.*.props` 与 `.slnx` 留在仓库根。新项目按此归位，同时登记到 `hello-avalonia.slnx` 的对应 `<Folder>`。
 - 典型演示：`App.axaml` + `Program.cs` + `Views/MainWindow` + `Views/Pages/*`（每个知识点一页）+ `ViewModels/`；默认开启编译绑定。
-- 例外：`MusicStore`、`WebViewDemo`、`HtmlRendererDemo` 是较完整的应用；`StarterTutorialDemo` 照官方教程用 code-behind，无 `ViewModels/`，别补 ViewModel。
+- 例外：`MusicStore`（在 `samples/`）、`WebViewDemo`、`HtmlRendererDemo` 是较完整的应用；`StarterTutorialDemo` 照官方教程用 code-behind，无 `ViewModels/`，别补 ViewModel。
 - `Avalonia.Shared` 是共用库（`DemoHeader`、`SharedStyles.axaml`、`ViewModelBase`、`EventLog` 等），通用代码放这里，不要在各项目复制。
 - `tests/Avalonia.Tests.Common` 是测试共用库（`HeadlessApp`、`UiHelpers`、`TabWalker`、`LogCollector`）：各应用的测试项目引用它，不要在测试项目里复制辅助代码；`TestAppBuilder` 只写 `HeadlessApp.Build<App>()`。
 - `tests/Avalonia.Appium.Common` 是 Appium 共用库（`AppSession`、`AppiumFactAttribute`、`AppPaths`、`UnicodeKeyboard`、`KeyChord`）；键入、按键、子窗口、并行的用法规则见 `.claude/rules/testing.md` §3。

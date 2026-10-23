@@ -16,7 +16,7 @@
 
     <ItemGroup>
         <!-- Build order only: the tests launch the app's exe and never load its assembly. -->
-        <ProjectReference Include="..\..\src\Avalonia.MusicStore\Avalonia.MusicStore.csproj" ReferenceOutputAssembly="false" />
+        <ProjectReference Include="..\..\samples\Avalonia.MusicStore\Avalonia.MusicStore.csproj" ReferenceOutputAssembly="false" />
         <ProjectReference Include="..\Avalonia.Appium.Common\Avalonia.Appium.Common.csproj" />
     </ItemGroup>
 </Project>

@@ -5,7 +5,7 @@ using System.Linq;
 namespace Avalonia.Appium.Common
 {
     // Finds the built exe of a demo app: walks up to the folder holding hello-avalonia.slnx, then picks the newer of
-    // src\<app>\bin\Debug and bin\Release (Directory.Build.props drops the target framework folder).
+    // src\<app>\bin or samples\<app>\bin, Debug and Release (Directory.Build.props drops the target framework folder).
     public static class AppPaths
     {
         // Null when no hello-avalonia.slnx sits above the test binaries. A throwing static initializer would surface as
@@ -16,8 +16,8 @@ namespace Avalonia.Appium.Common
         {
             if (RepoRoot is null)
                 return null;
-            return new[] { "Debug", "Release" }
-                .Select(config => Path.Combine(RepoRoot, "src", app, "bin", config, app + ".exe"))
+            return new[] { "src", "samples" }
+                .SelectMany(root => new[] { "Debug", "Release" }.Select(config => Path.Combine(RepoRoot, root, app, "bin", config, app + ".exe")))
                 .Where(File.Exists)
                 .OrderByDescending(File.GetLastWriteTimeUtc)
                 .FirstOrDefault();

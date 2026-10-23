@@ -1,10 +1,6 @@
-﻿using Avalonia.MusicStore.Models;
-using Avalonia.Media.Imaging;
+﻿using Avalonia.Media.Imaging;
+using Avalonia.MusicStore.Models;
 using Avalonia.Shared.ViewModels;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Avalonia.MusicStore.ViewModels

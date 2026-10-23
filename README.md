@@ -4,7 +4,7 @@ Avalonia UI 学习示例集合。每个项目演示一个独立主题，可单�
 
 ## 项目
 
-演示项目都在 `src/`，按建议的学习顺序排列。
+演示项目都在 `src/`，按建议的学习顺序排列；较完整的应用放在 `samples/`（见下方「示例应用」）。
 
 | 项目 | 演示内容 |
 |---|---|
@@ -26,7 +26,6 @@ Avalonia UI 学习示例集合。每个项目演示一个独立主题，可单�
 | [Avalonia.ServicesDemo.LaunchTarget](src/Avalonia.ServicesDemo.LaunchTarget) | ServicesDemo「启动程序」页启动的程序 2：显示收到的参数，按指定退出码退出 |
 | [Avalonia.AppDevelopmentDemo](src/Avalonia.AppDevelopmentDemo) | 依赖注入、本地化、日志、未处理异常、资源查找、线程模型、窗口管理、无障碍 |
 | [Avalonia.TestingDemo](src/Avalonia.TestingDemo) | 被测应用：计数器、表单、列表三个易于断言的面板（测试写法的基准样例，见「项目测试」） |
-| [Avalonia.MusicStore](src/Avalonia.MusicStore) | 完整应用：专辑搜索（iTunes API）、购买、本地缓存、RESX 多语言 |
 | [Avalonia.WebViewDemo](src/Avalonia.WebViewDemo) | NativeWebView 嵌入控件、NativeWebDialog 原生窗口、JS ↔ C# 双向调用 |
 | [Avalonia.HtmlRendererDemo](src/Avalonia.HtmlRendererDemo) | HtmlPanel 富文本渲染、IconFont 与 PathIcon 图标 |
 | [Avalonia.Shared](src/Avalonia.Shared) | 共享类库：演示页说明条控件、窗口 Helper、消息载体、ViewModel 基类 |
@@ -50,6 +49,14 @@ Avalonia UI 学习示例集合。每个项目演示一个独立主题，可单�
 | **合计** | **119** | 80 个可运行控件页 + 19 个实战页 + 20 个路标页 |
 
 导航树里，实战页标题带「实战：」前缀，路标页带「↗」前缀；路标页只说明用途与指向，不重复实现演示。
+
+## 示例应用
+
+较完整的应用放在 `samples/`，与 `src/` 里按主题拆分的演示项目区分开。
+
+| 项目 | 演示内容 |
+|---|---|
+| [Avalonia.MusicStore](samples/Avalonia.MusicStore) | 完整应用：专辑搜索（iTunes API）、购买、本地缓存、RESX 多语言 |
 
 ## 环境
 

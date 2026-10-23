@@ -77,7 +77,7 @@ paths:
 
 ## 7. 组织与 CI
 
-- 目录：被测应用 `src/Avalonia.<X>Demo/`，测试 `tests/Avalonia.<X>Demo.Tests/`，Appium `tests/Avalonia.<X>Demo.AppiumTests/`；共用辅助放 `Avalonia.Tests.Common` / `Avalonia.Appium.Common`，不复制。
+- 目录：被测应用 `src/Avalonia.<X>Demo/`（MusicStore 在 `samples/`），测试 `tests/Avalonia.<X>Demo.Tests/`，Appium `tests/Avalonia.<X>Demo.AppiumTests/`；共用辅助放 `Avalonia.Tests.Common` / `Avalonia.Appium.Common`，不复制。
 - 每个应用至少一条冒烟测试：主窗口能 Show、每个 Tab/页面能切换（`TabWalker.Walk`）、主 VM 能构造。
 - 测试方法名描述行为；多输入用 `[Theory] + [InlineData]`。
 - 执行顺序：build → `dotnet test`（L0 + L1，强制门禁）→ Appium（可选）→ benchmark（独立阶段）。

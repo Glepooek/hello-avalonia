@@ -18,7 +18,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\src\Avalonia.MusicStore\Avalonia.MusicStore.csproj" />
+        <ProjectReference Include="..\..\samples\Avalonia.MusicStore\Avalonia.MusicStore.csproj" />
         <ProjectReference Include="..\Avalonia.Tests.Common\Avalonia.Tests.Common.csproj" />
     </ItemGroup>
 </Project>
