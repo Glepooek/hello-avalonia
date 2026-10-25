@@ -9,7 +9,12 @@
              x:Class="Avalonia.AppDevelopmentDemo.Views.Pages.ResourcesPage">
 
     <UserControl.Resources>
-        <SolidColorBrush x:Key="Brand" Color="Red" />
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <MergeResourceInclude Source="avares://Avalonia.AppDevelopmentDemo/Themes/AppDevelopmentResources.axaml" />
+            </ResourceDictionary.MergedDictionaries>
+            <SolidColorBrush x:Key="Brand" Color="Red" />
+        </ResourceDictionary>
     </UserControl.Resources>
 
     <ScrollViewer>
@@ -45,8 +50,32 @@
                 </StackPanel>
             </Border>
 
+            <TextBlock Classes="caption" Text="4. 合并字典与主题变体" />
+            <Border Classes="stage" Padding="10">
+                <StackPanel Spacing="8">
+                    <StackPanel Orientation="Horizontal" Spacing="12">
+                        <StackPanel Spacing="4">
+                            <Border Name="MergedSwatch" Width="120" Height="48" CornerRadius="4"
+                                    Background="{StaticResource MergedAccentBrush}" />
+                            <TextBlock Name="MergedLine" />
+                        </StackPanel>
+                        <ThemeVariantScope Name="ThemeScope" RequestedThemeVariant="Dark">
+                            <StackPanel Spacing="4">
+                                <Border Name="ThemeSwatch" Width="120" Height="48" CornerRadius="4"
+                                        Background="{DynamicResource ThemeAccentBrush}" />
+                                <TextBlock Name="ThemeLine" />
+                            </StackPanel>
+                        </ThemeVariantScope>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <Button Name="LightThemeButton" Content="局部 Light" Click="OnLightTheme" />
+                        <Button Name="DarkThemeButton" Content="局部 Dark" Click="OnDarkTheme" />
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+
             <TextBlock Classes="hint" Margin="0,12,0,0" TextWrapping="Wrap"
-                       Text="替换字典里的项：只有 DynamicResource（或 GetResourceObservable 绑定）会跟着变，一次性取值的不会。直接改同一个画刷实例的 Color：两者都会变，因为它们拿的是同一个对象。查找方法：FindResource 找不到返回 null，TryFindResource 返回 bool，都沿逻辑树向上，最后到 Application.Resources。" />
+                       Text="MergeResourceInclude 把独立字典并入当前作用域；ThemeDictionaries 用同一个键为 Light / Dark 提供不同值，必须通过 DynamicResource 在实际主题确定后解析。" />
         </StackPanel>
     </ScrollViewer>
 </UserControl>

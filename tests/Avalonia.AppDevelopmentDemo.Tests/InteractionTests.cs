@@ -95,6 +95,13 @@ namespace Avalonia.AppDevelopmentDemo.Tests
             var window = UiHelpers.Show(new ResourcesPage());
             string[] Lines() => new[] { Text(window, "StaticLine"), Text(window, "DynamicLine") };
             Assert.Equal(new[] { "TryFindResource 取到的：Red", "DynamicResource 的：Red" }, Lines());
+            Assert.Equal("合并字典：CornflowerBlue", Text(window, "MergedLine"));
+
+            Press(window, "LightThemeButton");
+            Assert.Equal("主题资源：#FF1D4ED8", Text(window, "ThemeLine"));
+
+            Press(window, "DarkThemeButton");
+            Assert.Equal("主题资源：#FF93C5FD", Text(window, "ThemeLine"));
 
             Press(window, "ReplaceButton");
             Assert.Equal(new[] { "TryFindResource 取到的：Red", "DynamicResource 的：Blue" }, Lines());

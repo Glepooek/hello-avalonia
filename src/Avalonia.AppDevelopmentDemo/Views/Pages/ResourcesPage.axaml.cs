@@ -1,6 +1,9 @@
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Media;
+using Avalonia.Styling;
+using Avalonia.Threading;
+using System;
 
 namespace Avalonia.AppDevelopmentDemo.Views.Pages
 {
@@ -10,6 +13,7 @@ namespace Avalonia.AppDevelopmentDemo.Views.Pages
         {
             InitializeComponent();
             Reset();
+            RefreshThemeLines();
         }
 
         private void Reset()
@@ -35,13 +39,37 @@ namespace Avalonia.AppDevelopmentDemo.Views.Pages
 
         private void OnReset(object? sender, RoutedEventArgs e) => Reset();
 
+        private void OnLightTheme(object? sender, RoutedEventArgs e)
+        {
+            ThemeScope.RequestedThemeVariant = ThemeVariant.Light;
+            Dispatcher.UIThread.Post(RefreshThemeLines, DispatcherPriority.Loaded);
+        }
+
+        private void OnDarkTheme(object? sender, RoutedEventArgs e)
+        {
+            ThemeScope.RequestedThemeVariant = ThemeVariant.Dark;
+            Dispatcher.UIThread.Post(RefreshThemeLines, DispatcherPriority.Loaded);
+        }
+
         private void Refresh()
         {
             StaticLine.Text = $"TryFindResource 取到的：{Describe(StaticSwatch.Background)}";
             DynamicLine.Text = $"DynamicResource 的：{Describe(DynamicSwatch.Background)}";
         }
 
+        private void RefreshThemeLines()
+        {
+            MergedLine.Text = $"合并字典：{Describe(MergedSwatch.Background)}";
+            ThemeLine.Text = $"主题资源：{Describe(ThemeSwatch.Background)}";
+        }
+
         private static string Describe(IBrush? brush)
-            => brush is ISolidColorBrush solid ? solid.Color.ToString() : "（无）";
+        {
+            if (brush is not ISolidColorBrush solid)
+                return "（无）";
+
+            var value = solid.Color.ToString();
+            return value.StartsWith('#') ? value.ToUpperInvariant() : value;
+        }
     }
 }
