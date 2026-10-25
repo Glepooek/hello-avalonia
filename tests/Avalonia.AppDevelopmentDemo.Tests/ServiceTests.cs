@@ -83,6 +83,19 @@ namespace Avalonia.AppDevelopmentDemo.Tests
         }
 
         [Fact]
+        public void Application_exception_reporter_records_the_ui_filter_stage()
+        {
+            using var services = ApplicationServices.CreateServiceProvider();
+            var reporter = services.GetRequiredService<ApplicationExceptionReporter>();
+            var entries = services.GetRequiredService<ListLoggerProvider>().Entries;
+
+            reporter.ReportUiThreadExceptionFilter(new InvalidOperationException("boom"), requestCatch: true);
+
+            var entry = Assert.Single(entries);
+            Assert.Equal("Debug:UI-thread exception filter (RequestCatch: True) | InvalidOperationException: boom", entry);
+        }
+
+        [Fact]
         public void List_logger_writes_level_and_message_and_ignores_level_none()
         {
             using var provider = new ListLoggerProvider();

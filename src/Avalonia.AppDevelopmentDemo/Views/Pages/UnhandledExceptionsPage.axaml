@@ -25,6 +25,7 @@
             <TextBlock Classes="caption" Text="App.OnFrameworkInitializationCompleted：UI 线程" />
             <Border Classes="stage" Padding="10">
                 <StackPanel Spacing="4">
+                    <TextBlock Text="Dispatcher.UIThread.UnhandledExceptionFilter：在处理器之前观察是否请求捕获；本项目只记录，不改变 RequestCatch。" TextWrapping="Wrap" />
                     <TextBlock Text="订阅 Dispatcher.UIThread.UnhandledException，并交给 ApplicationExceptionReporter 记录。" TextWrapping="Wrap" />
                     <TextBlock Text="应用退出时解除订阅并释放 DI 容器。" TextWrapping="Wrap" />
                 </StackPanel>

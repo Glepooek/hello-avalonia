@@ -21,6 +21,7 @@ namespace Avalonia.AppDevelopmentDemo
         {
             _services = ApplicationServices.CreateServiceProvider();
             _exceptionReporter = _services.GetRequiredService<ApplicationExceptionReporter>();
+            Dispatcher.UIThread.UnhandledExceptionFilter += OnDispatcherUnhandledExceptionFilter;
             Dispatcher.UIThread.UnhandledException += OnDispatcherUnhandledException;
 
             if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
@@ -38,9 +39,16 @@ namespace Avalonia.AppDevelopmentDemo
             // Do not mark unknown exceptions as handled. Logging them does not make continuing safe.
         }
 
+        private void OnDispatcherUnhandledExceptionFilter(object? sender, DispatcherUnhandledExceptionFilterEventArgs e)
+        {
+            _exceptionReporter?.ReportUiThreadExceptionFilter(e.Exception, e.RequestCatch);
+            // The filter observes the decision point but does not change RequestCatch for unknown exceptions.
+        }
+
         private void OnDesktopExit(object? sender, ControlledApplicationLifetimeExitEventArgs e)
         {
             Dispatcher.UIThread.UnhandledException -= OnDispatcherUnhandledException;
+            Dispatcher.UIThread.UnhandledExceptionFilter -= OnDispatcherUnhandledExceptionFilter;
 
             if (sender is IClassicDesktopStyleApplicationLifetime desktop)
                 desktop.Exit -= OnDesktopExit;

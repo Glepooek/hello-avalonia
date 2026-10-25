@@ -16,5 +16,10 @@ namespace Avalonia.AppDevelopmentDemo.Services
         {
             _logger.LogError(exception, "Unhandled UI-thread exception");
         }
+
+        public void ReportUiThreadExceptionFilter(Exception exception, bool requestCatch)
+        {
+            _logger.LogDebug(exception, "UI-thread exception filter (RequestCatch: {RequestCatch})", requestCatch);
+        }
     }
 }
