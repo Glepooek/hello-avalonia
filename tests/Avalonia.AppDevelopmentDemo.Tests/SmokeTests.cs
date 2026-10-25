@@ -1,11 +1,13 @@
 using Avalonia.AppDevelopmentDemo.Views;
 using Avalonia.AppDevelopmentDemo.Views.Pages;
+using Avalonia.AppDevelopmentDemo.Logging;
 using Avalonia.Controls;
 using Avalonia.Headless.XUnit;
 using Avalonia.Logging;
 using Avalonia.Tests.Common;
 using Avalonia.Threading;
 using Avalonia.VisualTree;
+using Microsoft.Extensions.DependencyInjection;
 using System.Linq;
 using Xunit;
 
@@ -14,9 +16,36 @@ namespace Avalonia.AppDevelopmentDemo.Tests
     public class SmokeTests
     {
         [AvaloniaFact]
+        public void Application_container_constructs_the_main_window_and_its_dependencies()
+        {
+            using var services = ApplicationServices.CreateServiceProvider();
+
+            var window = services.GetRequiredService<MainWindow>();
+
+            Assert.NotNull(window);
+            Assert.Contains(
+                services.GetRequiredService<ListLoggerProvider>().Entries,
+                entry => entry.StartsWith("Information:Main window created for 你好，Avalonia。现在是 "));
+        }
+
+        [AvaloniaFact]
+        public void Cross_cutting_pages_are_read_only_explanations()
+        {
+            var pages = new UserControl[]
+            {
+                new DependencyInjectionPage(),
+                new LoggingPage(),
+                new UnhandledExceptionsPage()
+            };
+
+            Assert.All(pages, page => Assert.Empty(page.GetVisualDescendants().OfType<Button>()));
+        }
+
+        [AvaloniaFact]
         public void Main_window_walks_every_tab_without_errors()
         {
-            var window = new MainWindow();
+            using var services = ApplicationServices.CreateServiceProvider();
+            var window = services.GetRequiredService<MainWindow>();
             window.Show();
 
             var visits = TabWalker.Walk(window);
@@ -28,13 +57,12 @@ namespace Avalonia.AppDevelopmentDemo.Tests
         }
 
         // Catches runtime binding errors on any page; compiled bindings to struct properties are not visible here.
-        // Blind spot: while the 日志 tab is selected, LoggingPage owns Logger.Sink and this collector hears nothing
-        // (see the next test), so a warning raised on that page alone would not fail this test.
         [AvaloniaFact]
         public void Walking_every_tab_logs_no_warnings()
         {
             using var logs = new LogCollector();
-            var window = new MainWindow();
+            using var services = ApplicationServices.CreateServiceProvider();
+            var window = services.GetRequiredService<MainWindow>();
             window.Show();
 
             TabWalker.Walk(window);
@@ -43,13 +71,12 @@ namespace Avalonia.AppDevelopmentDemo.Tests
             Assert.Same(logs, Logger.Sink);
         }
 
-        // Logger.Sink is process-wide: if LoggingPage did not hand it back on unload, every later test in the
-        // process would report to the page instead of to its own LogCollector.
         [AvaloniaFact]
-        public void Logging_tab_owns_the_log_sink_only_while_it_is_selected()
+        public void Logging_tab_does_not_replace_the_application_log_sink()
         {
             using var logs = new LogCollector();
-            var window = new MainWindow();
+            using var services = ApplicationServices.CreateServiceProvider();
+            var window = services.GetRequiredService<MainWindow>();
             window.Show();
             var tabs = window.GetVisualDescendants().OfType<TabControl>().First();
             try
@@ -58,7 +85,7 @@ namespace Avalonia.AppDevelopmentDemo.Tests
 
                 tabs.SelectedIndex = 3;
                 Dispatcher.UIThread.RunJobs();
-                Assert.NotSame(logs, Logger.Sink);
+                Assert.Same(logs, Logger.Sink);
 
                 tabs.SelectedIndex = 4;
                 Dispatcher.UIThread.RunJobs();
@@ -68,20 +95,6 @@ namespace Avalonia.AppDevelopmentDemo.Tests
             {
                 window.Close();
             }
-        }
-
-        [AvaloniaFact]
-        public void Closing_the_window_on_the_logging_page_restores_the_previous_sink()
-        {
-            using var logs = new LogCollector();
-            var window = UiHelpers.Show(new LoggingPage());
-            Dispatcher.UIThread.RunJobs();
-            Assert.NotSame(logs, Logger.Sink);
-
-            window.Close();
-            Dispatcher.UIThread.RunJobs();
-
-            Assert.Same(logs, Logger.Sink);
         }
     }
 }

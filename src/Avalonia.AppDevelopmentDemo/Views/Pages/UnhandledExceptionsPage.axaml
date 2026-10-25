@@ -10,24 +10,28 @@
 
     <ScrollViewer>
         <StackPanel Margin="12">
-            <shared:DemoHeader Title="未处理异常：UI 线程上的最后一道防线"
+            <shared:DemoHeader Title="未处理异常：按应用生命周期统一接入"
                                DocPath="app-development/setting-unhandled-exceptions" />
 
-            <TextBlock Classes="caption" Text="1. 在 UI 线程上抛一个异常" />
-            <StackPanel Orientation="Horizontal" Spacing="8">
-                <Button Name="ThrowButton" Content="Post 一个会抛异常的回调" Click="OnThrow" />
-            </StackPanel>
-
-            <TextBlock Classes="caption" Text="2. 处理器收到了什么" />
+            <TextBlock Classes="caption" Text="Program.Main：进程级最后防线" />
             <Border Classes="stage" Padding="10">
                 <StackPanel Spacing="4">
-                    <TextBlock Name="CountLine" Text="处理器被调用：0 次" />
-                    <TextBlock Name="MessageLine" Text="最近一次异常：（无）" TextWrapping="Wrap" />
+                    <TextBlock Text="全局 try/catch：记录越过桌面生命周期入口的致命异常，并设置非零退出码。" TextWrapping="Wrap" />
+                    <TextBlock Text="AppDomain.CurrentDomain.UnhandledException：记录未处理的域异常。" TextWrapping="Wrap" />
+                    <TextBlock Text="TaskScheduler.UnobservedTaskException：记录未观察的 Task 异常并调用 SetObserved。" TextWrapping="Wrap" />
+                </StackPanel>
+            </Border>
+
+            <TextBlock Classes="caption" Text="App.OnFrameworkInitializationCompleted：UI 线程" />
+            <Border Classes="stage" Padding="10">
+                <StackPanel Spacing="4">
+                    <TextBlock Text="订阅 Dispatcher.UIThread.UnhandledException，并交给 ApplicationExceptionReporter 记录。" TextWrapping="Wrap" />
+                    <TextBlock Text="应用退出时解除订阅并释放 DI 容器。" TextWrapping="Wrap" />
                 </StackPanel>
             </Border>
 
             <TextBlock Classes="hint" Margin="0,12,0,0" TextWrapping="Wrap"
-                       Text="Dispatcher.UIThread.UnhandledException 只管 UI 线程派发的回调。处理器里设 e.Handled = true 就吞掉异常，应用继续运行；不设，异常继续向上抛，经典桌面应用会退出——所以本页的处理器固定吞掉，只演示这条路径。后台 Task 里没人 await 的异常走 TaskScheduler.UnobservedTaskException，不经过这个事件。" />
+                       Text="记录异常不代表应用可以安全继续运行。本项目不会对未知 UI 异常设置 Handled = true；只有在业务明确证明状态仍然有效时，才应选择继续。页面本身不订阅全局事件，也不主动制造崩溃。" />
         </StackPanel>
     </ScrollViewer>
 </UserControl>

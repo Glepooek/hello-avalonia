@@ -5,7 +5,6 @@ using Avalonia.Tests.Common;
 using Avalonia.Threading;
 using Avalonia.VisualTree;
 using System.Linq;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -19,42 +18,6 @@ namespace Avalonia.AppDevelopmentDemo.Tests
         {
             window.Click(window.ByName<Button>(buttonName));
             Dispatcher.UIThread.RunJobs();
-        }
-
-        // Ids come from a static counter, so compare lines across clicks instead of asserting numbers.
-        [AvaloniaFact]
-        public void Resolving_twice_shows_new_scoped_instances_and_the_same_singleton()
-        {
-            var window = UiHelpers.Show(new DependencyInjectionPage());
-
-            Press(window, "ResolveButton");
-            var transient = Text(window, "TransientLine");
-            var scoped = Text(window, "ScopedLine");
-            var singleton = Text(window, "SingletonLine");
-            Press(window, "ResolveButton");
-
-            Assert.StartsWith("Transient：", transient);
-            Assert.EndsWith("不同实例", transient);
-            Assert.EndsWith("同一个实例", scoped);
-            Assert.EndsWith("同一个实例", singleton);
-            // A new scope per click: the scoped id moves on, the singleton id does not.
-            Assert.NotEqual(scoped, Text(window, "ScopedLine"));
-            Assert.Equal(singleton, Text(window, "SingletonLine"));
-        }
-
-        [AvaloniaFact]
-        public void Greeter_comes_from_the_container_and_a_scoped_service_cannot_come_from_the_root()
-        {
-            using var culture = CultureScope.Invariant();
-            var window = UiHelpers.Show(new DependencyInjectionPage());
-
-            Press(window, "GreetButton");
-            Press(window, "RootScopedButton");
-
-            Assert.Matches(new Regex(@"^你好，Avalonia。现在是 \d{2}:\d{2}:\d{2}$"), Text(window, "GreetLine"));
-            Assert.Equal(
-                "InvalidOperationException：Cannot resolve scoped service 'Avalonia.AppDevelopmentDemo.Services.Counter' from root provider.",
-                Text(window, "ScopeErrorLine"));
         }
 
         [AvaloniaFact]
@@ -110,54 +73,6 @@ namespace Avalonia.AppDevelopmentDemo.Tests
             Assert.Equal("HelpText：Confirms the form", Text(window, "PeerHelp"));
             Assert.Equal("ControlType：Button", Text(window, "PeerControl"));
             Assert.Equal("Decoration 的 AccessibilityView = Raw", Text(window, "ViewLine"));
-        }
-
-        // The framework entry goes through Dispatcher.Post, so wait for it instead of reading right after the click.
-        [AvaloniaFact]
-        public async Task Logging_page_lists_app_log_entries_and_the_framework_binding_warning()
-        {
-            var window = UiHelpers.Show(new LoggingPage());
-            try
-            {
-                var app = window.ByName<ItemsControl>("AppEntries");
-                var framework = window.ByName<ItemsControl>("AvaloniaEntries");
-
-                Press(window, "AppLogButton");
-                Press(window, "AvaloniaLogButton");
-                await UiHelpers.WaitUntil(() => framework.ItemCount > 0);
-
-                Assert.Equal(new[] { "Debug:d 1", "Warning:w", "Error:e" }, app.Items.Cast<string>());
-                var entry = Assert.Single(framework.Items.Cast<string>());
-                Assert.StartsWith("Warning/Binding:", entry);
-                Assert.Contains("Missing", entry);
-
-                Press(window, "AppClearButton");
-                Press(window, "AvaloniaClearButton");
-                Assert.Equal(0, app.ItemCount);
-                Assert.Equal(0, framework.ItemCount);
-            }
-            finally
-            {
-                window.Close();
-            }
-        }
-
-        // The handler marks the exception handled, so RunJobs must not rethrow it into the test.
-        [AvaloniaFact]
-        public void A_throwing_posted_callback_reaches_the_page_handler_instead_of_crashing()
-        {
-            var window = UiHelpers.Show(new UnhandledExceptionsPage());
-            try
-            {
-                Press(window, "ThrowButton");
-
-                Assert.Equal("处理器被调用：1 次", Text(window, "CountLine"));
-                Assert.Equal("最近一次异常：InvalidOperationException：thrown from a posted callback", Text(window, "MessageLine"));
-            }
-            finally
-            {
-                window.Close();
-            }
         }
 
         [AvaloniaFact]

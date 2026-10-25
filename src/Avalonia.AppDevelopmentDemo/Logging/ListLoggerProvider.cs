@@ -4,7 +4,7 @@ using System.Collections.ObjectModel;
 
 namespace Avalonia.AppDevelopmentDemo.Logging
 {
-    // Collects ILogger output into a list the UI can show; WinExe has no console to read.
+    // Keeps application log entries in one process-wide buffer for diagnostics and tests.
     public sealed class ListLoggerProvider : ILoggerProvider
     {
         public ObservableCollection<string> Entries { get; } = new();
@@ -24,7 +24,13 @@ namespace Avalonia.AppDevelopmentDemo.Logging
             public bool IsEnabled(LogLevel logLevel) => logLevel != LogLevel.None;
 
             public void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception? exception, Func<TState, Exception?, string> formatter)
-                => _entries.Add($"{logLevel}:{formatter(state, exception)}");
+            {
+                var entry = $"{logLevel}:{formatter(state, exception)}";
+                if (exception is not null)
+                    entry += $" | {exception.GetType().Name}: {exception.Message}";
+
+                _entries.Add(entry);
+            }
         }
     }
 }

@@ -10,30 +10,28 @@
 
     <ScrollViewer>
         <StackPanel Margin="12">
-            <shared:DemoHeader Title="日志：Avalonia 自己的日志与应用的 ILogger，是两套"
+            <shared:DemoHeader Title="日志：在应用启动阶段统一配置"
                                DocPath="app-development/logging-errors-and-warnings" />
 
-            <TextBlock Classes="caption" Text="1. 应用日志（Microsoft.Extensions.Logging）" />
-            <StackPanel Orientation="Horizontal" Spacing="8">
-                <Button Name="AppLogButton" Content="写 Debug / Warning / Error" Click="OnAppLog" />
-                <Button Name="AppClearButton" Content="清空" Click="OnAppClear" />
-            </StackPanel>
-            <Border Classes="stage" Padding="10" MinHeight="80">
-                <ItemsControl Name="AppEntries" />
+            <TextBlock Classes="caption" Text="应用日志（Microsoft.Extensions.Logging）" />
+            <Border Classes="stage" Padding="10">
+                <StackPanel Spacing="4">
+                    <TextBlock Text="ApplicationServices：注册 ILoggerProvider 与 AddLogging。" TextWrapping="Wrap" />
+                    <TextBlock Text="MainWindow、ApplicationExceptionReporter：通过构造函数获得 ILogger。" TextWrapping="Wrap" />
+                    <TextBlock Text="所有应用日志共用同一个 Provider，不随页面切换而更换。" TextWrapping="Wrap" />
+                </StackPanel>
             </Border>
 
-            <TextBlock Classes="caption" Text="2. Avalonia 日志（Logger.Sink）" />
-            <StackPanel Orientation="Horizontal" Spacing="8">
-                <Button Name="AvaloniaLogButton" Content="触发一条绑定警告" Click="OnAvaloniaLog" />
-                <Button Name="AvaloniaClearButton" Content="清空" Click="OnAvaloniaClear" />
-            </StackPanel>
-            <Border Classes="stage" Padding="10" MinHeight="80">
-                <ItemsControl Name="AvaloniaEntries" />
+            <TextBlock Classes="caption" Text="Avalonia 框架日志" />
+            <Border Classes="stage" Padding="10">
+                <StackPanel Spacing="4">
+                    <TextBlock Text="Program.BuildAvaloniaApp：通过 LogToTrace(LogEventLevel.Debug) 接入调试输出。" TextWrapping="Wrap" />
+                    <TextBlock Text="绑定、布局和样式等框架消息由 Avalonia.Logger 产生，与 ILogger 是两条独立管线。" TextWrapping="Wrap" />
+                </StackPanel>
             </Border>
-            <StackPanel Name="Probe" IsVisible="False" />
 
             <TextBlock Classes="hint" Margin="0,12,0,0" TextWrapping="Wrap"
-                       Text="两套日志互不相通：ILogger 是应用自己的，Logger.Sink 接的是框架内部（绑定、布局、样式）的消息。WinExe 没有控制台，所以这里用自定义 ILoggerProvider 与 ILogSink 把消息收进列表。AppBuilder.LogToTrace() 则是把框架日志送到调试输出。" />
+                       Text="日志属于应用基础设施，应在启动时配置一次。页面只说明两套日志的职责，不再创建 LoggerFactory，也不再替换进程级 Logger.Sink。" />
         </StackPanel>
     </ScrollViewer>
 </UserControl>

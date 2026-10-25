@@ -10,39 +10,31 @@
 
     <ScrollViewer>
         <StackPanel Margin="12">
-            <shared:DemoHeader Title="依赖注入：三种生命周期，以及作用域校验的响亮失败"
+            <shared:DemoHeader Title="依赖注入：在应用组合根中注册和解析"
                                DocPath="app-development/dependency-injection" />
 
-            <TextBlock Classes="caption" Text="1. 同一作用域里解析两次" />
-            <StackPanel Orientation="Horizontal" Spacing="8">
-                <Button Name="ResolveButton" Content="解析" Click="OnResolve" />
-            </StackPanel>
+            <TextBlock Classes="caption" Text="实现位置" />
             <Border Classes="stage" Padding="10">
                 <StackPanel Spacing="4">
-                    <TextBlock Name="TransientLine" Text="Transient：（未解析）" />
-                    <TextBlock Name="ScopedLine" Text="Scoped：（未解析）" />
-                    <TextBlock Name="SingletonLine" Text="Singleton：（未解析）" />
+                    <TextBlock Text="ApplicationServices.CreateServiceProvider：集中注册应用服务。" TextWrapping="Wrap" />
+                    <TextBlock Text="App.OnFrameworkInitializationCompleted：创建根容器并解析 MainWindow。" TextWrapping="Wrap" />
+                    <TextBlock Text="App 退出时释放 ServiceProvider，服务生命周期与应用生命周期一致。" TextWrapping="Wrap" />
                 </StackPanel>
             </Border>
 
-            <TextBlock Classes="caption" Text="2. 构造函数注入" />
-            <StackPanel Orientation="Horizontal" Spacing="8">
-                <Button Name="GreetButton" Content="Greeter 问候" Click="OnGreet" />
-            </StackPanel>
+            <TextBlock Classes="caption" Text="本项目中的注册" />
             <Border Classes="stage" Padding="10">
-                <TextBlock Name="GreetLine" Text="（未调用）" />
-            </Border>
-
-            <TextBlock Classes="caption" Text="3. 从根容器解析 Scoped 服务" />
-            <StackPanel Orientation="Horizontal" Spacing="8">
-                <Button Name="RootScopedButton" Content="从根容器解析 Scoped" Click="OnRootScoped" />
-            </StackPanel>
-            <Border Classes="stage" Padding="10">
-                <TextBlock Name="ScopeErrorLine" Text="（未调用）" TextWrapping="Wrap" />
+                <StackPanel Spacing="4">
+                    <TextBlock Text="IClock → SystemClock：Singleton" />
+                    <TextBlock Text="Greeter、MainWindow：Transient" />
+                    <TextBlock Text="Counter：用 keyed service 演示 Transient / Scoped / Singleton" TextWrapping="Wrap" />
+                    <TextBlock Text="ILogger 与 ApplicationExceptionReporter：由同一个应用容器提供" TextWrapping="Wrap" />
+                </StackPanel>
             </Border>
 
             <TextBlock Classes="hint" Margin="0,12,0,0"
-                       Text="每个 Counter 实例带一个递增的 Id，所以 Id 相同就是同一个实例。ValidateScopes = true 时，从根容器拿 Scoped 服务会立刻抛 InvalidOperationException，而不是悄悄把它当成单例用。" />
+                       TextWrapping="Wrap"
+                       Text="页面不创建容器，也不解析服务。MainWindow 的 Greeter 与 ILogger 通过构造函数注入；容器启用 ValidateOnBuild 和 ValidateScopes，让无效注册与错误的 Scoped 解析尽早失败。" />
         </StackPanel>
     </ScrollViewer>
 </UserControl>

@@ -1,6 +1,7 @@
 using Avalonia.AppDevelopmentDemo.Logging;
 using Avalonia.AppDevelopmentDemo.Services;
 using Avalonia.Tests.Common;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System;
 using Xunit;
@@ -34,6 +35,43 @@ namespace Avalonia.AppDevelopmentDemo.Tests
         }
 
         [Fact]
+        public void Application_container_applies_the_registered_service_lifetimes()
+        {
+            using var services = ApplicationServices.CreateServiceProvider();
+            using var firstScope = services.CreateScope();
+            using var secondScope = services.CreateScope();
+
+            var first = firstScope.ServiceProvider;
+            var second = secondScope.ServiceProvider;
+
+            Assert.NotSame(
+                first.GetRequiredKeyedService<Counter>("transient"),
+                first.GetRequiredKeyedService<Counter>("transient"));
+            Assert.Same(
+                first.GetRequiredKeyedService<Counter>("scoped"),
+                first.GetRequiredKeyedService<Counter>("scoped"));
+            Assert.NotSame(
+                first.GetRequiredKeyedService<Counter>("scoped"),
+                second.GetRequiredKeyedService<Counter>("scoped"));
+            Assert.Same(
+                first.GetRequiredKeyedService<Counter>("singleton"),
+                second.GetRequiredKeyedService<Counter>("singleton"));
+        }
+
+        [Fact]
+        public void Application_exception_reporter_writes_to_the_registered_logger_provider()
+        {
+            using var services = ApplicationServices.CreateServiceProvider();
+            var reporter = services.GetRequiredService<ApplicationExceptionReporter>();
+            var entries = services.GetRequiredService<ListLoggerProvider>().Entries;
+
+            reporter.ReportUiThreadException(new InvalidOperationException("boom"));
+
+            var entry = Assert.Single(entries);
+            Assert.Equal("Error:Unhandled UI-thread exception | InvalidOperationException: boom", entry);
+        }
+
+        [Fact]
         public void List_logger_writes_level_and_message_and_ignores_level_none()
         {
             using var provider = new ListLoggerProvider();
@@ -42,7 +80,7 @@ namespace Avalonia.AppDevelopmentDemo.Tests
             logger.LogWarning("w {Index}", 1);
             logger.LogError(new InvalidOperationException("boom"), "e");
 
-            Assert.Equal(new[] { "Warning:w 1", "Error:e" }, provider.Entries);
+            Assert.Equal(new[] { "Warning:w 1", "Error:e | InvalidOperationException: boom" }, provider.Entries);
             Assert.False(logger.IsEnabled(LogLevel.None));
         }
     }
