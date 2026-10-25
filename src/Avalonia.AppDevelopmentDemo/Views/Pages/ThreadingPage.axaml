@@ -28,7 +28,14 @@
                 <Button Name="AwaitButton" Content="await Task.Run 之后写" Click="OnAwait" />
             </StackPanel>
 
-            <TextBlock Classes="caption" Text="4. 结果" />
+            <TextBlock Classes="caption" Text="4. 用 InvokeAsync 等待 UI 线程返回值" />
+            <StackPanel Orientation="Horizontal" Spacing="8">
+                <Button Name="InvokeButton"
+                        Content="后台线程 InvokeAsync 并等待结果"
+                        Click="OnInvoke" />
+            </StackPanel>
+
+            <TextBlock Classes="caption" Text="5. 结果" />
             <Border Classes="stage" Padding="10">
                 <StackPanel Spacing="4">
                     <TextBlock Name="Target" Text="（被写的控件）" />
@@ -37,7 +44,7 @@
             </Border>
 
             <TextBlock Classes="hint" Margin="0,12,0,0" TextWrapping="Wrap"
-                       Text="Dispatcher.UIThread.CheckAccess() 回答「我现在在 UI 线程吗」。从后台线程碰控件会抛 InvalidOperationException；Post 是不等待的投递，InvokeAsync 返回可 await 的任务。await 之后的代码回到原来的同步上下文，所以在 UI 线程上 await 之后依然在 UI 线程。" />
+                       Text="Post 是不等待的投递；InvokeAsync 返回可 await 的操作和结果。DispatcherPriority 只决定工作在 UI 队列中的先后顺序，不会创建新的线程。" />
         </StackPanel>
     </ScrollViewer>
 </UserControl>

@@ -50,5 +50,21 @@ namespace Avalonia.AppDevelopmentDemo.Views.Pages
             Target.Text = "written after await";
             Result.Text = $"await 之后 CheckAccess = {Dispatcher.UIThread.CheckAccess()}，写入成功";
         }
+
+        private async void OnInvoke(object? sender, RoutedEventArgs e)
+        {
+            var message = await Task.Run(async () =>
+            {
+                return await Dispatcher.UIThread.InvokeAsync(() =>
+                {
+                    Target.Text = "written via InvokeAsync";
+                    var result = $"InvokeAsync(Background) 的回调里 CheckAccess = {Dispatcher.UIThread.CheckAccess()}，已等待返回值";
+                    Result.Text = result;
+                    return result;
+                }, DispatcherPriority.Background);
+            });
+
+            Result.Text = message;
+        }
     }
 }

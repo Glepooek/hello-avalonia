@@ -166,6 +166,17 @@ namespace Avalonia.AppDevelopmentDemo.Tests
             Assert.Equal("await 之后 CheckAccess = True，写入成功", Text(window, "Result"));
         }
 
+        [AvaloniaFact]
+        public async Task Invoke_async_returns_a_value_from_the_ui_thread()
+        {
+            var window = UiHelpers.Show(new ThreadingPage());
+
+            window.Click(window.ByName<Button>("InvokeButton"));
+            await UiHelpers.WaitUntil(() => Text(window, "Target") == "written via InvokeAsync");
+
+            Assert.Equal("InvokeAsync(Background) 的回调里 CheckAccess = True，已等待返回值", Text(window, "Result"));
+        }
+
         // The page needs a real Window as its TopLevel to act as owner; UiHelpers.Show provides one.
         [AvaloniaFact]
         public void Show_with_owner_makes_the_page_window_the_owner()
