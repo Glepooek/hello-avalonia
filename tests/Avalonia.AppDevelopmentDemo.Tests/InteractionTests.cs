@@ -42,6 +42,17 @@ namespace Avalonia.AppDevelopmentDemo.Tests
         }
 
         [AvaloniaFact]
+        public void Native_interop_page_reports_the_platform_handle_without_calling_native_code()
+        {
+            var window = UiHelpers.Show(new NativeInteropPage());
+            Dispatcher.UIThread.RunJobs();
+
+            var text = Text(window, "PlatformHandleText");
+            Assert.NotEqual("原生句柄：（尚未读取）", text);
+            Assert.StartsWith("原生句柄：", text);
+        }
+
+        [AvaloniaFact]
         public void Switching_language_reloads_the_strings_from_the_resource_file()
         {
             var window = UiHelpers.Show(new LocalizationPage());

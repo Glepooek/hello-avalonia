@@ -12,8 +12,26 @@
         <StackPanel Margin="12">
             <shared:DemoHeader Title="原生互操作：句柄、平台服务与原生控件"
                                DocPath="app-development/native-interop" />
-            <TextBlock TextWrapping="Wrap"
-                       Text="平台句柄和原生调用应封装在明确的平台边界中，并提供跨平台回退。" />
+
+            <TextBlock Classes="caption" Text="1. 当前 TopLevel 的原生句柄" />
+            <Border Classes="stage" Padding="12">
+                <TextBlock Name="PlatformHandleText"
+                           Text="原生句柄：（尚未读取）"
+                           TextWrapping="Wrap" />
+            </Border>
+
+            <TextBlock Classes="caption" Text="2. 互操作边界" />
+            <Border Classes="stage" Padding="12">
+                <StackPanel Spacing="5">
+                    <TextBlock Text="TryGetPlatformHandle：窗口挂接原生平台后读取句柄；不可用时返回 null。" TextWrapping="Wrap" />
+                    <TextBlock Text="NativeControlHost：用于嵌入原生视图，但受平台、层级和渲染限制。" TextWrapping="Wrap" />
+                    <TextBlock Text="P/Invoke 与原生库：按平台加载，并把句柄和内存生命周期封装在服务层。" TextWrapping="Wrap" />
+                    <TextBlock Text="平台服务 + DI：共享代码依赖接口，各平台入口注册自己的实现。" TextWrapping="Wrap" />
+                </StackPanel>
+            </Border>
+
+            <TextBlock Classes="hint" Margin="0,12,0,0" TextWrapping="Wrap"
+                       Text="本页只读句柄，不调用原生 API。Headless 或未提供平台窗口时显示“未提供”是正常结果。" />
         </StackPanel>
     </ScrollViewer>
 </UserControl>
