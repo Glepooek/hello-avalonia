@@ -14,6 +14,9 @@
         WindowStartupLocation="CenterScreen">
 
     <TabControl Margin="12" TabStripPlacement="Left">
+        <TabItem Header="跨平台结构">
+            <pages:CrossPlatformSetupPage />
+        </TabItem>
         <TabItem Header="依赖注入">
             <pages:DependencyInjectionPage />
         </TabItem>
@@ -32,6 +35,9 @@
         <TabItem Header="资源">
             <pages:ResourcesPage />
         </TabItem>
+        <TabItem Header="XAML 设计时">
+            <pages:XamlDesignTimePage />
+        </TabItem>
         <TabItem Header="数据校验">
             <pages:DataValidationPage />
         </TabItem>
@@ -41,8 +47,14 @@
         <TabItem Header="窗口管理">
             <pages:WindowManagementPage />
         </TabItem>
+        <TabItem Header="性能">
+            <pages:PerformancePage />
+        </TabItem>
         <TabItem Header="无障碍">
             <pages:AccessibilityPage />
+        </TabItem>
+        <TabItem Header="原生互操作">
+            <pages:NativeInteropPage />
         </TabItem>
     </TabControl>
 </Window>

@@ -1,0 +1,19 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             mc:Ignorable="d"
+             d:DesignWidth="760"
+             d:DesignHeight="560"
+             x:Class="Avalonia.AppDevelopmentDemo.Views.Pages.NativeInteropPage">
+
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="原生互操作：句柄、平台服务与原生控件"
+                               DocPath="app-development/native-interop" />
+            <TextBlock TextWrapping="Wrap"
+                       Text="平台句柄和原生调用应封装在明确的平台边界中，并提供跨平台回退。" />
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

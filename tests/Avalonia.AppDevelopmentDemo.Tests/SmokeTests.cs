@@ -51,7 +51,11 @@ namespace Avalonia.AppDevelopmentDemo.Tests
             var visits = TabWalker.Walk(window);
 
             Assert.Equal(
-                new[] { "依赖注入", "本地化", "Web 内容", "日志", "未处理异常", "资源", "数据校验", "线程模型", "窗口管理", "无障碍" },
+                new[]
+                {
+                    "跨平台结构", "依赖注入", "本地化", "Web 内容", "日志", "未处理异常", "资源",
+                    "XAML 设计时", "数据校验", "线程模型", "窗口管理", "性能", "无障碍", "原生互操作"
+                },
                 visits.Select(v => v.Header));
             Assert.All(visits, v => Assert.Null(v.Error));
         }
@@ -81,13 +85,13 @@ namespace Avalonia.AppDevelopmentDemo.Tests
             var tabs = window.GetVisualDescendants().OfType<TabControl>().First();
             try
             {
-                Assert.Equal("日志", (tabs.Items[3] as TabItem)?.Header);
+                Assert.Equal("日志", (tabs.Items[4] as TabItem)?.Header);
 
-                tabs.SelectedIndex = 3;
+                tabs.SelectedIndex = 4;
                 Dispatcher.UIThread.RunJobs();
                 Assert.Same(logs, Logger.Sink);
 
-                tabs.SelectedIndex = 4;
+                tabs.SelectedIndex = 5;
                 Dispatcher.UIThread.RunJobs();
                 Assert.Same(logs, Logger.Sink);
             }

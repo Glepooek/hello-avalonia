@@ -1,0 +1,19 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:shared="using:Avalonia.Shared.Controls"
+             mc:Ignorable="d"
+             d:DesignWidth="760"
+             d:DesignHeight="560"
+             x:Class="Avalonia.AppDevelopmentDemo.Views.Pages.PerformancePage">
+
+    <ScrollViewer>
+        <StackPanel Margin="12">
+            <shared:DemoHeader Title="性能：虚拟化、编译绑定与分析"
+                               DocPath="app-development/performance" />
+            <TextBlock TextWrapping="Wrap"
+                       Text="性能优化应从虚拟化、布局、绑定、集合更新和分析数据入手。" />
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>
