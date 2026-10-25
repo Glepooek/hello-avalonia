@@ -4,6 +4,7 @@ using Avalonia.Headless.XUnit;
 using Avalonia.Tests.Common;
 using Avalonia.Threading;
 using Avalonia.VisualTree;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
@@ -55,18 +56,35 @@ namespace Avalonia.AppDevelopmentDemo.Tests
         [AvaloniaFact]
         public void Switching_language_reloads_the_strings_from_the_resource_file()
         {
-            var window = UiHelpers.Show(new LocalizationPage());
-            Assert.Equal(new[] { "你好，世界", "再见", "culture = zh-CN" },
-                new[] { Text(window, "GreetingText"), Text(window, "FarewellText"), Text(window, "CultureText") });
+            var savedCulture = CultureInfo.CurrentCulture;
+            var savedUiCulture = CultureInfo.CurrentUICulture;
+            try
+            {
+                var window = UiHelpers.Show(new LocalizationPage());
+                Assert.Equal(new[] { "你好，世界", "再见", "culture = zh-CN" },
+                    new[] { Text(window, "GreetingText"), Text(window, "FarewellText"), Text(window, "CultureText") });
 
-            window.Click(window.ByName<RadioButton>("EnglishRadio"));
-            Dispatcher.UIThread.RunJobs();
-            Assert.Equal(new[] { "Hello, world", "Goodbye", "culture = en-US" },
-                new[] { Text(window, "GreetingText"), Text(window, "FarewellText"), Text(window, "CultureText") });
+                window.Click(window.ByName<RadioButton>("EnglishRadio"));
+                Dispatcher.UIThread.RunJobs();
+                Assert.Equal(new[] { "Hello, world", "Goodbye", "culture = en-US" },
+                    new[] { Text(window, "GreetingText"), Text(window, "FarewellText"), Text(window, "CultureText") });
 
-            window.Click(window.ByName<RadioButton>("ChineseRadio"));
-            Dispatcher.UIThread.RunJobs();
-            Assert.Equal("你好，世界", Text(window, "GreetingText"));
+                window.Click(window.ByName<RadioButton>("ChineseRadio"));
+                Dispatcher.UIThread.RunJobs();
+                Assert.Equal("你好，世界", Text(window, "GreetingText"));
+
+                window.Click(window.ByName<RadioButton>("ArabicRadio"));
+                Dispatcher.UIThread.RunJobs();
+                Assert.Equal("ar-SA", CultureInfo.CurrentCulture.Name);
+                Assert.Equal("ar-SA", CultureInfo.CurrentUICulture.Name);
+                Assert.Equal("اتجاه المعاينة: RightToLeft", Text(window, "DirectionText"));
+                Assert.Contains("12", Text(window, "FormatText"));
+            }
+            finally
+            {
+                CultureInfo.CurrentCulture = savedCulture;
+                CultureInfo.CurrentUICulture = savedUiCulture;
+            }
         }
 
         // The page's point: a one-shot lookup keeps the brush it got, DynamicResource follows the key, and both
