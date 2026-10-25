@@ -1,5 +1,6 @@
 using Avalonia.AppDevelopmentDemo.Logging;
 using Avalonia.AppDevelopmentDemo.Services;
+using Avalonia.AppDevelopmentDemo.ViewModels;
 using Avalonia.Tests.Common;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -13,6 +14,16 @@ namespace Avalonia.AppDevelopmentDemo.Tests
         private sealed class FixedClock : IClock
         {
             public DateTime Now { get; } = new(2026, 10, 15, 9, 5, 7);
+        }
+
+        [Fact]
+        public void Performance_view_model_builds_a_stable_thousand_item_data_set()
+        {
+            var viewModel = new PerformancePageViewModel();
+
+            Assert.Equal(1000, viewModel.Items.Count);
+            Assert.Equal(new PerformanceItem(1, "项目 0001"), viewModel.Items[0]);
+            Assert.Equal(new PerformanceItem(1000, "项目 1000"), viewModel.Items[^1]);
         }
 
         // HH:mm:ss uses the culture's time separator, so pin the culture before asserting on ':'.

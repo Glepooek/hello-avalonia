@@ -30,6 +30,18 @@ namespace Avalonia.AppDevelopmentDemo.Tests
         }
 
         [AvaloniaFact]
+        public void Performance_page_reports_fewer_realized_containers_than_data_items()
+        {
+            var window = UiHelpers.Show(new PerformancePage());
+
+            Press(window, "MeasureRealizedButton");
+
+            Assert.Equal("数据项：1000", Text(window, "ItemCountText"));
+            Assert.StartsWith("已实现容器：", Text(window, "RealizedCountText"));
+            Assert.DoesNotContain("已实现容器：1000", Text(window, "RealizedCountText"));
+        }
+
+        [AvaloniaFact]
         public void Switching_language_reloads_the_strings_from_the_resource_file()
         {
             var window = UiHelpers.Show(new LocalizationPage());

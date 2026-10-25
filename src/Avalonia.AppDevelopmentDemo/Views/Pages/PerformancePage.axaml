@@ -3,17 +3,53 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:shared="using:Avalonia.Shared.Controls"
+             xmlns:viewModels="using:Avalonia.AppDevelopmentDemo.ViewModels"
              mc:Ignorable="d"
              d:DesignWidth="760"
              d:DesignHeight="560"
+             x:DataType="viewModels:PerformancePageViewModel"
              x:Class="Avalonia.AppDevelopmentDemo.Views.Pages.PerformancePage">
 
     <ScrollViewer>
         <StackPanel Margin="12">
             <shared:DemoHeader Title="性能：虚拟化、编译绑定与分析"
                                DocPath="app-development/performance" />
-            <TextBlock TextWrapping="Wrap"
-                       Text="性能优化应从虚拟化、布局、绑定、集合更新和分析数据入手。" />
+
+            <TextBlock Classes="caption" Text="1. 1000 个数据项，不创建 1000 个可视容器" />
+            <Border Classes="stage" Padding="10">
+                <StackPanel Spacing="8">
+                    <TextBlock Name="ItemCountText" Text="数据项：1000" />
+                    <ListBox Name="VirtualizedList" Height="220" ItemsSource="{Binding Items}">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate x:DataType="viewModels:PerformanceItem">
+                                <Grid ColumnDefinitions="60,*">
+                                    <TextBlock Text="{Binding Index}" />
+                                    <TextBlock Grid.Column="1" Text="{Binding Name}" />
+                                </Grid>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                    <Button Name="MeasureRealizedButton"
+                            HorizontalAlignment="Left"
+                            Content="读取已实现容器数"
+                            Click="OnMeasureRealized" />
+                    <TextBlock Name="RealizedCountText" Text="已实现容器：（未读取）" />
+                </StackPanel>
+            </Border>
+
+            <TextBlock Classes="caption" Text="2. 优化检查清单" />
+            <Border Classes="stage" Padding="10">
+                <StackPanel Spacing="4">
+                    <TextBlock Text="• 保持视觉树和布局层级简单，避免无意义的重复 Measure / Arrange。" TextWrapping="Wrap" />
+                    <TextBlock Text="• 使用编译绑定；静态数据可使用 OneTime，减少持续订阅。" TextWrapping="Wrap" />
+                    <TextBlock Text="• 大集合批量更新或增量加载，避免逐项触发昂贵刷新。" TextWrapping="Wrap" />
+                    <TextBlock Text="• 耗时工作放到后台，UI 更新保持短小并使用合适的 Dispatcher 优先级。" TextWrapping="Wrap" />
+                    <TextBlock Text="• 使用 Avalonia DevTools、dotTrace 或 dotMemory 测量后再优化。" TextWrapping="Wrap" />
+                </StackPanel>
+            </Border>
+
+            <TextBlock Classes="hint" Margin="0,12,0,0" TextWrapping="Wrap"
+                       Text="本页读取可视树中的 ListBoxItem 数量来说明虚拟化，不把单次运行耗时当作性能基准。" />
         </StackPanel>
     </ScrollViewer>
 </UserControl>
