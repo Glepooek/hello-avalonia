@@ -8,7 +8,8 @@ namespace Avalonia.AppDevelopmentDemo.Views.Pages
         public XamlDesignTimePage()
         {
             InitializeComponent();
-            DataContext = DesignTimeSampleViewModel.CreateRuntime();
+            if (!Design.IsDesignMode)
+                DataContext = DesignTimeSampleViewModel.CreateRuntime();
         }
     }
 }

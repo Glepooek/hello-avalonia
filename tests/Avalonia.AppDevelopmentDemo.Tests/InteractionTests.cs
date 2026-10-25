@@ -54,6 +54,28 @@ namespace Avalonia.AppDevelopmentDemo.Tests
         }
 
         [AvaloniaFact]
+        public void Constructing_the_localization_page_does_not_change_the_process_culture()
+        {
+            var savedCulture = CultureInfo.CurrentCulture;
+            var savedUiCulture = CultureInfo.CurrentUICulture;
+            try
+            {
+                CultureInfo.CurrentCulture = new CultureInfo("en-US");
+                CultureInfo.CurrentUICulture = new CultureInfo("en-US");
+
+                _ = new LocalizationPage();
+
+                Assert.Equal("en-US", CultureInfo.CurrentCulture.Name);
+                Assert.Equal("en-US", CultureInfo.CurrentUICulture.Name);
+            }
+            finally
+            {
+                CultureInfo.CurrentCulture = savedCulture;
+                CultureInfo.CurrentUICulture = savedUiCulture;
+            }
+        }
+
+        [AvaloniaFact]
         public void Switching_language_reloads_the_strings_from_the_resource_file()
         {
             var savedCulture = CultureInfo.CurrentCulture;

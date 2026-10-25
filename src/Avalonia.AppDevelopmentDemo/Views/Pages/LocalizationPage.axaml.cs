@@ -10,6 +10,8 @@ namespace Avalonia.AppDevelopmentDemo.Views.Pages
 {
     public partial class LocalizationPage : UserControl
     {
+        private bool _isInitialized;
+
         // The manifest name is the assembly's root namespace + folder path + file name.
         private static readonly ResourceManager Strings =
             new("Avalonia.AppDevelopmentDemo.Assets.Langs.Strings", Assembly.GetExecutingAssembly());
@@ -17,25 +19,33 @@ namespace Avalonia.AppDevelopmentDemo.Views.Pages
         public LocalizationPage()
         {
             InitializeComponent();
-            Apply(new CultureInfo("zh-CN"));
+            Apply(new CultureInfo("zh-CN"), updateCurrentCulture: false);
+            _isInitialized = true;
         }
 
         private void OnLangChanged(object? sender, RoutedEventArgs e)
         {
+            if (!_isInitialized)
+                return;
+
             // Decide from the sender, not from the sibling's state: the sibling is unchecked only after this event.
             if (sender is RadioButton { IsChecked: true } radio)
             {
                 var cultureName = ReferenceEquals(radio, EnglishRadio)
                     ? "en-US"
                     : ReferenceEquals(radio, ArabicRadio) ? "ar-SA" : "zh-CN";
-                Apply(new CultureInfo(cultureName));
+                Apply(new CultureInfo(cultureName), updateCurrentCulture: true);
             }
         }
 
-        private void Apply(CultureInfo culture)
+        private void Apply(CultureInfo culture, bool updateCurrentCulture)
         {
-            CultureInfo.CurrentCulture = culture;
-            CultureInfo.CurrentUICulture = culture;
+            if (updateCurrentCulture)
+            {
+                CultureInfo.CurrentCulture = culture;
+                CultureInfo.CurrentUICulture = culture;
+            }
+
             GreetingText.Text = Strings.GetString("Greeting", culture);
             FarewellText.Text = Strings.GetString("Farewell", culture);
             CultureText.Text = $"culture = {culture.Name}";
