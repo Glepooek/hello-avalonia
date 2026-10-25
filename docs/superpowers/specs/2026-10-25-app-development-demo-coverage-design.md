@@ -189,8 +189,8 @@ dotnet build hello-avalonia.slnx
 
 2026-10-25 完成实现并执行以下验证：
 
-- `dotnet test tests/Avalonia.AppDevelopmentDemo.Tests --no-restore --nologo --verbosity minimal`：25 个测试通过，0 失败，0 跳过。
-- `dotnet build hello-avalonia.slnx --no-restore --nologo --verbosity minimal`：构建成功，0 错误；保留 1 个既有的 `Avalonia.MusicStore` `NU1701` 警告。
+- `dotnet test tests/Avalonia.AppDevelopmentDemo.Tests --no-restore --nologo --verbosity minimal`：26 个测试通过，0 失败，0 跳过。
+- `dotnet build hello-avalonia.slnx --no-restore --nologo --verbosity minimal`：构建成功，0 错误；保留 6 个来自 `Avalonia.MusicStore`、`Avalonia.MusicStore.Tests` 和 `Avalonia.WebViewDemo` 的既有警告。
 - 主窗口包含 14 个官方顶层主题标签；四个新增页面均使用对应的 `app-development` 文档路径。
 
 验证期间曾有两个重叠的解决方案构建进程争用 `Avalonia.TestingDemo.Tests.dll`，导致一次 `CS2012` 文件占用错误。终止本次会话遗留的构建进程后，单独重跑构建成功；该错误不是源代码或项目配置失败。
