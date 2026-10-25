@@ -21,6 +21,15 @@ namespace Avalonia.AppDevelopmentDemo.Tests
         }
 
         [AvaloniaFact]
+        public void Xaml_design_time_page_uses_runtime_data_when_the_application_runs()
+        {
+            var window = UiHelpers.Show(new XamlDesignTimePage());
+
+            Assert.Equal("运行时数据", Text(window, "DesignTitle"));
+            Assert.Equal("Design.DataContext 只服务预览器，不会覆盖运行时 DataContext。", Text(window, "DesignSummary"));
+        }
+
+        [AvaloniaFact]
         public void Switching_language_reloads_the_strings_from_the_resource_file()
         {
             var window = UiHelpers.Show(new LocalizationPage());

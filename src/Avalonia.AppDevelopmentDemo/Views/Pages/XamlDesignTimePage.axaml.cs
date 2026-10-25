@@ -1,4 +1,5 @@
 using Avalonia.Controls;
+using Avalonia.AppDevelopmentDemo.ViewModels;
 
 namespace Avalonia.AppDevelopmentDemo.Views.Pages
 {
@@ -7,6 +8,7 @@ namespace Avalonia.AppDevelopmentDemo.Views.Pages
         public XamlDesignTimePage()
         {
             InitializeComponent();
+            DataContext = DesignTimeSampleViewModel.CreateRuntime();
         }
     }
 }

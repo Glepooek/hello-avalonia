@@ -12,8 +12,40 @@
         <StackPanel Margin="12">
             <shared:DemoHeader Title="跨平台解决方案结构：共享核心与平台启动项目"
                                DocPath="app-development/cross-platform-solution-setup" />
-            <TextBlock TextWrapping="Wrap"
-                       Text="共享核心项目承载 UI、ViewModel 与跨平台服务，各平台项目只负责启动和平台集成。" />
+
+            <TextBlock Classes="caption" Text="推荐结构" />
+            <Border Classes="stage" Padding="12">
+                <Grid RowDefinitions="Auto,Auto" ColumnDefinitions="*,*,*,*" RowSpacing="8" ColumnSpacing="8">
+                    <Border Grid.ColumnSpan="4" Padding="10" Background="#264F78" CornerRadius="4">
+                        <TextBlock HorizontalAlignment="Center" Text="Core：UI · ViewModel · Models · 跨平台服务接口" />
+                    </Border>
+                    <Border Grid.Row="1" Grid.Column="0" Padding="8" Background="#333333" CornerRadius="4">
+                        <TextBlock HorizontalAlignment="Center" Text="Desktop" />
+                    </Border>
+                    <Border Grid.Row="1" Grid.Column="1" Padding="8" Background="#333333" CornerRadius="4">
+                        <TextBlock HorizontalAlignment="Center" Text="Android" />
+                    </Border>
+                    <Border Grid.Row="1" Grid.Column="2" Padding="8" Background="#333333" CornerRadius="4">
+                        <TextBlock HorizontalAlignment="Center" Text="iOS" />
+                    </Border>
+                    <Border Grid.Row="1" Grid.Column="3" Padding="8" Background="#333333" CornerRadius="4">
+                        <TextBlock HorizontalAlignment="Center" Text="Browser" />
+                    </Border>
+                </Grid>
+            </Border>
+
+            <TextBlock Classes="caption" Text="职责边界" />
+            <Border Classes="stage" Padding="12">
+                <StackPanel Spacing="5">
+                    <TextBlock Text="Core：共享 AXAML、业务状态、导航和平台服务接口。" TextWrapping="Wrap" />
+                    <TextBlock Text="Desktop：桌面生命周期、应用清单、图标和桌面平台服务。" TextWrapping="Wrap" />
+                    <TextBlock Text="Android / iOS：Activity、权限、原生资产与移动平台服务。" TextWrapping="Wrap" />
+                    <TextBlock Text="Browser：WebAssembly 启动、浏览器宿主和 Web 专用服务。" TextWrapping="Wrap" />
+                </StackPanel>
+            </Border>
+
+            <TextBlock Classes="hint" Margin="0,12,0,0" TextWrapping="Wrap"
+                       Text="本仓库的 AppDevelopmentDemo 是桌面入口。这里只说明结构，不创建需要额外工作负载的平台空项目。" />
         </StackPanel>
     </ScrollViewer>
 </UserControl>

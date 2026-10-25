@@ -3,17 +3,41 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:shared="using:Avalonia.Shared.Controls"
+             xmlns:viewModels="using:Avalonia.AppDevelopmentDemo.ViewModels"
              mc:Ignorable="d"
              d:DesignWidth="760"
              d:DesignHeight="560"
+             x:DataType="viewModels:DesignTimeSampleViewModel"
              x:Class="Avalonia.AppDevelopmentDemo.Views.Pages.XamlDesignTimePage">
+
+    <Design.DataContext>
+        <viewModels:DesignTimeSampleViewModel />
+    </Design.DataContext>
 
     <ScrollViewer>
         <StackPanel Margin="12">
             <shared:DemoHeader Title="XAML 预览与设计时设置"
                                DocPath="app-development/xaml-preview-and-design-settings" />
-            <TextBlock TextWrapping="Wrap"
-                       Text="设计时尺寸和 Design.DataContext 只服务 IDE 预览器，不替代运行时数据。" />
+
+            <TextBlock Classes="caption" Text="1. 同一个页面的设计时与运行时数据" />
+            <Border Classes="stage" Padding="12">
+                <StackPanel Spacing="6">
+                    <TextBlock Name="DesignTitle" FontSize="20" Text="{Binding Title}" />
+                    <TextBlock Name="DesignSummary" TextWrapping="Wrap" Text="{Binding Summary}" />
+                </StackPanel>
+            </Border>
+
+            <TextBlock Classes="caption" Text="2. 设计器读取的位置" />
+            <Border Classes="stage" Padding="12">
+                <StackPanel Spacing="4">
+                    <TextBlock Text="d:DesignWidth / d:DesignHeight：只影响预览画布。" TextWrapping="Wrap" />
+                    <TextBlock Text="Design.DataContext：给编译绑定提供设计数据，不进入运行时逻辑。" TextWrapping="Wrap" />
+                    <TextBlock Text="Design.IsDesignMode：仅在确实需要代码生成设计数据时使用。" TextWrapping="Wrap" />
+                </StackPanel>
+            </Border>
+
+            <TextBlock Classes="hint" Margin="0,12,0,0" TextWrapping="Wrap"
+                       Text="本页根元素声明 x:DataType，因此 Title 与 Summary 使用编译绑定；构造函数在运行时替换 DataContext。" />
         </StackPanel>
     </ScrollViewer>
 </UserControl>
