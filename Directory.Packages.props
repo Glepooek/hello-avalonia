@@ -1,41 +1,40 @@
 <Project>
-    <PropertyGroup>
-        <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
-    </PropertyGroup>
-
-    <ItemGroup>
-        <PackageVersion Include="Avalonia" Version="12.1.2" />
-        <PackageVersion Include="Avalonia.Desktop" Version="12.1.2" />
-        <PackageVersion Include="Avalonia.Themes.Fluent" Version="12.1.2" />
-        <PackageVersion Include="Avalonia.Fonts.Inter" Version="12.1.2" />
-        <!--NOTE: DataGrid, ColorPicker and ColorView ship as separate packages in v12 (they are not
+  <PropertyGroup>
+    <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageVersion Include="Avalonia" Version="12.1.5" />
+    <PackageVersion Include="Avalonia.Desktop" Version="12.1.5" />
+    <PackageVersion Include="Avalonia.Themes.Fluent" Version="12.1.5" />
+    <PackageVersion Include="Avalonia.Fonts.Inter" Version="12.1.5" />
+    <!--NOTE: DataGrid, ColorPicker and ColorView ship as separate packages in v12 (they are not
             in the main Avalonia assembly). They back the ControlsDemo Input and Data display pages.-->
-        <PackageVersion Include="Avalonia.Controls.DataGrid" Version="12.1.2" />
-        <PackageVersion Include="Avalonia.Controls.ColorPicker" Version="12.1.2" />
-        <!--NOTE: Avalonia.Diagnostics has no 12.x release yet; DevTools are built into the main Avalonia package in v12.-->
-        <PackageVersion Include="Avalonia.Diagnostics" Version="11.3.22" />
-        <PackageVersion Include="Avalonia.Controls.WebView" Version="12.1.0" />
-        <PackageVersion Include="Avalonia.HtmlRenderer" Version="12.0.0" />
-        <!--NOTE: Avalonia.Xaml.Behaviors stopped at 11.3.x and is binary-incompatible with Avalonia 12;
+    <PackageVersion Include="Avalonia.Controls.DataGrid" Version="12.1.2" />
+    <PackageVersion Include="Avalonia.Controls.ColorPicker" Version="12.1.2" />
+    <!--NOTE: Avalonia.Diagnostics has no 12.x release yet; DevTools are built into the main Avalonia package in v12.-->
+    <PackageVersion Include="Avalonia.Diagnostics" Version="11.3.22" />
+    <PackageVersion Include="Avalonia.Controls.WebView" Version="12.1.0" />
+    <PackageVersion Include="Avalonia.HtmlRenderer" Version="12.0.0" />
+    <!--NOTE: Avalonia.Xaml.Behaviors stopped at 11.3.x and is binary-incompatible with Avalonia 12;
             the same author continues it as Xaml.Behaviors.Avalonia for the 12.x line.-->
-        <PackageVersion Include="Xaml.Behaviors.Avalonia" Version="12.0.7" />
-        <PackageVersion Include="AsyncImageLoader.Avalonia" Version="3.8.0" />
-        <PackageVersion Include="CommunityToolkit.Mvvm" Version="8.4.2" />
-        <PackageVersion Include="MessageBox.Avalonia" Version="12.0.0" />
-        <PackageVersion Include="iTunesSearch" Version="1.0.44" />
-        <PackageVersion Include="Microsoft.Extensions.DependencyInjection" Version="10.0.12" />
-        <PackageVersion Include="Microsoft.Extensions.Logging.Console" Version="10.0.12" />
-        <PackageVersion Include="Avalonia.Headless" Version="12.1.2" />
-        <PackageVersion Include="Avalonia.Skia" Version="12.1.2" />
-        <PackageVersion Include="Avalonia.Headless.XUnit" Version="12.1.2" />
-        <PackageVersion Include="Appium.WebDriver" Version="4.4.5" />
-        <PackageVersion Include="xunit.v3" Version="3.2.2" />
-        <!-- For libraries that define xunit attributes; xunit.v3 itself turns a project into a test executable. -->
-        <PackageVersion Include="xunit.v3.extensibility.core" Version="3.2.2" />
-        <PackageVersion Include="xunit.v3.assert" Version="3.2.2" />
-        <PackageVersion Include="xunit.runner.visualstudio" Version="3.1.5" />
-        <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="18.10.1" />
-        <!-- Benchmarks only; the benchmark project is an Exe and is not run by dotnet test. -->
-        <PackageVersion Include="BenchmarkDotNet" Version="0.15.8" />
-    </ItemGroup>
+    <PackageVersion Include="Xaml.Behaviors.Avalonia" Version="12.1.5" />
+    <PackageVersion Include="AsyncImageLoader.Avalonia" Version="3.8.0" />
+    <PackageVersion Include="CommunityToolkit.Mvvm" Version="8.4.2" />
+    <PackageVersion Include="MessageBox.Avalonia" Version="12.0.0" />
+    <PackageVersion Include="iTunesSearch" Version="1.0.44" />
+    <PackageVersion Include="Microsoft.Extensions.DependencyInjection" Version="10.0.14" />
+    <PackageVersion Include="Microsoft.Extensions.Logging.Console" Version="10.0.14" />
+    <PackageVersion Include="Avalonia.Headless" Version="12.1.2" />
+    <PackageVersion Include="Avalonia.Skia" Version="12.1.2" />
+    <PackageVersion Include="Avalonia.Headless.XUnit" Version="12.1.5" />
+    <PackageVersion Include="Appium.WebDriver" Version="4.4.5" />
+    <PackageVersion Include="xunit.v3" Version="4.0.2" />
+    <!-- For libraries that define xunit attributes; xunit.v3 itself turns a project into a test executable. -->
+    <PackageVersion Include="xunit.v3.extensibility.core" Version="3.2.2" />
+    <PackageVersion Include="xunit.v3.assert" Version="3.2.2" />
+    <PackageVersion Include="xunit.runner.visualstudio" Version="4.0.1" />
+    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="18.11.0" />
+    <!-- Benchmarks only; the benchmark project is an Exe and is not run by dotnet test. -->
+    <PackageVersion Include="BenchmarkDotNet" Version="0.15.8" />
+  </ItemGroup>
 </Project>
